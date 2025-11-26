@@ -4,6 +4,8 @@ import "./globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider"
 import { MobileLayout } from "@/components/mobile/mobile-layout"
+import { Navbar } from "@/components/navbar"
+import { ModeToggle } from "@/components/mode-toggle"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,11 +42,19 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
+          disableTransitionOnChange={false}
         >
-          <MobileLayout>
-            {children}
-          </MobileLayout>
+          <div className="hidden md:block fixed top-0 left-0 right-0 z-50">
+            <Navbar />
+            <div className="absolute top-8 right-8 z-50">
+              <ModeToggle />
+            </div>
+          </div>
+          <div className="md:pt-20">
+            <MobileLayout>
+              {children}
+            </MobileLayout>
+          </div>
         </ThemeProvider>
       </body>
     </html>

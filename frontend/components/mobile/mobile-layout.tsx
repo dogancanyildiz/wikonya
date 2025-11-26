@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { MobileHomePage } from "./mobile-home-page"
 import { MobileTopicDetailPage } from "./mobile-topic-detail-page"
+import { MobileNavbar } from "./mobile-navbar"
 import { usePathname, useRouter } from "next/navigation"
 
 interface MobileLayoutProps {
@@ -33,6 +34,13 @@ export function MobileLayout({ children }: MobileLayoutProps) {
       const topicId = pathname.split("/topic/")[1]
       return <MobileTopicDetailPage topicId={topicId} />
     }
+    // Diğer mobil sayfalar için MobileNavbar ekle
+    return (
+      <>
+        <MobileNavbar />
+        {children}
+      </>
+    )
   }
 
   // Desktop görünüm veya diğer sayfalar
