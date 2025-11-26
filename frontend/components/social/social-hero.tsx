@@ -15,7 +15,7 @@ export function SocialHero() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
       {/* Left Side - Venue of the Week */}
-      <div className="relative rounded-[24px] overflow-hidden h-[300px] sm:h-[400px] shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:shadow-xl group">
+      <div className="relative rounded-[24px] overflow-hidden h-[400px] sm:h-[500px] shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:shadow-xl group">
         <Image
           src="https://images.unsplash.com/photo-1739723745132-97df9db49db2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwY2FmZSUyMGludGVyaW9yfGVufDF8fHx8MTc2NDE1ODI0MHww&ixlib=rb-4.1.0&q=80&w=1080"
           alt="Kitap & Kahve"
@@ -66,8 +66,8 @@ export function SocialHero() {
       </div>
 
       {/* Right Side - Top 3 Trending */}
-      <Card className="bg-white dark:bg-card rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
-        <CardContent className="p-6 sm:p-8">
+      <Card className="bg-white dark:bg-card rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border h-[400px] sm:h-[500px] flex flex-col">
+        <CardContent className="p-6 sm:p-8 flex flex-col flex-1">
           <div className="flex items-center gap-2 mb-4 sm:mb-6">
             <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-[#03624c]" strokeWidth={2.5} />
             <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-xl sm:text-2xl">

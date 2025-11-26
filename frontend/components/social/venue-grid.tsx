@@ -1,9 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import { VenueCard } from "./venue-card"
 import { Button } from "@/components/ui/button"
 
 export function VenueGrid() {
+  const [sortBy, setSortBy] = useState<"distance" | "rating" | "popularity">("distance")
+
   const venues = [
     {
       id: 1,
@@ -14,6 +17,7 @@ export function VenueGrid() {
       reviews: 156,
       crowdLevel: "medium" as const,
       category: "Kahve & Tatlı",
+      distance: 1.2,
     },
     {
       id: 2,
@@ -24,6 +28,7 @@ export function VenueGrid() {
       reviews: 234,
       crowdLevel: "low" as const,
       category: "Ders Çalışma",
+      distance: 0.8,
     },
     {
       id: 3,
@@ -34,6 +39,7 @@ export function VenueGrid() {
       reviews: 89,
       crowdLevel: "high" as const,
       category: "Sosyal Buluşma",
+      distance: 2.5,
     },
     {
       id: 4,
@@ -44,6 +50,7 @@ export function VenueGrid() {
       reviews: 112,
       crowdLevel: "low" as const,
       category: "Sakin Ortam",
+      distance: 3.1,
     },
     {
       id: 5,
@@ -54,6 +61,7 @@ export function VenueGrid() {
       reviews: 198,
       crowdLevel: "low" as const,
       category: "Ders Çalışma",
+      distance: 1.5,
     },
     {
       id: 6,
@@ -64,6 +72,7 @@ export function VenueGrid() {
       reviews: 76,
       crowdLevel: "high" as const,
       category: "Canlı Müzik",
+      distance: 2.8,
     },
     {
       id: 7,
@@ -74,6 +83,7 @@ export function VenueGrid() {
       reviews: 134,
       crowdLevel: "medium" as const,
       category: "Oyun & Eğlence",
+      distance: 4.2,
     },
     {
       id: 8,
@@ -84,6 +94,7 @@ export function VenueGrid() {
       reviews: 92,
       crowdLevel: "low" as const,
       category: "Sakin Ortam",
+      distance: 1.9,
     },
     {
       id: 9,
@@ -94,8 +105,20 @@ export function VenueGrid() {
       reviews: 67,
       crowdLevel: "medium" as const,
       category: "Kahve & Tatlı",
+      distance: 3.5,
     },
   ]
+
+  const sortedVenues = [...venues].sort((a, b) => {
+    if (sortBy === "distance") {
+      return (a.distance || 0) - (b.distance || 0)
+    } else if (sortBy === "rating") {
+      return b.rating - a.rating
+    } else if (sortBy === "popularity") {
+      return b.reviews - a.reviews
+    }
+    return 0
+  })
 
   return (
     <div>
@@ -105,19 +128,32 @@ export function VenueGrid() {
         </h2>
         <div className="flex items-center gap-2 flex-wrap">
           <Button 
-            className="px-3 sm:px-4 py-2 bg-[#03624c] text-white rounded-xl font-[Manrope] transition-colors hover:bg-[#03624c]/90 font-bold text-xs sm:text-sm"
+            onClick={() => setSortBy("distance")}
+            className={`px-3 sm:px-4 py-2 rounded-xl font-[Manrope] transition-colors font-bold text-xs sm:text-sm ${
+              sortBy === "distance"
+                ? 'bg-[#03624c] text-white hover:bg-[#03624c]/90 border-[#03624c]'
+                : 'bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground hover:bg-[#f2f4f3] dark:hover:bg-accent border border-border shadow-sm'
+            }`}
           >
             Mesafeye Göre
           </Button>
           <Button 
-            variant="outline"
-            className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border"
+            onClick={() => setSortBy("rating")}
+            className={`px-3 sm:px-4 py-2 rounded-xl font-[Manrope] transition-colors font-bold text-xs sm:text-sm ${
+              sortBy === "rating"
+                ? 'bg-[#03624c] text-white hover:bg-[#03624c]/90 border-[#03624c]'
+                : 'bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground hover:bg-[#f2f4f3] dark:hover:bg-accent border border-border shadow-sm'
+            }`}
           >
             Puana Göre
           </Button>
           <Button 
-            variant="outline"
-            className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border"
+            onClick={() => setSortBy("popularity")}
+            className={`px-3 sm:px-4 py-2 rounded-xl font-[Manrope] transition-colors font-bold text-xs sm:text-sm ${
+              sortBy === "popularity"
+                ? 'bg-[#03624c] text-white hover:bg-[#03624c]/90 border-[#03624c]'
+                : 'bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground hover:bg-[#f2f4f3] dark:hover:bg-accent border border-border shadow-sm'
+            }`}
           >
             Popülerlik
           </Button>
@@ -125,7 +161,7 @@ export function VenueGrid() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        {venues.map((venue) => (
+        {sortedVenues.map((venue) => (
           <VenueCard key={venue.id} {...venue} />
         ))}
       </div>
