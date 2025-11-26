@@ -1,0 +1,231 @@
+"use client"
+
+import { ArrowUp, ArrowDown, Reply, Flag } from "lucide-react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Textarea } from "@/components/ui/textarea"
+
+interface Comment {
+  id: number
+  author: string
+  authorInitials: string
+  timeAgo: string
+  content: string
+  upvotes: number
+  downvotes: number
+  replies: number
+  isUpvoted?: boolean
+  isDownvoted?: boolean
+}
+
+export function CommentFeed() {
+  const [comments, setComments] = useState<Comment[]>([
+    {
+      id: 1,
+      author: "Ayşe Yılmaz",
+      authorInitials: "AY",
+      timeAgo: "2 saat önce",
+      content: "Bu notlar gerçekten çok işime yaradı! Özellikle anayasa hukuku kısmı çok detaylı ve anlaşılır şekilde hazırlanmış. Final sınavında bu notlar sayesinde başarılı oldum. Herkese tavsiye ederim.",
+      upvotes: 24,
+      downvotes: 2,
+      replies: 5,
+      isUpvoted: false,
+      isDownvoted: false,
+    },
+    {
+      id: 2,
+      author: "Mehmet Demir",
+      authorInitials: "MD",
+      timeAgo: "5 saat önce",
+      content: "Notlar iyi hazırlanmış ama bazı konularda daha fazla örnek olabilirdi. Özellikle medeni hukuk bölümünde vaka analizleri eksik. Yine de genel olarak faydalı bir kaynak.",
+      upvotes: 18,
+      downvotes: 4,
+      replies: 3,
+      isUpvoted: true,
+      isDownvoted: false,
+    },
+    {
+      id: 3,
+      author: "Zeynep Kaya",
+      authorInitials: "ZK",
+      timeAgo: "1 gün önce",
+      content: "Final öncesi son gün bu notlara çalıştım ve çok yardımcı oldu. Özellikle özet tablolar ve şemalar sayesinde konuları daha iyi kavradım. Teşekkürler!",
+      upvotes: 42,
+      downvotes: 1,
+      replies: 8,
+      isUpvoted: false,
+      isDownvoted: false,
+    },
+    {
+      id: 4,
+      author: "Can Özkan",
+      authorInitials: "CÖ",
+      timeAgo: "2 gün önce",
+      content: "Notların güncelliğine dikkat etmek gerekiyor. 2023 yılında yapılan bazı yasal değişiklikler burada yer almıyor. Bunu göz önünde bulundurarak kullanın.",
+      upvotes: 15,
+      downvotes: 3,
+      replies: 2,
+      isUpvoted: false,
+      isDownvoted: false,
+    },
+  ])
+
+  const handleVote = (commentId: number, voteType: 'up' | 'down') => {
+    setComments(comments.map(comment => {
+      if (comment.id === commentId) {
+        if (voteType === 'up') {
+          if (comment.isUpvoted) {
+            return { ...comment, upvotes: comment.upvotes - 1, isUpvoted: false }
+          } else {
+            return {
+              ...comment,
+              upvotes: comment.upvotes + 1,
+              downvotes: comment.isDownvoted ? comment.downvotes - 1 : comment.downvotes,
+              isUpvoted: true,
+              isDownvoted: false,
+            }
+          }
+        } else {
+          if (comment.isDownvoted) {
+            return { ...comment, downvotes: comment.downvotes - 1, isDownvoted: false }
+          } else {
+            return {
+              ...comment,
+              downvotes: comment.downvotes + 1,
+              upvotes: comment.isUpvoted ? comment.upvotes - 1 : comment.upvotes,
+              isDownvoted: true,
+              isUpvoted: false,
+            }
+          }
+        }
+      }
+      return comment
+    }))
+  }
+
+  return (
+    <div>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
+        <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-2xl sm:text-3xl lg:text-[32px]">
+          Kullanıcı Görüşleri
+        </h2>
+        <div className="flex items-center gap-2">
+          <Button className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] font-bold text-xs sm:text-sm">
+            En Yeni
+          </Button>
+          <Button 
+            variant="outline" 
+            className="border-2 border-[#03624c] text-[#03624c] hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] dark:hover:text-white font-[Manrope] font-bold text-xs sm:text-sm"
+          >
+            En Popüler
+          </Button>
+        </div>
+      </div>
+
+      <div className="space-y-3 sm:space-y-4">
+        {comments.map((comment) => (
+          <Card
+            key={comment.id}
+            className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:hover:shadow-xl transition-shadow duration-300 border border-border"
+          >
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex gap-3 sm:gap-4">
+                {/* Vote Section */}
+                <div className="flex flex-col items-center gap-2">
+                  <button
+                    onClick={() => handleVote(comment.id, 'up')}
+                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
+                      comment.isUpvoted
+                        ? 'bg-[#03624c] text-white'
+                        : 'hover:bg-[#f2f4f3] dark:hover:bg-accent text-[#4d4d4d] dark:text-foreground'
+                    }`}
+                  >
+                    <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5" fill={comment.isUpvoted ? 'white' : 'none'} />
+                  </button>
+                  <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-base sm:text-lg">
+                    {comment.upvotes - comment.downvotes}
+                  </span>
+                  <button
+                    onClick={() => handleVote(comment.id, 'down')}
+                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
+                      comment.isDownvoted
+                        ? 'bg-[#03624c] text-white'
+                        : 'hover:bg-[#f2f4f3] dark:hover:bg-accent text-[#4d4d4d] dark:text-foreground'
+                    }`}
+                  >
+                    <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5" fill={comment.isDownvoted ? 'white' : 'none'} />
+                  </button>
+                </div>
+
+                {/* Comment Content */}
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-[#f2f4f3] dark:border-border">
+                      <AvatarFallback className="bg-[#03624c] text-white font-[Manrope] font-bold text-[10px] sm:text-xs">
+                        {comment.authorInitials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-sm sm:text-base">
+                        {comment.author}
+                      </div>
+                      <div className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
+                        {comment.timeAgo}
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-3 sm:mb-4 font-medium text-sm sm:text-base leading-relaxed">
+                    {comment.content}
+                  </p>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors">
+                      <Reply className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="font-[Manrope] font-semibold text-xs sm:text-sm">
+                        {comment.replies} Yanıt
+                      </span>
+                    </button>
+                    <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors">
+                      <Flag className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="font-[Manrope] font-semibold text-xs sm:text-sm">
+                        Bildir
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Add Comment Section */}
+      <Card className="mt-4 sm:mt-6 bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+        <CardHeader>
+          <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg sm:text-xl">
+            Görüş Bildir
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Textarea
+            placeholder="Deneyimlerinizi ve düşüncelerinizi paylaşın..."
+            className="w-full p-3 sm:p-4 bg-[#f2f4f3] dark:bg-accent rounded-xl font-[Manrope] text-[#4d4d4d] dark:text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-[#03624c] font-medium min-h-[100px] sm:min-h-[120px] text-sm sm:text-base"
+          />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mt-3 sm:mt-4">
+            <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
+              Lütfen yapıcı ve saygılı yorumlar yazın
+            </span>
+            <Button className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] px-6 sm:px-8 font-bold text-xs sm:text-sm">
+              Gönder
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
