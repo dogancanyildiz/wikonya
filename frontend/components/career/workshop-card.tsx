@@ -17,6 +17,8 @@ interface WorkshopCardProps {
   participants: number
   maxParticipants: number
   isFree: boolean
+  category?: string
+  subCategory?: string
 }
 
 export function WorkshopCard({
@@ -32,7 +34,7 @@ export function WorkshopCard({
   isFree,
 }: WorkshopCardProps) {
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-all overflow-hidden group w-[320px] sm:w-[340px] flex-shrink-0 border border-border">
+    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-all overflow-hidden group w-full md:w-[320px] md:flex-shrink-0 border border-border">
       {/* Image with Date Badge */}
       <div className="relative h-36 sm:h-44 overflow-hidden">
         <Image

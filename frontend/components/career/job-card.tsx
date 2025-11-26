@@ -13,6 +13,8 @@ interface JobCardProps {
   type: "Part-Time" | "Full-Time" | "Remote" | "Hybrid"
   postedDays: number
   salary?: string
+  category?: string
+  subCategory?: string
 }
 
 export function JobCard({

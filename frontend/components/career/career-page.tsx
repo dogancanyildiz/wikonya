@@ -1,8 +1,21 @@
+"use client"
+
+import { useState } from "react"
 import { CareerStats } from "./career-stats"
 import { JobBoard } from "./job-board"
 import { DevelopmentHub } from "./development-hub"
+import { ScholarshipBoard } from "./scholarship-board"
+import { Button } from "@/components/ui/button"
 
 export function CareerPage() {
+  const [selectedMainCategory, setSelectedMainCategory] = useState("jobs")
+
+  const mainCategories = [
+    { id: "jobs", name: "İş/Staj" },
+    { id: "events", name: "Etkinlik" },
+    { id: "scholarships", name: "Burs" },
+  ]
+
   return (
     <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 py-6 sm:py-8">
       <div className="mb-6 sm:mb-8">
@@ -16,11 +29,43 @@ export function CareerPage() {
 
       <CareerStats />
 
+      {/* Main Category Selection */}
       <div className="mb-6 sm:mb-8">
-        <JobBoard />
+        <div className="flex items-center gap-2 flex-wrap">
+          {mainCategories.map((category) => (
+            <Button
+              key={category.id}
+              onClick={() => setSelectedMainCategory(category.id)}
+              className={`
+                px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-[Manrope] transition-colors font-bold text-sm sm:text-base
+                ${selectedMainCategory === category.id
+                  ? 'bg-[#03624c] text-white hover:bg-[#03624c]/90 shadow-[0_4px_20px_rgba(3,98,76,0.3)]' 
+                  : 'bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground hover:bg-[#f2f4f3] dark:hover:bg-accent border border-border shadow-sm'
+                }
+              `}
+            >
+              {category.name}
+            </Button>
+          ))}
+        </div>
       </div>
 
-      <DevelopmentHub />
+      {/* Content based on selected category */}
+      {selectedMainCategory === "jobs" && (
+        <div className="mb-6 sm:mb-8">
+          <JobBoard />
+        </div>
+      )}
+
+      {selectedMainCategory === "events" && (
+        <DevelopmentHub />
+      )}
+
+      {selectedMainCategory === "scholarships" && (
+        <div className="mb-6 sm:mb-8">
+          <ScholarshipBoard />
+        </div>
+      )}
     </div>
   )
 }

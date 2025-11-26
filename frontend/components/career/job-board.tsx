@@ -1,9 +1,29 @@
 "use client"
 
+import { useState } from "react"
 import { JobCard } from "./job-card"
 import { Button } from "@/components/ui/button"
+import { ChevronDown } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function JobBoard() {
+  const [selectedType, setSelectedType] = useState("all")
+
+  const jobTypes = [
+    { id: "all", name: "Tümü" },
+    { id: "part-time", name: "Part-Time" },
+    { id: "full-time", name: "Full-Time" },
+    { id: "remote", name: "Remote" },
+    { id: "hybrid", name: "Hybrid" },
+  ]
+
+  const selectedTypeData = jobTypes.find(t => t.id === selectedType)
+
   const jobs = [
     {
       id: 1,
@@ -67,6 +87,16 @@ export function JobBoard() {
     },
   ]
 
+  const filteredJobs = jobs.filter(job => {
+    const typeMatch = selectedType === "all" || 
+      (selectedType === "part-time" && job.type === "Part-Time") ||
+      (selectedType === "full-time" && job.type === "Full-Time") ||
+      (selectedType === "remote" && job.type === "Remote") ||
+      (selectedType === "hybrid" && job.type === "Hybrid")
+    
+    return typeMatch
+  })
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
@@ -74,36 +104,44 @@ export function JobBoard() {
           İş & Staj İlanları
         </h2>
         <div className="flex items-center gap-2 flex-wrap">
-          <Button 
-            className="px-3 sm:px-4 py-2 bg-[#03624c] text-white rounded-xl font-[Manrope] transition-colors hover:bg-[#03624c]/90 font-bold text-xs sm:text-sm"
-          >
-            Tümü
-          </Button>
-          <Button 
-            variant="outline"
-            className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border"
-          >
-            Staj
-          </Button>
-          <Button 
-            variant="outline"
-            className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border"
-          >
-            Part-Time
-          </Button>
-          <Button 
-            variant="outline"
-            className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border"
-          >
-            Remote
-          </Button>
+          {/* Type Filter Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="outline"
+                className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border flex items-center gap-2"
+              >
+                {selectedTypeData?.name || "Tümü"}
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              {jobTypes.map((type) => (
+                <DropdownMenuItem
+                  key={type.id}
+                  onClick={() => setSelectedType(type.id)}
+                  className={selectedType === type.id ? 'bg-[#03624c] text-white' : ''}
+                >
+                  {type.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
       <div className="space-y-3 sm:space-y-4">
-        {jobs.map((job) => (
-          <JobCard key={job.id} {...job} />
-        ))}
+        {filteredJobs.length > 0 ? (
+          filteredJobs.map((job) => (
+            <JobCard key={job.id} {...job} />
+          ))
+        ) : (
+          <div className="text-center py-12">
+            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
+              Seçilen kriterlere uygun ilan bulunamadı.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -1,13 +1,66 @@
 "use client"
 
+import { useState } from "react"
 import { WorkshopCard } from "./workshop-card"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react"
 import { useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function DevelopmentHub() {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [selectedCategory, setSelectedCategory] = useState("all")
+  const [selectedSubCategory, setSelectedSubCategory] = useState("all")
+
+  const categories = [
+    {
+      id: "all",
+      name: "Tümü",
+      subCategories: [],
+    },
+    {
+      id: "municipality",
+      name: "Belediye Kurumları",
+      subCategories: [
+        { id: "komek", name: "KOMEK" },
+        { id: "kapsul", name: "Kapsül" },
+        { id: "divizyon", name: "Divizyon" },
+        { id: "kbb-akademi", name: "KBB Akademi" },
+        { id: "bilim-merkezi", name: "Konya Bilim Merkezi" },
+        { id: "kultur", name: "Kültür ve Sosyal İşler" },
+      ],
+    },
+    {
+      id: "university",
+      name: "Üniversite Etkinlikleri",
+      subCategories: [
+        { id: "selcuk", name: "Selçuk Üniversitesi" },
+        { id: "neu", name: "Necmettin Erbakan Üniversitesi" },
+        { id: "kto", name: "KTO Karatay Üniversitesi" },
+        { id: "ktun", name: "Konya Teknik Üniversitesi" },
+        { id: "kgtu", name: "Konya Gıda ve Tarım Üniversitesi" },
+      ],
+    },
+    {
+      id: "other",
+      name: "Diğer Kurumlar",
+      subCategories: [
+        { id: "teknokent", name: "Teknokent" },
+        { id: "startup", name: "Startup Toplulukları" },
+        { id: "ngo", name: "STK'lar" },
+      ],
+    },
+  ]
 
   const workshops = [
     {
@@ -23,6 +76,8 @@ export function DevelopmentHub() {
       participants: 18,
       maxParticipants: 25,
       isFree: true,
+      category: "municipality",
+      subCategory: "komek",
     },
     {
       id: 2,
@@ -37,12 +92,14 @@ export function DevelopmentHub() {
       participants: 32,
       maxParticipants: 40,
       isFree: false,
+      category: "municipality",
+      subCategory: "kbb-akademi",
     },
     {
       id: 3,
       image: "https://images.unsplash.com/photo-1738676524296-364cf18900a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcmVhdGl2ZSUyMGRlc2lnbiUyMHN0dWRpb3xlbnwxfHx8fDE3NjQxNjU2MTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       title: "UI/UX Design Temelleri",
-      organizer: "Tasarım Topluluğu",
+      organizer: "Selçuk Üniversitesi",
       date: "1 Aralık 2024",
       dateDay: "01",
       dateMonth: "ARA",
@@ -51,6 +108,8 @@ export function DevelopmentHub() {
       participants: 24,
       maxParticipants: 30,
       isFree: true,
+      category: "university",
+      subCategory: "selcuk",
     },
     {
       id: 4,
@@ -65,6 +124,8 @@ export function DevelopmentHub() {
       participants: 45,
       maxParticipants: 60,
       isFree: true,
+      category: "university",
+      subCategory: "neu",
     },
     {
       id: 5,
@@ -79,6 +140,56 @@ export function DevelopmentHub() {
       participants: 67,
       maxParticipants: 100,
       isFree: true,
+      category: "municipality",
+      subCategory: "komek",
+    },
+    {
+      id: 6,
+      image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&h=600",
+      title: "Kapsül Girişimcilik Programı",
+      organizer: "Kapsül",
+      date: "7 Aralık 2024",
+      dateDay: "07",
+      dateMonth: "ARA",
+      time: "10:00 - 16:00",
+      location: "Kapsül Merkez",
+      participants: 28,
+      maxParticipants: 35,
+      isFree: true,
+      category: "municipality",
+      subCategory: "kapsul",
+    },
+    {
+      id: 7,
+      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&h=600",
+      title: "Divizyon Teknoloji Atölyesi",
+      organizer: "Divizyon",
+      date: "10 Aralık 2024",
+      dateDay: "10",
+      dateMonth: "ARA",
+      time: "13:00 - 17:00",
+      location: "Divizyon Kuluçka Merkezi",
+      participants: 15,
+      maxParticipants: 20,
+      isFree: true,
+      category: "municipality",
+      subCategory: "divizyon",
+    },
+    {
+      id: 8,
+      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&h=600",
+      title: "KTO Kariyer Günleri",
+      organizer: "KTO Karatay Üniversitesi",
+      date: "12 Aralık 2024",
+      dateDay: "12",
+      dateMonth: "ARA",
+      time: "09:00 - 18:00",
+      location: "KTO Kampüs",
+      participants: 120,
+      maxParticipants: 200,
+      isFree: true,
+      category: "university",
+      subCategory: "kto",
     },
   ]
 
@@ -92,49 +203,135 @@ export function DevelopmentHub() {
     }
   }
 
+  const selectedCategoryData = categories.find(c => c.id === selectedCategory)
+  const filteredWorkshops = workshops.filter(workshop => {
+    const categoryMatch = selectedCategory === "all" || workshop.category === selectedCategory
+    const subCategoryMatch = selectedSubCategory === "all" || workshop.subCategory === selectedSubCategory
+    return categoryMatch && subCategoryMatch
+  })
+
   return (
     <Card className="bg-white dark:bg-card rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
       <CardHeader>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-1 font-extrabold text-xl sm:text-2xl lg:text-[28px]">
-              Kendini Geliştir
-            </CardTitle>
-            <CardDescription className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
-              Kurslar, atölyeler ve sertifika programları
-            </CardDescription>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-1 font-extrabold text-xl sm:text-2xl lg:text-[28px]">
+                Kendini Geliştir
+              </CardTitle>
+              <CardDescription className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
+                Kurslar, atölyeler ve sertifika programları
+              </CardDescription>
+            </div>
+
+            <div className="hidden md:flex items-center gap-2">
+              <Button
+                onClick={() => scroll("left")}
+                variant="outline"
+                size="icon"
+                className="w-9 h-9 sm:w-10 sm:h-10 bg-[#f2f4f3] dark:bg-accent hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] text-[#4d4d4d] dark:text-foreground rounded-xl transition-all border border-border"
+              >
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
+              </Button>
+              <Button
+                onClick={() => scroll("right")}
+                variant="outline"
+                size="icon"
+                className="w-9 h-9 sm:w-10 sm:h-10 bg-[#f2f4f3] dark:bg-accent hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] text-[#4d4d4d] dark:text-foreground rounded-xl transition-all border border-border"
+              >
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
+              </Button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={() => scroll("left")}
-              variant="outline"
-              size="icon"
-              className="w-9 h-9 sm:w-10 sm:h-10 bg-[#f2f4f3] dark:bg-accent hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] text-[#4d4d4d] dark:text-foreground rounded-xl transition-all border border-border"
-            >
-              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
-            </Button>
-            <Button
-              onClick={() => scroll("right")}
-              variant="outline"
-              size="icon"
-              className="w-9 h-9 sm:w-10 sm:h-10 bg-[#f2f4f3] dark:bg-accent hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] text-[#4d4d4d] dark:text-foreground rounded-xl transition-all border border-border"
-            >
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
-            </Button>
+          {/* Category Filter */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="outline"
+                  className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border flex items-center gap-2"
+                >
+                  {selectedCategoryData?.name || "Kategori"}
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                {categories.map((category) => (
+                  category.subCategories.length > 0 ? (
+                    <DropdownMenuSub key={category.id}>
+                      <DropdownMenuSubTrigger
+                        onClick={() => {
+                          setSelectedCategory(category.id)
+                          setSelectedSubCategory("all")
+                        }}
+                        className={selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
+                      >
+                        {category.name}
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setSelectedCategory(category.id)
+                            setSelectedSubCategory("all")
+                          }}
+                          className={selectedSubCategory === "all" && selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
+                        >
+                          Tümü
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        {category.subCategories.map((sub) => (
+                          <DropdownMenuItem
+                            key={sub.id}
+                            onClick={() => {
+                              setSelectedCategory(category.id)
+                              setSelectedSubCategory(sub.id)
+                            }}
+                            className={selectedSubCategory === sub.id && selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
+                          >
+                            {sub.name}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+                  ) : (
+                    <DropdownMenuItem
+                      key={category.id}
+                      onClick={() => {
+                        setSelectedCategory(category.id)
+                        setSelectedSubCategory("all")
+                      }}
+                      className={selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
+                    >
+                      {category.name}
+                    </DropdownMenuItem>
+                  )
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        {/* Scrollable Container */}
+        {/* Grid Layout for Mobile, Scrollable for Desktop */}
         <div
           ref={scrollRef}
-          className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-hide"
+          className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-none md:flex md:overflow-x-auto md:pb-4 md:scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {workshops.map((workshop) => (
-            <WorkshopCard key={workshop.id} {...workshop} />
-          ))}
+          {filteredWorkshops.length > 0 ? (
+            filteredWorkshops.map((workshop) => (
+              <div key={workshop.id} className="md:flex-shrink-0">
+                <WorkshopCard {...workshop} />
+              </div>
+            ))
+          ) : (
+            <div className="w-full text-center py-12 col-span-1 md:col-span-auto">
+              <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
+                Seçilen kriterlere uygun etkinlik bulunamadı.
+              </p>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
