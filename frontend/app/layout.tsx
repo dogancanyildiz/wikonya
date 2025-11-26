@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { MobileLayout } from "@/components/mobile/mobile-layout"
 import { Navbar } from "@/components/navbar"
 import { ModeToggle } from "@/components/mode-toggle"
+import { PageTransition } from "@/components/page-transition"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,7 +53,9 @@ export default function RootLayout({
           </div>
           <div className="md:pt-20">
             <MobileLayout>
-              {children}
+              <PageTransition>
+                {children}
+              </PageTransition>
             </MobileLayout>
           </div>
         </ThemeProvider>
