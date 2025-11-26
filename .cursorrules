@@ -1,0 +1,53 @@
+{
+  "$schema": "https://www.cursor.com/schemas/v1.json",
+  "rules": [
+    {
+      "name": "Tech Stack Expertise",
+      "description": "You are an expert in Next.js, Tailwind CSS, and Shadcn/UI. Always follow best practices for these technologies."
+    },
+    {
+      "name": "Styling Rules",
+      "description": [
+        "Do NOT create or modify any `.css` files.",
+        "Use ONLY Tailwind CSS for styling.",
+        "Use Shadcn/UI components whenever suitable.",
+        "Ensure all UI is responsive, accessible, and minimal."
+      ]
+    },
+    {
+      "name": "Next.js App Router Guidelines",
+      "description": [
+        "Use Next.js App Router conventions.",
+        "Default to Server Components unless Client Components are required.",
+        "Keep project structure clean: use `app/`, `components/`, and `lib/` folders.",
+        "Use TypeScript strictly."
+      ]
+    },
+    {
+      "name": "Code Quality",
+      "description": [
+        "Avoid unnecessary abstractions or over-engineering.",
+        "Only output code that is required for the requested task.",
+        "Keep all code clean, consistent, and scalable."
+      ]
+    },
+    {
+      "name": "Commit Message Rules",
+      "description": "All commits MUST follow the Conventional Commits format: `<type>(<scope>): <subject>`.",
+      "examples": [
+        "feat(ui): add habit card component",
+        "fix(api): resolve prisma connection issue",
+        "refactor(auth): simplify session logic",
+        "chore(config): update environment variables"
+      ]
+    },
+    {
+      "name": "Interaction Behavior",
+      "description": [
+        "Never add unnecessary explanations unless asked.",
+        "When unclear, ask SHORT clarification questions.",
+        "Prefer minimal and production-ready solutions."
+      ]
+    }
+  ]
+}
