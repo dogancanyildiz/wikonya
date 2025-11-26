@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 
 export function AcademicHeader() {
   return (
-    <Card className="rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg mb-6 border border-border">
+    <Card className="rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg mb-8 sm:mb-10 border border-border">
       <CardContent className="p-6 sm:p-8">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-8">
           <div className="flex-shrink-0">

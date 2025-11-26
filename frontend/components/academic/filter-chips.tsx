@@ -15,7 +15,7 @@ export function FilterChips() {
   ]
 
   return (
-    <div className="flex items-center gap-3 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+    <div className="flex items-center gap-3 mb-8 sm:mb-10 overflow-x-auto pb-2 scrollbar-hide">
       {filters.map((filter) => {
         const Icon = filter.icon
         const isActive = activeFilter === filter.id
