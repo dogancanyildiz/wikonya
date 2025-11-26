@@ -1,0 +1,61 @@
+"use client"
+
+import { Home, TrendingUp, PlusCircle, MessageSquare, User } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+interface MobileBottomNavProps {
+  activeTab?: string
+  onNavigate?: (tab: string) => void
+}
+
+export function MobileBottomNav({ activeTab, onNavigate }: MobileBottomNavProps) {
+  const pathname = usePathname()
+
+  const navItems = [
+    { id: "home", label: "Ana Sayfa", icon: Home, href: "/" },
+    { id: "trending", label: "Trendler", icon: TrendingUp, href: "/trending" },
+    { id: "create", label: "Oluştur", icon: PlusCircle, href: "/create" },
+    { id: "messages", label: "Mesajlar", icon: MessageSquare, href: "/messages" },
+    { id: "profile", label: "Profil", icon: User, href: "/dashboard" },
+  ]
+
+  const isActive = (itemId: string, href: string) => {
+    if (activeTab) return activeTab === itemId
+    return pathname === href || (href === "/" && pathname === "/")
+  }
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-card border-t border-gray-200 dark:border-border pb-safe z-50">
+      <div className="flex items-center justify-around h-14 sm:h-16 px-2">
+        {navItems.map((item) => {
+          const Icon = item.icon
+          const active = isActive(item.id, item.href)
+          
+          return (
+            <Link
+              key={item.id}
+              href={item.href}
+              onClick={() => onNavigate?.(item.id)}
+              className="flex flex-col items-center justify-center gap-1 px-2 py-1 min-w-[60px] active:scale-95 transition-transform"
+            >
+              <Icon
+                className={active ? "text-[#03624c]" : "text-[#4d4d4d]/60 dark:text-muted-foreground"}
+                size={22}
+                strokeWidth={2.5}
+                fill={active ? "#03624c" : "none"}
+              />
+              <span
+                className={`font-[Manrope] ${active ? "text-[#03624c] font-bold" : "text-[#4d4d4d]/60 dark:text-muted-foreground font-semibold"}`}
+                style={{ fontSize: '10px' }}
+              >
+                {item.label}
+              </span>
+            </Link>
+          )
+        })}
+      </div>
+    </nav>
+  )
+}
+
