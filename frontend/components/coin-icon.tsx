@@ -73,7 +73,7 @@ export function CoinIcon() {
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <p>GC</p>
+        <p>Genç Coin</p>
       </TooltipContent>
     </Tooltip>
   )
