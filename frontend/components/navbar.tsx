@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { CoinIcon } from "@/components/coin-icon"
 
 export function Navbar() {
   const pathname = usePathname()
@@ -87,12 +88,13 @@ export function Navbar() {
                   AY
                 </AvatarFallback>
               </Avatar>
-              <div className="hidden sm:flex px-3 py-1.5 bg-[#f2f4f3] dark:bg-accent rounded-full">
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#f2f4f3] dark:bg-accent rounded-full">
                 <span 
                   className="font-[Manrope] text-[#03624c] dark:text-[#03624c] font-bold text-sm"
                 >
-                  1,250 GC
+                  1,250
                 </span>
+                <CoinIcon />
               </div>
             </Link>
           </div>
