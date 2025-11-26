@@ -3,6 +3,7 @@
 import { ArrowUpRight, TrendingUp, Gift } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { CoinIcon } from "@/components/coin-icon"
 
 export function WalletCard() {
   return (
@@ -10,9 +11,12 @@ export function WalletCard() {
       <CardContent className="p-6 sm:p-10">
         <div className="flex items-start justify-between mb-6 sm:mb-8">
           <div>
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mb-3 sm:mb-4 uppercase tracking-wider font-bold text-xs sm:text-sm">
-              Toplam GençCoin
-            </p>
+            <div className="flex items-center gap-2 mb-3 sm:mb-4">
+              <CoinIcon />
+              <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground uppercase tracking-wider font-bold text-xs sm:text-sm">
+                Toplam GençCoin
+              </p>
+            </div>
             <div className="font-[Manrope] text-[#03624c] leading-none mb-2 font-black text-5xl sm:text-6xl lg:text-[72px]">
               12,450
             </div>
