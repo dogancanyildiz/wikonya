@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
-import { TrendingTopics } from "@/components/trending-topics"
 import { DiscussionFeed } from "@/components/discussion-feed"
 import { Sidebar } from "@/components/sidebar"
 import { ModeToggle } from "@/components/mode-toggle"
@@ -15,7 +14,7 @@ export default function Home() {
       <Hero />
       
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16">
-        <TrendingTopics />
+        
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 mt-12 pb-16">
           <div className="lg:col-span-8">
