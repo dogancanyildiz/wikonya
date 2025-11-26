@@ -1,9 +1,30 @@
 "use client"
 
+import { useState } from "react"
 import { ResourceCard } from "./resource-card"
 import { Button } from "@/components/ui/button"
+import { GraduationCap, ChevronDown } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function ResourceGrid() {
+  const [selectedUniversity, setSelectedUniversity] = useState("all")
+  const [selectedSort, setSelectedSort] = useState("newest")
+
+  const universities = [
+    { id: "all", name: "Hepsi", abbr: "Tümü" },
+    { id: "selcuk", name: "Selçuk Üniversitesi", abbr: "SÜ" },
+    { id: "neu", name: "Necmettin Erbakan Üniversitesi", abbr: "NEÜ" },
+    { id: "kto", name: "KTO Karatay Üniversitesi", abbr: "KTO" },
+    { id: "ktun", name: "Konya Teknik Üniversitesi", abbr: "KTÜN" },
+    { id: "kgtu", name: "Konya Gıda ve Tarım Üniversitesi", abbr: "KGTÜ" },
+  ]
+
+  const selectedUni = universities.find(u => u.id === selectedUniversity) || universities[0]
   const resources = [
     {
       id: 1,
@@ -108,25 +129,73 @@ export function ResourceGrid() {
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl sm:text-2xl">
           Tüm Kaynaklar
         </h2>
         <div className="flex items-center gap-2 flex-wrap">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="outline"
+                className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors font-bold text-xs sm:text-sm border border-border flex items-center gap-2"
+              >
+                <GraduationCap className="w-4 h-4" />
+                {selectedUni.abbr}
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              {universities.map((university) => (
+                <DropdownMenuItem
+                  key={university.id}
+                  onClick={() => setSelectedUniversity(university.id)}
+                  className={`
+                    font-[Manrope] cursor-pointer
+                    ${selectedUniversity === university.id ? 'bg-[#03624c] text-white' : ''}
+                  `}
+                >
+                  {university.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
           <Button 
-            className="px-3 sm:px-4 py-2 bg-[#03624c] text-white rounded-xl font-[Manrope] transition-colors hover:bg-[#03624c]/90 font-bold text-xs sm:text-sm"
+            onClick={() => setSelectedSort("newest")}
+            className={`
+              px-3 sm:px-4 py-2 rounded-xl font-[Manrope] transition-colors font-bold text-xs sm:text-sm
+              ${selectedSort === "newest"
+                ? 'bg-[#03624c] text-white hover:bg-[#03624c]/90' 
+                : 'bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground hover:bg-[#f2f4f3] dark:hover:bg-accent border border-border'
+              }
+            `}
           >
             En Yeni
           </Button>
           <Button 
+            onClick={() => setSelectedSort("popular")}
             variant="outline"
-            className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors font-bold text-xs sm:text-sm border border-border"
+            className={`
+              px-3 sm:px-4 py-2 rounded-xl font-[Manrope] transition-colors font-bold text-xs sm:text-sm
+              ${selectedSort === "popular"
+                ? 'bg-[#03624c] text-white hover:bg-[#03624c]/90 border-[#03624c]' 
+                : 'bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground hover:bg-[#f2f4f3] dark:hover:bg-accent border border-border'
+              }
+            `}
           >
             En Popüler
           </Button>
           <Button 
+            onClick={() => setSelectedSort("downloads")}
             variant="outline"
-            className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors font-bold text-xs sm:text-sm border border-border"
+            className={`
+              px-3 sm:px-4 py-2 rounded-xl font-[Manrope] transition-colors font-bold text-xs sm:text-sm
+              ${selectedSort === "downloads"
+                ? 'bg-[#03624c] text-white hover:bg-[#03624c]/90 border-[#03624c]' 
+                : 'bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground hover:bg-[#f2f4f3] dark:hover:bg-accent border border-border'
+              }
+            `}
           >
             En Çok İndirilen
           </Button>
