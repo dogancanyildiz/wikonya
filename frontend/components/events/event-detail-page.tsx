@@ -8,13 +8,11 @@ import {
   Calendar, 
   MapPin, 
   Clock, 
-  Users, 
   ArrowLeft,
   Share2,
   Heart,
   CheckCircle2,
-  Navigation,
-  User
+  Navigation
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"

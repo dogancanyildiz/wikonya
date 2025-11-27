@@ -4,7 +4,6 @@ import { useParams } from "next/navigation"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calendar, MapPin, Award, Gift, MessageSquare, ThumbsUp, BookOpen, Trophy } from "lucide-react"
 import { ROLE_DISPLAY_NAMES } from "@/lib/constants"
 

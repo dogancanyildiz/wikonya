@@ -223,7 +223,7 @@ export function ScholarshipBoard() {
       <div className="space-y-3 sm:space-y-4">
         {filteredScholarships.length > 0 ? (
           filteredScholarships.map((scholarship) => (
-            <ScholarshipCard key={scholarship.id} id={scholarship.id} {...scholarship} />
+            <ScholarshipCard key={scholarship.id} {...scholarship} />
           ))
         ) : (
           <div className="text-center py-12">

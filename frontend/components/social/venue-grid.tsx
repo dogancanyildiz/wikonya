@@ -138,9 +138,8 @@ export function VenueGrid() {
   const centerLat = 37.8746
   const centerLng = 32.4932
 
-  // Google Maps URL oluştur (tüm mekanları marker olarak göster)
+  // Google Maps URL oluştur
   const getMapUrl = () => {
-    const markers = sortedVenues.map(v => `${v.coordinates.lat},${v.coordinates.lng}`).join('|')
     return `https://www.google.com/maps/embed/v1/view?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d-s6U4ZbZ2p9M&center=${centerLat},${centerLng}&zoom=13`
   }
 
