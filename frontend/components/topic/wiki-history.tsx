@@ -9,7 +9,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { WikiRevision } from "@/lib/types"
-import { useApp } from "@/contexts/app-context"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 // Date formatting helper
 const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
@@ -29,10 +28,8 @@ export function WikiHistory({
   currentVersion,
   onRevert,
 }: WikiHistoryProps) {
-  const { state } = useApp()
   const { canEditWiki } = usePermissions()
   const [selectedRevision, setSelectedRevision] = useState<WikiRevision | null>(null)
-  const [showDiff, setShowDiff] = useState(false)
 
   const handleRevert = (revisionId: number) => {
     if (onRevert) {
@@ -83,7 +80,6 @@ export function WikiHistory({
                       }`}
                       onClick={() => {
                         setSelectedRevision(revision)
-                        setShowDiff(false)
                       }}
                     >
                       <CardContent className="p-3 sm:p-4">

@@ -88,7 +88,7 @@ export function MarkdownEditor({
 
   const renderMarkdown = (text: string) => {
     // Basit markdown renderer
-    let html = text
+    const html = text
       // Başlıklar
       .replace(/^### (.*$)/gim, "<h3 class='font-bold text-lg mt-4 mb-2'>$1</h3>")
       .replace(/^## (.*$)/gim, "<h2 class='font-bold text-xl mt-4 mb-2'>$1</h2>")

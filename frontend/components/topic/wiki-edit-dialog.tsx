@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useApp } from "@/contexts/app-context"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -28,7 +27,6 @@ export function WikiEditDialog({
   topicId,
   onSave,
 }: WikiEditDialogProps) {
-  const { state } = useApp()
   const { canEditWiki, canProposeWikiEdit } = usePermissions()
   const { rewardCoins } = useCoinReward()
   const [content, setContent] = useState(wikiContent?.content || "")

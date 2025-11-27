@@ -10,7 +10,6 @@ import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
 import { WikiEditDialog } from "./wiki-edit-dialog"
 import { WikiHistory } from "./wiki-history"
 import { WikiContent, WikiRevision } from "@/lib/types"
-import { Badge } from "@/components/ui/badge"
 import { renderMarkdown } from "@/lib/utils/markdown"
 
 interface TopicHeaderProps {
