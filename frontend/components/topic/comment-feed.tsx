@@ -141,8 +141,10 @@ export function CommentFeed() {
                         ? 'bg-[#03624c] text-white'
                         : 'hover:bg-[#f2f4f3] dark:hover:bg-accent text-[#4d4d4d] dark:text-foreground'
                     }`}
+                    aria-label={comment.isUpvoted ? "Beğenmeyi geri al" : "Beğen"}
+                    aria-pressed={comment.isUpvoted}
                   >
-                    <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5" fill={comment.isUpvoted ? 'white' : 'none'} />
+                    <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5" fill={comment.isUpvoted ? 'white' : 'none'} aria-hidden="true" />
                   </button>
                   <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-base sm:text-lg">
                     {comment.upvotes - comment.downvotes}
@@ -154,8 +156,10 @@ export function CommentFeed() {
                         ? 'bg-[#03624c] text-white'
                         : 'hover:bg-[#f2f4f3] dark:hover:bg-accent text-[#4d4d4d] dark:text-foreground'
                     }`}
+                    aria-label={comment.isDownvoted ? "Beğenmemeyi geri al" : "Beğenme"}
+                    aria-pressed={comment.isDownvoted}
                   >
-                    <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5" fill={comment.isDownvoted ? 'white' : 'none'} />
+                    <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5" fill={comment.isDownvoted ? 'white' : 'none'} aria-hidden="true" />
                   </button>
                 </div>
 
@@ -183,14 +187,20 @@ export function CommentFeed() {
 
                   {/* Actions */}
                   <div className="flex items-center gap-3 sm:gap-4">
-                    <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors">
-                      <Reply className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <button 
+                      className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors"
+                      aria-label={`${comment.replies} yanıt`}
+                    >
+                      <Reply className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
                       <span className="font-[Manrope] font-semibold text-xs sm:text-sm">
                         {comment.replies} Yanıt
                       </span>
                     </button>
-                    <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors">
-                      <Flag className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <button 
+                      className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors"
+                      aria-label="Yorumu bildir"
+                    >
+                      <Flag className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
                       <span className="font-[Manrope] font-semibold text-xs sm:text-sm">
                         Bildir
                       </span>

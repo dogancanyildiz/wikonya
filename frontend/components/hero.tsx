@@ -24,8 +24,12 @@ export function Hero() {
                 type="text"
                 placeholder="Konuları, soruları keşfet..."
                 className="w-full h-[60px] pl-12 sm:pl-16 pr-28 sm:pr-32 bg-transparent rounded-[20px] font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
+                aria-label="Arama kutusu"
               />
-              <Button className="absolute right-2 h-[48px] px-6 sm:px-8 bg-[#03624c] hover:bg-[#03624c]/90 rounded-[16px] font-[Manrope] font-semibold text-white">
+              <Button 
+                className="absolute right-2 h-[48px] px-6 sm:px-8 bg-[#03624c] hover:bg-[#03624c]/90 rounded-[16px] font-[Manrope] font-semibold text-white"
+                aria-label="Ara"
+              >
                 Ara
               </Button>
             </div>
@@ -38,6 +42,7 @@ export function Hero() {
               <button
                 key={tag}
                 className="px-3 sm:px-4 py-2 bg-white dark:bg-card hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] text-[#4d4d4d] dark:text-foreground rounded-full font-[Manrope] font-semibold transition-colors duration-200 text-sm"
+                aria-label={`${tag} konusunda ara`}
               >
                 {tag}
               </button>

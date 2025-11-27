@@ -83,7 +83,7 @@ export function Navbar() {
   ]
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-card shadow-sm border-b border-border">
+    <nav className="sticky top-0 z-50 bg-white dark:bg-card shadow-sm border-b border-border" role="navigation" aria-label="Ana navigasyon">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16">
         <div className="flex items-center justify-between h-[90px]">
           {/* Logo */}
