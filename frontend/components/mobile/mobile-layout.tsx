@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { MobileHomePage } from "./mobile-home-page"
 import { MobileTopicDetailPage } from "./mobile-topic-detail-page"
 import { MobileNavbar } from "./mobile-navbar"
+import { MobileBottomNav } from "./mobile-bottom-nav"
 import { usePathname } from "next/navigation"
 
 interface MobileLayoutProps {
@@ -30,14 +31,16 @@ export function MobileLayout({ children }: MobileLayoutProps) {
       return <MobileHomePage />
     }
     if (pathname.startsWith("/topic/")) {
-      const topicId = pathname.split("/topic/")[1]
-      return <MobileTopicDetailPage topicId={topicId} />
+      return <MobileTopicDetailPage />
     }
-    // Diğer mobil sayfalar için MobileNavbar ekle
+    // Diğer mobil sayfalar için MobileNavbar ve MobileBottomNav ekle
     return (
       <>
         <MobileNavbar />
-        {children}
+        <div className="pb-20 sm:pb-24">
+          {children}
+        </div>
+        <MobileBottomNav />
       </>
     )
   }
