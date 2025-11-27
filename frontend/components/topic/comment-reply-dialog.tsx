@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useApp } from "@/contexts/app-context"
 import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
-import { canPerformAction, performAction, getRemainingActions } from "@/lib/gamification/rate-limiter"
+import { performAction, getRemainingActions } from "@/lib/gamification/rate-limiter"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"

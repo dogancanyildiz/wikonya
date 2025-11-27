@@ -28,7 +28,7 @@ export function CommentFeed() {
   const [newComment, setNewComment] = useState("")
   const [commentError, setCommentError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [sortOrder, setSortOrder] = useState<"newest" | "popular" | "logical">("newest")
+  const [sortOrder] = useState<"newest" | "popular" | "logical">("newest")
   const [replyingTo, setReplyingTo] = useState<{ id: number; author: string } | null>(null)
   const [comments, setComments] = useState<Comment[]>([
     {
@@ -148,7 +148,8 @@ export function CommentFeed() {
     ))
   }
 
-  const handleFlagComment = async (commentId: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleFlagComment = async (_commentId: number) => {
     if (!state.user) {
       setCommentError("Yorum bildirmek için giriş yapmalısınız.")
       return
@@ -160,7 +161,7 @@ export function CommentFeed() {
       
       // Başarı mesajı gösterilebilir
       alert("Yorum bildirildi. Moderatörler tarafından incelenecektir.")
-    } catch (err) {
+    } catch {
       setCommentError("Yorum bildirilirken bir hata oluştu")
     }
   }

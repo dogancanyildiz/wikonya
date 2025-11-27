@@ -5,7 +5,6 @@
 import { useCallback } from "react"
 import { useApp } from "@/contexts/app-context"
 import {
-  type Notification,
   createCoinEarnedNotification,
   createRolePromotedNotification,
   createBadgeEarnedNotification,

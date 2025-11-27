@@ -3,8 +3,6 @@
 import { useState } from "react"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
-import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
-import { useApp } from "@/contexts/app-context"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -28,8 +26,6 @@ export function TopicApprovalList({
 }: TopicApprovalListProps) {
   const { canApproveProposals } = usePermissions()
   const { notifyTopicApproved, notifyTopicRejected } = useNotifications()
-  const { rewardCoins } = useCoinReward()
-  const { state } = useApp()
   const [rejectingId, setRejectingId] = useState<number | null>(null)
   const [rejectReason, setRejectReason] = useState("")
 

@@ -3,7 +3,6 @@
 import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { CoinIcon } from "@/components/common/icons/coin-icon"

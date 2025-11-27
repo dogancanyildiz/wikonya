@@ -7,7 +7,6 @@ import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
-import { useApp } from "@/contexts/app-context"
 import {
   Sheet,
   SheetContent,

@@ -2,8 +2,6 @@
  * Notification System - Bildirim yönetim sistemi
  */
 
-import { User } from "@/lib/types"
-
 export type NotificationType = 
   | "coin_earned"
   | "role_promoted"

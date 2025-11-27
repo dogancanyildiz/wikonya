@@ -4,7 +4,6 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useApp } from "@/contexts/app-context"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
-import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
 import { canPerformAction, performAction } from "@/lib/gamification/rate-limiter"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -28,7 +27,6 @@ export default function NewTopicPage() {
   const router = useRouter()
   const { state } = useApp()
   const { canCreateTopic } = usePermissions()
-  const { rewardCoins } = useCoinReward()
   const [title, setTitle] = useState("")
   const [category, setCategory] = useState<string>("")
   const [tags, setTags] = useState("")
@@ -106,9 +104,6 @@ export default function NewTopicPage() {
       // Yeni topic oluştur (pending status ile - onay bekliyor)
       // Coin kazanma sadece onaylandığında olacak
       // const _coinResult = rewardCoins("create_topic", { title, category })
-
-      // Yeni topic ID (gerçek uygulamada API'den gelecek)
-      const topicId = Math.floor(Math.random() * 10000)
 
       // Başarılı mesajı göster
       alert("Başlığınız moderatörler tarafından incelenecek. Onaylandığında yayınlanacak ve +20 GençCoin kazanacaksınız!")

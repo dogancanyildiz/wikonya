@@ -3,7 +3,6 @@
  */
 
 import { UserBadge, User, UserRole } from "@/lib/types"
-import { USER_ROLES } from "@/lib/constants"
 
 /**
  * Rozet tanımları
@@ -14,7 +13,8 @@ export const BADGE_DEFINITIONS = {
     name: "İlk Yorum",
     icon: "💬",
     description: "İlk yorumunu yaptın!",
-    condition: (user: User) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    condition: (_user: User) => {
       // Gerçek uygulamada user'ın yorum sayısını kontrol eder
       return false // Mock için
     },
@@ -24,7 +24,8 @@ export const BADGE_DEFINITIONS = {
     name: "İlk Düzenleme",
     icon: "✏️",
     description: "İlk wiki düzenlemeni yaptın!",
-    condition: (user: User) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    condition: (_user: User) => {
       return false // Mock için
     },
   },
@@ -33,7 +34,8 @@ export const BADGE_DEFINITIONS = {
     name: "İlk Başlık",
     icon: "📝",
     description: "İlk başlığını açtın!",
-    condition: (user: User) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    condition: (_user: User) => {
       return false // Mock için
     },
   },
@@ -84,7 +86,8 @@ export const BADGE_DEFINITIONS = {
     name: "Yardımsever",
     icon: "🤝",
     description: "10 yorumun mantıklı olarak işaretlendi!",
-    condition: (user: User) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    condition: (_user: User) => {
       return false // Mock için
     },
   },

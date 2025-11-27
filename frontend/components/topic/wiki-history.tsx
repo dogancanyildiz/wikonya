@@ -8,10 +8,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { WikiRevision } from "@/lib/types"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
-import { computeDiff, type DiffLine } from "@/lib/utils/diff"
+import { computeDiff } from "@/lib/utils/diff"
 // Date formatting helper
 const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
 
