@@ -2,7 +2,7 @@
  * Performance utilities
  */
 
-import { memo, type ComponentType, type PropsWithChildren } from "react"
+import { memo, type ComponentType } from "react"
 
 // Memo wrapper for components
 export const withMemo = <P extends object>(Component: ComponentType<P>) => {
@@ -24,7 +24,7 @@ export const IMAGE_CONFIG = {
 } as const
 
 // Debounce utility
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: never[]) => void>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -44,7 +44,7 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 // Throttle utility
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: never[]) => void>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {

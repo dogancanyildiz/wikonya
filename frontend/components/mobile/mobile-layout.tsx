@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { MobileHomePage } from "./mobile-home-page"
 import { MobileTopicDetailPage } from "./mobile-topic-detail-page"
 import { MobileNavbar } from "./mobile-navbar"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 
 interface MobileLayoutProps {
   children: React.ReactNode
@@ -13,7 +13,6 @@ interface MobileLayoutProps {
 export function MobileLayout({ children }: MobileLayoutProps) {
   const [isMobile, setIsMobile] = useState(false)
   const pathname = usePathname()
-  const router = useRouter()
 
   useEffect(() => {
     const checkMobile = () => {

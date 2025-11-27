@@ -24,10 +24,9 @@ export function ScholarshipCard({
   title,
   amount,
   location,
-  deadline,
   deadlineDays,
   type,
-}: ScholarshipCardProps) {
+}: Omit<ScholarshipCardProps, 'deadline'>) {
   const [isBookmarked, setIsBookmarked] = useState(false)
 
   const typeColors = {

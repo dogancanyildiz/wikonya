@@ -87,7 +87,10 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
     },
   ]
 
+  // Track if component is mounted (client-side only)
+  // This is necessary for hydration safety with next-themes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
   }, [])
 

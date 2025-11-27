@@ -3,9 +3,7 @@
 import { MobileBottomNav } from "./mobile-bottom-nav"
 import { ArrowLeft, Bookmark, Share2, Calendar, Eye, MessageCircle, ArrowUp, ArrowDown, Reply } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -14,7 +12,7 @@ interface MobileTopicDetailPageProps {
   topicId?: string
 }
 
-export function MobileTopicDetailPage({ onBack, topicId = "1" }: MobileTopicDetailPageProps) {
+export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState("home")
   const [isBookmarked, setIsBookmarked] = useState(false)

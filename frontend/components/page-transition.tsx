@@ -12,11 +12,12 @@ export function PageTransition({ children }: PageTransitionProps) {
   const pathname = usePathname()
   const [isFirstRender, setIsFirstRender] = useState(true)
 
+  // Track first render to skip animation on initial load
+  // This pattern is necessary for page transition behavior
   useEffect(() => {
-    if (isFirstRender) {
-      setIsFirstRender(false)
-    }
-  }, [isFirstRender])
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsFirstRender(false)
+  }, [])
 
   if (isFirstRender) {
     return <>{children}</>
