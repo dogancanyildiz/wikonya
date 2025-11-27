@@ -1,11 +1,13 @@
 "use client"
 
-import { Menu, Bell, Moon, Sun, CheckCircle, Gift, MessageSquare, Award, Clock } from "lucide-react"
+import { Menu, Bell, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
+import { useNotifications } from "@/lib/utils/hooks/use-notifications"
+import { useApp } from "@/contexts/app-context"
 import {
   Sheet,
   SheetContent,
@@ -24,68 +26,67 @@ interface MobileNavbarProps {
 }
 
 export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
-  const [notificationCount] = useState(5)
   const [open, setOpen] = useState(false)
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
+  const { notifications, unreadCount, markAsRead } = useNotifications()
 
-  const notifications = [
-    {
-      id: 1,
-      type: "reward",
-      icon: Gift,
-      title: "Genç Coin Kazandınız!",
-      message: "Bir gönderiye yorum yaptığınız için 10 GC kazandınız.",
-      time: "2 dakika önce",
-      isRead: false,
-    },
-    {
-      id: 2,
-      type: "message",
-      icon: MessageSquare,
-      title: "Yeni Mesaj",
-      message: "Ahmet Yılmaz size bir mesaj gönderdi.",
-      time: "15 dakika önce",
-      isRead: false,
-    },
-    {
-      id: 3,
-      type: "achievement",
-      icon: Award,
-      title: "Yeni Rozet Kazandınız!",
-      message: "Aktif Kullanıcı rozetini kazandınız.",
-      time: "1 saat önce",
-      isRead: false,
-    },
-    {
-      id: 4,
-      type: "reward",
-      icon: Gift,
-      title: "Genç Coin Kazandınız!",
-      message: "Bir kaynak indirdiğiniz için 5 GC kazandınız.",
-      time: "3 saat önce",
-      isRead: true,
-    },
-    {
-      id: 5,
-      type: "update",
-      icon: CheckCircle,
-      title: "Yeni Özellik",
-      message: "Kariyer sayfasına yeni iş ilanları eklendi.",
-      time: "1 gün önce",
-      isRead: true,
-    },
-    {
-      id: 6,
-      type: "reminder",
-      icon: Clock,
-      title: "Hatırlatma",
-      message: "Yarın saat 14:00'te KOMEK Diksiyon Kursu var.",
-      time: "2 gün önce",
-      isRead: true,
-    },
-  ]
+  // Icon mapping for notification types
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case "coin_earned":
+        return "💰"
+      case "role_promoted":
+      case "badge_earned":
+        return "🎉"
+      case "comment_liked":
+      case "comment_replied":
+        return "💬"
+      case "topic_approved":
+      case "proposal_approved":
+        return "✅"
+      case "topic_rejected":
+      case "proposal_rejected":
+        return "❌"
+      default:
+        return "🔔"
+    }
+  }
+
+  const getNotificationTypeColor = (type: string) => {
+    switch (type) {
+      case "coin_earned":
+        return "bg-[#03624c]/10 dark:bg-[#03624c]/20 text-[#03624c]"
+      case "role_promoted":
+      case "badge_earned":
+        return "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"
+      case "comment_liked":
+      case "comment_replied":
+        return "bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400"
+      case "topic_approved":
+      case "proposal_approved":
+        return "bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400"
+      case "topic_rejected":
+      case "proposal_rejected":
+        return "bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400"
+      default:
+        return "bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400"
+    }
+  }
+
+  // Simple time ago formatter
+  function formatTimeAgo(date: string): string {
+    const now = new Date()
+    const then = new Date(date)
+    const diffInSeconds = Math.floor((now.getTime() - then.getTime()) / 1000)
+
+    if (diffInSeconds < 60) return "Az önce"
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} dakika önce`
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} saat önce`
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} gün önce`
+    return `${Math.floor(diffInSeconds / 604800)} hafta önce`
+  }
 
   // Track if component is mounted (client-side only)
   // This is necessary for hydration safety with next-themes
@@ -140,7 +141,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                 className="relative"
               >
                 <Bell className="w-5 h-5 text-[#4d4d4d] dark:text-foreground" strokeWidth={2.5} />
-                {notificationCount > 0 && (
+                {unreadCount > 0 && (
                   <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#03624C] rounded-full"></span>
                 )}
               </Button>
@@ -152,9 +153,9 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                   <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg">
                     Bildirimler
                   </h3>
-                  {notificationCount > 0 && (
+                  {unreadCount > 0 && (
                     <span className="px-2.5 py-1 bg-[#03624c] text-white rounded-full font-[Manrope] font-bold text-xs">
-                      {notificationCount} yeni
+                      {unreadCount} yeni
                     </span>
                   )}
                 </div>
@@ -164,40 +165,37 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                   {notifications.length > 0 ? (
                     <div className="divide-y divide-border">
                       {notifications.map((notification) => {
-                        const Icon = notification.icon
+                        const timeAgo = formatTimeAgo(notification.createdAt)
+                        
                         return (
                           <div
                             key={notification.id}
+                            onClick={() => {
+                              if (!notification.read) {
+                                markAsRead(notification.id)
+                              }
+                              if (notification.actionUrl) {
+                                router.push(notification.actionUrl)
+                              }
+                            }}
                             className={`p-4 hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors cursor-pointer ${
-                              !notification.isRead ? 'bg-[#03624c]/5 dark:bg-[#03624c]/10' : ''
+                              !notification.read ? 'bg-[#03624c]/5 dark:bg-[#03624c]/10' : ''
                             }`}
                           >
                             <div className="flex items-start gap-3">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                notification.type === "reward" ? "bg-[#03624c]/10 dark:bg-[#03624c]/20" :
-                                notification.type === "message" ? "bg-blue-100 dark:bg-blue-500/20" :
-                                notification.type === "achievement" ? "bg-amber-100 dark:bg-amber-500/20" :
-                                notification.type === "update" ? "bg-green-100 dark:bg-green-500/20" :
-                                "bg-purple-100 dark:bg-purple-500/20"
-                              }`}>
-                                <Icon className={`w-5 h-5 ${
-                                  notification.type === "reward" ? "text-[#03624c]" :
-                                  notification.type === "message" ? "text-blue-600 dark:text-blue-400" :
-                                  notification.type === "achievement" ? "text-amber-600 dark:text-amber-400" :
-                                  notification.type === "update" ? "text-green-600 dark:text-green-400" :
-                                  "text-purple-600 dark:text-purple-400"
-                                }`} strokeWidth={2.5} />
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${getNotificationTypeColor(notification.type)}`}>
+                                <span className="text-lg">{notification.icon || getNotificationIcon(notification.type)}</span>
                               </div>
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-start justify-between gap-2 mb-1">
                                   <h4 className={`font-[Manrope] font-bold text-sm ${
-                                    !notification.isRead 
+                                    !notification.read 
                                       ? 'text-[#4d4d4d] dark:text-foreground' 
                                       : 'text-[#4d4d4d]/70 dark:text-muted-foreground'
                                   }`}>
                                     {notification.title}
                                   </h4>
-                                  {!notification.isRead && (
+                                  {!notification.read && (
                                     <div className="w-2 h-2 bg-[#03624c] rounded-full flex-shrink-0 mt-1.5"></div>
                                   )}
                                 </div>
@@ -205,7 +203,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                                   {notification.message}
                                 </p>
                                 <span className="font-[Manrope] text-[#4d4d4d]/50 dark:text-muted-foreground text-[11px]">
-                                  {notification.time}
+                                  {timeAgo}
                                 </span>
                               </div>
                             </div>

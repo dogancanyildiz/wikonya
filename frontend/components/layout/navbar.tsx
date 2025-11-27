@@ -23,13 +23,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ROLE_DISPLAY_NAMES } from "@/lib/constants"
+import { useNotifications } from "@/lib/utils/hooks/use-notifications"
+
+// Simple time ago formatter (date-fns yerine)
+function formatTimeAgo(date: string): string {
+  const now = new Date()
+  const then = new Date(date)
+  const diffInSeconds = Math.floor((now.getTime() - then.getTime()) / 1000)
+
+  if (diffInSeconds < 60) return "Az önce"
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} dakika önce`
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} saat önce`
+  if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} gün önce`
+  return `${Math.floor(diffInSeconds / 604800)} hafta önce`
+}
 
 export function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
   const { state, clearUser } = useApp()
   const { user, isAuthenticated } = state
-  const [unreadCount] = useState(5)
+  const { notifications, unreadCount, markAsRead } = useNotifications()
 
   const handleLogout = async () => {
     await mockLogout()
@@ -45,62 +59,57 @@ export function Navbar() {
     { id: "kesif", label: "Konya Keşif", href: "/kesif" },
   ]
 
-  const notifications = [
-    {
-      id: 1,
-      type: "reward",
-      icon: Gift,
-      title: "Genç Coin Kazandınız!",
-      message: "Bir gönderiye yorum yaptığınız için 10 GC kazandınız.",
-      time: "2 dakika önce",
-      isRead: false,
-    },
-    {
-      id: 2,
-      type: "message",
-      icon: MessageSquare,
-      title: "Yeni Mesaj",
-      message: "Ahmet Yılmaz size bir mesaj gönderdi.",
-      time: "15 dakika önce",
-      isRead: false,
-    },
-    {
-      id: 3,
-      type: "achievement",
-      icon: Award,
-      title: "Yeni Rozet Kazandınız!",
-      message: "Aktif Kullanıcı rozetini kazandınız.",
-      time: "1 saat önce",
-      isRead: false,
-    },
-    {
-      id: 4,
-      type: "reward",
-      icon: Gift,
-      title: "Genç Coin Kazandınız!",
-      message: "Bir kaynak indirdiğiniz için 5 GC kazandınız.",
-      time: "3 saat önce",
-      isRead: true,
-    },
-    {
-      id: 5,
-      type: "update",
-      icon: CheckCircle,
-      title: "Yeni Özellik",
-      message: "Kariyer sayfasına yeni iş ilanları eklendi.",
-      time: "1 gün önce",
-      isRead: true,
-    },
-    {
-      id: 6,
-      type: "reminder",
-      icon: Clock,
-      title: "Hatırlatma",
-      message: "Yarın saat 14:00'te KOMEK Diksiyon Kursu var.",
-      time: "2 gün önce",
-      isRead: true,
-    },
-  ]
+  // Icon mapping for notification types
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case "coin_earned":
+      case "reward":
+        return Gift
+      case "role_promoted":
+        return Award
+      case "badge_earned":
+      case "achievement":
+        return Award
+      case "comment_liked":
+      case "comment_replied":
+      case "message":
+        return MessageSquare
+      case "topic_approved":
+      case "proposal_approved":
+      case "update":
+        return CheckCircle
+      case "topic_rejected":
+      case "proposal_rejected":
+        return Clock
+      default:
+        return Bell
+    }
+  }
+
+  const getNotificationTypeColor = (type: string) => {
+    switch (type) {
+      case "coin_earned":
+      case "reward":
+        return "bg-[#03624c]/10 dark:bg-[#03624c]/20 text-[#03624c]"
+      case "role_promoted":
+      case "badge_earned":
+      case "achievement":
+        return "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"
+      case "comment_liked":
+      case "comment_replied":
+      case "message":
+        return "bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400"
+      case "topic_approved":
+      case "proposal_approved":
+      case "update":
+        return "bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400"
+      case "topic_rejected":
+      case "proposal_rejected":
+        return "bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400"
+      default:
+        return "bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400"
+    }
+  }
 
   return (
     <nav className="sticky top-0 z-50 bg-white dark:bg-card shadow-sm border-b border-border" role="navigation" aria-label="Ana navigasyon">
@@ -186,40 +195,42 @@ export function Navbar() {
                     {notifications.length > 0 ? (
                       <div className="divide-y divide-border">
                         {notifications.map((notification) => {
-                          const Icon = notification.icon
+                          const Icon = getNotificationIcon(notification.type)
+                          const timeAgo = formatTimeAgo(notification.createdAt)
+                          
                           return (
                             <div
                               key={notification.id}
+                              onClick={() => {
+                                if (!notification.read) {
+                                  markAsRead(notification.id)
+                                }
+                                if (notification.actionUrl) {
+                                  router.push(notification.actionUrl)
+                                }
+                              }}
                               className={`p-4 hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors cursor-pointer ${
-                                !notification.isRead ? 'bg-[#03624c]/5 dark:bg-[#03624c]/10' : ''
+                                !notification.read ? 'bg-[#03624c]/5 dark:bg-[#03624c]/10' : ''
                               }`}
                             >
                               <div className="flex items-start gap-3">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                  notification.type === "reward" ? "bg-[#03624c]/10 dark:bg-[#03624c]/20" :
-                                  notification.type === "message" ? "bg-blue-100 dark:bg-blue-500/20" :
-                                  notification.type === "achievement" ? "bg-amber-100 dark:bg-amber-500/20" :
-                                  notification.type === "update" ? "bg-green-100 dark:bg-green-500/20" :
-                                  "bg-purple-100 dark:bg-purple-500/20"
-                                }`}>
-                                  <Icon className={`w-5 h-5 ${
-                                    notification.type === "reward" ? "text-[#03624c]" :
-                                    notification.type === "message" ? "text-blue-600 dark:text-blue-400" :
-                                    notification.type === "achievement" ? "text-amber-600 dark:text-amber-400" :
-                                    notification.type === "update" ? "text-green-600 dark:text-green-400" :
-                                    "text-purple-600 dark:text-purple-400"
-                                  }`} strokeWidth={2.5} />
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${getNotificationTypeColor(notification.type)}`}>
+                                  {notification.icon ? (
+                                    <span className="text-lg">{notification.icon}</span>
+                                  ) : (
+                                    <Icon className="w-5 h-5" strokeWidth={2.5} />
+                                  )}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-start justify-between gap-2 mb-1">
                                     <h4 className={`font-[Manrope] font-bold text-sm ${
-                                      !notification.isRead 
+                                      !notification.read 
                                         ? 'text-[#4d4d4d] dark:text-foreground' 
                                         : 'text-[#4d4d4d]/70 dark:text-muted-foreground'
                                     }`}>
                                       {notification.title}
                                     </h4>
-                                    {!notification.isRead && (
+                                    {!notification.read && (
                                       <div className="w-2 h-2 bg-[#03624c] rounded-full flex-shrink-0 mt-1.5"></div>
                                     )}
                                   </div>
@@ -227,7 +238,7 @@ export function Navbar() {
                                     {notification.message}
                                   </p>
                                   <span className="font-[Manrope] text-[#4d4d4d]/50 dark:text-muted-foreground text-[11px]">
-                                    {notification.time}
+                                    {timeAgo}
                                   </span>
                                 </div>
                               </div>
