@@ -35,15 +35,21 @@ export function HousingCard({
   const [isFavorite, setIsFavorite] = useState(false)
 
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-all overflow-hidden group border border-border">
-      <div className="flex flex-col sm:flex-row">
+    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-all overflow-hidden group border border-border p-0">
+      <div className="flex flex-col sm:flex-row sm:items-stretch">
         {/* Left - Image */}
-        <div className="relative w-full sm:w-[280px] h-[200px] sm:h-[240px] flex-shrink-0 overflow-hidden">
+        <div className="relative w-full sm:w-[280px] h-[200px] sm:h-auto flex-shrink-0 overflow-hidden rounded-t-[20px] sm:rounded-l-[20px] sm:rounded-tr-none sm:rounded-bl-[20px] sm:rounded-br-none">
           <Image
             src={image}
             alt={title}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-500"
+            style={{ 
+              borderRadius: 'inherit',
+              objectPosition: 'center',
+              width: '100%',
+              height: '100%'
+            }}
             loading="lazy"
             sizes="(max-width: 768px) 100vw, 280px"
             quality={85}
@@ -76,7 +82,7 @@ export function HousingCard({
         </div>
 
         {/* Right - Details */}
-        <CardContent className="flex-1 p-4 sm:p-6 flex flex-col">
+        <CardContent className="flex-1 p-4 sm:p-6 flex flex-col min-h-[200px] sm:min-h-[240px]">
           {/* Price */}
           <div className="mb-2 sm:mb-3">
             <span className="font-[Manrope] text-[#03624c] font-black text-xl sm:text-2xl lg:text-[24px]">
