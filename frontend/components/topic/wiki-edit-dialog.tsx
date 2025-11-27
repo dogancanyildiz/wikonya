@@ -61,6 +61,17 @@ export function WikiEditDialog({
       // Simüle edilmiş API çağrısı
       await new Promise((resolve) => setTimeout(resolve, 500))
 
+      // Eğer teklif gönderiyorsa, proposal oluştur
+      if (canProposeWikiEdit && !canEditWiki) {
+        // Proposal oluştur (gerçek uygulamada API çağrısı)
+        // Şimdilik sadece callback çağırıyoruz
+        if (onSave) {
+          onSave(content)
+        }
+        onOpenChange(false)
+        return
+      }
+
       // Coin kazanma (eğer doğrudan düzenleme yapabiliyorsa)
       if (canEditWiki) {
         rewardCoins("edit_wiki", { topicId, version: wikiContent?.version || 1 })

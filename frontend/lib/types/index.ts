@@ -267,5 +267,9 @@ export interface Topic {
   comments: number
   tags: string[]
   reliabilityScore?: number
+  status?: "pending" | "approved" | "rejected"
+  approvedBy?: User
+  approvedAt?: string
+  rejectionReason?: string
 }
 
