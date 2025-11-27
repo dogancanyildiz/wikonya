@@ -7,6 +7,7 @@ import { MobileLayout } from "@/components/mobile/mobile-layout"
 import { Navbar } from "@/components/navbar"
 import { ModeToggle } from "@/components/mode-toggle"
 import { PageTransition } from "@/components/page-transition"
+import { AppProvider } from "@/contexts/app-context"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,19 +46,21 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange={false}
         >
-          <div className="hidden md:block fixed top-0 left-0 right-0 z-50">
-            <Navbar />
-            <div className="absolute top-8 right-8 z-50">
-              <ModeToggle />
+          <AppProvider>
+            <div className="hidden md:block fixed top-0 left-0 right-0 z-50">
+              <Navbar />
+              <div className="absolute top-8 right-8 z-50">
+                <ModeToggle />
+              </div>
             </div>
-          </div>
-          <div className="md:pt-20">
-            <MobileLayout>
-              <PageTransition>
-                {children}
-              </PageTransition>
-            </MobileLayout>
-          </div>
+            <div className="md:pt-20">
+              <MobileLayout>
+                <PageTransition>
+                  {children}
+                </PageTransition>
+              </MobileLayout>
+            </div>
+          </AppProvider>
         </ThemeProvider>
       </body>
     </html>
