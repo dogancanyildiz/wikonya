@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/layout/theme-provider"
 import { MobileLayout } from "@/components/mobile/mobile-layout"
-import { Navbar } from "@/components/navbar"
-import { PageTransition } from "@/components/page-transition"
+import { Navbar } from "@/components/layout/navbar"
+import { PageTransition } from "@/components/common/page-transition"
 import { AppProvider } from "@/contexts/app-context"
 
 const geistSans = Geist({

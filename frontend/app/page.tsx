@@ -1,6 +1,6 @@
-import { Hero } from "@/components/hero"
-import { DiscussionFeed } from "@/components/discussion-feed"
-import { Sidebar } from "@/components/sidebar"
+import { Hero } from "@/components/layout/hero"
+import { DiscussionFeed } from "@/components/features/home/discussion-feed"
+import { Sidebar } from "@/components/layout/sidebar"
 
 export default function Home() {
   return (

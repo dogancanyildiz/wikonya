@@ -3,7 +3,7 @@
 import { ArrowUpRight, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { CoinIcon } from "@/components/coin-icon"
+import { CoinIcon } from "@/components/common/icons/coin-icon"
 
 export function WalletCard() {
   return (
