@@ -41,7 +41,9 @@ export function HousingCard({
             alt={title}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-500"
-            unoptimized
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, 280px"
+            quality={85}
           />
           
           {/* Favorite Button */}

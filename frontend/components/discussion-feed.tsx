@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { MessageCircle, ThumbsUp, Clock, BookOpen } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,7 +10,7 @@ interface DiscussionFeedProps {
   onNavigateToTopic?: () => void
 }
 
-export function DiscussionFeed({ onNavigateToTopic }: DiscussionFeedProps) {
+export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }: DiscussionFeedProps) {
   const discussions = [
     {
       id: 1,
@@ -144,5 +145,5 @@ export function DiscussionFeed({ onNavigateToTopic }: DiscussionFeedProps) {
       </div>
     </div>
   )
-}
+})
 
