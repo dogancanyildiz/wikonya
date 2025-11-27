@@ -1,18 +1,48 @@
 "use client"
 
-import { Star, MapPin, TrendingUp, Users } from "lucide-react"
+import { useState } from "react"
+import { Star, MapPin, TrendingUp, Users, Vote, Check } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 export function SocialHero() {
+  const [isVoteModalOpen, setIsVoteModalOpen] = useState(false)
+  const [selectedVenueId, setSelectedVenueId] = useState<number | null>(null)
+
   // Trending venues with their actual IDs from venue-grid
   const trendingVenues = [
     { id: 5, name: "Okuma Odası Kitap Cafe", category: "Ders Çalışma", visitors: "245" },
     { id: 1, name: "Meram Kıraathanesi", category: "Kahve & Tatlı", visitors: "189" },
     { id: 2, name: "Study Hub Cafe", category: "Ders Çalışma", visitors: "167" },
   ]
+
+  // All venues for voting (from venue-grid)
+  const allVenues = [
+    { id: 1, name: "Meram Kıraathanesi", category: "Kahve & Tatlı", location: "Meram, Merkez", rating: 4.8 },
+    { id: 2, name: "Study Hub Cafe", category: "Ders Çalışma", location: "Bosna Hersek, Selçuklu", rating: 4.9 },
+    { id: 3, name: "Şems-i Bistro", category: "Sosyal Buluşma", location: "Alaaddin, Karatay", rating: 4.7 },
+    { id: 4, name: "Bahçe Cafe & Baharat", category: "Sakin Ortam", location: "Yazır, Selçuklu", rating: 4.6 },
+    { id: 5, name: "Okuma Odası Kitap Cafe", category: "Ders Çalışma", location: "Fevziçakmak, Karatay", rating: 4.9 },
+    { id: 6, name: "Müzik & Konser Mekanı", category: "Eğlence", location: "Meram, Merkez", rating: 4.5 },
+  ]
+
+  const handleVote = () => {
+    if (selectedVenueId) {
+      // TODO: API call to submit vote
+      console.log("Voted for venue:", selectedVenueId)
+      setIsVoteModalOpen(false)
+      setSelectedVenueId(null)
+      // Show success message or toast
+    }
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
@@ -114,17 +144,102 @@ export function SocialHero() {
             ))}
           </div>
 
-          {/* View All Button */}
-          <Link href="/social">
+          {/* Vote Button */}
+          <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 dark:border-border">
             <Button 
               variant="outline"
-              className="w-full mt-4 sm:mt-6 py-2 sm:py-3 border-2 border-[#03624c] rounded-xl font-[Manrope] text-[#03624c] hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] dark:hover:text-white transition-all font-bold text-xs sm:text-sm"
+              onClick={() => setIsVoteModalOpen(true)}
+              className="w-full py-4 sm:py-5 border-2 border-[#03624c] rounded-xl font-[Manrope] text-[#03624c] hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] dark:hover:text-white transition-all font-bold text-sm sm:text-base cursor-pointer"
             >
-              Tüm Trend Mekanları Gör
+              <Vote className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
+              Bu Haftanın Mekanını Oyla
             </Button>
-          </Link>
+          </div>
         </CardContent>
       </Card>
+
+      {/* Vote Modal */}
+      <Dialog open={isVoteModalOpen} onOpenChange={setIsVoteModalOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col rounded-2xl p-0">
+          <div className="p-6 flex-shrink-0 border-b border-border">
+            <DialogHeader>
+              <DialogTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-xl sm:text-2xl flex items-center gap-2">
+                <Vote className="w-6 h-6 text-[#03624c]" />
+                Bu Haftanın Mekanını Oyla
+              </DialogTitle>
+            </DialogHeader>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            <div className="space-y-3">
+              {allVenues.map((venue) => (
+                <button
+                  key={venue.id}
+                  onClick={() => setSelectedVenueId(venue.id)}
+                  className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                    selectedVenueId === venue.id
+                      ? "border-[#03624c] bg-[#03624c]/10 dark:bg-[#03624c]/20"
+                      : "border-gray-200 dark:border-border hover:border-[#03624c]/50 hover:bg-[#f2f4f3] dark:hover:bg-accent"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-base sm:text-lg">
+                          {venue.name}
+                        </h4>
+                        {selectedVenueId === venue.id && (
+                          <Check className="w-5 h-5 text-[#03624c]" />
+                        )}
+                      </div>
+                      <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-sm mb-1">
+                        {venue.category}
+                      </p>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-[#03624c]" />
+                          <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-xs">
+                            {venue.location}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-3 h-3 text-[#03624c] fill-[#03624c]" />
+                          <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xs">
+                            {venue.rating}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="p-6 flex-shrink-0 border-t border-border">
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsVoteModalOpen(false)
+                  setSelectedVenueId(null)
+                }}
+                className="flex-1 font-[Manrope] font-bold"
+              >
+                İptal
+              </Button>
+              <Button
+                onClick={handleVote}
+                disabled={!selectedVenueId}
+                className="flex-1 bg-[#03624c] hover:bg-[#03624c]/90 text-white font-[Manrope] font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Vote className="w-4 h-4 mr-2" />
+                Oyla
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
