@@ -1,8 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { FileText, ClipboardList, MessageSquare, Calendar } from "lucide-react"
+import { FileText, ClipboardList, MessageSquare, Calendar, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function FilterChips() {
   const [activeFilter, setActiveFilter] = useState("notes")
@@ -14,30 +20,41 @@ export function FilterChips() {
     { id: "calendar", label: "Akademik Takvim", icon: Calendar },
   ]
 
+  const activeFilterData = filters.find((f) => f.id === activeFilter) || filters[0]
+  const ActiveIcon = activeFilterData.icon
+
   return (
-    <div className="flex items-center gap-3 mb-8 sm:mb-10 overflow-x-auto pb-2 scrollbar-hide">
-      {filters.map((filter) => {
-        const Icon = filter.icon
-        const isActive = activeFilter === filter.id
-        
-        return (
-          <Button
-            key={filter.id}
-            onClick={() => setActiveFilter(filter.id)}
-            variant={isActive ? "default" : "outline"}
-            className={`
-              flex items-center gap-2 px-4 sm:px-6 py-3 rounded-2xl transition-all flex-shrink-0 font-[Manrope] font-bold text-sm sm:text-[15px]
-              ${isActive 
-                ? 'bg-[#03624c] text-white shadow-[0_4px_20px_rgba(3,98,76,0.3)] hover:bg-[#03624c]/90' 
-                : 'bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-md hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] dark:hover:shadow-lg border border-border'
-              }
-            `}
+    <div className="mb-8 sm:mb-10">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button 
+            variant="outline"
+            className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors font-bold text-xs sm:text-sm border border-border flex items-center gap-2"
           >
-            <Icon className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
-            {filter.label}
+            <ActiveIcon className="w-4 h-4" />
+            {activeFilterData.label}
+            <ChevronDown className="w-4 h-4" />
           </Button>
-        )
-      })}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="w-56">
+          {filters.map((filter) => {
+            const Icon = filter.icon
+            return (
+              <DropdownMenuItem
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                className={`
+                  font-[Manrope] cursor-pointer flex items-center gap-2
+                  ${activeFilter === filter.id ? 'bg-[#03624c] text-white' : ''}
+                `}
+              >
+                <Icon className="w-4 h-4" />
+                {filter.label}
+              </DropdownMenuItem>
+            )
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   )
 }
