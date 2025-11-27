@@ -103,7 +103,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
     { label: "Sosyal", href: "/social" },
     { label: "Barınma", href: "/housing" },
     { label: "Kariyer", href: "/career" },
-    { label: "Keşif", href: "/kesif" },
+    { label: "Keşif", href: "/discovery" },
     { label: "Profil", href: "/dashboard" },
   ]
 

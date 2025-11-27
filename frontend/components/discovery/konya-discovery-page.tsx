@@ -1,12 +1,14 @@
 "use client"
 
-import { MapPin, Bus, Clock, Navigation, Heart } from "lucide-react"
+import { MapPin, Clock, Navigation, Heart, Calendar, MessageCircle, ThumbsUp, BookOpen } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
-export function KonyaKesifPage() {
+export function KonyaDiscoveryPage() {
   // Must Visit Places data
   const mustVisitPlaces = [
     {
@@ -109,35 +111,67 @@ export function KonyaKesifPage() {
     }
   ]
 
-  // Transport Tips data
-  const transportTips = [
+  // Klasik Sorular - Tartışma Formatında
+  const faqQuestions = [
     {
       id: 1,
-      destination: "Mevlana Müzesi",
-      buses: ["11", "28", "33"],
-      tram: "Mevlana Durağı",
-      duration: "Merkez'den 10 dk"
+      author: "Konya Rehberi",
+      authorInitials: "KR",
+      question: "Etli ekmek nerede yenir?",
+      answer: "Konya'nın en meşhur etli ekmek mekanları: Meram'da bulunan tarihi etli ekmek fırınları, Alaaddin Tepesi çevresindeki restoranlar ve şehir merkezindeki geleneksel fırınlar. Özellikle 'Fırın Kebabı' olarak bilinen yerlerde en lezzetli etli ekmeği bulabilirsiniz. Meram ve Karatay ilçelerindeki eski mahalle fırınları da çok popülerdir.",
+      timeAgo: "2 gün önce",
+      likes: 45,
+      comments: 12
     },
     {
       id: 2,
-      destination: "Sille Köyü",
-      buses: ["66", "67"],
-      tram: null,
-      duration: "Merkez'den 25 dk"
+      author: "Konya Rehberi",
+      authorInitials: "KR",
+      question: "Konya'da ne zaman gidilir?",
+      answer: "Konya'yı ziyaret etmek için en ideal zamanlar ilkbahar (Nisan-Mayıs) ve sonbahar (Eylül-Ekim) aylarıdır. Özellikle Aralık ayında Mevlana Şeb-i Arus törenleri için çok özel bir atmosfer olur. Yaz ayları çok sıcak olabilir, kış ayları ise soğuk ama kar manzarası güzel olabilir.",
+      timeAgo: "3 gün önce",
+      likes: 38,
+      comments: 8
     },
     {
       id: 3,
-      destination: "Japon Parkı",
-      buses: ["22", "44", "55"],
-      tram: null,
-      duration: "Merkez'den 15 dk"
+      author: "Konya Rehberi",
+      authorInitials: "KR",
+      question: "Mevlana Müzesi'ne giriş ücretli mi?",
+      answer: "Evet, Mevlana Müzesi'ne giriş ücretlidir. Ancak Müze Kart geçerlidir. Müze Kart ile yılda iki kez ücretsiz giriş yapabilirsiniz. Pazartesi günleri kapalıdır, ziyaret saatleri 09:00-17:00 arasındadır.",
+      timeAgo: "4 gün önce",
+      likes: 52,
+      comments: 15
     },
     {
       id: 4,
-      destination: "Tropikal Kelebek Bahçesi",
-      buses: ["12", "31"],
-      tram: null,
-      duration: "Merkez'den 20 dk"
+      author: "Konya Rehberi",
+      authorInitials: "KR",
+      question: "Konya'da ulaşım nasıl sağlanır?",
+      answer: "Konya'da ulaşım oldukça kolaydır. Tramvay hattı şehrin ana arterlerinden geçer. Otobüs hatları geniş bir ağa sahiptir. Şehir merkezi yürüyüş mesafesinde birçok yeri kapsar. Taksi ve dolmuşlar da yaygın olarak kullanılır.",
+      timeAgo: "5 gün önce",
+      likes: 29,
+      comments: 6
+    },
+    {
+      id: 5,
+      author: "Konya Rehberi",
+      authorInitials: "KR",
+      question: "Konya'nın en ünlü yemekleri nelerdir?",
+      answer: "Konya mutfağının en ünlü yemekleri: Etli ekmek, fırın kebabı, bamya çorbası, Mevlana böreği, tirit, etli pide ve sac kavurma. Tatlı olarak ise höşmerim ve peynirli irmik helvası çok meşhurdur.",
+      timeAgo: "1 hafta önce",
+      likes: 67,
+      comments: 19
+    },
+    {
+      id: 6,
+      author: "Konya Rehberi",
+      authorInitials: "KR",
+      question: "Kelebekler Vadisi'ne nasıl gidilir?",
+      answer: "Tropikal Kelebek Bahçesi (Kelebekler Vadisi), Selçuk Üniversitesi kampüsü içinde yer alır. 12 ve 31 numaralı otobüslerle ulaşabilirsiniz. Merkez'den yaklaşık 20 dakika sürer. Kampüs içinde olduğu için araba ile gitmek de mümkündür, otopark mevcuttur.",
+      timeAgo: "1 hafta önce",
+      likes: 41,
+      comments: 10
     }
   ]
 
@@ -163,7 +197,7 @@ export function KonyaKesifPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {mustVisitPlaces.map((place) => (
-            <PlaceCard key={place.id} {...place} />
+            <PlaceCard key={place.id} id={place.id} {...place} />
           ))}
         </div>
       </section>
@@ -183,17 +217,28 @@ export function KonyaKesifPage() {
         </div>
       </section>
 
-      {/* Transport Tips Section */}
+      {/* FAQ Section - Fresh Discussions Format */}
       <section>
-        <div className="mb-3 sm:mb-4 md:mb-6">
-          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-lg sm:text-xl md:text-2xl lg:text-[28px]">
-            Ulaşım İpuçları
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <h2 className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground text-xl sm:text-2xl">
+            Sık Sorulan Sorular
           </h2>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button className="px-4 py-2 bg-[#03624c] text-white rounded-xl font-[Manrope] font-semibold hover:bg-[#03624c]/90 text-sm">
+              Yeni
+            </Button>
+            <Button variant="outline" className="px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] font-semibold hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] transition-colors text-sm">
+              Popüler
+            </Button>
+            <Button variant="outline" className="px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] font-semibold hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] transition-colors text-sm">
+              Cevaplanmamış
+            </Button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {transportTips.map((tip) => (
-            <TransportCard key={tip.id} {...tip} />
+        <div className="space-y-4">
+          {faqQuestions.map((faq) => (
+            <FAQCard key={faq.id} faq={faq} />
           ))}
         </div>
       </section>
@@ -202,7 +247,8 @@ export function KonyaKesifPage() {
 }
 
 // Place Card Component
-function PlaceCard({ image, title, description, category }: {
+function PlaceCard({ id, image, title, description, category }: {
+  id: number
   image: string
   title: string
   description: string
@@ -258,11 +304,13 @@ function PlaceCard({ image, title, description, category }: {
 
         {/* Action Button */}
         <div className="pt-3 sm:pt-4 border-t border-gray-100 dark:border-border">
-          <Button 
-            className="w-full px-4 py-2 sm:py-2.5 bg-[#03624c] text-white rounded-lg font-[Manrope] hover:bg-[#03624c]/90 transition-colors font-bold text-xs sm:text-sm"
-          >
-            Detayları Gör
-          </Button>
+          <Link href={`/discovery/${id}`}>
+            <Button 
+              className="w-full px-4 py-2 sm:py-2.5 bg-[#03624c] text-white rounded-lg font-[Manrope] hover:bg-[#03624c]/90 transition-colors font-bold text-xs sm:text-sm cursor-pointer"
+            >
+              Detayları Gör
+            </Button>
+          </Link>
         </div>
       </CardContent>
     </Card>
@@ -349,59 +397,66 @@ function RouteCard({ route }: {
   )
 }
 
-// Transport Card Component
-function TransportCard({ destination, buses, tram, duration }: {
-  destination: string
-  buses: string[]
-  tram: string | null
-  duration: string
+// FAQ Card Component - Fresh Discussions Format
+function FAQCard({ faq }: {
+  faq: {
+    id: number
+    author: string
+    authorInitials: string
+    question: string
+    answer: string
+    timeAgo: string
+    likes: number
+    comments: number
+  }
 }) {
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border-l-4 border-[#03624c] border border-border">
+    <Card className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-[20px] hover:shadow-lg transition-all duration-300 cursor-pointer group">
       <CardContent className="p-4 sm:p-6">
-        <div className="flex items-start gap-3 mb-3 sm:mb-4">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#03624c]/10 dark:bg-[#03624c]/20 flex items-center justify-center flex-shrink-0">
-            <Bus className="w-4 h-4 sm:w-5 sm:h-5 text-[#03624c]" strokeWidth={2.5} />
-          </div>
-          <div>
-            <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-1 font-bold text-base sm:text-lg">
-              {destination}
+        <div className="flex items-start gap-4">
+          <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-[#f2f4f3] dark:border-border">
+            <AvatarFallback className="bg-[#03624c] text-white font-[Manrope] font-bold">
+              {faq.authorInitials}
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+              <span className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground text-sm sm:text-base">
+                {faq.author}
+              </span>
+              <span className="px-3 py-1 bg-[#f2f4f3] dark:bg-accent rounded-full font-[Manrope] font-semibold text-[#03624c] text-xs sm:text-sm">
+                Rehber
+              </span>
+              <div className="flex items-center gap-1 text-[#4d4d4d]/60 dark:text-muted-foreground">
+                <Clock className="w-4 h-4" />
+                <span className="font-[Manrope] font-medium text-xs sm:text-sm">{faq.timeAgo}</span>
+              </div>
+            </div>
+
+            <h3 className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground mb-2 group-hover:text-[#03624c] transition-colors text-sm sm:text-base">
+              {faq.question}
             </h3>
-            <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs sm:text-[13px]">
-              {duration}
-            </span>
-          </div>
-        </div>
 
-        <div className="space-y-2 sm:space-y-3">
-          {/* Bus Numbers */}
-          <div>
-            <span className="font-[Manrope] text-[#4d4d4d]/70 dark:text-muted-foreground block mb-1.5 sm:mb-2 font-bold text-[10px] sm:text-[11px] tracking-wide">
-              OTOBÜS HATLARI
-            </span>
-            <div className="flex gap-2 flex-wrap">
-              {buses.map((bus) => (
-                <span
-                  key={bus}
-                  className="px-2 sm:px-3 py-1 sm:py-1.5 bg-[#03624c] rounded-lg font-[Manrope] text-white font-bold text-xs sm:text-[13px]"
-                >
-                  {bus}
-                </span>
-              ))}
+            <p className="font-[Manrope] font-medium text-[#4d4d4d]/70 dark:text-muted-foreground mb-4 text-sm sm:text-base line-clamp-2">
+              {faq.answer}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+              <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors cursor-pointer">
+                <ThumbsUp className="w-4 h-4" />
+                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{faq.likes}</span>
+              </button>
+              <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors cursor-pointer">
+                <MessageCircle className="w-4 h-4" />
+                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{faq.comments}</span>
+              </button>
+              <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors ml-auto cursor-pointer">
+                <BookOpen className="w-4 h-4" />
+                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">Devamını Oku</span>
+              </button>
             </div>
           </div>
-
-          {/* Tram Station if available */}
-          {tram && (
-            <div>
-              <span className="font-[Manrope] text-[#4d4d4d]/70 dark:text-muted-foreground block mb-1.5 sm:mb-2 font-bold text-[10px] sm:text-[11px] tracking-wide">
-                TRAMVAY DURAĞI
-              </span>
-              <span className="font-[Manrope] text-[#03624c] font-bold text-sm sm:text-sm">
-                {tram}
-              </span>
-            </div>
-          )}
         </div>
       </CardContent>
     </Card>

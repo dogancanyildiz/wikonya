@@ -2,6 +2,7 @@
 
 import { Calendar, MapPin, TrendingUp, MessageCircle, Eye } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import Link from "next/link"
 
 interface SidebarProps {
   onNavigateToTopic?: () => void
@@ -71,10 +72,10 @@ export function Sidebar({ onNavigateToTopic }: SidebarProps = {}) {
         </CardHeader>
         <CardContent className="space-y-2.5 pt-0">
           {trendingData.slice(0, 2).map((topic) => (
-            <div
+            <Link
               key={topic.id}
-              onClick={onNavigateToTopic}
-              className="bg-[#f2f4f3] dark:bg-accent rounded-xl p-2.5 hover:shadow-md transition-shadow cursor-pointer"
+              href={`/topic/${topic.id}`}
+              className="block bg-[#f2f4f3] dark:bg-accent rounded-xl p-2.5 hover:shadow-md transition-shadow cursor-pointer"
             >
               <div className="flex items-start justify-between mb-1.5">
                 <span className="px-2 py-0.5 bg-white dark:bg-card rounded-full font-[Manrope] font-semibold text-[#03624c] text-xs">
@@ -98,7 +99,7 @@ export function Sidebar({ onNavigateToTopic }: SidebarProps = {}) {
                   <span className="font-[Manrope] font-semibold text-xs">{topic.comments}</span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </CardContent>
       </Card>
@@ -113,9 +114,10 @@ export function Sidebar({ onNavigateToTopic }: SidebarProps = {}) {
         </CardHeader>
         <CardContent className="space-y-2.5 pt-0">
           {upcomingEvents.slice(0, 2).map((event) => (
-            <div
+            <Link
               key={event.id}
-              className="bg-[#f2f4f3] dark:bg-accent rounded-xl p-2.5 hover:shadow-md transition-shadow cursor-pointer"
+              href={`/events/${event.id}`}
+              className="block bg-[#f2f4f3] dark:bg-accent rounded-xl p-2.5 hover:shadow-md transition-shadow cursor-pointer"
             >
               <h4 className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground mb-1.5 text-sm line-clamp-2">
                 {event.title}
@@ -135,7 +137,7 @@ export function Sidebar({ onNavigateToTopic }: SidebarProps = {}) {
                   {event.attendees} katılımcı
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </CardContent>
       </Card>

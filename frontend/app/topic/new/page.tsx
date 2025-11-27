@@ -20,7 +20,7 @@ const CATEGORIES = [
   { value: "social", label: "Sosyal Yaşam & Mekan" },
   { value: "housing", label: "Barınma & Yaşam" },
   { value: "career", label: "Kariyer & Gelişim" },
-  { value: "kesif", label: "Konya Keşif" },
+  { value: "discovery", label: "Konya Keşif" },
 ] as const
 
 export default function NewTopicPage() {

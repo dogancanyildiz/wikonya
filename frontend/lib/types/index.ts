@@ -1,5 +1,5 @@
 // Common Types
-export type PageRoute = 'home' | 'topic' | 'dashboard' | 'academic' | 'social' | 'housing' | 'career' | 'kesif'
+export type PageRoute = 'home' | 'topic' | 'dashboard' | 'academic' | 'social' | 'housing' | 'career' | 'discovery'
 
 export type JobType = "Part-Time" | "Full-Time" | "Remote" | "Hybrid"
 export type CrowdLevel = "low" | "medium" | "high"

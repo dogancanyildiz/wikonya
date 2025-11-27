@@ -17,7 +17,7 @@ export const ROUTES = {
   social: "/social",
   housing: "/housing",
   career: "/career",
-  kesif: "/kesif",
+  discovery: "/discovery",
   dashboard: "/dashboard",
   topic: (id: string | number) => `/topic/${id}`,
 } as const
@@ -28,7 +28,7 @@ export const NAV_MENU_ITEMS = [
   { id: "sosyal", label: "Sosyal Yaşam & Mekan", href: ROUTES.social },
   { id: "barinma", label: "Barınma & Yaşam", href: ROUTES.housing },
   { id: "kariyer", label: "Kariyer & Gelişim", href: ROUTES.career },
-  { id: "kesif", label: "Konya Keşif", href: ROUTES.kesif },
+  { id: "discovery", label: "Konya Keşif", href: ROUTES.discovery },
 ] as const
 
 // Breakpoints

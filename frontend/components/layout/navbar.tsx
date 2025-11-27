@@ -1,9 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { CoinIcon } from "@/components/common/icons/coin-icon"
 import { ModeToggle } from "@/components/layout/mode-toggle"
@@ -14,6 +16,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,6 +51,8 @@ export function Navbar() {
   const { state, clearUser } = useApp()
   const { user, isAuthenticated } = state
   const { notifications, unreadCount, markAsRead } = useNotifications()
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
 
   const handleLogout = async () => {
     await mockLogout()
@@ -55,7 +65,7 @@ export function Navbar() {
     { id: "sosyal", label: "Sosyal Yaşam & Mekan", href: "/social" },
     { id: "barinma", label: "Barınma & Yaşam", href: "/housing" },
     { id: "kariyer", label: "Kariyer & Gelişim", href: "/career" },
-    { id: "kesif", label: "Konya Keşif", href: "/kesif" },
+    { id: "discovery", label: "Konya Keşif", href: "/discovery" },
   ]
 
   // Icon mapping for notification types
@@ -153,10 +163,78 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="icon"
+              onClick={() => setIsSearchOpen(true)}
               className="hover:bg-[#f2f4f3] dark:hover:bg-accent rounded-full"
             >
               <Search className="w-5 h-5 text-[#4d4d4d] dark:text-foreground" strokeWidth={2.5} />
             </Button>
+
+            {/* Search Dialog */}
+            <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
+              <DialogContent className="sm:max-w-[600px] p-0 gap-0">
+                <DialogHeader className="p-4 sm:p-6 pb-0">
+                  <DialogTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-xl sm:text-2xl">
+                    Arama
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="p-4 sm:p-6">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      if (searchQuery.trim()) {
+                        router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+                        setIsSearchOpen(false)
+                        setSearchQuery("")
+                      }
+                    }}
+                    className="space-y-4"
+                  >
+                    <div className="relative flex items-center bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+                      <Search className="absolute left-4 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-[#03624c]" />
+                      <Input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Konuları, soruları, yorumları keşfet..."
+                        className="w-full h-[60px] pl-12 sm:pl-16 pr-28 sm:pr-32 bg-transparent rounded-[20px] font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
+                        autoFocus
+                      />
+                      <Button
+                        type="submit"
+                        className="absolute right-2 h-[48px] px-6 sm:px-8 bg-[#03624c] hover:bg-[#03624c]/90 rounded-[16px] font-[Manrope] font-semibold text-white"
+                      >
+                        Ara
+                      </Button>
+                    </div>
+                  </form>
+                  
+                  {/* Quick Search Tags */}
+                  <div className="mt-6">
+                    <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-semibold text-sm mb-3">
+                      Hızlı Arama
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {["Veri Yapıları", "Barınma", "Staj", "Etkinlik", "Yemek"].map((tag) => (
+                        <Button
+                          key={tag}
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSearchQuery(tag)
+                            router.push(`/search?q=${encodeURIComponent(tag)}`)
+                            setIsSearchOpen(false)
+                            setSearchQuery("")
+                          }}
+                          className="font-[Manrope] text-xs sm:text-sm border-[#03624c] text-[#03624c] hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] dark:hover:text-white"
+                        >
+                          {tag}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
 
             {/* Theme Toggle */}
             <ModeToggle />
@@ -274,7 +352,7 @@ export function Navbar() {
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
+                  <button className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity cursor-pointer">
                     <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-[#f2f4f3] dark:border-border">
                       <AvatarFallback 
                         className="bg-[#03624c] text-white font-[Manrope] font-bold"
