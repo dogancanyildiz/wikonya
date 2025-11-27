@@ -4,8 +4,30 @@ import { ArrowUpRight, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { CoinIcon } from "@/components/common/icons/coin-icon"
+import { useApp } from "@/contexts/app-context"
 
 export function WalletCard() {
+  const { state } = useApp()
+  const user = state.user
+
+  if (!user) {
+    return (
+      <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border h-full flex flex-col">
+        <CardContent className="p-3 sm:p-5 flex items-center justify-center">
+          <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground text-sm">
+            Lütfen giriş yapın
+          </p>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  // Mock veriler (gerçek uygulamada API'den gelecek)
+  const weeklyEarned = 240
+  const monthlyEarned = 485
+  const totalSpent = 120
+  const totalEarned = user.totalCoins + totalSpent
+
   return (
     <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border h-full flex flex-col">
       <CardContent className="p-3 sm:p-5 flex flex-col flex-1">
@@ -17,12 +39,12 @@ export function WalletCard() {
             </p>
           </div>
           <div className="font-[Manrope] text-[#03624c] leading-none mb-1 font-black text-3xl sm:text-4xl lg:text-[36px]">
-            12,450
+            {user.totalCoins.toLocaleString()}
           </div>
           <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
             <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
             <span className="font-[Manrope] font-semibold text-[10px] sm:text-xs">
-              +240 bu hafta
+              +{weeklyEarned} bu hafta
             </span>
           </div>
         </div>
@@ -40,7 +62,7 @@ export function WalletCard() {
               Bu Ay Kazanılan
             </p>
             <p className="font-[Manrope] text-[#03624c] font-bold text-base sm:text-lg lg:text-xl">
-              485
+              {monthlyEarned}
             </p>
           </div>
           <div>
@@ -48,7 +70,7 @@ export function WalletCard() {
               Harcanan
             </p>
             <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-base sm:text-lg lg:text-xl">
-              120
+              {totalSpent}
             </p>
           </div>
           <div>
@@ -56,7 +78,7 @@ export function WalletCard() {
               Toplam Kazanç
             </p>
             <p className="font-[Manrope] text-[#03624c] font-bold text-base sm:text-lg lg:text-xl">
-              12,570
+              {totalEarned.toLocaleString()}
             </p>
           </div>
         </div>

@@ -1,22 +1,41 @@
 "use client"
 
-import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock } from "lucide-react"
+import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { CoinIcon } from "@/components/common/icons/coin-icon"
 import { ModeToggle } from "@/components/layout/mode-toggle"
+import { useApp } from "@/contexts/app-context"
+import { mockLogout } from "@/lib/auth/mock-auth"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { ROLE_DISPLAY_NAMES } from "@/lib/constants"
 
 export function Navbar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { state, clearUser } = useApp()
+  const { user, isAuthenticated } = state
   const [unreadCount] = useState(5)
+
+  const handleLogout = async () => {
+    await mockLogout()
+    clearUser()
+    router.push("/")
+  }
 
   const menuItems = [
     { id: "akademik", label: "Akademik", href: "/academic" },
@@ -241,27 +260,67 @@ export function Navbar() {
               </PopoverContent>
             </Popover>
 
-            {/* Profile & GençCoin */}
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity"
-            >
-              <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-[#f2f4f3] dark:border-border">
-                <AvatarFallback 
-                  className="bg-[#03624c] text-white font-[Manrope] font-bold"
-                >
-                  AY
-                </AvatarFallback>
-              </Avatar>
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#f2f4f3] dark:bg-accent rounded-full">
-                <span 
-                  className="font-[Manrope] text-[#03624c] dark:text-[#03624c] font-bold text-sm"
-                >
-                  1,250
-                </span>
-                <CoinIcon />
-              </div>
-            </Link>
+            {/* Profile & GençCoin or Login */}
+            {isAuthenticated && user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
+                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-[#f2f4f3] dark:border-border">
+                      <AvatarFallback 
+                        className="bg-[#03624c] text-white font-[Manrope] font-bold"
+                      >
+                        {user.initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#f2f4f3] dark:bg-accent rounded-full">
+                      <span 
+                        className="font-[Manrope] text-[#03624c] dark:text-[#03624c] font-bold text-sm"
+                      >
+                        {user.totalCoins.toLocaleString()}
+                      </span>
+                      <CoinIcon />
+                    </div>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <div className="px-2 py-1.5">
+                    <p className="font-[Manrope] font-bold text-sm text-[#4d4d4d] dark:text-foreground">
+                      {user.name}
+                    </p>
+                    <p className="font-[Manrope] text-xs text-[#4d4d4d]/60 dark:text-muted-foreground">
+                      {ROLE_DISPLAY_NAMES[user.role]}
+                    </p>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="cursor-pointer">
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="cursor-pointer">
+                      Profil
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 dark:text-red-400">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Çıkış Yap
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button
+                asChild
+                variant="outline"
+                className="border-[#03624c] text-[#03624c] hover:bg-[#03624c] hover:text-white"
+              >
+                <Link href="/auth/login" className="flex items-center gap-2">
+                  <LogIn className="w-4 h-4" />
+                  <span className="hidden sm:inline">Giriş Yap</span>
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
