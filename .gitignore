@@ -1,0 +1,7 @@
+# Documentation and design files (not committed)
+/docs
+/figma
+
+# OS files
+.DS_Store
+
