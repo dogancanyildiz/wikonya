@@ -4,6 +4,23 @@ export type PageRoute = 'home' | 'topic' | 'dashboard' | 'academic' | 'social' |
 export type JobType = "Part-Time" | "Full-Time" | "Remote" | "Hybrid"
 export type CrowdLevel = "low" | "medium" | "high"
 
+// User Role Types
+export type UserRole = "yeni_gelen" | "seyyah" | "gezgin" | "kasif_meraklisi" | "konya_bilgesi"
+
+export interface UserBadge {
+  id: string
+  name: string
+  icon: string
+  description: string
+  earnedAt: string
+}
+
+export interface UserXP {
+  current: number
+  nextLevel: number
+  progress: number // 0-100
+}
+
 // User & Profile Types
 export interface User {
   id: number
@@ -11,6 +28,14 @@ export interface User {
   initials: string
   email?: string
   avatar?: string
+  role: UserRole
+  totalCoins: number
+  badges: UserBadge[]
+  xp: UserXP
+  joinedAt: string
+  location?: string
+  bio?: string
+  university?: string
 }
 
 // Discussion & Comment Types

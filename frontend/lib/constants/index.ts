@@ -147,3 +147,95 @@ export const APP_CONFIG = {
   version: "0.1.0",
 } as const
 
+// User Roles & Gamification
+export const USER_ROLES = {
+  yeni_gelen: {
+    id: "yeni_gelen",
+    name: "Yeni Gelen",
+    minCoins: 0,
+    maxCoins: 500,
+    multiplier: 1.0,
+    description: "Meraklı Gözlemci",
+    canCreateTopic: false,
+    canEditWiki: false,
+    canEditWikiProposal: true,
+    canModerate: false,
+    commentLimitPerHour: 5,
+  },
+  seyyah: {
+    id: "seyyah",
+    name: "Seyyah",
+    minCoins: 501,
+    maxCoins: 2500,
+    multiplier: 1.2,
+    description: "Katkıda Bulunan",
+    canCreateTopic: false,
+    canEditWiki: true,
+    canEditWikiProposal: false,
+    canModerate: false,
+    commentLimitPerHour: null, // No limit
+  },
+  gezgin: {
+    id: "gezgin",
+    name: "Gezgin",
+    minCoins: 2501,
+    maxCoins: 10000,
+    multiplier: 1.5,
+    description: "Güvenilir İçerik Üretici",
+    canCreateTopic: true,
+    canEditWiki: true,
+    canEditWikiProposal: false,
+    canModerate: false,
+    commentLimitPerHour: null,
+  },
+  kasif_meraklisi: {
+    id: "kasif_meraklisi",
+    name: "Kaşif Meraklısı",
+    minCoins: 10001,
+    maxCoins: 50000,
+    multiplier: 2.0,
+    description: "Topluluk Lideri / Moderatör",
+    canCreateTopic: true,
+    canEditWiki: true,
+    canEditWikiProposal: false,
+    canModerate: true,
+    canApproveProposals: true,
+    commentLimitPerHour: null,
+  },
+  konya_bilgesi: {
+    id: "konya_bilgesi",
+    name: "Konya Bilgesi",
+    minCoins: 50001,
+    maxCoins: Infinity,
+    multiplier: 2.5,
+    description: "Usta Rehber / Elit Katılımcı",
+    canCreateTopic: true,
+    canEditWiki: true,
+    canEditWikiProposal: false,
+    canModerate: true,
+    canApproveProposals: true,
+    canAccessAdminPanel: true,
+    commentLimitPerHour: null,
+  },
+} as const
+
+// Coin Earning Matrix (Base points for "Yeni Gelen" role)
+export const COIN_MATRIX = {
+  createTopic: 20,
+  editWiki: 10,
+  comment: 2,
+  wikiVoteUseful: 5,
+  wikiVoteNotUseful: -10,
+  commentLike: 1,
+  socialResponsibilityProject: 100,
+} as const
+
+// Role Display Names (Turkish)
+export const ROLE_DISPLAY_NAMES: Record<string, string> = {
+  yeni_gelen: "Yeni Gelen",
+  seyyah: "Seyyah",
+  gezgin: "Gezgin",
+  kasif_meraklisi: "Kaşif Meraklısı",
+  konya_bilgesi: "Konya Bilgesi",
+} as const
+
