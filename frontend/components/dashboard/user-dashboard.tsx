@@ -6,6 +6,10 @@ import { WalletCard } from "./wallet-card"
 import { ProfileCard } from "./profile-card"
 import { StatsCard } from "./stats-card"
 import { ActivityFeed } from "./activity-feed"
+import { XPProgressBar } from "./xp-progress-bar"
+import { ContributionsTab } from "./contributions-tab"
+import { CoinConverter } from "./coin-converter"
+import { ReferralSystem } from "./referral-system"
 
 export function UserDashboard() {
   const [activeItem, setActiveItem] = useState("wallet")
@@ -36,8 +40,30 @@ export function UserDashboard() {
             </div>
           </div>
 
+          {/* XP Progress Bar */}
+          <div className="mt-4 sm:mt-6">
+            <XPProgressBar />
+          </div>
+
+          {/* Coin Converter */}
+          {activeItem === "convert" && (
+            <CoinConverter />
+          )}
+
+          {/* Referral System */}
+          {activeItem === "referral" && (
+            <ReferralSystem />
+          )}
+
+          {/* Contributions Tab */}
+          {activeItem === "contributions" && (
+            <ContributionsTab />
+          )}
+
           {/* Activity Feed */}
-          <ActivityFeed />
+          {activeItem === "wallet" && (
+            <ActivityFeed />
+          )}
         </div>
       </div>
     </div>
