@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, Wallet, Trophy, BookOpen, MessageSquare, Settings, LogOut } from "lucide-react"
+import { Home, Wallet, Trophy, BookOpen, MessageSquare, Settings, LogOut, UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
@@ -13,6 +13,8 @@ export function DashboardSidebar({ activeItem, onNavigate }: DashboardSidebarPro
   const menuItems = [
     { id: "dashboard", label: "Ana Sayfa", icon: Home },
     { id: "wallet", label: "Cüzdan & GençCoin", icon: Wallet },
+    { id: "convert", label: "Kültür Kart&apos;a Aktar", icon: Wallet },
+    { id: "referral", label: "Arkadaşını Davet Et", icon: UserPlus },
     { id: "achievements", label: "Başarılar", icon: Trophy },
     { id: "contributions", label: "Katkılarım", icon: BookOpen },
     { id: "messages", label: "Mesajlar", icon: MessageSquare },
