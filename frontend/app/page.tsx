@@ -1,7 +1,6 @@
 import { Hero } from "@/components/layout/hero"
 import { DiscussionFeed } from "@/components/features/home/discussion-feed"
 import { Sidebar } from "@/components/layout/sidebar"
-import { TrendingTopics } from "@/components/features/home/trending-topics"
 import { PopularComments } from "@/components/features/home/popular-comments"
 import { KBBAnnouncements } from "@/components/features/home/kbb-announcements"
 
@@ -18,14 +17,15 @@ export default function Home() {
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 mt-4 sm:mt-6 pb-16 md:pb-20">
           <div className="lg:col-span-8 space-y-4 sm:space-y-6">
-            {/* Trending Topics */}
-            <TrendingTopics />
             
-            {/* Popular Comments */}
-            <PopularComments />
+ 
             
             {/* Discussion Feed */}
             <DiscussionFeed />
+
+           {/* Popular Comments */}
+           <PopularComments />
+
           </div>
           <div className="hidden lg:block lg:col-span-4">
             <Sidebar />
