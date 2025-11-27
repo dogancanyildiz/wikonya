@@ -1,11 +1,12 @@
 "use client"
 
-import { ArrowUp, ArrowDown, Reply, Flag } from "lucide-react"
+import { ArrowUp, ArrowDown, Reply, Flag, Brain } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
+import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
 
 interface Comment {
   id: number
@@ -15,12 +16,15 @@ interface Comment {
   content: string
   upvotes: number
   downvotes: number
+  logicalVotes: number
   replies: number
   isUpvoted?: boolean
   isDownvoted?: boolean
+  isLogical?: boolean
 }
 
 export function CommentFeed() {
+  const { rewardCoins } = useCoinReward()
   const [comments, setComments] = useState<Comment[]>([
     {
       id: 1,
@@ -30,9 +34,11 @@ export function CommentFeed() {
       content: "Bu notlar gerçekten çok işime yaradı! Özellikle anayasa hukuku kısmı çok detaylı ve anlaşılır şekilde hazırlanmış. Final sınavında bu notlar sayesinde başarılı oldum. Herkese tavsiye ederim.",
       upvotes: 24,
       downvotes: 2,
+      logicalVotes: 18,
       replies: 5,
       isUpvoted: false,
       isDownvoted: false,
+      isLogical: false,
     },
     {
       id: 2,
@@ -42,9 +48,11 @@ export function CommentFeed() {
       content: "Notlar iyi hazırlanmış ama bazı konularda daha fazla örnek olabilirdi. Özellikle medeni hukuk bölümünde vaka analizleri eksik. Yine de genel olarak faydalı bir kaynak.",
       upvotes: 18,
       downvotes: 4,
+      logicalVotes: 12,
       replies: 3,
       isUpvoted: true,
       isDownvoted: false,
+      isLogical: true,
     },
     {
       id: 3,
@@ -54,9 +62,11 @@ export function CommentFeed() {
       content: "Final öncesi son gün bu notlara çalıştım ve çok yardımcı oldu. Özellikle özet tablolar ve şemalar sayesinde konuları daha iyi kavradım. Teşekkürler!",
       upvotes: 42,
       downvotes: 1,
+      logicalVotes: 35,
       replies: 8,
       isUpvoted: false,
       isDownvoted: false,
+      isLogical: false,
     },
     {
       id: 4,
@@ -66,9 +76,11 @@ export function CommentFeed() {
       content: "Notların güncelliğine dikkat etmek gerekiyor. 2023 yılında yapılan bazı yasal değişiklikler burada yer almıyor. Bunu göz önünde bulundurarak kullanın.",
       upvotes: 15,
       downvotes: 3,
+      logicalVotes: 8,
       replies: 2,
       isUpvoted: false,
       isDownvoted: false,
+      isLogical: false,
     },
   ])
 
@@ -99,6 +111,21 @@ export function CommentFeed() {
               isUpvoted: false,
             }
           }
+        }
+      }
+      return comment
+    }))
+  }
+
+  const handleLogicalVote = (commentId: number) => {
+    setComments(comments.map(comment => {
+      if (comment.id === commentId) {
+        if (comment.isLogical) {
+          return { ...comment, logicalVotes: comment.logicalVotes - 1, isLogical: false }
+        } else {
+          // Coin kazanma (sadece ilk kez işaretlendiğinde)
+          rewardCoins("comment_logical", { commentId })
+          return { ...comment, logicalVotes: comment.logicalVotes + 1, isLogical: true }
         }
       }
       return comment
@@ -186,7 +213,23 @@ export function CommentFeed() {
                   </p>
 
                   {/* Actions */}
-                  <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+                    <button 
+                      onClick={() => handleLogicalVote(comment.id)}
+                      className={`flex items-center gap-2 transition-colors font-[Manrope] font-semibold text-xs sm:text-sm px-3 py-1.5 rounded-lg ${
+                        comment.isLogical
+                          ? 'bg-[#03624c] text-white hover:bg-[#03624c]/90'
+                          : 'text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] hover:bg-[#f2f4f3] dark:hover:bg-accent'
+                      }`}
+                      aria-label={comment.isLogical ? "Mantıklı yorum işaretini kaldır" : "Mantıklı yorum olarak işaretle"}
+                      aria-pressed={comment.isLogical}
+                    >
+                      <Brain className={`w-3 h-3 sm:w-4 sm:h-4 ${comment.isLogical ? 'fill-white' : ''}`} aria-hidden="true" />
+                      <span>Mantıklı Yorum</span>
+                      {comment.logicalVotes > 0 && (
+                        <span className="ml-1">({comment.logicalVotes})</span>
+                      )}
+                    </button>
                     <button 
                       className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors"
                       aria-label={`${comment.replies} yanıt`}
