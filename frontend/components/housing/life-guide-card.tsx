@@ -2,9 +2,11 @@
 
 import { LucideIcon, ArrowRight } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 
 interface LifeGuideCardProps {
+  id: number
   icon: LucideIcon
   title: string
   description: string
@@ -12,9 +14,10 @@ interface LifeGuideCardProps {
   articles: number
 }
 
-export function LifeGuideCard({ icon: Icon, title, description, image, articles }: LifeGuideCardProps) {
+export function LifeGuideCard({ id, icon: Icon, title, description, image, articles }: LifeGuideCardProps) {
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-all overflow-hidden group cursor-pointer border border-border">
+    <Link href={`/life-guide/${id}`} className="block w-full">
+      <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-all overflow-hidden group cursor-pointer border border-border w-full">
       {/* Image */}
       <div className="relative h-32 sm:h-40 overflow-hidden">
         <Image
@@ -53,6 +56,7 @@ export function LifeGuideCard({ icon: Icon, title, description, image, articles 
         </div>
       </CardContent>
     </Card>
+    </Link>
   )
 }
 

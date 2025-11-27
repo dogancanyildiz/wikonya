@@ -65,7 +65,9 @@ export function LifeGuideSidebar() {
 
       <div className="space-y-4 sm:space-y-6">
         {guides.map((guide) => (
-          <LifeGuideCard key={guide.id} {...guide} />
+          <div key={guide.id} className="w-full">
+            <LifeGuideCard id={guide.id} {...guide} />
+          </div>
         ))}
       </div>
 
