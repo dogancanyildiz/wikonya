@@ -1,15 +1,17 @@
 "use client"
 
-import { useState } from "react"
-import { Calendar, User, RotateCcw, CheckCircle2, XCircle } from "lucide-react"
+import { useState, useMemo } from "react"
+import { Calendar, User, RotateCcw, CheckCircle2, XCircle, GitCompare } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { WikiRevision } from "@/lib/types"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
+import { computeDiff, type DiffLine } from "@/lib/utils/diff"
 // Date formatting helper
 const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
 
@@ -29,7 +31,11 @@ export function WikiHistory({
   onRevert,
 }: WikiHistoryProps) {
   const { canEditWiki } = usePermissions()
-  const [selectedRevision, setSelectedRevision] = useState<WikiRevision | null>(null)
+  const [selectedRevision, setSelectedRevision] = useState<WikiRevision | null>(
+    revisions.find((r) => r.version === currentVersion) || revisions[0] || null
+  )
+  const [compareRevision, setCompareRevision] = useState<WikiRevision | null>(null)
+  const [viewMode, setViewMode] = useState<"content" | "diff">("content")
 
   const handleRevert = (revisionId: number) => {
     if (onRevert) {
@@ -51,6 +57,20 @@ export function WikiHistory({
       return dateString
     }
   }
+
+  // Diff hesaplama
+  const diff = useMemo(() => {
+    if (!selectedRevision || !compareRevision || viewMode !== "diff") {
+      return null
+    }
+
+    // Önceki sürümü bul (compareRevision'dan önceki)
+    const previousRevision = revisions.find(
+      (r) => r.version < compareRevision.version && r.version < selectedRevision.version
+    ) || compareRevision
+
+    return computeDiff(previousRevision.content, selectedRevision.content)
+  }, [selectedRevision, compareRevision, viewMode, revisions])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -193,11 +213,96 @@ export function WikiHistory({
                       </div>
                     )}
 
-                    <div className="bg-[#f2f4f3] dark:bg-accent rounded-xl p-4">
-                      <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground leading-relaxed text-sm sm:text-base whitespace-pre-wrap">
-                        {selectedRevision.content}
-                      </p>
-                    </div>
+                    {/* View Mode Tabs */}
+                    {revisions.length > 1 && (
+                      <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "content" | "diff")} className="mb-4">
+                        <TabsList className="font-[Manrope]">
+                          <TabsTrigger value="content">İçerik</TabsTrigger>
+                          <TabsTrigger value="diff">Farkları Görüntüle</TabsTrigger>
+                        </TabsList>
+                      </Tabs>
+                    )}
+
+                    {/* Diff Mode */}
+                    {viewMode === "diff" && revisions.length > 1 && (
+                      <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <GitCompare className="w-4 h-4 text-[#03624c]" />
+                          <span className="font-[Manrope] text-sm font-bold text-[#4d4d4d] dark:text-foreground">
+                            Karşılaştır:
+                          </span>
+                        </div>
+                        <div className="flex gap-2 flex-wrap">
+                          {revisions
+                            .filter((r) => r.id !== selectedRevision.id)
+                            .map((revision) => (
+                              <Button
+                                key={revision.id}
+                                variant={compareRevision?.id === revision.id ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => setCompareRevision(revision)}
+                                className="font-[Manrope] text-xs"
+                              >
+                                v{revision.version}
+                              </Button>
+                            ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Content View */}
+                    {viewMode === "content" && (
+                      <div className="bg-[#f2f4f3] dark:bg-accent rounded-xl p-4">
+                        <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground leading-relaxed text-sm sm:text-base whitespace-pre-wrap">
+                          {selectedRevision.content}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Diff View */}
+                    {viewMode === "diff" && diff && compareRevision && (
+                      <div className="bg-[#f2f4f3] dark:bg-accent rounded-xl p-4 overflow-x-auto">
+                        <div className="mb-2 flex items-center gap-4 text-xs font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
+                          <span>
+                            <span className="font-bold">Eski:</span> v{compareRevision.version}
+                          </span>
+                          <span>
+                            <span className="font-bold">Yeni:</span> v{selectedRevision.version}
+                          </span>
+                        </div>
+                        <div className="font-mono text-xs sm:text-sm">
+                          {diff.map((line, index) => (
+                            <div
+                              key={index}
+                              className={`py-1 px-2 ${
+                                line.type === "added"
+                                  ? "bg-green-100 dark:bg-green-500/20 text-green-800 dark:text-green-300"
+                                  : line.type === "removed"
+                                  ? "bg-red-100 dark:bg-red-500/20 text-red-800 dark:text-red-300"
+                                  : "text-[#4d4d4d] dark:text-foreground"
+                              }`}
+                            >
+                              <span className="inline-block w-8 text-right mr-2 text-[#4d4d4d]/40 dark:text-muted-foreground">
+                                {line.lineNumber}
+                              </span>
+                              <span className="inline-block w-4 mr-2 font-bold">
+                                {line.type === "added" ? "+" : line.type === "removed" ? "-" : " "}
+                              </span>
+                              <span className="whitespace-pre-wrap">{line.content || " "}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {viewMode === "diff" && !compareRevision && (
+                      <div className="bg-[#f2f4f3] dark:bg-accent rounded-xl p-8 text-center">
+                        <GitCompare className="w-12 h-12 text-[#4d4d4d]/30 dark:text-muted-foreground/30 mx-auto mb-3" />
+                        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
+                          Karşılaştırmak için bir sürüm seçin
+                        </p>
+                      </div>
+                    )}
 
                     {selectedRevision.version !== currentVersion && canEditWiki && (
                       <div className="mt-4 flex justify-end">
