@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { CoinIcon } from "@/components/common/icons/coin-icon"
 import { useApp } from "@/contexts/app-context"
+import Link from "next/link"
 
 export function WalletCard() {
   const { state } = useApp()
@@ -49,12 +50,14 @@ export function WalletCard() {
           </div>
         </div>
 
-        <Button 
-          className="w-full h-8 sm:h-10 bg-[#03624c] hover:bg-[#03624c]/90 rounded-xl font-[Manrope] text-white mb-2 font-bold text-xs sm:text-sm"
-        >
-          Kültür Kart&apos;a Aktar
-          <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-        </Button>
+            <Link href="/dashboard?tab=convert" className="w-full">
+              <Button 
+                className="w-full h-8 sm:h-10 bg-[#03624c] hover:bg-[#03624c]/90 rounded-xl font-[Manrope] text-white mb-2 font-bold text-xs sm:text-sm"
+              >
+                Kültür Kart&apos;a Aktar
+                <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
+              </Button>
+            </Link>
 
         <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-200 dark:border-border">
           <div>
