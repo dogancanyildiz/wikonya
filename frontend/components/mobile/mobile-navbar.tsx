@@ -119,14 +119,9 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
     <nav className="sticky top-0 z-50 bg-white dark:bg-card border-b border-gray-200 dark:border-border">
       <div className="flex items-center justify-between h-14 sm:h-16 px-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#03624C] flex items-center justify-center">
-            <span className="text-white font-[Manrope] font-bold text-[10px] sm:text-xs">
-              KG
-            </span>
-          </div>
-          <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-sm sm:text-base">
-            WikiSözlük
+        <Link href="/" className="flex items-center group hover:opacity-80 transition-opacity">
+          <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-black text-lg sm:text-xl">
+            KONYA <span className="text-[#03624c]">GENÇ</span>
           </span>
         </Link>
 
