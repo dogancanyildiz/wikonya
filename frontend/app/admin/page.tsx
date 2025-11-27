@@ -24,7 +24,7 @@ export default function AdminPage() {
 
   if (!canAccessAdminPanel) {
     return (
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="font-[Manrope]">
@@ -62,18 +62,18 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
-      <div className="mb-6">
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-3xl sm:text-4xl mb-2">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8">
+      <div className="mb-4 sm:mb-6">
+        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-2xl sm:text-3xl md:text-4xl mb-2">
           KBB Admin Paneli
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
+        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-sm sm:text-base">
           Platform ayarlarını ve coin sistemini yönetin
         </p>
       </div>
 
       <Tabs defaultValue="dashboard" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 font-[Manrope] mb-6">
+        <TabsList className="grid w-full grid-cols-3 font-[Manrope] mb-4 sm:mb-6 text-xs sm:text-sm">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="conversion">Dönüşüm Oranı</TabsTrigger>
           <TabsTrigger value="coin-matrix">Coin Matrisi</TabsTrigger>

@@ -142,10 +142,10 @@ export function KonyaKesifPage() {
   ]
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 py-6 sm:py-8">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
       {/* Page Header */}
-      <div className="mb-6 sm:mb-8">
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-2 font-extrabold text-3xl sm:text-4xl lg:text-[42px]">
+      <div className="mb-4 sm:mb-6 md:mb-8">
+        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-2 font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-[42px]">
           Konya Keşif Rehberi
         </h1>
         <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-sm sm:text-base">
@@ -154,9 +154,9 @@ export function KonyaKesifPage() {
       </div>
 
       {/* Must Visit Section */}
-      <section className="mb-6 sm:mb-8">
-        <div className="mb-4 sm:mb-6">
-          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px]">
+      <section className="mb-4 sm:mb-6 md:mb-8">
+        <div className="mb-3 sm:mb-4 md:mb-6">
+          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-lg sm:text-xl md:text-2xl lg:text-[28px]">
             Mutlaka Görülmesi Gerekenler
           </h2>
         </div>
@@ -169,9 +169,9 @@ export function KonyaKesifPage() {
       </section>
 
       {/* Curated Routes Section */}
-      <section className="mb-6 sm:mb-8">
-        <div className="mb-4 sm:mb-6">
-          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px]">
+      <section className="mb-4 sm:mb-6 md:mb-8">
+        <div className="mb-3 sm:mb-4 md:mb-6">
+          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-lg sm:text-xl md:text-2xl lg:text-[28px]">
             Hazır Rotalar
           </h2>
         </div>
@@ -185,8 +185,8 @@ export function KonyaKesifPage() {
 
       {/* Transport Tips Section */}
       <section>
-        <div className="mb-4 sm:mb-6">
-          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px]">
+        <div className="mb-3 sm:mb-4 md:mb-6">
+          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-lg sm:text-xl md:text-2xl lg:text-[28px]">
             Ulaşım İpuçları
           </h2>
         </div>
