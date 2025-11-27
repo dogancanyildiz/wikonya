@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
+import { useApp } from "@/contexts/app-context"
+import { canPerformAction, performAction, getRemainingActions } from "@/lib/gamification/rate-limiter"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
 interface Comment {
   id: number
@@ -24,7 +28,11 @@ interface Comment {
 }
 
 export function CommentFeed() {
+  const { state } = useApp()
   const { rewardCoins } = useCoinReward()
+  const [newComment, setNewComment] = useState("")
+  const [commentError, setCommentError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [comments, setComments] = useState<Comment[]>([
     {
       id: 1,
@@ -264,16 +272,103 @@ export function CommentFeed() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {commentError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription className="font-[Manrope]">{commentError}</AlertDescription>
+            </Alert>
+          )}
+
           <Textarea
+            value={newComment}
+            onChange={(e) => {
+              setNewComment(e.target.value)
+              setCommentError(null)
+            }}
             placeholder="Deneyimlerinizi ve düşüncelerinizi paylaşın..."
             className="w-full p-3 sm:p-4 bg-[#f2f4f3] dark:bg-accent rounded-xl font-[Manrope] text-[#4d4d4d] dark:text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-[#03624c] font-medium min-h-[100px] sm:min-h-[120px] text-sm sm:text-base"
+            disabled={isSubmitting}
+            aria-label="Yorum metni"
           />
+
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mt-3 sm:mt-4">
-            <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
-              Lütfen yapıcı ve saygılı yorumlar yazın
-            </span>
-            <Button className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] px-6 sm:px-8 font-bold text-xs sm:text-sm">
-              Gönder
+            <div className="flex flex-col gap-1">
+              <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
+                Lütfen yapıcı ve saygılı yorumlar yazın
+              </span>
+              {state.user && (() => {
+                const remaining = getRemainingActions(state.user, "comment")
+                if (remaining.limit !== null && remaining.remaining < remaining.limit) {
+                  return (
+                    <span className="font-[Manrope] text-[#03624c] font-semibold text-xs">
+                      Kalan yorum hakkı: {remaining.remaining} / {remaining.limit} ({remaining.timeWindow})
+                    </span>
+                  )
+                }
+                return null
+              })()}
+            </div>
+            <Button
+              onClick={async () => {
+                if (!newComment.trim()) {
+                  setCommentError("Yorum boş olamaz")
+                  return
+                }
+
+                // Rate limit kontrolü
+                const check = canPerformAction(state.user, "comment")
+                if (!check.allowed) {
+                  setCommentError(check.reason || "Yorum gönderilemedi")
+                  return
+                }
+
+                setIsSubmitting(true)
+                setCommentError(null)
+
+                try {
+                  // Rate limit kaydı
+                  const result = performAction(state.user, "comment")
+                  if (!result.success) {
+                    setCommentError(result.reason || "Yorum gönderilemedi")
+                    setIsSubmitting(false)
+                    return
+                  }
+
+                  // Simüle edilmiş API çağrısı
+                  await new Promise((resolve) => setTimeout(resolve, 500))
+
+                  // Coin kazanma
+                  rewardCoins("comment", { content: newComment })
+
+                  // Yeni yorum ekle
+                  const newCommentObj: Comment = {
+                    id: comments.length + 1,
+                    author: state.user?.name || "Anonim",
+                    authorInitials: state.user?.initials || "AN",
+                    timeAgo: "Şimdi",
+                    content: newComment,
+                    upvotes: 0,
+                    downvotes: 0,
+                    logicalVotes: 0,
+                    replies: 0,
+                    isUpvoted: false,
+                    isDownvoted: false,
+                    isLogical: false,
+                  }
+
+                  setComments([newCommentObj, ...comments])
+                  setNewComment("")
+                } catch (err) {
+                  setCommentError(err instanceof Error ? err.message : "Yorum gönderilirken bir hata oluştu")
+                } finally {
+                  setIsSubmitting(false)
+                }
+              }}
+              disabled={isSubmitting || !newComment.trim() || !state.user}
+              className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] px-6 sm:px-8 font-bold text-xs sm:text-sm disabled:opacity-50"
+              aria-label="Yorumu gönder"
+            >
+              {isSubmitting ? "Gönderiliyor..." : "Gönder"}
             </Button>
           </div>
         </CardContent>
