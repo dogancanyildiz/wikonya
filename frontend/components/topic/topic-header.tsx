@@ -1,11 +1,77 @@
 "use client"
 
-import { Calendar, Eye, MessageCircle, Share2, Bookmark } from "lucide-react"
+import { useState } from "react"
+import { Calendar, Eye, MessageCircle, Share2, Bookmark, Edit2, ThumbsUp, ThumbsDown, History } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { useApp } from "@/contexts/app-context"
+import { usePermissions } from "@/lib/utils/hooks/use-permissions"
+import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
+import { WikiEditDialog } from "./wiki-edit-dialog"
+import { WikiHistory } from "./wiki-history"
+import { WikiContent, WikiRevision } from "@/lib/types"
+import { Badge } from "@/components/ui/badge"
+import { renderMarkdown } from "@/lib/utils/markdown"
 
-export function TopicHeader() {
+interface TopicHeaderProps {
+  topicId?: number
+  wikiContent?: WikiContent | null
+}
+
+export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: TopicHeaderProps) {
+  const { state } = useApp()
+  const { canEditWiki, canProposeWikiEdit } = usePermissions()
+  const { rewardCoins } = useCoinReward()
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [revisions, setRevisions] = useState<WikiRevision[]>([])
+  const [wikiContent, setWikiContent] = useState<WikiContent | null>(
+    initialWikiContent || {
+      id: 1,
+      topicId,
+      content: "Selçuk Üniversitesi Hukuk Fakültesi final sınavlarına hazırlık için derlenmiş kapsamlı ders notları. İçerik; anayasa hukuku, medeni hukuk, ceza hukuku ve ticaret hukuku gibi temel dersleri kapsamaktadır. Notlar, son 3 yılın sınav sorularına göre düzenlenmiş ve akademisyenlerin tavsiyeleri doğrultusunda hazırlanmıştır.",
+      version: 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      author: state.user || { id: 1, name: "Admin", initials: "AD", role: "konya_bilgesi", totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() },
+      usefulVotes: 45,
+      notUsefulVotes: 2,
+      isCurrent: true,
+    }
+  )
+  const [userVote, setUserVote] = useState<"useful" | "not_useful" | null>(null)
+
   const tags = ["Ders Notu", "Hukuk Fakültesi", "Final Hazırlık"]
+  
+  const canEdit = canEditWiki || canProposeWikiEdit
+
+  const handleWikiSave = (newContent: string) => {
+    if (wikiContent) {
+      setWikiContent({
+        ...wikiContent,
+        content: newContent,
+        version: wikiContent.version + 1,
+        updatedAt: new Date().toISOString(),
+      })
+    }
+  }
+
+  const handleVote = (voteType: "useful" | "not_useful") => {
+    if (!state.user) return
+    
+    if (userVote === voteType) {
+      // Aynı oyu tekrar tıklarsa geri al
+      setUserVote(null)
+    } else {
+      setUserVote(voteType)
+      // Coin kazanma
+      if (voteType === "useful") {
+        rewardCoins("wiki_vote_useful", { topicId })
+      } else {
+        rewardCoins("wiki_vote_not_useful", { topicId })
+      }
+    }
+  }
   
   return (
     <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
@@ -91,17 +157,91 @@ export function TopicHeader() {
           </div>
         </div>
 
-        {/* Wiki Content Preview */}
+        {/* Wiki Content Area */}
         <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t-2 border-[#f2f4f3] dark:border-border">
-          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-3 sm:mb-4 font-bold text-xl sm:text-2xl lg:text-[24px]">
-            Özet Bilgi
-          </h2>
-          <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground leading-relaxed font-medium text-sm sm:text-base">
-            Selçuk Üniversitesi Hukuk Fakültesi final sınavlarına hazırlık için derlenmiş kapsamlı 
-            ders notları. İçerik; anayasa hukuku, medeni hukuk, ceza hukuku ve ticaret hukuku gibi 
-            temel dersleri kapsamaktadır. Notlar, son 3 yılın sınav sorularına göre düzenlenmiş ve 
-            akademisyenlerin tavsiyeleri doğrultusunda hazırlanmıştır.
-          </p>
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl sm:text-2xl lg:text-[24px]">
+              Bilgi Alanı (Wiki)
+            </h2>
+            <div className="flex items-center gap-2">
+              {canEdit && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsEditDialogOpen(true)}
+                  className="font-[Manrope] font-bold text-xs sm:text-sm"
+                >
+                  <Edit2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
+                  {canEditWiki ? "Düzenle" : "Teklif Gönder"}
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  // Mock revisions - gerçek uygulamada API'den gelecek
+                  setRevisions([
+                    {
+                      id: 1,
+                      wikiContentId: wikiContent?.id || 1,
+                      content: wikiContent?.content || "",
+                      version: wikiContent?.version || 1,
+                      createdAt: wikiContent?.updatedAt || new Date().toISOString(),
+                      author: wikiContent?.author || state.user || { id: 1, name: "Admin", initials: "AD", role: "konya_bilgesi", totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() },
+                      changeSummary: "İlk sürüm",
+                    },
+                  ])
+                  setIsHistoryOpen(true)
+                }}
+                className="font-[Manrope] font-bold text-xs sm:text-sm"
+              >
+                <History className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
+                Geçmiş
+              </Button>
+            </div>
+          </div>
+          
+          <div className="bg-[#f2f4f3] dark:bg-accent rounded-xl p-4 sm:p-6 mb-4">
+            <div
+              className="font-[Manrope] text-[#4d4d4d] dark:text-foreground leading-relaxed text-sm sm:text-base prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: renderMarkdown(wikiContent?.content || ""),
+              }}
+            />
+          </div>
+
+          {/* Wiki Voting */}
+          {state.user && (
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={userVote === "useful" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleVote("useful")}
+                  className={`font-[Manrope] font-bold text-xs sm:text-sm ${
+                    userVote === "useful" ? "bg-[#03624c] hover:bg-[#03624c]/90" : ""
+                  }`}
+                >
+                  <ThumbsUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
+                  Yararlı ({wikiContent?.usefulVotes || 0})
+                </Button>
+                <Button
+                  variant={userVote === "not_useful" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleVote("not_useful")}
+                  className={`font-[Manrope] font-bold text-xs sm:text-sm ${
+                    userVote === "not_useful" ? "bg-red-600 hover:bg-red-700" : ""
+                  }`}
+                >
+                  <ThumbsDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
+                  Yararsız ({wikiContent?.notUsefulVotes || 0})
+                </Button>
+              </div>
+              <div className="text-xs text-muted-foreground font-[Manrope]">
+                v{wikiContent?.version || 1} • Son güncelleme: {wikiContent?.author.name || "Bilinmiyor"}
+              </div>
+            </div>
+          )}
 
           {/* Key Points */}
           <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
@@ -131,6 +271,35 @@ export function TopicHeader() {
             </div>
           </div>
         </div>
+
+        {/* Wiki Edit Dialog */}
+        <WikiEditDialog
+          open={isEditDialogOpen}
+          onOpenChange={setIsEditDialogOpen}
+          wikiContent={wikiContent}
+          topicId={topicId}
+          onSave={handleWikiSave}
+        />
+
+        {/* Wiki History Dialog */}
+        <WikiHistory
+          open={isHistoryOpen}
+          onOpenChange={setIsHistoryOpen}
+          revisions={revisions}
+          currentVersion={wikiContent?.version || 1}
+          onRevert={(revisionId) => {
+            // Revert işlemi - gerçek uygulamada API çağrısı yapılacak
+            const revision = revisions.find((r) => r.id === revisionId)
+            if (revision && wikiContent) {
+              setWikiContent({
+                ...wikiContent,
+                content: revision.content,
+                version: revision.version + 1,
+                updatedAt: new Date().toISOString(),
+              })
+            }
+          }}
+        />
       </CardContent>
     </Card>
   )
