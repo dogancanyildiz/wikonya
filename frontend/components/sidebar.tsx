@@ -88,7 +88,7 @@ export function Sidebar({ onNavigateToTopic }: SidebarProps = {}) {
               <h4 className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground mb-1.5 text-sm line-clamp-2">
                 {topic.title}
               </h4>
-              <div className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground">
+                <div className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground">
                 <div className="flex items-center gap-0.5">
                   <Eye className="w-2.5 h-2.5" />
                   <span className="font-[Manrope] font-semibold text-xs">{topic.views}</span>
@@ -119,7 +119,7 @@ export function Sidebar({ onNavigateToTopic }: SidebarProps = {}) {
             >
               <h4 className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground mb-1.5 text-sm line-clamp-2">
                 {event.title}
-              </h4>
+                  </h4>
               <div className="space-y-0.5">
                 <div className="flex items-center gap-1.5 text-[#4d4d4d]/60 dark:text-muted-foreground">
                   <Calendar className="w-2.5 h-2.5" />
