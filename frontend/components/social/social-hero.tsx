@@ -2,14 +2,16 @@
 
 import { Star, MapPin, TrendingUp, Users } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
 export function SocialHero() {
+  // Trending venues with their actual IDs from venue-grid
   const trendingVenues = [
-    { name: "Kitap & Kahve", category: "Ders Çalışma", visitors: "245" },
-    { name: "Meram Kıraathanesi", category: "Canlı Müzik", visitors: "189" },
-    { name: "Study Hub Cafe", category: "Sakin Atmosfer", visitors: "167" },
+    { id: 5, name: "Okuma Odası Kitap Cafe", category: "Ders Çalışma", visitors: "245" },
+    { id: 1, name: "Meram Kıraathanesi", category: "Kahve & Tatlı", visitors: "189" },
+    { id: 2, name: "Study Hub Cafe", category: "Ders Çalışma", visitors: "167" },
   ]
 
   return (
@@ -57,11 +59,13 @@ export function SocialHero() {
           <p className="font-[Manrope] text-white/80 mb-4 font-medium text-xs sm:text-sm leading-relaxed">
             Sakin ortam, sınırsız kahve ve kitap seçenekleriyle ders çalışmak için ideal.
           </p>
-          <Button 
-            className="px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-xl font-[Manrope] text-[#03624c] hover:bg-white/95 transition-colors shadow-lg font-bold text-xs sm:text-sm"
-          >
-            Detayları Gör
-          </Button>
+          <Link href="/social/venue/5">
+            <Button 
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-xl font-[Manrope] text-[#03624c] hover:bg-white/95 transition-colors shadow-lg font-bold text-xs sm:text-sm cursor-pointer"
+            >
+              Detayları Gör
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -77,9 +81,10 @@ export function SocialHero() {
 
           <div className="space-y-3 sm:space-y-4">
             {trendingVenues.map((venue, index) => (
-              <div
-                key={index}
-                className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl hover:bg-[#f2f4f3] dark:hover:bg-accent transition-all cursor-pointer"
+              <Link
+                key={venue.id}
+                href={`/social/venue/${venue.id}`}
+                className="block group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl hover:bg-[#f2f4f3] dark:hover:bg-accent transition-all cursor-pointer"
               >
                 {/* Rank Badge */}
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#03624c] to-[#03624c]/80 rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_4px_16px_rgba(3,98,76,0.3)]">
@@ -105,17 +110,19 @@ export function SocialHero() {
                     {venue.visitors}
                   </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
           {/* View All Button */}
-          <Button 
-            variant="outline"
-            className="w-full mt-4 sm:mt-6 py-2 sm:py-3 border-2 border-[#03624c] rounded-xl font-[Manrope] text-[#03624c] hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] dark:hover:text-white transition-all font-bold text-xs sm:text-sm"
-          >
-            Tüm Trend Mekanları Gör
-          </Button>
+          <Link href="/social">
+            <Button 
+              variant="outline"
+              className="w-full mt-4 sm:mt-6 py-2 sm:py-3 border-2 border-[#03624c] rounded-xl font-[Manrope] text-[#03624c] hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] dark:hover:text-white transition-all font-bold text-xs sm:text-sm"
+            >
+              Tüm Trend Mekanları Gör
+            </Button>
+          </Link>
         </CardContent>
       </Card>
     </div>
