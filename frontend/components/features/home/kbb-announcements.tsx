@@ -30,7 +30,7 @@ export function KBBAnnouncements({ announcements }: KBBAnnouncementsProps) {
       content: "Genç Kültür Kart&apos;a yeni avantajlar eklendi. Detaylar için tıklayın.",
       date: new Date(baseTimestamp).toISOString(),
       category: "Duyuru",
-      link: "#",
+      link: "/announcements/1",
       isImportant: true,
     },
     {
@@ -39,7 +39,7 @@ export function KBBAnnouncements({ announcements }: KBBAnnouncementsProps) {
       content: "Bu yıl düzenlenecek gençlik festivali için kayıtlar başladı!",
       date: new Date(baseTimestamp - 2 * 24 * 60 * 60 * 1000).toISOString(),
       category: "Etkinlik",
-      link: "#",
+      link: "/announcements/2",
     },
     {
       id: 3,
@@ -47,7 +47,7 @@ export function KBBAnnouncements({ announcements }: KBBAnnouncementsProps) {
       content: "Yeni sosyal sorumluluk projelerine katılarak +100 GençCoin kazanabilirsiniz.",
       date: new Date(baseTimestamp - 5 * 24 * 60 * 60 * 1000).toISOString(),
       category: "Proje",
-      link: "#",
+      link: "/announcements/3",
     },
   ]
 
@@ -68,46 +68,45 @@ export function KBBAnnouncements({ announcements }: KBBAnnouncementsProps) {
       </CardHeader>
       <CardContent className="space-y-3">
         {mockAnnouncements.map((announcement) => (
-          <div
+          <Link
             key={announcement.id}
-            className="bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 hover:bg-white/20 transition-colors"
+            href={announcement.link || "#"}
+            className="block"
           >
-            <div className="flex items-start justify-between gap-2 mb-2">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  {announcement.isImportant && (
-                    <Badge className="bg-yellow-500 text-white font-[Manrope] font-bold text-xs">
-                      Önemli
+            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 hover:bg-white/20 transition-colors cursor-pointer">
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    {announcement.isImportant && (
+                      <Badge className="bg-yellow-500 text-white font-[Manrope] font-bold text-xs">
+                        Önemli
+                      </Badge>
+                    )}
+                    <Badge variant="outline" className="border-white/50 text-white font-[Manrope] text-xs">
+                      {announcement.category}
                     </Badge>
-                  )}
-                  <Badge variant="outline" className="border-white/50 text-white font-[Manrope] text-xs">
-                    {announcement.category}
-                  </Badge>
+                  </div>
+                  <h3 className="font-[Manrope] font-bold text-sm sm:text-base text-white mb-1">
+                    {announcement.title}
+                  </h3>
+                  <p className="font-[Manrope] text-xs sm:text-sm text-white/90 line-clamp-2 mb-2">
+                    {announcement.content}
+                  </p>
+                  <div className="flex items-center gap-2 text-white/70">
+                    <Calendar className="w-3 h-3" />
+                    <span className="font-[Manrope] text-xs">
+                      {formatDate(announcement.date)}
+                    </span>
+                  </div>
                 </div>
-                <h3 className="font-[Manrope] font-bold text-sm sm:text-base text-white mb-1">
-                  {announcement.title}
-                </h3>
-                <p className="font-[Manrope] text-xs sm:text-sm text-white/90 line-clamp-2 mb-2">
-                  {announcement.content}
-                </p>
-                <div className="flex items-center gap-2 text-white/70">
-                  <Calendar className="w-3 h-3" />
-                  <span className="font-[Manrope] text-xs">
-                    {formatDate(announcement.date)}
-                  </span>
-                </div>
+                {announcement.link && (
+                  <div className="flex-shrink-0 text-white hover:text-white/80 transition-colors">
+                    <ExternalLink className="w-4 h-4" />
+                  </div>
+                )}
               </div>
-              {announcement.link && (
-                <Link
-                  href={announcement.link}
-                  className="flex-shrink-0 text-white hover:text-white/80 transition-colors"
-                  aria-label="Duyuruyu görüntüle"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                </Link>
-              )}
             </div>
-          </div>
+          </Link>
         ))}
       </CardContent>
     </Card>
