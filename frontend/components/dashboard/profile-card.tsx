@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useApp } from "@/contexts/app-context"
 import { calculateUserXP, getCoinsNeededForNextRole } from "@/lib/gamification/role-system"
 import { ROLE_DISPLAY_NAMES, USER_ROLES } from "@/lib/constants"
-import { format } from "date-fns"
 
 export function ProfileCard() {
   const { state } = useApp()

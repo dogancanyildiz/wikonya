@@ -32,7 +32,7 @@ export default function LoginPage() {
       }
 
       // Login
-      const user = await mockLogin(email, password)
+      const user = await mockLogin(email)
       if (user) {
         setUser(user)
         router.push("/dashboard")
@@ -50,7 +50,7 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Giriş Yap</CardTitle>
           <CardDescription className="text-center">
-            Genç Kültür Kart ID veya üniversite email'inizle giriş yapın
+            Genç Kültür Kart ID veya üniversite email&apos;inizle giriş yapın
           </CardDescription>
         </CardHeader>
         <CardContent>

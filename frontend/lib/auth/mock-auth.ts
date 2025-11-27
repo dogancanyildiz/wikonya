@@ -3,8 +3,7 @@
  * Not: Production'da gerçek auth sistemi kullanılmalı
  */
 
-import { User, UserRole } from "@/lib/types"
-import { getUserRole } from "@/lib/gamification/role-system"
+import { User } from "@/lib/types"
 
 /**
  * Mock kullanıcı verileri
@@ -139,7 +138,7 @@ const MOCK_USERS: Record<string, User> = {
 /**
  * Mock login fonksiyonu
  */
-export async function mockLogin(email: string, password?: string): Promise<User | null> {
+export async function mockLogin(email: string): Promise<User | null> {
   // Simüle edilmiş API çağrısı
   await new Promise((resolve) => setTimeout(resolve, 500))
 
@@ -156,8 +155,7 @@ export async function mockLogin(email: string, password?: string): Promise<User 
  */
 export async function mockRegister(
   email: string,
-  name: string,
-  password?: string
+  name: string
 ): Promise<User> {
   // Simüle edilmiş API çağrısı
   await new Promise((resolve) => setTimeout(resolve, 500))

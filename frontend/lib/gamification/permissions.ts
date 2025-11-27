@@ -2,9 +2,8 @@
  * Permissions System - Rol bazlı yetki kontrolü
  */
 
-import { UserRole, User } from "@/lib/types"
+import { User } from "@/lib/types"
 import { USER_ROLES } from "@/lib/constants"
-import { getUserRole } from "./role-system"
 
 /**
  * Kullanıcının yeni başlık açıp açamayacağını kontrol eder

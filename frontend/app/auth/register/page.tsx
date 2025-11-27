@@ -33,7 +33,7 @@ export default function RegisterPage() {
       }
 
       // Register
-      const user = await mockRegister(email, name, password)
+      const user = await mockRegister(email, name)
       if (user) {
         setUser(user)
         router.push("/dashboard")
@@ -51,7 +51,7 @@ export default function RegisterPage() {
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Kayıt Ol</CardTitle>
           <CardDescription className="text-center">
-            Genç Kültür Kart ID veya üniversite email'inizle kayıt olun
+            Genç Kültür Kart ID veya üniversite email&apos;inizle kayıt olun
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -88,7 +88,7 @@ export default function RegisterPage() {
                 disabled={isLoading}
               />
               <p className="text-xs text-muted-foreground">
-                Sadece üniversite email'i (.edu.tr) veya test email'i kullanılabilir
+                Sadece üniversite email&apos;i (.edu.tr) veya test email&apos;i kullanılabilir
               </p>
             </div>
 

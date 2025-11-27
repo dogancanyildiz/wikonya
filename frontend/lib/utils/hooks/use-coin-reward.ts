@@ -12,7 +12,6 @@ import {
   createCoinTransaction,
 } from "@/lib/gamification/coin-system"
 import { updateUserRole } from "@/lib/gamification/role-system"
-import { User } from "@/lib/types"
 
 /**
  * Coin kazanma hook'u

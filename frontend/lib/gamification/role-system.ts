@@ -55,7 +55,6 @@ export function calculateCoinsWithMultiplier(baseCoins: number, role: UserRole):
  */
 export function getCoinsNeededForNextRole(currentCoins: number): number | null {
   const currentRole = getUserRole(currentCoins)
-  const roleConfig = USER_ROLES[currentRole]
 
   // Eğer en üst roldeyse, null döndür
   if (currentRole === "konya_bilgesi") {
