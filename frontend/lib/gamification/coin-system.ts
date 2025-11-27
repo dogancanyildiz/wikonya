@@ -5,6 +5,7 @@
 import { UserRole, User } from "@/lib/types"
 import { COIN_MATRIX } from "@/lib/constants"
 import { calculateCoinsWithMultiplier } from "./role-system"
+import { checkAndAwardBadges, addBadgesToUser } from "./badge-system"
 
 /**
  * Coin kazanma eylem tipleri
@@ -55,13 +56,22 @@ export function calculateCoinsEarned(action: CoinAction, userRole: UserRole): nu
 
 /**
  * Kullanıcıya coin ekler ve yeni toplam coin miktarını döndürür
+ * Ayrıca rozet kontrolü yapar
  */
 export function addCoinsToUser(user: User, coins: number): User {
   const newTotalCoins = Math.max(0, user.totalCoins + coins)
-  return {
+  const updatedUser = {
     ...user,
     totalCoins: newTotalCoins,
   }
+
+  // Rozet kontrolü yap
+  const newBadges = checkAndAwardBadges(updatedUser)
+  if (newBadges.length > 0) {
+    return addBadgesToUser(updatedUser, newBadges)
+  }
+
+  return updatedUser
 }
 
 /**

@@ -59,9 +59,11 @@ export interface Comment {
   content: string
   upvotes: number
   downvotes: number
+  logicalVotes?: number
   replies: number
   isUpvoted?: boolean
   isDownvoted?: boolean
+  isLogical?: boolean
 }
 
 // Career Types

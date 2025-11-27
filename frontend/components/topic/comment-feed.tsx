@@ -11,20 +11,15 @@ import { useApp } from "@/contexts/app-context"
 import { canPerformAction, performAction, getRemainingActions } from "@/lib/gamification/rate-limiter"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
+import { CommentReplyDialog } from "./comment-reply-dialog"
 
-interface Comment {
-  id: number
-  author: string
-  authorInitials: string
-  timeAgo: string
-  content: string
-  upvotes: number
-  downvotes: number
-  logicalVotes: number
-  replies: number
-  isUpvoted?: boolean
-  isDownvoted?: boolean
+import { Comment as CommentType } from "@/lib/types"
+
+interface Comment extends CommentType {
+  logicalVotes?: number
   isLogical?: boolean
+  parentId?: number
+  repliesList?: Comment[]
 }
 
 export function CommentFeed() {
@@ -33,6 +28,8 @@ export function CommentFeed() {
   const [newComment, setNewComment] = useState("")
   const [commentError, setCommentError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [sortOrder, setSortOrder] = useState<"newest" | "popular" | "logical">("newest")
+  const [replyingTo, setReplyingTo] = useState<{ id: number; author: string } | null>(null)
   const [comments, setComments] = useState<Comment[]>([
     {
       id: 1,
@@ -125,6 +122,49 @@ export function CommentFeed() {
     }))
   }
 
+  const handleReply = (replyContent: string, parentCommentId: number) => {
+    // Gerçek uygulamada API çağrısı yapılacak
+    const newReply: Comment = {
+      id: comments.length + 1,
+      author: state.user?.name || "Anonim",
+      authorInitials: state.user?.initials || "AN",
+      timeAgo: "Şimdi",
+      content: replyContent,
+      upvotes: 0,
+      downvotes: 0,
+      logicalVotes: 0,
+      replies: 0,
+      parentId: parentCommentId,
+      isUpvoted: false,
+      isDownvoted: false,
+      isLogical: false,
+    }
+
+    // Parent comment'in replies sayısını artır
+    setComments(comments.map(c => 
+      c.id === parentCommentId 
+        ? { ...c, replies: c.replies + 1, repliesList: [...(c.repliesList || []), newReply] }
+        : c
+    ))
+  }
+
+  const handleFlagComment = async (commentId: number) => {
+    if (!state.user) {
+      setCommentError("Yorum bildirmek için giriş yapmalısınız.")
+      return
+    }
+
+    try {
+      // Simüle edilmiş API çağrısı - gerçek uygulamada moderation API'sine gönderilecek
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      
+      // Başarı mesajı gösterilebilir
+      alert("Yorum bildirildi. Moderatörler tarafından incelenecektir.")
+    } catch (err) {
+      setCommentError("Yorum bildirilirken bir hata oluştu")
+    }
+  }
+
   const handleLogicalVote = (commentId: number) => {
     setComments(comments.map(comment => {
       if (comment.id === commentId) {
@@ -160,7 +200,25 @@ export function CommentFeed() {
       </div>
 
       <div className="space-y-3 sm:space-y-4">
-        {comments.map((comment) => (
+        {[...comments]
+          .sort((a, b) => {
+            if (sortOrder === "newest") {
+              // En yeni - timeAgo'ya göre sıralama (mock için id kullanıyoruz)
+              return b.id - a.id
+            } else if (sortOrder === "popular") {
+              // En popüler - upvotes - downvotes'e göre
+              const scoreA = a.upvotes - a.downvotes
+              const scoreB = b.upvotes - b.downvotes
+              return scoreB - scoreA
+            } else if (sortOrder === "logical") {
+              // En mantıklı - logicalVotes'e göre
+              const logicalA = a.logicalVotes || 0
+              const logicalB = b.logicalVotes || 0
+              return logicalB - logicalA
+            }
+            return 0
+          })
+          .map((comment) => (
           <Card
             key={comment.id}
             className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:hover:shadow-xl transition-shadow duration-300 border border-border"
@@ -239,6 +297,7 @@ export function CommentFeed() {
                       )}
                     </button>
                     <button 
+                      onClick={() => setReplyingTo({ id: comment.id, author: comment.author })}
                       className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors"
                       aria-label={`${comment.replies} yanıt`}
                     >
@@ -248,6 +307,7 @@ export function CommentFeed() {
                       </span>
                     </button>
                     <button 
+                      onClick={() => handleFlagComment(comment.id)}
                       className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors"
                       aria-label="Yorumu bildir"
                     >
@@ -263,6 +323,17 @@ export function CommentFeed() {
           </Card>
         ))}
       </div>
+
+      {/* Reply Dialog */}
+      {replyingTo && (
+        <CommentReplyDialog
+          open={!!replyingTo}
+          onOpenChange={(open) => !open && setReplyingTo(null)}
+          parentCommentId={replyingTo.id}
+          parentAuthor={replyingTo.author}
+          onReply={handleReply}
+        />
+      )}
 
       {/* Add Comment Section */}
       <Card className="mt-4 sm:mt-6 bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">

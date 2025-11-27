@@ -1,10 +1,26 @@
 "use client"
 
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export function Hero() {
+  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+    }
+  }
+
+  const handleTagClick = (tag: string) => {
+    router.push(`/search?q=${encodeURIComponent(tag)}`)
+  }
+
   return (
     <div className="bg-[#f2f4f3] dark:bg-muted pt-16 pb-12">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16">
@@ -17,23 +33,26 @@ export function Hero() {
           </p>
           
           {/* Premium Search Bar */}
-          <div className="relative max-w-3xl mx-auto">
+          <form onSubmit={handleSearch} className="relative max-w-3xl mx-auto">
             <div className="relative flex items-center bg-white dark:bg-card rounded-[20px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-lg hover:shadow-[0_15px_50px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-shadow duration-300">
               <Search className="absolute left-4 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-[#03624c]" />
               <Input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Konuları, soruları keşfet..."
                 className="w-full h-[60px] pl-12 sm:pl-16 pr-28 sm:pr-32 bg-transparent rounded-[20px] font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
                 aria-label="Arama kutusu"
               />
               <Button 
+                type="submit"
                 className="absolute right-2 h-[48px] px-6 sm:px-8 bg-[#03624c] hover:bg-[#03624c]/90 rounded-[16px] font-[Manrope] font-semibold text-white"
                 aria-label="Ara"
               >
                 Ara
               </Button>
             </div>
-          </div>
+          </form>
 
           {/* Quick Tags */}
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-8">
@@ -41,6 +60,8 @@ export function Hero() {
             {["Yurt Önerileri", "Ders Notları", "Etkinlikler", "Sosyal Kulüpler"].map((tag) => (
               <button
                 key={tag}
+                type="button"
+                onClick={() => handleTagClick(tag)}
                 className="px-3 sm:px-4 py-2 bg-white dark:bg-card hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] text-[#4d4d4d] dark:text-foreground rounded-full font-[Manrope] font-semibold transition-colors duration-200 text-sm"
                 aria-label={`${tag} konusunda ara`}
               >
