@@ -1,12 +1,14 @@
 "use client"
 
-import { Menu, Bell, Moon, Sun } from "lucide-react"
+import { Menu, Bell, Moon, Sun, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
+import { useApp } from "@/contexts/app-context"
+import { mockLogout } from "@/lib/auth/mock-auth"
 import {
   Sheet,
   SheetContent,
@@ -30,6 +32,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
   const { notifications, unreadCount, markAsRead } = useNotifications()
+  const { clearUser } = useApp()
 
   // Icon mapping for notification types
   const getNotificationIcon = (type: string) => {
@@ -111,6 +114,13 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark")
+  }
+
+  const handleLogout = async () => {
+    await mockLogout()
+    clearUser()
+    setOpen(false)
+    router.push("/")
   }
 
   const isDark = mounted && theme === "dark"
@@ -253,6 +263,18 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                     {item.label}
                   </button>
                 ))}
+                
+                {/* Logout Button - Profil altında */}
+                <div className="mt-2 pt-2 ">
+                  <Button
+                    onClick={handleLogout}
+                    variant="ghost"
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors font-[Manrope] justify-start text-red-500 dark:text-red-400 font-semibold"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span className="text-sm sm:text-base">Çıkış Yap</span>
+                  </Button>
+                </div>
               </nav>
               
               {/* Theme Toggle Switch */}
