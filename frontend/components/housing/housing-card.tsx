@@ -2,11 +2,13 @@
 
 import { MapPin, Bed, Bath, Ruler, Heart, Eye } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
 interface HousingCardProps {
+  id: number
   image: string
   price: string
   title: string
@@ -19,6 +21,7 @@ interface HousingCardProps {
 }
 
 export function HousingCard({
+  id,
   image,
   price,
   title,
@@ -85,9 +88,11 @@ export function HousingCard({
           </div>
 
           {/* Title */}
-          <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-2 group-hover:text-[#03624c] transition-colors font-bold text-base sm:text-lg leading-snug">
-            {title}
-          </h3>
+          <Link href={`/housing/${id}`}>
+            <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-2 group-hover:text-[#03624c] transition-colors font-bold text-base sm:text-lg leading-snug cursor-pointer">
+              {title}
+            </h3>
+          </Link>
 
           {/* Location */}
           <div className="flex items-center gap-2 mb-3 sm:mb-4">
@@ -129,9 +134,12 @@ export function HousingCard({
             </div>
 
             <Button 
+              asChild
               className="px-4 sm:px-6 py-2 sm:py-2.5 bg-[#03624c] text-white rounded-xl font-[Manrope] hover:bg-[#03624c]/90 transition-colors font-bold text-xs sm:text-sm"
             >
-              Detayları Gör
+              <Link href={`/housing/${id}`}>
+                Detayları Gör
+              </Link>
             </Button>
           </div>
         </CardContent>
