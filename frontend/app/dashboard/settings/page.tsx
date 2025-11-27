@@ -16,7 +16,6 @@ import {
   Bell, 
   Shield, 
   Eye, 
-  Moon, 
   Globe,
   Mail,
   Lock,

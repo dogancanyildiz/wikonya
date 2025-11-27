@@ -9,9 +9,7 @@ import { CoinConverter } from "@/components/dashboard/coin-converter"
 import { useApp } from "@/contexts/app-context"
 import { 
   TrendingUp, 
-  TrendingDown, 
   ArrowUpRight, 
-  ArrowDownRight, 
   Calendar,
   MessageSquare,
   ThumbsUp,

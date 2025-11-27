@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Edit, MessageCircle, Calendar, Eye, ThumbsUp, ThumbsDown } from "lucide-react"
+import { BookOpen, Edit, MessageCircle, Calendar, Eye, ThumbsUp } from "lucide-react"
 import Link from "next/link"
 
 interface Contribution {
@@ -25,73 +25,75 @@ export default function ContributionsPage() {
   const [activeTab, setActiveTab] = useState<"topics" | "edits" | "comments">("topics")
 
   // Mock data - gerçek uygulamada API'den gelecek
-  const now = Date.now()
-  const contributions: Contribution[] = [
-    {
-      id: 1,
-      type: "topic",
-      title: "Selçuk Hukuk Final Notları",
-      content: "2024 yılı hukuk fakültesi final sınavları için hazırlanmış kapsamlı notlar...",
-      createdAt: new Date(now - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      topicId: 1,
-      coins: 30,
-      views: 1245,
-      likes: 89,
-      status: "approved",
-    },
-    {
-      id: 2,
-      type: "topic",
-      title: "Kampüste En İyi Çalışma Mekanları",
-      content: "Konya'daki üniversite öğrencileri için sessiz ve verimli çalışma alanları...",
-      createdAt: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString(),
-      topicId: 5,
-      coins: 30,
-      views: 856,
-      likes: 62,
-      status: "approved",
-    },
-    {
-      id: 3,
-      type: "wiki_edit",
-      title: "Konya'da Öğrenci Dostu Restoranlar",
-      content: "Fiyat bilgilerini güncelledim ve yeni mekanlar ekledim...",
-      topicId: 2,
-      createdAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      coins: 15,
-      status: "approved",
-    },
-    {
-      id: 4,
-      type: "wiki_edit",
-      title: "NEÜ Mühendislik Yemekhanesi",
-      content: "Haftalık menü ve çalışma saatlerini güncelledim...",
-      topicId: 8,
-      createdAt: new Date(now - 3 * 24 * 60 * 60 * 1000).toISOString(),
-      coins: 10,
-      status: "pending",
-    },
-    {
-      id: 5,
-      type: "comment",
-      title: "Selçuk Hukuk Final Notları",
-      content: "Bu notlar gerçekten çok işime yaradı! Özellikle 3. bölümdeki özetler muhteşem.",
-      topicId: 1,
-      createdAt: new Date(now - 1 * 24 * 60 * 60 * 1000).toISOString(),
-      coins: 2,
-      likes: 12,
-    },
-    {
-      id: 6,
-      type: "comment",
-      title: "Bosna Hersek Mahallesi Kiralık Ev Rehberi",
-      content: "Ev arkadaşı arayan var mı? Ben de bu bölgede arıyorum.",
-      topicId: 3,
-      createdAt: new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString(),
-      coins: 2,
-      likes: 5,
-    },
-  ]
+  const contributions: Contribution[] = useMemo(() => {
+    const now = Date.now()
+    return [
+      {
+        id: 1,
+        type: "topic",
+        title: "Selçuk Hukuk Final Notları",
+        content: "2024 yılı hukuk fakültesi final sınavları için hazırlanmış kapsamlı notlar...",
+        createdAt: new Date(now - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        topicId: 1,
+        coins: 30,
+        views: 1245,
+        likes: 89,
+        status: "approved",
+      },
+      {
+        id: 2,
+        type: "topic",
+        title: "Kampüste En İyi Çalışma Mekanları",
+        content: "Konya'daki üniversite öğrencileri için sessiz ve verimli çalışma alanları...",
+        createdAt: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString(),
+        topicId: 5,
+        coins: 30,
+        views: 856,
+        likes: 62,
+        status: "approved",
+      },
+      {
+        id: 3,
+        type: "wiki_edit",
+        title: "Konya'da Öğrenci Dostu Restoranlar",
+        content: "Fiyat bilgilerini güncelledim ve yeni mekanlar ekledim...",
+        topicId: 2,
+        createdAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        coins: 15,
+        status: "approved",
+      },
+      {
+        id: 4,
+        type: "wiki_edit",
+        title: "NEÜ Mühendislik Yemekhanesi",
+        content: "Haftalık menü ve çalışma saatlerini güncelledim...",
+        topicId: 8,
+        createdAt: new Date(now - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        coins: 10,
+        status: "pending",
+      },
+      {
+        id: 5,
+        type: "comment",
+        title: "Selçuk Hukuk Final Notları",
+        content: "Bu notlar gerçekten çok işime yaradı! Özellikle 3. bölümdeki özetler muhteşem.",
+        topicId: 1,
+        createdAt: new Date(now - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        coins: 2,
+        likes: 12,
+      },
+      {
+        id: 6,
+        type: "comment",
+        title: "Bosna Hersek Mahallesi Kiralık Ev Rehberi",
+        content: "Ev arkadaşı arayan var mı? Ben de bu bölgede arıyorum.",
+        topicId: 3,
+        createdAt: new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        coins: 2,
+        likes: 5,
+      },
+    ]
+  }, [])
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
