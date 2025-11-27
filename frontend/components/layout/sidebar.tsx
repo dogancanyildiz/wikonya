@@ -60,7 +60,7 @@ export function Sidebar({ onNavigateToTopic }: SidebarProps = {}) {
   ]
 
   return (
-    <div className="space-y-4 sticky top-24">
+    <div className="space-y-4 sticky 2xl:top-3">
       {/* Trending Topics */}
       <Card className="rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg">
         <CardHeader className="pb-3">
