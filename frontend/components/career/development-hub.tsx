@@ -2,10 +2,8 @@
 
 import { useState } from "react"
 import { WorkshopCard } from "./workshop-card"
-import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react"
-import { useRef } from "react"
+import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function DevelopmentHub() {
-  const scrollRef = useRef<HTMLDivElement>(null)
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [selectedSubCategory, setSelectedSubCategory] = useState("all")
 
@@ -193,16 +190,6 @@ export function DevelopmentHub() {
     },
   ]
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const scrollAmount = 360
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      })
-    }
-  }
-
   const selectedCategoryData = categories.find(c => c.id === selectedCategory)
   const filteredWorkshops = workshops.filter(workshop => {
     const categoryMatch = selectedCategory === "all" || workshop.category === selectedCategory
@@ -211,92 +198,28 @@ export function DevelopmentHub() {
   })
 
   return (
-    <Card className="bg-white dark:bg-card rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
-      <CardHeader>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-1 font-extrabold text-xl sm:text-2xl lg:text-[28px]">
-                Kendini Geliştir
-              </CardTitle>
-              <CardDescription className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
-                Kurslar, atölyeler ve sertifika programları
-              </CardDescription>
-            </div>
-
-            <div className="hidden md:flex items-center gap-2">
-              <Button
-                onClick={() => scroll("left")}
+    <div>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
+        <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px]">
+          Etkinlikler & Kurslar
+        </h2>
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Category Filter Dropdown */}
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <Button 
                 variant="outline"
-                size="icon"
-                className="w-9 h-9 sm:w-10 sm:h-10 bg-[#f2f4f3] dark:bg-accent hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] text-[#4d4d4d] dark:text-foreground rounded-xl transition-all border border-border"
+                className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border flex items-center gap-2"
               >
-                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
+                {selectedCategoryData?.name || "Kategori"}
+                <ChevronDown className="w-4 h-4" />
               </Button>
-              <Button
-                onClick={() => scroll("right")}
-                variant="outline"
-                size="icon"
-                className="w-9 h-9 sm:w-10 sm:h-10 bg-[#f2f4f3] dark:bg-accent hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] text-[#4d4d4d] dark:text-foreground rounded-xl transition-all border border-border"
-              >
-                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
-              </Button>
-            </div>
-          </div>
-
-          {/* Category Filter */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="outline"
-                  className="px-3 sm:px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border flex items-center gap-2"
-                >
-                  {selectedCategoryData?.name || "Kategori"}
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                {categories.map((category) => (
-                  category.subCategories.length > 0 ? (
-                    <DropdownMenuSub key={category.id}>
-                      <DropdownMenuSubTrigger
-                        onClick={() => {
-                          setSelectedCategory(category.id)
-                          setSelectedSubCategory("all")
-                        }}
-                        className={selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
-                      >
-                        {category.name}
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            setSelectedCategory(category.id)
-                            setSelectedSubCategory("all")
-                          }}
-                          className={selectedSubCategory === "all" && selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
-                        >
-                          Tümü
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        {category.subCategories.map((sub) => (
-                          <DropdownMenuItem
-                            key={sub.id}
-                            onClick={() => {
-                              setSelectedCategory(category.id)
-                              setSelectedSubCategory(sub.id)
-                            }}
-                            className={selectedSubCategory === sub.id && selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
-                          >
-                            {sub.name}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuSubContent>
-                    </DropdownMenuSub>
-                  ) : (
-                    <DropdownMenuItem
-                      key={category.id}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56" onCloseAutoFocus={(e) => e.preventDefault()}>
+              {categories.map((category) => (
+                category.subCategories.length > 0 ? (
+                  <DropdownMenuSub key={category.id}>
+                    <DropdownMenuSubTrigger
                       onClick={() => {
                         setSelectedCategory(category.id)
                         setSelectedSubCategory("all")
@@ -304,37 +227,64 @@ export function DevelopmentHub() {
                       className={selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
                     >
                       {category.name}
-                    </DropdownMenuItem>
-                  )
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelectedCategory(category.id)
+                          setSelectedSubCategory("all")
+                        }}
+                        className={selectedSubCategory === "all" && selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
+                      >
+                        Tümü
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      {category.subCategories.map((sub) => (
+                        <DropdownMenuItem
+                          key={sub.id}
+                          onClick={() => {
+                            setSelectedCategory(category.id)
+                            setSelectedSubCategory(sub.id)
+                          }}
+                          className={selectedSubCategory === sub.id && selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
+                        >
+                          {sub.name}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuSub>
+                ) : (
+                  <DropdownMenuItem
+                    key={category.id}
+                    onClick={() => {
+                      setSelectedCategory(category.id)
+                      setSelectedSubCategory("all")
+                    }}
+                    className={selectedCategory === category.id ? 'bg-[#03624c] text-white' : ''}
+                  >
+                    {category.name}
+                  </DropdownMenuItem>
+                )
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {filteredWorkshops.length > 0 ? (
+          filteredWorkshops.map((workshop) => (
+            <WorkshopCard key={workshop.id} {...workshop} />
+          ))
+        ) : (
+          <div className="col-span-full text-center py-12">
+            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
+              Seçilen kriterlere uygun etkinlik bulunamadı.
+            </p>
           </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {/* Grid Layout for Mobile, Scrollable for Desktop */}
-        <div
-          ref={scrollRef}
-          className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-none md:flex md:overflow-x-auto md:pb-4 md:scrollbar-hide"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {filteredWorkshops.length > 0 ? (
-            filteredWorkshops.map((workshop) => (
-              <div key={workshop.id} className="md:flex-shrink-0">
-                <WorkshopCard {...workshop} />
-              </div>
-            ))
-          ) : (
-            <div className="w-full text-center py-12 col-span-1 md:col-span-auto">
-              <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
-                Seçilen kriterlere uygun etkinlik bulunamadı.
-              </p>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+        )}
+      </div>
+    </div>
   )
 }
 
