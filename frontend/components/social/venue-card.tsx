@@ -2,11 +2,13 @@
 
 import { Star, MapPin, Users, Heart } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
 interface VenueCardProps {
+  id: number
   image: string
   name: string
   location: string
@@ -17,6 +19,7 @@ interface VenueCardProps {
 }
 
 export function VenueCard({
+  id,
   image,
   name,
   location,
@@ -82,9 +85,11 @@ export function VenueCard({
 
       {/* Content */}
       <CardContent className="p-4 sm:p-5">
-        <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-2 group-hover:text-[#03624c] transition-colors font-bold text-base sm:text-lg leading-snug">
-          {name}
-        </h3>
+        <Link href={`/social/venue/${id}`}>
+          <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-2 group-hover:text-[#03624c] transition-colors font-bold text-base sm:text-lg leading-snug cursor-pointer">
+            {name}
+          </h3>
+        </Link>
 
         <div className="flex items-center gap-1.5 mb-4">
           <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-[#4d4d4d]/60 dark:text-muted-foreground" strokeWidth={2.5} />
@@ -106,9 +111,12 @@ export function VenueCard({
           </div>
 
           <Button 
+            asChild
             className="px-3 sm:px-4 py-1.5 sm:py-2 bg-[#03624c] text-white rounded-lg font-[Manrope] hover:bg-[#03624c]/90 transition-colors font-bold text-xs sm:text-[13px]"
           >
-            Detay
+            <Link href={`/social/venue/${id}`}>
+              Detay
+            </Link>
           </Button>
         </div>
       </CardContent>
