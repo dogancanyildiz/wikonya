@@ -2,6 +2,7 @@
 
 import { Calendar, MapPin, Users, Clock, ArrowRight } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -46,12 +47,13 @@ export function CommunityEvents() {
           <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-xl sm:text-2xl">
             Öğrenci Etkinlikleri
           </CardTitle>
-          <button 
+          <Link 
+            href="/events"
             className="font-[Manrope] text-[#03624c] hover:text-[#03624c]/80 transition-colors flex items-center gap-1 font-bold text-xs sm:text-sm"
           >
             Tümü
             <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={2.5} />
-          </button>
+          </Link>
         </div>
       </CardHeader>
       <CardContent className="space-y-3 sm:space-y-4">
@@ -124,12 +126,14 @@ export function CommunityEvents() {
                 </div>
 
                 {/* Join Button */}
-                <Button 
-                  className="w-full py-2 sm:py-2.5 bg-[#03624c] text-white rounded-xl font-[Manrope] hover:bg-[#03624c]/90 transition-all flex items-center justify-center gap-2 font-bold text-xs sm:text-sm"
-                >
-                  Katıl
-                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={2.5} />
-                </Button>
+                <Link href={`/events/${event.id}`}>
+                  <Button 
+                    className="w-full py-2 sm:py-2.5 bg-[#03624c] text-white rounded-xl font-[Manrope] hover:bg-[#03624c]/90 transition-all flex items-center justify-center gap-2 font-bold text-xs sm:text-sm"
+                  >
+                    Detayları Gör
+                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={2.5} />
+                  </Button>
+                </Link>
               </div>
             </div>
           )
