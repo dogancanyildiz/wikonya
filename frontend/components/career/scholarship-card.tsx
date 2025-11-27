@@ -1,11 +1,13 @@
 "use client"
 
 import { MapPin, Clock, Bookmark, DollarSign } from "lucide-react"
+import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
 interface ScholarshipCardProps {
+  id: number
   organization: string
   organizationLogo: string
   title: string
@@ -19,6 +21,7 @@ interface ScholarshipCardProps {
 }
 
 export function ScholarshipCard({
+  id,
   organization,
   organizationLogo,
   title,
@@ -50,14 +53,14 @@ export function ScholarshipCard({
           {/* Scholarship Details */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between mb-2">
-              <div>
-                <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-1 group-hover:text-[#03624c] transition-colors font-bold text-base sm:text-lg leading-snug">
+              <Link href={`/career/scholarship/${id}`} className="flex-1">
+                <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-1 group-hover:text-[#03624c] transition-colors font-bold text-base sm:text-lg leading-snug cursor-pointer">
                   {title}
                 </h3>
                 <p className="font-[Manrope] text-[#4d4d4d]/70 dark:text-muted-foreground font-semibold text-xs sm:text-sm">
                   {organization}
                 </p>
-              </div>
+              </Link>
               
               <button
                 onClick={() => setIsBookmarked(!isBookmarked)}
@@ -99,10 +102,13 @@ export function ScholarshipCard({
               </div>
 
               <Button 
+                asChild
                 variant="outline"
                 className="px-4 sm:px-5 py-1.5 sm:py-2 border-2 border-[#03624c] rounded-xl font-[Manrope] text-[#03624c] hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] dark:hover:text-white transition-all font-bold text-xs sm:text-[13px]"
               >
-                Başvur
+                <Link href={`/career/scholarship/${id}`}>
+                  Detaylar
+                </Link>
               </Button>
             </div>
           </div>

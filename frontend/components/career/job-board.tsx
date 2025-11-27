@@ -133,7 +133,7 @@ export function JobBoard() {
       <div className="space-y-3 sm:space-y-4">
         {filteredJobs.length > 0 ? (
           filteredJobs.map((job) => (
-            <JobCard key={job.id} {...job} />
+            <JobCard key={job.id} id={job.id} {...job} />
           ))
         ) : (
           <div className="text-center py-12">
