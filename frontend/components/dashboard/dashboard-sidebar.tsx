@@ -1,65 +1,62 @@
 "use client"
 
 import { useState } from "react"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
 import { Home, Wallet, Trophy, BookOpen, MessageSquare, Settings, LogOut, UserPlus, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
-interface DashboardSidebarProps {
-  activeItem: string
-  onNavigate?: (item: string) => void
-}
-
 const menuItems = [
-  { id: "dashboard", label: "Ana Sayfa", icon: Home },
-  { id: "wallet", label: "Cüzdan & GençCoin", icon: Wallet },
-  { id: "convert", label: "Kültür Kart&apos;a Aktar", icon: Wallet },
-  { id: "referral", label: "Arkadaşını Davet Et", icon: UserPlus },
-  { id: "achievements", label: "Başarılar", icon: Trophy },
-  { id: "contributions", label: "Katkılarım", icon: BookOpen },
-  { id: "messages", label: "Mesajlar", icon: MessageSquare },
-  { id: "settings", label: "Ayarlar", icon: Settings },
+  { id: "dashboard", label: "Ana Sayfa", icon: Home, href: "/dashboard" },
+  { id: "wallet", label: "Cüzdan & GençCoin", icon: Wallet, href: "/dashboard/wallet" },
+  { id: "contributions", label: "Katkılarım", icon: BookOpen, href: "/dashboard/contributions" },
+  { id: "messages", label: "Mesajlar", icon: MessageSquare, href: "/dashboard/messages" },
+  { id: "invite", label: "Arkadaşını Davet Et", icon: UserPlus, href: "/dashboard/invite" },
+  { id: "achievements", label: "Başarılar", icon: Trophy, href: "/dashboard/achievements" },
+  { id: "settings", label: "Ayarlar", icon: Settings, href: "/dashboard/settings" },
 ]
 
-function SidebarContent({ activeItem, onItemClick }: { activeItem: string; onItemClick: (itemId: string) => void }) {
+function SidebarContent({ onItemClick }: { onItemClick?: () => void }) {
+  const pathname = usePathname()
+
   return (
     <div className="space-y-1 sm:space-y-2">
       {menuItems.map((item) => {
         const Icon = item.icon
-        const isActive = activeItem === item.id
+        const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname?.startsWith(item.href))
         
         return (
-          <Button
+          <Link
             key={item.id}
-            onClick={() => onItemClick(item.id)}
-            variant={isActive ? "secondary" : "ghost"}
-            className={`
-              w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl transition-all duration-200 font-[Manrope] justify-start
-              ${isActive 
-                ? 'bg-[#f2f4f3] dark:bg-accent border-l-4 border-[#03624c] text-[#03624c] dark:text-[#03624c] font-bold' 
-                : 'hover:bg-[#f2f4f3]/50 dark:hover:bg-accent text-[#4d4d4d] dark:text-foreground font-semibold'
-              }
-            `}
+            href={item.href}
+            onClick={onItemClick}
           >
-            <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="text-sm sm:text-base">
-              {item.label}
-            </span>
-          </Button>
+            <Button
+              variant={isActive ? "secondary" : "ghost"}
+              className={`
+                w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl transition-all duration-200 font-[Manrope] justify-start
+                ${isActive 
+                  ? 'bg-[#f2f4f3] dark:bg-accent border-l-4 border-[#03624c] text-[#03624c] dark:text-[#03624c] font-bold' 
+                  : 'hover:bg-[#f2f4f3]/50 dark:hover:bg-accent text-[#4d4d4d] dark:text-foreground font-semibold'
+                }
+              `}
+            >
+              <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">
+                {item.label}
+              </span>
+            </Button>
+          </Link>
         )
       })}
     </div>
   )
 }
 
-export function DashboardSidebar({ activeItem, onNavigate }: DashboardSidebarProps) {
+export function DashboardSidebar() {
   const [open, setOpen] = useState(false)
-
-  const handleItemClick = (itemId: string) => {
-    onNavigate?.(itemId)
-    setOpen(false)
-  }
 
   return (
     <>
@@ -77,7 +74,7 @@ export function DashboardSidebar({ activeItem, onNavigate }: DashboardSidebarPro
               <SheetTitle className="font-[Manrope] text-left">Dashboard Menü</SheetTitle>
             </SheetHeader>
             <div className="mt-6">
-              <SidebarContent activeItem={activeItem} onItemClick={handleItemClick} />
+              <SidebarContent onItemClick={() => setOpen(false)} />
               <div className="mt-6 pt-6 border-t border-gray-200 dark:border-border">
                 <Button 
                   variant="ghost"
@@ -95,7 +92,7 @@ export function DashboardSidebar({ activeItem, onNavigate }: DashboardSidebarPro
       {/* Desktop: Card */}
       <div className="hidden lg:block">
         <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg p-4 sm:p-6 sticky top-24 border border-border">
-          <SidebarContent activeItem={activeItem} onItemClick={(itemId) => onNavigate?.(itemId)} />
+          <SidebarContent />
           <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200 dark:border-border">
             <Button 
               variant="ghost"
@@ -110,4 +107,3 @@ export function DashboardSidebar({ activeItem, onNavigate }: DashboardSidebarPro
     </>
   )
 }
-

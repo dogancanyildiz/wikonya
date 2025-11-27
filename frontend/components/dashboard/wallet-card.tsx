@@ -50,7 +50,7 @@ export function WalletCard() {
           </div>
         </div>
 
-            <Link href="/dashboard?tab=convert" className="w-full">
+            <Link href="/dashboard/wallet" className="w-full">
               <Button 
                 className="w-full h-8 sm:h-10 bg-[#03624c] hover:bg-[#03624c]/90 rounded-xl font-[Manrope] text-white mb-2 font-bold text-xs sm:text-sm"
               >
