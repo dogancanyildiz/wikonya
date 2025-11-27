@@ -16,6 +16,7 @@ export type CoinAction =
   | "wiki_vote_useful"
   | "wiki_vote_not_useful"
   | "comment_like"
+  | "comment_logical"
   | "social_responsibility_project"
 
 /**
@@ -35,6 +36,8 @@ export function getBaseCoinsForAction(action: CoinAction): number {
       return COIN_MATRIX.wikiVoteNotUseful
     case "comment_like":
       return COIN_MATRIX.commentLike
+    case "comment_logical":
+      return COIN_MATRIX.commentLogical
     case "social_responsibility_project":
       return COIN_MATRIX.socialResponsibilityProject
     default:

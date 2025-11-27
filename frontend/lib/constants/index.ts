@@ -227,6 +227,7 @@ export const COIN_MATRIX = {
   wikiVoteUseful: 5,
   wikiVoteNotUseful: -10,
   commentLike: 1,
+  commentLogical: 2,
   socialResponsibilityProject: 100,
 } as const
 

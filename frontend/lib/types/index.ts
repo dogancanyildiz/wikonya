@@ -215,17 +215,57 @@ export interface HousingTabsProps {
   onTabChange?: (tab: string) => void
 }
 
+// Wiki Types
+export interface WikiContent {
+  id: number
+  topicId: number
+  content: string
+  version: number
+  createdAt: string
+  updatedAt: string
+  author: User
+  usefulVotes: number
+  notUsefulVotes: number
+  isCurrent: boolean
+}
+
+export interface WikiRevision {
+  id: number
+  wikiContentId: number
+  content: string
+  version: number
+  createdAt: string
+  author: User
+  changeSummary?: string
+}
+
+export interface WikiEditProposal {
+  id: number
+  topicId: number
+  currentContent: string
+  proposedContent: string
+  author: User
+  status: "pending" | "approved" | "rejected"
+  createdAt: string
+  reviewedBy?: User
+  reviewedAt?: string
+  reviewNote?: string
+}
+
 // Topic Types
 export interface Topic {
   id: number
   title: string
   content: string
+  wikiContent?: WikiContent
   author: User
   category: string
   createdAt: string
+  updatedAt: string
   views: number
   likes: number
   comments: number
   tags: string[]
+  reliabilityScore?: number
 }
 
