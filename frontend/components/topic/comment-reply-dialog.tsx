@@ -42,8 +42,8 @@ export function CommentReplyDialog({
       return
     }
 
-    const remainingActions = getRemainingActions(state.user.id, "comment", state.user.role)
-    if (remainingActions !== null && remainingActions <= 0) {
+    const remainingActions = getRemainingActions(state.user, "comment")
+    if (remainingActions.limit !== null && remainingActions.remaining <= 0) {
       setError(`Yorum limitinizi aştınız. Lütfen 1 saat sonra tekrar deneyin.`)
       return
     }
@@ -56,7 +56,12 @@ export function CommentReplyDialog({
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       // Rate limiter'a eylemi kaydet
-      performAction(state.user.id, "comment")
+      const result = performAction(state.user, "comment")
+      if (!result.success) {
+        setError(result.reason || "Yorum gönderilemedi")
+        setIsSubmitting(false)
+        return
+      }
 
       // Coin kazanma
       rewardCoins("comment", { commentId: parentCommentId, type: "reply" })
@@ -81,7 +86,7 @@ export function CommentReplyDialog({
     onOpenChange(false)
   }
 
-  const remainingComments = state.user ? getRemainingActions(state.user.id, "comment", state.user.role) : null
+  const remainingComments = state.user ? getRemainingActions(state.user, "comment") : null
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -114,9 +119,9 @@ export function CommentReplyDialog({
               className="min-h-[150px] font-[Manrope] text-sm"
               disabled={isSubmitting}
             />
-            {remainingComments !== null && (
+            {remainingComments !== null && remainingComments.limit !== null && (
               <p className="text-xs text-muted-foreground font-[Manrope]">
-                Kalan yorum hakkı: {remainingComments}
+                Kalan yorum hakkı: {remainingComments.remaining} / {remainingComments.limit} ({remainingComments.timeWindow})
               </p>
             )}
           </div>
@@ -133,7 +138,7 @@ export function CommentReplyDialog({
           </Button>
           <Button
             onClick={handleSubmit}
-            disabled={isSubmitting || !replyContent.trim() || (remainingComments !== null && remainingComments <= 0)}
+            disabled={isSubmitting || !replyContent.trim() || (remainingComments !== null && remainingComments.limit !== null && remainingComments.remaining <= 0)}
             className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] font-bold"
           >
             {isSubmitting ? (

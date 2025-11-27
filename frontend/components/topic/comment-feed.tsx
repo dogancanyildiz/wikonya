@@ -168,12 +168,13 @@ export function CommentFeed() {
   const handleLogicalVote = (commentId: number) => {
     setComments(comments.map(comment => {
       if (comment.id === commentId) {
+        const currentVotes = comment.logicalVotes || 0
         if (comment.isLogical) {
-          return { ...comment, logicalVotes: comment.logicalVotes - 1, isLogical: false }
+          return { ...comment, logicalVotes: currentVotes - 1, isLogical: false }
         } else {
           // Coin kazanma (sadece ilk kez işaretlendiğinde)
           rewardCoins("comment_logical", { commentId })
-          return { ...comment, logicalVotes: comment.logicalVotes + 1, isLogical: true }
+          return { ...comment, logicalVotes: currentVotes + 1, isLogical: true }
         }
       }
       return comment
@@ -292,8 +293,8 @@ export function CommentFeed() {
                     >
                       <Brain className={`w-3 h-3 sm:w-4 sm:h-4 ${comment.isLogical ? 'fill-white' : ''}`} aria-hidden="true" />
                       <span>Mantıklı Yorum</span>
-                      {comment.logicalVotes > 0 && (
-                        <span className="ml-1">({comment.logicalVotes})</span>
+                      {(comment.logicalVotes || 0) > 0 && (
+                        <span className="ml-1">({comment.logicalVotes || 0})</span>
                       )}
                     </button>
                     <button 
