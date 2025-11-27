@@ -2,17 +2,20 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode } from "react"
 import { type User } from "@/lib/types"
+import type { Notification } from "@/lib/notifications/notification-system"
 
 interface AppState {
   user: User | null
   isAuthenticated: boolean
-  notifications: number
+  notifications: Notification[]
 }
 
 interface AppContextType {
   state: AppState
   setUser: (user: User | null) => void
-  setNotifications: (count: number) => void
+  addNotification: (notification: Notification) => void
+  markNotificationAsRead: (notificationId: string) => void
+  markAllNotificationsAsRead: () => void
   clearUser: () => void
 }
 
@@ -22,7 +25,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState>({
     user: null,
     isAuthenticated: false,
-    notifications: 0,
+    notifications: [],
   })
 
   const setUser = useCallback((user: User | null) => {
@@ -33,10 +36,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }))
   }, [])
 
-  const setNotifications = useCallback((count: number) => {
+  const addNotification = useCallback((notification: Notification) => {
     setState((prev) => ({
       ...prev,
-      notifications: count,
+      notifications: [notification, ...prev.notifications],
+    }))
+  }, [])
+
+  const markNotificationAsRead = useCallback((notificationId: string) => {
+    setState((prev) => ({
+      ...prev,
+      notifications: prev.notifications.map((notif) =>
+        notif.id === notificationId ? { ...notif, read: true } : notif
+      ),
+    }))
+  }, [])
+
+  const markAllNotificationsAsRead = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      notifications: prev.notifications.map((notif) => ({ ...notif, read: true })),
     }))
   }, [])
 
@@ -45,7 +64,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       ...prev,
       user: null,
       isAuthenticated: false,
-      notifications: 0,
+      notifications: [],
     }))
   }, [])
 
@@ -54,7 +73,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       value={{
         state,
         setUser,
-        setNotifications,
+        addNotification,
+        markNotificationAsRead,
+        markAllNotificationsAsRead,
         clearUser,
       }}
     >

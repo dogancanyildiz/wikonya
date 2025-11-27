@@ -12,6 +12,8 @@ import {
   createCoinTransaction,
 } from "@/lib/gamification/coin-system"
 import { updateUserRole } from "@/lib/gamification/role-system"
+import { useNotifications } from "./use-notifications"
+import { ROLE_DISPLAY_NAMES } from "@/lib/constants"
 
 /**
  * Coin kazanma hook'u
@@ -20,6 +22,7 @@ import { updateUserRole } from "@/lib/gamification/role-system"
 export function useCoinReward() {
   const { state, setUser } = useApp()
   const user = state.user
+  const { notifyCoinEarned, notifyRolePromoted, notifyBadgeEarned } = useNotifications()
 
   /**
    * Kullanıcıya coin ödülü verir
@@ -28,12 +31,44 @@ export function useCoinReward() {
     (action: CoinAction, metadata?: Record<string, unknown>) => {
       if (!user) return null
 
+      const oldRole = user.role
       const coinsEarned = calculateCoinsEarned(action, user.role)
       const updatedUser = addCoinsToUser(user, coinsEarned)
       const userWithUpdatedRole = updateUserRole(updatedUser)
 
       // Transaction oluştur (loglama için)
       const transaction = createCoinTransaction(user.id, action, user.role, metadata)
+
+      // Coin kazanma bildirimi
+      const actionNames: Record<CoinAction, string> = {
+        create_topic: "Yeni başlık açtınız",
+        edit_wiki: "Wiki düzenlemesi yaptınız",
+        comment: "Yorum yaptınız",
+        wiki_vote_useful: "Wiki'ye yararlı oyu verdiniz",
+        wiki_vote_not_useful: "Wiki'ye yararsız oyu verdiniz",
+        comment_like: "Yorum beğendiniz",
+        comment_logical: "Mantıklı yorum işaretlediniz",
+        social_responsibility_project: "Sosyal sorumluluk projesi tamamladınız",
+      }
+      notifyCoinEarned(coinsEarned, actionNames[action] || "Aktivite")
+
+      // Rol terfi kontrolü
+      if (userWithUpdatedRole.role !== oldRole) {
+        notifyRolePromoted(
+          ROLE_DISPLAY_NAMES[userWithUpdatedRole.role],
+          ROLE_DISPLAY_NAMES[oldRole]
+        )
+      }
+
+      // Yeni rozet kontrolü (addCoinsToUser içinde yapılıyor ama bildirim için kontrol ediyoruz)
+      const newBadges = userWithUpdatedRole.badges.filter(
+        (badge) => !user.badges.some((b) => b.id === badge.id)
+      )
+      if (newBadges.length > 0) {
+        newBadges.forEach((badge) => {
+          notifyBadgeEarned(badge.name, badge.icon)
+        })
+      }
 
       // Kullanıcıyı güncelle
       setUser(userWithUpdatedRole)
@@ -45,7 +80,7 @@ export function useCoinReward() {
         transaction,
       }
     },
-    [user, setUser]
+    [user, setUser, notifyCoinEarned, notifyRolePromoted, notifyBadgeEarned]
   )
 
   /**
