@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function ModeToggle() {
-  const { setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
@@ -22,9 +22,13 @@ export function ModeToggle() {
 
   if (!mounted) {
     return (
-      <Button variant="outline" size="icon" className="size-9">
-        <Sun className="size-4" />
-        <span className="sr-only">Toggle theme</span>
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className="size-9 sm:size-10 rounded-lg hover:bg-muted transition-colors"
+        aria-label="Toggle theme"
+      >
+        <Sun className="size-4 sm:size-5 text-muted-foreground" />
       </Button>
     )
   }
@@ -32,24 +36,44 @@ export function ModeToggle() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="size-9 relative">
-          <Sun className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute size-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="size-9 sm:size-10 rounded-lg hover:bg-muted transition-colors relative"
+          aria-label="Toggle theme"
+        >
+          <Sun className="size-4 sm:size-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground dark:text-muted-foreground" />
+          <Moon className="absolute size-4 sm:size-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground dark:text-muted-foreground" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" onCloseAutoFocus={(e) => e.preventDefault()}>
-        <DropdownMenuItem onClick={() => setTheme("light")}>
+      <DropdownMenuContent 
+        align="end" 
+        className="w-40 font-[Manrope]"
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
+        <DropdownMenuItem 
+          onClick={() => setTheme("light")}
+          className="cursor-pointer"
+        >
           <Sun className="mr-2 size-4" />
-          <span>Light</span>
+          <span>Açık</span>
+          {theme === "light" && <span className="ml-auto text-primary">✓</span>}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem 
+          onClick={() => setTheme("dark")}
+          className="cursor-pointer"
+        >
           <Moon className="mr-2 size-4" />
-          <span>Dark</span>
+          <span>Koyu</span>
+          {theme === "dark" && <span className="ml-auto text-primary">✓</span>}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
+        <DropdownMenuItem 
+          onClick={() => setTheme("system")}
+          className="cursor-pointer"
+        >
           <Monitor className="mr-2 size-4" />
-          <span>System</span>
+          <span>Sistem</span>
+          {theme === "system" && <span className="ml-auto text-primary">✓</span>}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

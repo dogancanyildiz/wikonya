@@ -7,6 +7,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { CoinIcon } from "@/components/coin-icon"
+import { ModeToggle } from "@/components/mode-toggle"
 import {
   Popover,
   PopoverContent,
@@ -120,7 +121,7 @@ export function Navbar() {
           </div>
 
           {/* Right Section */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
             {/* Search Icon */}
             <Button
               variant="ghost"
@@ -129,6 +130,9 @@ export function Navbar() {
             >
               <Search className="w-5 h-5 text-[#4d4d4d] dark:text-foreground" strokeWidth={2.5} />
             </Button>
+
+            {/* Theme Toggle */}
+            <ModeToggle />
 
             {/* Notification Bell */}
             <Popover>

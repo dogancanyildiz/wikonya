@@ -5,7 +5,6 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import { MobileLayout } from "@/components/mobile/mobile-layout"
 import { Navbar } from "@/components/navbar"
-import { ModeToggle } from "@/components/mode-toggle"
 import { PageTransition } from "@/components/page-transition"
 import { AppProvider } from "@/contexts/app-context"
 
@@ -47,13 +46,10 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           <AppProvider>
-            <div className="hidden md:block fixed top-0 left-0 right-0 z-50">
+            <div className="hidden md:block">
               <Navbar />
-              <div className="absolute top-8 right-8 z-50">
-                <ModeToggle />
-              </div>
             </div>
-            <div className="md:pt-20">
+            <div className="md:pt-[90px]">
               <MobileLayout>
                 <PageTransition>
                   {children}
