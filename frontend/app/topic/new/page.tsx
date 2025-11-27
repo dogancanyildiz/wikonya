@@ -103,18 +103,18 @@ export default function NewTopicPage() {
       // Simüle edilmiş API çağrısı
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      // Coin kazanma
-      rewardCoins("create_topic", {
-        title,
-        category,
-        tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-      })
+      // Yeni topic oluştur (pending status ile - onay bekliyor)
+      // Coin kazanma sadece onaylandığında olacak
+      // const _coinResult = rewardCoins("create_topic", { title, category })
 
       // Yeni topic ID (gerçek uygulamada API'den gelecek)
       const topicId = Math.floor(Math.random() * 10000)
 
-      // Başarılı - topic sayfasına yönlendir
-      router.push(`/topic/${topicId}`)
+      // Başarılı mesajı göster
+      alert("Başlığınız moderatörler tarafından incelenecek. Onaylandığında yayınlanacak ve +20 GençCoin kazanacaksınız!")
+
+      // Dashboard'a yönlendir
+      router.push("/dashboard")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Başlık oluşturulurken bir hata oluştu")
       setIsLoading(false)
@@ -122,18 +122,18 @@ export default function NewTopicPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
-      <div className="mb-6">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8">
+      <div className="mb-4 sm:mb-6">
         <Link href="/">
-          <Button variant="ghost" className="font-[Manrope] mb-4">
+          <Button variant="ghost" className="font-[Manrope] mb-3 sm:mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Geri Dön
+            <span className="hidden sm:inline">Geri Dön</span>
           </Button>
         </Link>
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-3xl sm:text-4xl">
+        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-2xl sm:text-3xl md:text-4xl">
           Yeni Başlık Aç
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-2">
+        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-2 text-sm sm:text-base">
           Bilgi paylaşmak için yeni bir başlık oluşturun. +20 GençCoin kazanacaksınız!
         </p>
       </div>

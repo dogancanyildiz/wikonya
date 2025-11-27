@@ -66,12 +66,12 @@ export default function ModerationPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
-      <div className="mb-6">
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-3xl sm:text-4xl mb-2">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8">
+      <div className="mb-4 sm:mb-6">
+        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-2xl sm:text-3xl md:text-4xl mb-2">
           Moderasyon Paneli
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
+        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-sm sm:text-base">
           İçerik onayları ve düzenleme tekliflerini yönetin
         </p>
       </div>

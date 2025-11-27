@@ -2,6 +2,9 @@
 
 import { useState } from "react"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
+import { useNotifications } from "@/lib/utils/hooks/use-notifications"
+import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
+import { useApp } from "@/contexts/app-context"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -24,8 +27,55 @@ export function TopicApprovalList({
   onReject,
 }: TopicApprovalListProps) {
   const { canApproveProposals } = usePermissions()
+  const { notifyTopicApproved, notifyTopicRejected } = useNotifications()
+  const { rewardCoins } = useCoinReward()
+  const { state } = useApp()
   const [rejectingId, setRejectingId] = useState<number | null>(null)
   const [rejectReason, setRejectReason] = useState("")
+
+  const handleApprove = async (topicId: number) => {
+    const topic = topics.find((t) => t.id === topicId)
+    if (!topic) return
+
+    try {
+      // Simüle edilmiş API çağrısı
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
+      // Topic'in author'ına coin ver (onaylandığında)
+      // Gerçek uygulamada bu backend'de yapılacak
+      // rewardCoins("create_topic", { topicId })
+
+      // Bildirim gönder
+      notifyTopicApproved(topicId, topic.title)
+
+      // Callback çağır
+      if (onApprove) {
+        onApprove(topicId)
+      }
+    } catch (err) {
+      console.error("Topic approval error:", err)
+    }
+  }
+
+  const handleReject = async (topicId: number, reason: string) => {
+    const topic = topics.find((t) => t.id === topicId)
+    if (!topic) return
+
+    try {
+      // Simüle edilmiş API çağrısı
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
+      // Bildirim gönder
+      notifyTopicRejected(topic.title, reason)
+
+      // Callback çağır
+      if (onReject) {
+        onReject(topicId, reason)
+      }
+    } catch (err) {
+      console.error("Topic rejection error:", err)
+    }
+  }
 
   if (!canApproveProposals) {
     return (
@@ -112,14 +162,14 @@ export function TopicApprovalList({
                   rows={3}
                 />
                 <div className="flex gap-2">
-                  <Button
-                    onClick={() => {
-                      if (onReject && rejectReason.trim()) {
-                        onReject(topic.id, rejectReason)
-                        setRejectingId(null)
-                        setRejectReason("")
-                      }
-                    }}
+                <Button
+                  onClick={async () => {
+                    if (rejectReason.trim()) {
+                      await handleReject(topic.id, rejectReason)
+                      setRejectingId(null)
+                      setRejectReason("")
+                    }
+                  }}
                     variant="destructive"
                     size="sm"
                     className="font-[Manrope]"
@@ -143,7 +193,7 @@ export function TopicApprovalList({
             ) : (
               <div className="flex gap-2">
                 <Button
-                  onClick={() => onApprove?.(topic.id)}
+                  onClick={() => handleApprove(topic.id)}
                   className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] font-bold"
                 >
                   <CheckCircle2 className="w-4 h-4 mr-2" />
