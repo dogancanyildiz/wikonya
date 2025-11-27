@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, TrendingUp, PlusCircle, MessageSquare, User } from "lucide-react"
+import { Home, TrendingUp, PlusCircle, Search, User } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -14,15 +14,20 @@ export function MobileBottomNav({ activeTab, onNavigate }: MobileBottomNavProps)
 
   const navItems = [
     { id: "home", label: "Ana Sayfa", icon: Home, href: "/" },
-    { id: "trending", label: "Trendler", icon: TrendingUp, href: "/trending" },
-    { id: "create", label: "Oluştur", icon: PlusCircle, href: "/create" },
-    { id: "messages", label: "Mesajlar", icon: MessageSquare, href: "/messages" },
+    { id: "trending", label: "Trendler", icon: TrendingUp, href: "/" },
+    { id: "create", label: "Oluştur", icon: PlusCircle, href: "/topic/new" },
+    { id: "search", label: "Ara", icon: Search, href: "/search" },
     { id: "profile", label: "Profil", icon: User, href: "/dashboard" },
   ]
 
   const isActive = (itemId: string, href: string) => {
     if (activeTab) return activeTab === itemId
-    return pathname === href || (href === "/" && pathname === "/")
+    if (itemId === "home") return pathname === "/"
+    if (itemId === "trending") return pathname === "/" // Trending de ana sayfada
+    if (itemId === "create") return pathname?.startsWith("/topic/new")
+    if (itemId === "search") return pathname?.startsWith("/search")
+    if (itemId === "profile") return pathname?.startsWith("/dashboard")
+    return pathname === href
   }
 
   return (

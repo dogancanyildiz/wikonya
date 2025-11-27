@@ -1,8 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { MobileHomePage } from "./mobile-home-page"
-import { MobileTopicDetailPage } from "./mobile-topic-detail-page"
 import { MobileNavbar } from "./mobile-navbar"
 import { MobileBottomNav } from "./mobile-bottom-nav"
 import { usePathname } from "next/navigation"
@@ -25,27 +23,23 @@ export function MobileLayout({ children }: MobileLayoutProps) {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  // Mobile görünümde özel sayfalar
+  // Auth sayfalarında bottom nav gösterme
+  const hideBottomNav = pathname?.startsWith("/auth/")
+
+  // Mobile görünümde tüm sayfalar için MobileNavbar ve MobileBottomNav ekle
   if (isMobile) {
-    if (pathname === "/") {
-      return <MobileHomePage />
-    }
-    if (pathname.startsWith("/topic/")) {
-      return <MobileTopicDetailPage />
-    }
-    // Diğer mobil sayfalar için MobileNavbar ve MobileBottomNav ekle
     return (
       <>
         <MobileNavbar />
-        <div className="pb-20 sm:pb-24">
+        <div className={`min-h-screen bg-[#f2f4f3] dark:bg-background ${!hideBottomNav ? "pb-20 sm:pb-24" : ""}`}>
           {children}
         </div>
-        <MobileBottomNav />
+        {!hideBottomNav && <MobileBottomNav />}
       </>
     )
   }
 
-  // Desktop görünüm veya diğer sayfalar
+  // Desktop görünüm
   return <>{children}</>
 }
 
