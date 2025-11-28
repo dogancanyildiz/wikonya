@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn } from "lucide-react"
+import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn, Lock } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -31,6 +31,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ROLE_DISPLAY_NAMES } from "@/lib/constants"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
+import { usePermissions } from "@/lib/utils/hooks/use-permissions"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // Simple time ago formatter (date-fns yerine)
 function formatTimeAgo(date: string): string {
@@ -51,6 +53,7 @@ export function Navbar() {
   const { state, clearUser } = useApp()
   const { user, isAuthenticated } = state
   const { notifications, unreadCount, markAsRead } = useNotifications()
+  const { canCreateTopic } = usePermissions()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -250,6 +253,39 @@ export function Navbar() {
 
             {/* Theme Toggle */}
             <ModeToggle />
+
+            {/* Yeni Başlık Aç Button */}
+            {isAuthenticated && (
+              canCreateTopic ? (
+                <Button
+                  asChild
+                  size="sm"
+                  className="hidden sm:flex bg-primary hover:bg-primary/90 text-primary-foreground font-[Manrope] font-bold"
+                >
+                  <Link href="/topic/new">+ Yeni Başlık</Link>
+                </Button>
+              ) : (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        disabled
+                        className="hidden sm:flex bg-muted text-muted-foreground cursor-not-allowed opacity-50 font-[Manrope] font-bold"
+                      >
+                        <Lock className="w-4 h-4 mr-1" />
+                        Yeni Başlık
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="font-[Manrope]">
+                        Yeni başlık açmak için &quot;Gezgin&quot; veya üstü bir role sahip olmanız gerekiyor.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )
+            )}
 
             {/* Notification Bell */}
             <Popover>

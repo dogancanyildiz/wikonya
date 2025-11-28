@@ -2,15 +2,19 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useApp } from "@/contexts/app-context"
+import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
-import { Clock, MessageSquare, ThumbsUp, Search, Filter, HelpCircle, X } from "lucide-react"
+import { Clock, MessageSquare, ThumbsUp, Search, Filter, HelpCircle, X, Lock } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export function DiscussionPage() {
+  const { canCreateTopic } = usePermissions()
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState<"newest" | "popular" | "trending">("newest")
@@ -294,12 +298,33 @@ export function DiscussionPage() {
                 >
                   Filtreleri Temizle
                 </Button>
-                <Button
-                  asChild
-                  className="font-[Manrope] font-bold bg-primary text-white hover:bg-primary/90"
-                >
-                  <Link href="/topic/new">Yeni Tartışma Başlat</Link>
-                </Button>
+                {canCreateTopic ? (
+                  <Button
+                    asChild
+                    className="font-[Manrope] font-bold bg-primary text-white hover:bg-primary/90"
+                  >
+                    <Link href="/topic/new">Yeni Tartışma Başlat</Link>
+                  </Button>
+                ) : (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          disabled
+                          className="font-[Manrope] font-bold bg-muted text-muted-foreground cursor-not-allowed opacity-50"
+                        >
+                          <Lock className="w-4 h-4 mr-2" />
+                          Yeni Tartışma Başlat
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="font-[Manrope]">
+                          Yeni başlık açmak için &quot;Gezgin&quot; veya üstü bir role sahip olmanız gerekiyor.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </div>
             </EmptyContent>
           </Empty>
