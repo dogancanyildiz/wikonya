@@ -35,7 +35,7 @@ export function HousingCard({
   const [isFavorite, setIsFavorite] = useState(false)
 
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-all overflow-hidden group border border-border p-0">
+    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl hover:scale-[1.01] transition-all duration-300 overflow-hidden group border border-border p-0">
       <div className="flex flex-col sm:flex-row sm:items-stretch">
         {/* Left - Image */}
         <div className="relative w-full sm:w-[280px] h-[200px] sm:h-auto flex-shrink-0 overflow-hidden rounded-t-[20px] sm:rounded-l-[20px] sm:rounded-tr-none sm:rounded-bl-[20px] sm:rounded-br-none">

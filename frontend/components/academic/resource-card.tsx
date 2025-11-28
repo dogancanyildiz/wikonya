@@ -27,7 +27,7 @@ export function ResourceCard({
   views,
 }: ResourceCardProps) {
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:hover:shadow-xl transition-all group border border-border">
+    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:hover:shadow-xl hover:scale-[1.01] transition-all duration-300 group border border-border">
       <CardContent className="p-4 sm:p-6">
         {/* Icon */}
         <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#03624c]/10 to-[#03624c]/5 dark:from-[#03624c]/20 dark:to-[#03624c]/10 rounded-2xl flex items-center justify-center mb-4 group-hover:from-[#03624c]/20 group-hover:to-[#03624c]/10 dark:group-hover:from-[#03624c]/30 dark:group-hover:to-[#03624c]/20 transition-all">

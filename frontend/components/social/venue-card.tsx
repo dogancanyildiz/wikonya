@@ -39,7 +39,7 @@ export function VenueCard({
   const crowd = crowdColors[crowdLevel]
 
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-all group overflow-hidden border border-border">
+    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group overflow-hidden border border-border">
       {/* Image */}
       <div className="relative h-40 sm:h-52 overflow-hidden">
         <Image
