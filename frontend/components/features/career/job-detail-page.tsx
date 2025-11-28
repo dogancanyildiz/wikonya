@@ -267,7 +267,7 @@ export function JobDetailPage() {
         {/* Sidebar */}
         <div className="space-y-4 sm:space-y-6">
           {/* Apply Card */}
-          <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border sticky top-4">
+          <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
             <CardHeader>
               <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
                 Başvuru
