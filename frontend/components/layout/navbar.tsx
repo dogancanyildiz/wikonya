@@ -121,21 +121,26 @@ export function Navbar() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-card shadow-sm border-b border-border" role="navigation" aria-label="Ana navigasyon">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16">
-        <div className="flex items-center justify-between h-[90px]">
+    <nav 
+      className="sticky top-0 z-50 bg-background/95 dark:bg-card/95 backdrop-blur-md border-b border-border/50 shadow-sm" 
+      role="navigation" 
+      aria-label="Ana navigasyon"
+    >
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md px-2 -ml-2"
+            aria-label="Ana sayfaya dön"
           >
-            <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-black text-2xl">
-              KONYA <span className="text-[#03624c] dark:text-[#03624c]">GENÇ</span>
+            <span className="font-[Manrope] text-foreground font-black text-xl sm:text-2xl tracking-tight">
+              KONYA <span className="text-primary">GENÇ</span>
             </span>
           </Link>
 
           {/* Center Navigation */}
-          <div className="hidden md:flex items-center gap-4 lg:gap-8">
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Ana menü">
             {menuItems.map((item) => {
               const isActive = pathname?.startsWith(item.href)
               
@@ -144,40 +149,45 @@ export function Navbar() {
                   key={item.id}
                   href={item.href}
                   className={`
-                    relative font-[Manrope] text-[#4d4d4d] dark:text-foreground hover:text-[#03624c] dark:hover:text-[#03624c] transition-colors duration-200 pb-1 font-bold text-sm lg:text-[15px]
-                    ${isActive ? 'text-[#03624c] dark:text-[#03624c]' : ''}
+                    relative px-3 py-2 rounded-lg font-[Manrope] font-semibold text-sm lg:text-base
+                    transition-all duration-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+                    ${
+                      isActive 
+                        ? 'text-primary bg-primary/10' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                    }
                   `}
+                  aria-current={isActive ? 'page' : undefined}
                 >
                   {item.label}
-                  {isActive && (
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#03624c] rounded-t-full"></div>
-                  )}
                 </Link>
               )
             })}
-          </div>
+          </nav>
 
           {/* Right Section */}
-          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+          <div className="flex items-center gap-1 sm:gap-2">
             {/* Search Icon */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsSearchOpen(true)}
-              className="hover:bg-[#f2f4f3] dark:hover:bg-accent rounded-full"
+              className="h-9 w-9 rounded-lg hover:bg-accent"
+              aria-label="Ara"
             >
-              <Search className="w-5 h-5 text-[#4d4d4d] dark:text-foreground" strokeWidth={2.5} />
+              <Search className="h-4 w-4 text-foreground" strokeWidth={2.5} />
             </Button>
 
             {/* Search Dialog */}
             <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
               <DialogContent className="sm:max-w-[600px] p-0 gap-0">
-                <DialogHeader className="p-4 sm:p-6 pb-0">
-                  <DialogTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-xl sm:text-2xl">
+                <DialogHeader className="p-6 pb-4">
+                  <DialogTitle className="font-[Manrope] text-foreground font-bold text-xl sm:text-2xl">
                     Arama
                   </DialogTitle>
                 </DialogHeader>
-                <div className="p-4 sm:p-6">
+                <div className="p-6 pt-0">
                   <form
                     onSubmit={(e) => {
                       e.preventDefault()
@@ -189,19 +199,21 @@ export function Navbar() {
                     }}
                     className="space-y-4"
                   >
-                    <div className="relative flex items-center bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
-                      <Search className="absolute left-4 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-[#03624c]" />
+                    <div className="relative flex items-center bg-card rounded-xl shadow-md border border-border">
+                      <Search className="absolute left-4 h-5 w-5 text-muted-foreground" />
                       <Input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Konuları, soruları, yorumları keşfet..."
-                        className="w-full h-[60px] pl-12 sm:pl-16 pr-28 sm:pr-32 bg-transparent rounded-[20px] font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
+                        className="w-full h-12 pl-11 pr-24 bg-transparent rounded-xl font-[Manrope] font-medium text-foreground placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
                         autoFocus
+                        aria-label="Arama kutusu"
                       />
                       <Button
                         type="submit"
-                        className="absolute right-2 h-[48px] px-6 sm:px-8 bg-[#03624c] hover:bg-[#03624c]/90 rounded-[16px] font-[Manrope] font-semibold text-white"
+                        className="absolute right-2 h-8 px-4 bg-primary hover:bg-primary/90 rounded-lg font-[Manrope] font-semibold text-primary-foreground text-sm"
+                        aria-label="Ara"
                       >
                         Ara
                       </Button>
@@ -210,7 +222,7 @@ export function Navbar() {
                   
                   {/* Quick Search Tags */}
                   <div className="mt-6">
-                    <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-semibold text-sm mb-3">
+                    <p className="font-[Manrope] text-muted-foreground font-semibold text-sm mb-3">
                       Hızlı Arama
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -225,7 +237,7 @@ export function Navbar() {
                             setIsSearchOpen(false)
                             setSearchQuery("")
                           }}
-                          className="font-[Manrope] text-xs sm:text-sm border-[#03624c] text-[#03624c] hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] dark:hover:text-white"
+                          className="font-[Manrope] text-xs sm:text-sm border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                         >
                           {tag}
                         </Button>
@@ -245,11 +257,12 @@ export function Navbar() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="relative hover:bg-[#f2f4f3] dark:hover:bg-accent rounded-full"
+                  className="relative h-9 w-9 rounded-lg hover:bg-accent"
+                  aria-label={`Bildirimler${unreadCount > 0 ? ` (${unreadCount} yeni)` : ''}`}
                 >
-                  <Bell className="w-5 h-5 text-[#4d4d4d] dark:text-foreground" strokeWidth={2.5} />
+                  <Bell className="h-4 w-4 text-foreground" strokeWidth={2.5} />
                   {unreadCount > 0 && (
-                    <span className="absolute top-2 right-2 w-2 h-2 bg-[#03624c] rounded-full"></span>
+                    <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-primary rounded-full ring-2 ring-background" aria-hidden="true"></span>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -257,11 +270,11 @@ export function Navbar() {
                 <div className="flex flex-col max-h-[600px]">
                   {/* Header */}
                   <div className="flex items-center justify-between p-4 border-b border-border">
-                    <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg">
+                    <h3 className="font-[Manrope] text-foreground font-bold text-lg">
                       Bildirimler
                     </h3>
                     {unreadCount > 0 && (
-                      <span className="px-2.5 py-1 bg-[#03624c] text-white rounded-full font-[Manrope] font-bold text-xs">
+                      <span className="px-2.5 py-1 bg-primary text-primary-foreground rounded-full font-[Manrope] font-bold text-xs">
                         {unreadCount} yeni
                       </span>
                     )}
@@ -286,8 +299,8 @@ export function Navbar() {
                                   router.push(notification.actionUrl)
                                 }
                               }}
-                              className={`p-4 hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors cursor-pointer ${
-                                !notification.read ? 'bg-[#03624c]/5 dark:bg-[#03624c]/10' : ''
+                              className={`p-4 hover:bg-accent transition-colors cursor-pointer ${
+                                !notification.read ? 'bg-primary/5 dark:bg-primary/10' : ''
                               }`}
                             >
                               <div className="flex items-start gap-3">
@@ -302,19 +315,19 @@ export function Navbar() {
                                   <div className="flex items-start justify-between gap-2 mb-1">
                                     <h4 className={`font-[Manrope] font-bold text-sm ${
                                       !notification.read 
-                                        ? 'text-[#4d4d4d] dark:text-foreground' 
-                                        : 'text-[#4d4d4d]/70 dark:text-muted-foreground'
+                                        ? 'text-foreground' 
+                                        : 'text-muted-foreground'
                                     }`}>
                                       {notification.title}
                                     </h4>
                                     {!notification.read && (
-                                      <div className="w-2 h-2 bg-[#03624c] rounded-full flex-shrink-0 mt-1.5"></div>
+                                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" aria-hidden="true"></div>
                                     )}
                                   </div>
-                                  <p className="font-[Manrope] text-[#4d4d4d]/70 dark:text-muted-foreground text-xs mb-2 leading-relaxed">
+                                  <p className="font-[Manrope] text-muted-foreground text-xs mb-2 leading-relaxed">
                                     {notification.message}
                                   </p>
-                                  <span className="font-[Manrope] text-[#4d4d4d]/50 dark:text-muted-foreground text-[11px]">
+                                  <span className="font-[Manrope] text-muted-foreground/70 text-[11px]">
                                     {timeAgo}
                                   </span>
                                 </div>
@@ -325,8 +338,8 @@ export function Navbar() {
                       </div>
                     ) : (
                       <div className="p-8 text-center">
-                        <Bell className="w-12 h-12 text-[#4d4d4d]/30 dark:text-muted-foreground/30 mx-auto mb-3" />
-                        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
+                        <Bell className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                        <p className="font-[Manrope] text-muted-foreground font-medium">
                           Bildiriminiz yok
                         </p>
                       </div>
@@ -338,7 +351,7 @@ export function Navbar() {
                     <div className="p-3 border-t border-border">
                       <Button
                         variant="ghost"
-                        className="w-full font-[Manrope] text-[#03624c] hover:bg-[#03624c]/10 dark:hover:bg-[#03624c]/20 font-bold text-sm"
+                        className="w-full font-[Manrope] text-primary hover:bg-primary/10 font-bold text-sm"
                       >
                         Tümünü Görüntüle
                       </Button>
@@ -352,17 +365,20 @@ export function Navbar() {
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity cursor-pointer">
-                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-[#f2f4f3] dark:border-border">
+                  <button 
+                    className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity cursor-pointer rounded-lg p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    aria-label="Kullanıcı menüsü"
+                  >
+                    <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border-2 border-border">
                       <AvatarFallback 
-                        className="bg-[#03624c] text-white font-[Manrope] font-bold"
+                        className="bg-primary text-primary-foreground font-[Manrope] font-bold"
                       >
                         {user.initials}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#f2f4f3] dark:bg-accent rounded-full">
+                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-accent rounded-full">
                       <span 
-                        className="font-[Manrope] text-[#03624c] dark:text-[#03624c] font-bold text-sm"
+                        className="font-[Manrope] text-primary font-bold text-sm"
                       >
                         {user.totalCoins.toLocaleString()}
                       </span>
@@ -372,10 +388,10 @@ export function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <div className="px-2 py-1.5">
-                    <p className="font-[Manrope] font-bold text-sm text-[#4d4d4d] dark:text-foreground">
+                    <p className="font-[Manrope] font-bold text-sm text-foreground">
                       {user.name}
                     </p>
-                    <p className="font-[Manrope] text-xs text-[#4d4d4d]/60 dark:text-muted-foreground">
+                    <p className="font-[Manrope] text-xs text-muted-foreground">
                       {ROLE_DISPLAY_NAMES[user.role]}
                     </p>
                   </div>
@@ -386,7 +402,7 @@ export function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 dark:text-red-400">
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
                     <LogOut className="mr-2 h-4 w-4" />
                     Çıkış Yap
                   </DropdownMenuItem>
@@ -396,7 +412,7 @@ export function Navbar() {
               <Button
                 asChild
                 variant="outline"
-                className="border-[#03624c] text-[#03624c] hover:bg-[#03624c] hover:text-white"
+                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
               >
                 <Link href="/auth/login" className="flex items-center gap-2">
                   <LogIn className="w-4 h-4" />

@@ -61,41 +61,41 @@ export function Sidebar({}: SidebarProps = {}) {
   ]
 
   return (
-    <div className="space-y-4 sticky 2xl:top-3">
+    <aside className="space-y-4 sticky top-20 2xl:top-24" aria-label="Yan panel">
       {/* Trending Topics */}
-      <Card className="rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg">
+      <Card className="rounded-xl shadow-md border border-border">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base">
-            <TrendingUp className="w-4 h-4 text-[#03624c]" />
-            <span className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground">Trending Topics</span>
+            <TrendingUp className="w-4 h-4 text-primary" />
+            <span className="font-[Manrope] font-bold text-foreground">Trending Topics</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2.5 pt-0">
+        <CardContent className="space-y-3 pt-0">
           {trendingData.slice(0, 2).map((topic) => (
             <Link
               key={topic.id}
               href={`/topic/${topic.id}`}
-              className="block bg-[#f2f4f3] dark:bg-accent rounded-xl p-2.5 hover:shadow-md transition-shadow cursor-pointer"
+              className="block bg-accent rounded-lg p-3 hover:shadow-md transition-all duration-200 cursor-pointer border border-transparent hover:border-border"
             >
-              <div className="flex items-start justify-between mb-1.5">
-                <span className="px-2 py-0.5 bg-white dark:bg-card rounded-full font-[Manrope] font-semibold text-[#03624c] text-xs">
+              <div className="flex items-start justify-between mb-2">
+                <span className="px-2 py-0.5 bg-card rounded-full font-[Manrope] font-semibold text-primary text-xs">
                   {topic.category}
                 </span>
-                <div className="flex items-center gap-0.5 text-[#03624c]">
-                  <TrendingUp className="w-2.5 h-2.5" />
+                <div className="flex items-center gap-1 text-primary">
+                  <TrendingUp className="w-3 h-3" />
                   <span className="font-[Manrope] font-bold text-xs">{topic.trend}</span>
                 </div>
               </div>
-              <h4 className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground mb-1.5 text-sm line-clamp-2">
+              <h4 className="font-[Manrope] font-bold text-foreground mb-2 text-sm line-clamp-2">
                 {topic.title}
               </h4>
-                <div className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground">
-                <div className="flex items-center gap-0.5">
-                  <Eye className="w-2.5 h-2.5" />
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Eye className="w-3 h-3" />
                   <span className="font-[Manrope] font-semibold text-xs">{topic.views}</span>
                 </div>
-                <div className="flex items-center gap-0.5">
-                  <MessageCircle className="w-2.5 h-2.5" />
+                <div className="flex items-center gap-1">
+                  <MessageCircle className="w-3 h-3" />
                   <span className="font-[Manrope] font-semibold text-xs">{topic.comments}</span>
                 </div>
               </div>
@@ -105,35 +105,35 @@ export function Sidebar({}: SidebarProps = {}) {
       </Card>
 
       {/* Upcoming Events */}
-      <Card className="rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg">
+      <Card className="rounded-xl shadow-md border border-border">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base">
-            <Calendar className="w-4 h-4 text-[#03624c]" />
-            <span className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground">Upcoming Events</span>
+            <Calendar className="w-4 h-4 text-primary" />
+            <span className="font-[Manrope] font-bold text-foreground">Upcoming Events</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2.5 pt-0">
+        <CardContent className="space-y-3 pt-0">
           {upcomingEvents.slice(0, 2).map((event) => (
             <Link
               key={event.id}
               href={`/events/${event.id}`}
-              className="block bg-[#f2f4f3] dark:bg-accent rounded-xl p-2.5 hover:shadow-md transition-shadow cursor-pointer"
+              className="block bg-accent rounded-lg p-3 hover:shadow-md transition-all duration-200 cursor-pointer border border-transparent hover:border-border"
             >
-              <h4 className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground mb-1.5 text-sm line-clamp-2">
+              <h4 className="font-[Manrope] font-bold text-foreground mb-2 text-sm line-clamp-2">
                 {event.title}
-                  </h4>
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-1.5 text-[#4d4d4d]/60 dark:text-muted-foreground">
-                  <Calendar className="w-2.5 h-2.5" />
+              </h4>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <Calendar className="w-3 h-3" />
                   <span className="font-[Manrope] font-medium text-xs">{event.date}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[#4d4d4d]/60 dark:text-muted-foreground">
-                  <MapPin className="w-2.5 h-2.5" />
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <MapPin className="w-3 h-3" />
                   <span className="font-[Manrope] font-medium text-xs">{event.location}</span>
                 </div>
               </div>
-              <div className="mt-2 pt-2 border-t border-gray-200 dark:border-border">
-                <span className="font-[Manrope] font-bold text-[#03624c] text-xs">
+              <div className="mt-2 pt-2 border-t border-border">
+                <span className="font-[Manrope] font-bold text-primary text-xs">
                   {event.attendees} katılımcı
                 </span>
               </div>
@@ -143,11 +143,11 @@ export function Sidebar({}: SidebarProps = {}) {
       </Card>
 
       {/* Quick Stats */}
-      <Card className="bg-gradient-to-br from-[#03624c] to-[#024d3c] rounded-[20px] text-white border-0">
+      <Card className="bg-gradient-to-br from-primary to-primary/80 rounded-xl text-primary-foreground border-0 shadow-lg">
         <CardHeader className="pb-3">
           <CardTitle className="font-[Manrope] font-bold text-base">Community Stats</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2 pt-0">
+        <CardContent className="space-y-3 pt-0">
           <div className="flex items-center justify-between">
             <span className="font-[Manrope] font-semibold opacity-90 text-sm">Toplam Üye</span>
             <span className="font-[Manrope] font-bold text-sm">12,458</span>
@@ -162,7 +162,7 @@ export function Sidebar({}: SidebarProps = {}) {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </aside>
   )
 }
 
