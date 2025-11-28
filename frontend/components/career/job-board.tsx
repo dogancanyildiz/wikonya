@@ -3,7 +3,9 @@
 import { useState } from "react"
 import { JobCard } from "./job-card"
 import { Button } from "@/components/ui/button"
-import { ChevronDown } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
+import { ChevronDown, Briefcase, X } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -127,6 +129,22 @@ export function JobBoard() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          {selectedType !== "all" && (
+            <>
+              <Button
+                onClick={() => setSelectedType("all")}
+                variant="outline"
+                size="sm"
+                className="font-[Manrope] font-bold text-xs text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c]"
+              >
+                <X className="w-3 h-3 mr-1" />
+                Temizle
+              </Button>
+              <Badge className="font-[Manrope] font-bold text-xs bg-[#03624c]/10 text-[#03624c] dark:bg-[#03624c]/20 dark:text-[#03624c]">
+                1 aktif filtre
+              </Badge>
+            </>
+          )}
         </div>
       </div>
 
@@ -136,11 +154,28 @@ export function JobBoard() {
             <JobCard key={job.id} {...job} />
           ))
         ) : (
-          <div className="text-center py-12">
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
-              Seçilen kriterlere uygun ilan bulunamadı.
-            </p>
-          </div>
+          <Empty className="py-12 sm:py-16">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Briefcase className="w-12 h-12 text-muted-foreground" />
+              </EmptyMedia>
+              <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+                İlan Bulunamadı
+              </EmptyTitle>
+              <EmptyDescription className="font-[Manrope] text-base">
+                Seçilen kriterlere uygun iş veya staj ilanı bulunamadı. Filtreleri değiştirmeyi deneyin.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button
+                onClick={() => setSelectedType("all")}
+                variant="outline"
+                className="font-[Manrope] font-bold"
+              >
+                Tüm İlanları Göster
+              </Button>
+            </EmptyContent>
+          </Empty>
         )}
       </div>
     </div>

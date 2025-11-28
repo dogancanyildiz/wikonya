@@ -1,13 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { Calendar, MapPin, Users, Clock, ArrowRight, Filter } from "lucide-react"
+import { Calendar, MapPin, Users, Clock, ArrowRight, Filter, CalendarX, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
 
 interface Event {
   id: number
@@ -159,18 +160,38 @@ export function EventsPage() {
             {category}
           </Button>
         ))}
+        {(selectedCategory !== null || activeTab !== "all") && (
+          <Button
+            onClick={() => {
+              setSelectedCategory(null)
+              setActiveTab("all")
+            }}
+            variant="outline"
+            size="sm"
+            className="font-[Manrope] font-bold text-xs text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c]"
+          >
+            <X className="w-3 h-3 mr-1" />
+            Temizle
+          </Button>
+        )}
+        {(selectedCategory !== null || activeTab !== "all") && (
+          <Badge className="font-[Manrope] font-bold text-xs bg-[#03624c]/10 text-[#03624c] dark:bg-[#03624c]/20 dark:text-[#03624c]">
+            {[selectedCategory, activeTab !== "all" ? activeTab : null].filter(Boolean).length} aktif filtre
+          </Badge>
+        )}
       </div>
 
       {/* Events Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        {filteredEvents.map((event) => {
+      {filteredEvents.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {filteredEvents.map((event) => {
           const filledPercentage = (event.participants / event.maxParticipants) * 100
           const isFull = event.participants >= event.maxParticipants
 
           return (
             <Card
               key={event.id}
-              className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border overflow-hidden hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-all group"
+              className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border overflow-hidden hover:shadow-[0_6px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group"
             >
               {/* Event Image */}
               <Link href={`/events/${event.id}`}>
@@ -292,17 +313,54 @@ export function EventsPage() {
             </Card>
           )
         })}
-      </div>
+        </div>
+      ) : (
+        <Empty className="py-12 sm:py-16">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <CalendarX className="w-12 h-12 text-muted-foreground" />
+            </EmptyMedia>
+            <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+              Etkinlik Bulunamadı
+            </EmptyTitle>
+            <EmptyDescription className="font-[Manrope] text-base">
+              Seçilen kriterlere uygun etkinlik bulunamadı. Filtreleri değiştirmeyi deneyin veya yeni bir etkinlik oluşturun.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                onClick={() => {
+                  setActiveTab("all")
+                  setSelectedCategory(null)
+                }}
+                variant="outline"
+                className="font-[Manrope] font-bold"
+              >
+                Filtreleri Temizle
+              </Button>
+              <Button
+                variant="outline"
+                className="px-6 py-3 border-2 border-dashed border-[#03624c] rounded-xl font-[Manrope] text-[#03624c] hover:bg-[#03624c]/5 dark:hover:bg-[#03624c]/10 transition-all font-bold text-sm sm:text-base"
+              >
+                + Yeni Etkinlik Oluştur
+              </Button>
+            </div>
+          </EmptyContent>
+        </Empty>
+      )}
 
       {/* Create Event Button */}
-      <div className="mt-8 text-center">
-        <Button 
-          variant="outline"
-          className="px-6 py-3 border-2 border-dashed border-[#03624c] rounded-xl font-[Manrope] text-[#03624c] hover:bg-[#03624c]/5 dark:hover:bg-[#03624c]/10 transition-all font-bold text-sm sm:text-base"
-        >
-          + Yeni Etkinlik Oluştur
-        </Button>
-      </div>
+      {filteredEvents.length > 0 && (
+        <div className="mt-8 text-center">
+          <Button 
+            variant="outline"
+            className="px-6 py-3 border-2 border-dashed border-[#03624c] rounded-xl font-[Manrope] text-[#03624c] hover:bg-[#03624c]/5 dark:hover:bg-[#03624c]/10 transition-all font-bold text-sm sm:text-base"
+          >
+            + Yeni Etkinlik Oluştur
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

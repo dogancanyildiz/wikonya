@@ -7,7 +7,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Clock, MessageSquare, ThumbsUp, Search, Filter } from "lucide-react"
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
+import { Clock, MessageSquare, ThumbsUp, Search, Filter, HelpCircle, X } from "lucide-react"
 
 export function DiscussionPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -153,6 +154,25 @@ export function DiscussionPage() {
                 {category}
               </Button>
             ))}
+            {(selectedCategory !== null || searchQuery !== "") && (
+              <Button
+                onClick={() => {
+                  setSelectedCategory(null)
+                  setSearchQuery("")
+                }}
+                variant="outline"
+                size="sm"
+                className="font-[Manrope] font-bold text-xs text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c]"
+              >
+                <X className="w-3 h-3 mr-1" />
+                Temizle
+              </Button>
+            )}
+            {(selectedCategory !== null || searchQuery !== "") && (
+              <Badge className="font-[Manrope] font-bold text-xs bg-[#03624c]/10 text-[#03624c] dark:bg-[#03624c]/20 dark:text-[#03624c]">
+                {[selectedCategory, searchQuery].filter(Boolean).length} aktif filtre
+              </Badge>
+            )}
           </div>
 
           {/* Sort */}
@@ -200,7 +220,7 @@ export function DiscussionPage() {
           sortedDiscussions.map((discussion) => (
             <Card
               key={discussion.id}
-              className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-[20px] hover:shadow-lg transition-all duration-300 cursor-pointer group"
+              className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-[20px] hover:shadow-lg hover:scale-[1.02] transition-all duration-300 cursor-pointer group"
             >
               <CardContent className="p-4 sm:p-6">
                 <Link href={`/topic/${discussion.id}`}>
@@ -250,11 +270,39 @@ export function DiscussionPage() {
             </Card>
           ))
         ) : (
-          <div className="text-center py-12">
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
-              Aradığınız kriterlere uygun tartışma bulunamadı.
-            </p>
-          </div>
+          <Empty className="py-12 sm:py-16">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <HelpCircle className="w-12 h-12 text-muted-foreground" />
+              </EmptyMedia>
+              <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+                Tartışma Bulunamadı
+              </EmptyTitle>
+              <EmptyDescription className="font-[Manrope] text-base">
+                Aradığınız kriterlere uygun tartışma bulunamadı. Filtreleri değiştirmeyi deneyin veya yeni bir tartışma başlatın.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button
+                  onClick={() => {
+                    setSearchQuery("")
+                    setSelectedCategory(null)
+                  }}
+                  variant="outline"
+                  className="font-[Manrope] font-bold"
+                >
+                  Filtreleri Temizle
+                </Button>
+                <Button
+                  asChild
+                  className="font-[Manrope] font-bold bg-[#03624c] text-white hover:bg-[#03624c]/90"
+                >
+                  <a href="/topic/new">Yeni Tartışma Başlat</a>
+                </Button>
+              </div>
+            </EmptyContent>
+          </Empty>
         )}
       </div>
     </div>

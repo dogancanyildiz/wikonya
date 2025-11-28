@@ -3,7 +3,9 @@
 import { useState } from "react"
 import { HousingCard } from "./housing-card"
 import { Button } from "@/components/ui/button"
-import { ChevronDown } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
+import { ChevronDown, Home, X } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -229,14 +231,63 @@ export function HousingList() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          {(selectedCategory !== null || sortBy !== "price" || priceOrder !== "low-high") && (
+            <>
+              <Button
+                onClick={() => {
+                  setSelectedCategory(null)
+                  setSortBy("price")
+                  setPriceOrder("low-high")
+                }}
+                variant="outline"
+                size="sm"
+                className="font-[Manrope] font-bold text-xs text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c]"
+              >
+                <X className="w-3 h-3 mr-1" />
+                Temizle
+              </Button>
+              <Badge className="font-[Manrope] font-bold text-xs bg-[#03624c]/10 text-[#03624c] dark:bg-[#03624c]/20 dark:text-[#03624c]">
+                {[selectedCategory !== null ? 1 : 0, sortBy !== "price" || priceOrder !== "low-high" ? 1 : 0].reduce((a, b) => a + b, 0)} aktif filtre
+              </Badge>
+            </>
+          )}
         </div>
       </div>
 
-      <div className="space-y-4 sm:space-y-6">
-        {sortedListings.map((listing) => (
-          <HousingCard key={listing.id} {...listing} price={listing.priceText} />
-        ))}
-      </div>
+      {sortedListings.length > 0 ? (
+        <div className="space-y-4 sm:space-y-6">
+          {sortedListings.map((listing) => (
+            <HousingCard key={listing.id} {...listing} price={listing.priceText} />
+          ))}
+        </div>
+      ) : (
+        <Empty className="py-12 sm:py-16">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Home className="w-12 h-12 text-muted-foreground" />
+            </EmptyMedia>
+            <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+              İlan Bulunamadı
+            </EmptyTitle>
+            <EmptyDescription className="font-[Manrope] text-base">
+              Seçilen kriterlere uygun konaklama ilanı bulunamadı. Filtreleri değiştirmeyi deneyin.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button
+              onClick={() => {
+                setSelectedCategory(null)
+                setSortBy("price")
+                setPriceOrder("low-high")
+              }}
+              variant="outline"
+              className="font-[Manrope] font-bold"
+            >
+              Filtreleri Temizle
+            </Button>
+          </EmptyContent>
+        </Empty>
+      )}
     </div>
   )
 }

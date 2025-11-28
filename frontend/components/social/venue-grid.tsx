@@ -4,7 +4,9 @@ import { useState } from "react"
 import { VenueCard } from "./venue-card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { MapPin, List, Navigation } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
+import { MapPin, List, Navigation, MapPinX, X } from "lucide-react"
 import Link from "next/link"
 
 export function VenueGrid() {
@@ -219,6 +221,22 @@ export function VenueGrid() {
               </Button>
             </>
           )}
+          {viewMode === "list" && sortBy !== "distance" && (
+            <>
+              <Button
+                onClick={() => setSortBy("distance")}
+                variant="outline"
+                size="sm"
+                className="font-[Manrope] font-bold text-xs text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c]"
+              >
+                <X className="w-3 h-3 mr-1" />
+                Sıfırla
+              </Button>
+              <Badge className="font-[Manrope] font-bold text-xs bg-[#03624c]/10 text-[#03624c] dark:bg-[#03624c]/20 dark:text-[#03624c]">
+                1 aktif filtre
+              </Badge>
+            </>
+          )}
         </div>
       </div>
 
@@ -295,12 +313,35 @@ export function VenueGrid() {
             </div>
           </div>
         </div>
-      ) : (
+      ) : sortedVenues.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {sortedVenues.map((venue) => (
             <VenueCard key={venue.id} {...venue} />
           ))}
         </div>
+      ) : (
+        <Empty className="py-12 sm:py-16">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <MapPinX className="w-12 h-12 text-muted-foreground" />
+            </EmptyMedia>
+            <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+              Mekan Bulunamadı
+            </EmptyTitle>
+            <EmptyDescription className="font-[Manrope] text-base">
+              Seçilen kriterlere uygun mekan bulunamadı. Filtreleri değiştirmeyi deneyin.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button
+              onClick={() => setSortBy("distance")}
+              variant="outline"
+              className="font-[Manrope] font-bold"
+            >
+              Filtreleri Sıfırla
+            </Button>
+          </EmptyContent>
+        </Empty>
       )}
     </div>
   )

@@ -3,7 +3,9 @@
 import { useState } from "react"
 import { ScholarshipCard } from "./scholarship-card"
 import { Button } from "@/components/ui/button"
-import { ChevronDown } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
+import { ChevronDown, GraduationCap, X } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -217,6 +219,25 @@ export function ScholarshipBoard() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          {(selectedCategory !== "all" || selectedSubCategory !== "all") && (
+            <>
+              <Button
+                onClick={() => {
+                  setSelectedCategory("all")
+                  setSelectedSubCategory("all")
+                }}
+                variant="outline"
+                size="sm"
+                className="font-[Manrope] font-bold text-xs text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c]"
+              >
+                <X className="w-3 h-3 mr-1" />
+                Temizle
+              </Button>
+              <Badge className="font-[Manrope] font-bold text-xs bg-[#03624c]/10 text-[#03624c] dark:bg-[#03624c]/20 dark:text-[#03624c]">
+                {[selectedCategory !== "all" ? 1 : 0, selectedSubCategory !== "all" ? 1 : 0].reduce((a, b) => a + b, 0)} aktif filtre
+              </Badge>
+            </>
+          )}
         </div>
       </div>
 
@@ -226,11 +247,31 @@ export function ScholarshipBoard() {
             <ScholarshipCard key={scholarship.id} {...scholarship} />
           ))
         ) : (
-          <div className="text-center py-12">
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
-              Seçilen kriterlere uygun burs bulunamadı.
-            </p>
-          </div>
+          <Empty className="py-12 sm:py-16">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <GraduationCap className="w-12 h-12 text-muted-foreground" />
+              </EmptyMedia>
+              <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+                Burs Bulunamadı
+              </EmptyTitle>
+              <EmptyDescription className="font-[Manrope] text-base">
+                Seçilen kriterlere uygun burs ilanı bulunamadı. Filtreleri değiştirmeyi deneyin.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Button
+                onClick={() => {
+                  setSelectedCategory("all")
+                  setSelectedSubCategory("all")
+                }}
+                variant="outline"
+                className="font-[Manrope] font-bold"
+              >
+                Tüm Bursları Göster
+              </Button>
+            </EmptyContent>
+          </Empty>
         )}
       </div>
     </div>
