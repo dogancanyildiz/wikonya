@@ -446,7 +446,7 @@ export function HousingDetailPage() {
                 İletişim
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-0">
               <div>
                 <p className="font-[Manrope] font-bold text-sm text-[#4d4d4d] dark:text-foreground mb-1">
                   {housing.contact.name}
@@ -485,7 +485,7 @@ export function HousingDetailPage() {
                 Konum
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-0">
               <div className="relative h-48 bg-[#f2f4f3] dark:bg-accent rounded-xl overflow-hidden">
                 {/* Placeholder for map */}
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -517,7 +517,7 @@ export function HousingDetailPage() {
                 Hızlı Bilgiler
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 pt-0">
               <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-border">
                 <span className="font-[Manrope] text-sm text-[#4d4d4d]/60 dark:text-muted-foreground">
                   Fiyat

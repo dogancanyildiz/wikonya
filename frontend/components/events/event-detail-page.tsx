@@ -285,7 +285,7 @@ export function EventDetailPage() {
                 Etkinliğe Katıl
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-0">
               {isJoined ? (
                 <div className="text-center py-4">
                   <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-3" />
@@ -373,7 +373,7 @@ export function EventDetailPage() {
                 Konum
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-0">
               <div className="relative h-48 bg-[#f2f4f3] dark:bg-accent rounded-xl overflow-hidden">
                 {/* Placeholder for map */}
                 <div className="absolute inset-0 flex items-center justify-center">
