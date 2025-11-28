@@ -27,9 +27,9 @@ export function CommentForm({ onSubmit, isLoading = false }: CommentFormProps) {
   }
 
   return (
-    <Card className="mt-4 sm:mt-6 bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+    <Card className="mt-6 sm:mt-8 rounded-xl shadow-md border-border">
       <CardHeader>
-        <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg sm:text-xl">
+        <CardTitle className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl">
           Görüş Bildir
         </CardTitle>
       </CardHeader>
@@ -45,7 +45,7 @@ export function CommentForm({ onSubmit, isLoading = false }: CommentFormProps) {
                     <Textarea
                       {...field}
                       placeholder="Deneyimlerinizi ve düşüncelerinizi paylaşın..."
-                      className="w-full p-3 sm:p-4 bg-[#f2f4f3] dark:bg-accent rounded-xl font-[Manrope] text-[#4d4d4d] dark:text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-[#03624c] font-medium min-h-[100px] sm:min-h-[120px] text-sm sm:text-base"
+                      className="w-full p-4 bg-accent rounded-lg font-[Manrope] text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-ring font-medium min-h-[120px] text-sm sm:text-base"
                       aria-label="Yorum metni"
                     />
                   </FormControl>
@@ -54,13 +54,13 @@ export function CommentForm({ onSubmit, isLoading = false }: CommentFormProps) {
               )}
             />
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-              <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
+              <span className="font-[Manrope] text-muted-foreground font-medium text-xs sm:text-sm">
                 Lütfen yapıcı ve saygılı yorumlar yazın
               </span>
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] px-6 sm:px-8 font-bold text-xs sm:text-sm"
+                className="bg-primary hover:bg-primary/90 font-[Manrope] px-6 sm:px-8 font-bold text-primary-foreground"
                 aria-label="Yorumu gönder"
               >
                 {isLoading ? "Gönderiliyor..." : "Gönder"}

@@ -70,17 +70,17 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
   ]
 
   return (
-    <div>
+    <section>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-        <h2 className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground text-xl sm:text-2xl">Fresh Discussions</h2>
+        <h2 className="font-[Manrope] font-bold text-foreground text-xl sm:text-2xl">Fresh Discussions</h2>
         <div className="flex items-center gap-2 flex-wrap">
-          <Button className="px-4 py-2 bg-[#03624c] text-white rounded-xl font-[Manrope] font-semibold hover:bg-[#03624c]/90 text-sm">
+          <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-[Manrope] font-semibold">
             Yeni
           </Button>
-          <Button variant="outline" className="px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] font-semibold hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] transition-colors text-sm">
+          <Button variant="outline" className="font-[Manrope] font-semibold hover:bg-primary hover:text-primary-foreground">
             Popüler
           </Button>
-          <Button variant="outline" className="px-4 py-2 bg-white dark:bg-card text-[#4d4d4d] dark:text-foreground rounded-xl font-[Manrope] font-semibold hover:bg-[#03624c] hover:text-white dark:hover:bg-[#03624c] transition-colors text-sm">
+          <Button variant="outline" className="font-[Manrope] font-semibold hover:bg-primary hover:text-primary-foreground">
             Cevaplanmamış
           </Button>
         </div>
@@ -91,48 +91,57 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
           <Card
             key={discussion.id}
             onClick={onNavigateToTopic}
-            className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-[20px] hover:shadow-lg transition-all duration-300 cursor-pointer group"
+            className="hover:shadow-lg transition-all duration-200 cursor-pointer group border-border"
           >
             <CardContent className="p-4 sm:p-6">
               <div className="flex items-start gap-4">
-                <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-[#f2f4f3] dark:border-border">
-                  <AvatarFallback className="bg-[#03624c] text-white font-[Manrope] font-bold">
+                <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-border">
+                  <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-bold">
                     {discussion.authorInitials}
                   </AvatarFallback>
                 </Avatar>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
-                    <span className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground text-sm sm:text-base">
+                    <span className="font-[Manrope] font-bold text-foreground text-sm sm:text-base">
                       {discussion.author}
                     </span>
-                    <span className="px-3 py-1 bg-[#f2f4f3] dark:bg-accent rounded-full font-[Manrope] font-semibold text-[#03624c] text-xs sm:text-sm">
+                    <span className="px-3 py-1 bg-accent rounded-full font-[Manrope] font-semibold text-primary text-xs sm:text-sm">
                       {discussion.category}
                     </span>
-                    <div className="flex items-center gap-1 text-[#4d4d4d]/60 dark:text-muted-foreground">
+                    <div className="flex items-center gap-1 text-muted-foreground">
                       <Clock className="w-4 h-4" />
                       <span className="font-[Manrope] font-medium text-xs sm:text-sm">{discussion.timeAgo}</span>
                     </div>
                   </div>
 
-                  <h3 className="font-[Manrope] font-bold text-[#4d4d4d] dark:text-foreground mb-2 group-hover:text-[#03624c] transition-colors text-sm sm:text-base">
+                  <h3 className="font-[Manrope] font-bold text-foreground mb-2 group-hover:text-primary transition-colors text-sm sm:text-base">
                     {discussion.title}
                   </h3>
 
-                  <p className="font-[Manrope] font-medium text-[#4d4d4d]/70 dark:text-muted-foreground mb-4 text-sm sm:text-base line-clamp-2">
+                  <p className="font-[Manrope] font-medium text-muted-foreground mb-4 text-sm sm:text-base line-clamp-2">
                     {discussion.excerpt}
                   </p>
 
                   <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-                    <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors">
+                    <button 
+                      className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+                      aria-label={`${discussion.likes} beğeni`}
+                    >
                       <ThumbsUp className="w-4 h-4" />
                       <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{discussion.likes}</span>
                     </button>
-                    <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors">
+                    <button 
+                      className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+                      aria-label={`${discussion.comments} yorum`}
+                    >
                       <MessageCircle className="w-4 h-4" />
                       <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{discussion.comments}</span>
                     </button>
-                    <button className="flex items-center gap-2 text-[#4d4d4d]/60 dark:text-muted-foreground hover:text-[#03624c] transition-colors ml-auto">
+                    <button 
+                      className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors ml-auto"
+                      aria-label="Devamını oku"
+                    >
                       <BookOpen className="w-4 h-4" />
                       <span className="font-[Manrope] font-semibold text-xs sm:text-sm">Devamını Oku</span>
                     </button>
@@ -143,7 +152,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
           </Card>
         ))}
       </div>
-    </div>
+    </section>
   )
 })
 
