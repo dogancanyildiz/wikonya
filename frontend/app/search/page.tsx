@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Search, BookOpen, MessageCircle, User } from "lucide-react"
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
+import { Search, BookOpen, MessageCircle, User, Clock, TrendingUp, X } from "lucide-react"
 import Link from "next/link"
 import { Topic, Comment } from "@/lib/types"
 
@@ -16,6 +17,15 @@ export default function SearchPage() {
   const [query, setQuery] = useState(searchParams.get("q") || "")
   const [activeTab, setActiveTab] = useState<"topics" | "comments" | "users">("topics")
   const [isLoading, setIsLoading] = useState(false)
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
+  const [popularSearches] = useState([
+    "Selçuk Üniversitesi",
+    "KYK Yurt",
+    "Etli Ekmek",
+    "Konya Kafeler",
+    "Staj İlanları",
+    "Burs Fırsatları",
+  ])
 
   // Mock search results - gerçek uygulamada API'den gelecek
   const [results, setResults] = useState<{
@@ -28,11 +38,38 @@ export default function SearchPage() {
     users: [],
   })
 
+  // Load recent searches from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("recentSearches")
+    if (stored) {
+      try {
+        setRecentSearches(JSON.parse(stored))
+      } catch {
+        setRecentSearches([])
+      }
+    }
+  }, [])
+
+  // Auto search on mount if query exists
+  useEffect(() => {
+    if (query && searchParams.get("q")) {
+      handleSearch()
+    }
+  }, [])
+
   const handleSearch = async () => {
     if (!query.trim()) return
 
     setIsLoading(true)
     try {
+      // Save to recent searches
+      const trimmedQuery = query.trim()
+      if (trimmedQuery) {
+        const updated = [trimmedQuery, ...recentSearches.filter(s => s !== trimmedQuery)].slice(0, 5)
+        setRecentSearches(updated)
+        localStorage.setItem("recentSearches", JSON.stringify(updated))
+      }
+
       // Simüle edilmiş API çağrısı
       await new Promise((resolve) => setTimeout(resolve, 500))
 
@@ -206,13 +243,19 @@ export default function SearchPage() {
                     </Card>
                   ))
                 ) : (
-                  <Card>
-                    <CardContent className="p-8 text-center">
-                      <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
-                        &quot;{query}&quot; için başlık bulunamadı
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <Empty className="py-12 sm:py-16">
+                    <EmptyHeader>
+                      <EmptyMedia variant="icon">
+                        <BookOpen className="w-12 h-12 text-muted-foreground" />
+                      </EmptyMedia>
+                      <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+                        Başlık Bulunamadı
+                      </EmptyTitle>
+                      <EmptyDescription className="font-[Manrope] text-base">
+                        &quot;{query}&quot; için başlık bulunamadı. Farklı anahtar kelimeler deneyin.
+                      </EmptyDescription>
+                    </EmptyHeader>
+                  </Empty>
                 )}
               </>
             )}
@@ -251,13 +294,19 @@ export default function SearchPage() {
                     </Card>
                   ))
                 ) : (
-                  <Card>
-                    <CardContent className="p-8 text-center">
-                      <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
-                        &quot;{query}&quot; için yorum bulunamadı
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <Empty className="py-12 sm:py-16">
+                    <EmptyHeader>
+                      <EmptyMedia variant="icon">
+                        <MessageCircle className="w-12 h-12 text-muted-foreground" />
+                      </EmptyMedia>
+                      <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+                        Yorum Bulunamadı
+                      </EmptyTitle>
+                      <EmptyDescription className="font-[Manrope] text-base">
+                        &quot;{query}&quot; için yorum bulunamadı. Farklı anahtar kelimeler deneyin.
+                      </EmptyDescription>
+                    </EmptyHeader>
+                  </Empty>
                 )}
               </>
             )}
@@ -273,14 +322,91 @@ export default function SearchPage() {
             )}
           </div>
         ) : (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <Search className="w-12 h-12 text-[#03624c] mx-auto mb-4 opacity-50" />
-              <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
-                Arama yapmak için yukarıdaki kutuya bir şeyler yazın
-              </p>
-            </CardContent>
-          </Card>
+          <div className="space-y-6">
+            {/* Recent Searches */}
+            {recentSearches.length > 0 && (
+              <Card>
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="font-[Manrope] font-bold text-lg text-[#4d4d4d] dark:text-foreground flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      Son Aramalar
+                    </h2>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setRecentSearches([])
+                        localStorage.removeItem("recentSearches")
+                      }}
+                      className="font-[Manrope] text-xs text-[#4d4d4d]/60 dark:text-muted-foreground"
+                    >
+                      Temizle
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {recentSearches.map((search, index) => (
+                      <Button
+                        key={index}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setQuery(search)
+                          router.push(`/search?q=${encodeURIComponent(search)}`)
+                          handleSearch()
+                        }}
+                        className="font-[Manrope] font-medium text-xs"
+                      >
+                        {search}
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Popular Searches */}
+            <Card>
+              <CardContent className="p-4 sm:p-6">
+                <h2 className="font-[Manrope] font-bold text-lg text-[#4d4d4d] dark:text-foreground mb-4 flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4" />
+                  Popüler Aramalar
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {popularSearches.map((search, index) => (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setQuery(search)
+                        router.push(`/search?q=${encodeURIComponent(search)}`)
+                        handleSearch()
+                      }}
+                      className="font-[Manrope] font-medium text-xs"
+                    >
+                      {search}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Empty State */}
+            <Empty className="py-12 sm:py-16">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Search className="w-12 h-12 text-muted-foreground" />
+                </EmptyMedia>
+                <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+                  Arama Yapın
+                </EmptyTitle>
+                <EmptyDescription className="font-[Manrope] text-base">
+                  Konuları, soruları ve yorumları keşfetmek için arama yapın
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </div>
         )}
       </div>
     </div>
