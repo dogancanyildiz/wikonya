@@ -298,7 +298,7 @@ export function DiscussionPage() {
                   asChild
                   className="font-[Manrope] font-bold bg-[#03624c] text-white hover:bg-[#03624c]/90"
                 >
-                  <a href="/topic/new">Yeni Tartışma Başlat</a>
+                  <Link href="/topic/new">Yeni Tartışma Başlat</Link>
                 </Button>
               </div>
             </EmptyContent>

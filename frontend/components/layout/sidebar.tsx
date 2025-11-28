@@ -8,7 +8,7 @@ interface SidebarProps {
   onNavigateToTopic?: () => void
 }
 
-export function Sidebar({ onNavigateToTopic }: SidebarProps = {}) {
+export function Sidebar({}: SidebarProps = {}) {
   const trendingData = [
     {
       id: 1,

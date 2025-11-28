@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, Clock, Navigation, Heart, Calendar, MessageCircle, ThumbsUp, BookOpen } from "lucide-react"
+import { MapPin, Clock, Navigation, Heart, MessageCircle, ThumbsUp, BookOpen } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"

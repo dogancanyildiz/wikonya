@@ -6,8 +6,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
-import { Search, BookOpen, MessageCircle, User, Clock, TrendingUp, X } from "lucide-react"
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty"
+import { Search, BookOpen, MessageCircle, User, Clock, TrendingUp } from "lucide-react"
 import Link from "next/link"
 import { Topic, Comment } from "@/lib/types"
 
@@ -55,6 +55,7 @@ export default function SearchPage() {
     if (query && searchParams.get("q")) {
       handleSearch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSearch = async () => {

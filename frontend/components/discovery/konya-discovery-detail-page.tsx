@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, Clock, Navigation, Calendar, ArrowLeft } from "lucide-react"
+import { MapPin, Navigation, Calendar, ArrowLeft } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"

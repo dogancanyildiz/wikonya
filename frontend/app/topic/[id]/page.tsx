@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { TopicDetailPage as TopicDetailPageContent } from "@/components/topic/topic-detail-page"
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Başlık Detayı | Konya Genç",
     description: "Konya Genç platformunda başlık detayı, wiki içeriği ve yorumlar.",
