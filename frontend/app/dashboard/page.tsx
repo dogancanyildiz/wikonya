@@ -4,6 +4,7 @@ import { StatsCard } from "@/components/features/dashboard/stats-card"
 import { ActivityFeed } from "@/components/features/dashboard/activity-feed"
 import { XPProgressBar } from "@/components/features/dashboard/xp-progress-bar"
 import { WalletCard } from "@/components/features/dashboard/wallet-card"
+import { SocialResponsibilityCard } from "@/components/features/dashboard/social-responsibility-card"
 
 export const metadata: Metadata = {
   title: "Dashboard | Konya Genç",
@@ -37,6 +38,11 @@ export default function DashboardPage() {
       {/* XP Progress Bar */}
       <div className="mt-6 sm:mt-8">
         <XPProgressBar />
+      </div>
+
+      {/* Social Responsibility Card */}
+      <div className="mt-6 sm:mt-8">
+        <SocialResponsibilityCard />
       </div>
 
       {/* Activity Feed - Yorumlar ve gönderiler */}
