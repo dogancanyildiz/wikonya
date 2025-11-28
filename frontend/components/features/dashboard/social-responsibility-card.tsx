@@ -41,8 +41,8 @@ export function SocialResponsibilityCard() {
 
   return (
     <Card className="bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl border-0 shadow-lg text-white overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-rose-600/20 to-pink-700/20" />
-      <CardHeader className="relative z-10">
+      <div className="absolute inset-0 bg-gradient-to-br" />
+      <CardHeader className="relative z-10 pt-5">
         <div className="flex items-center gap-2 mb-2">
           <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
             <Heart className="w-6 h-6 text-white" />
