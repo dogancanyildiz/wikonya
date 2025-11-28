@@ -80,37 +80,48 @@
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
+  /* Yeşil tonlarıyla uyumlu dark tema renkleri */
+  /* Background: Çok koyu yeşil-gri (göz yormayan) */
+  --background: oklch(0.15 0.008 180);
+  --foreground: oklch(0.95 0.002 180);
+  /* Card: Biraz daha açık yeşil-gri */
+  --card: oklch(0.22 0.012 180);
+  --card-foreground: oklch(0.95 0.002 180);
+  /* Popover: Card ile aynı */
+  --popover: oklch(0.22 0.012 180);
+  --popover-foreground: oklch(0.95 0.002 180);
+  /* Primary: Açık yeşil (vurgu için) */
+  --primary: oklch(0.65 0.15 165);
+  --primary-foreground: oklch(0.15 0.008 180);
+  /* Secondary/Muted/Accent: Orta ton yeşil-gri */
+  --secondary: oklch(0.28 0.015 180);
+  --secondary-foreground: oklch(0.95 0.002 180);
+  --muted: oklch(0.28 0.015 180);
+  --muted-foreground: oklch(0.65 0.02 180);
+  --accent: oklch(0.28 0.015 180);
+  --accent-foreground: oklch(0.95 0.002 180);
+  /* Destructive: Kırmızı (değişmedi) */
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.552 0.016 285.938);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.552 0.016 285.938);
+  /* Border/Input: Yeşil tonlu şeffaf beyaz */
+  --border: oklch(0.95 0.002 180 / 12%);
+  --input: oklch(0.95 0.002 180 / 18%);
+  /* Ring: Yeşil tonlu */
+  --ring: oklch(0.55 0.12 165);
+  /* Chart colors: Yeşil tonlarına uyumlu */
+  --chart-1: oklch(0.6 0.15 165);
+  --chart-2: oklch(0.65 0.12 170);
+  --chart-3: oklch(0.7 0.1 175);
+  --chart-4: oklch(0.55 0.18 160);
+  --chart-5: oklch(0.5 0.2 155);
+  /* Sidebar: Card ile uyumlu */
+  --sidebar: oklch(0.22 0.012 180);
+  --sidebar-foreground: oklch(0.95 0.002 180);
+  --sidebar-primary: oklch(0.6 0.15 165);
+  --sidebar-primary-foreground: oklch(0.15 0.008 180);
+  --sidebar-accent: oklch(0.28 0.015 180);
+  --sidebar-accent-foreground: oklch(0.95 0.002 180);
+  --sidebar-border: oklch(0.95 0.002 180 / 12%);
+  --sidebar-ring: oklch(0.55 0.12 165);
 }
 
 @layer base {
