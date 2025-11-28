@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { ProfileCard } from "@/components/features/dashboard/profile-card"
 import { StatsCard } from "@/components/features/dashboard/stats-card"
 import { ActivityFeed } from "@/components/features/dashboard/activity-feed"
-import { XPProgressBar } from "@/components/features/dashboard/xp-progress-bar"
 import { WalletCard } from "@/components/features/dashboard/wallet-card"
 import { SocialResponsibilityCard } from "@/components/features/dashboard/social-responsibility-card"
 
@@ -35,10 +34,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* XP Progress Bar */}
-      <div className="mt-6 sm:mt-8">
-        <XPProgressBar />
-      </div>
 
       {/* Social Responsibility Card */}
       <div className="mt-6 sm:mt-8">
