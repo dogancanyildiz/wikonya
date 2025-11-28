@@ -3,6 +3,7 @@
  */
 
 import { useCallback } from "react"
+import { toast } from "sonner"
 import { useApp } from "@/contexts/app-context"
 import {
   createCoinEarnedNotification,
@@ -25,6 +26,10 @@ export function useNotifications() {
     (amount: number, reason: string) => {
       const notification = createCoinEarnedNotification(amount, reason)
       addNotification(notification)
+      toast.success(`💰 +${amount} GençCoin`, {
+        description: reason,
+        duration: 3000,
+      })
     },
     [addNotification]
   )
@@ -33,6 +38,10 @@ export function useNotifications() {
     (newRole: string, oldRole: string) => {
       const notification = createRolePromotedNotification(newRole, oldRole)
       addNotification(notification)
+      toast.success("🎉 Rol Terfi Ettiniz!", {
+        description: `${oldRole} → ${newRole}`,
+        duration: 4000,
+      })
     },
     [addNotification]
   )
@@ -41,6 +50,10 @@ export function useNotifications() {
     (badgeName: string, badgeIcon: string) => {
       const notification = createBadgeEarnedNotification(badgeName, badgeIcon)
       addNotification(notification)
+      toast.success(`${badgeIcon} Yeni Rozet!`, {
+        description: `${badgeName} rozetini kazandınız`,
+        duration: 3000,
+      })
     },
     [addNotification]
   )
@@ -65,6 +78,10 @@ export function useNotifications() {
     (topicId: number, topicTitle: string) => {
       const notification = createTopicApprovedNotification(topicId, topicTitle)
       addNotification(notification)
+      toast.success("✅ Başlık Onaylandı", {
+        description: `"${topicTitle}" başlığınız yayınlandı`,
+        duration: 3000,
+      })
     },
     [addNotification]
   )
@@ -73,6 +90,10 @@ export function useNotifications() {
     (topicTitle: string, reason?: string) => {
       const notification = createTopicRejectedNotification(topicTitle, reason)
       addNotification(notification)
+      toast.error("❌ Başlık Reddedildi", {
+        description: reason || `"${topicTitle}" başlığınız reddedildi`,
+        duration: 4000,
+      })
     },
     [addNotification]
   )
@@ -81,6 +102,10 @@ export function useNotifications() {
     (proposalId: number) => {
       const notification = createProposalApprovedNotification(proposalId)
       addNotification(notification)
+      toast.success("✅ Düzenleme Onaylandı", {
+        description: "Wiki düzenleme teklifiniz onaylandı",
+        duration: 3000,
+      })
     },
     [addNotification]
   )
@@ -89,6 +114,10 @@ export function useNotifications() {
     (reason?: string) => {
       const notification = createProposalRejectedNotification(reason)
       addNotification(notification)
+      toast.error("❌ Düzenleme Reddedildi", {
+        description: reason || "Wiki düzenleme teklifiniz reddedildi",
+        duration: 4000,
+      })
     },
     [addNotification]
   )
