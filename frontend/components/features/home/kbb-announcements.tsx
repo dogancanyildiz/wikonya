@@ -57,42 +57,44 @@ export function KBBAnnouncements({ announcements }: KBBAnnouncementsProps) {
   }
 
   return (
-    <Card className="bg-gradient-to-br from-primary to-primary/80 rounded-xl shadow-md border-primary">
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <Megaphone className="w-6 h-6 text-primary-foreground" />
-          <CardTitle className="font-[Manrope] text-primary-foreground font-bold text-lg sm:text-xl">
+    <Card className="bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 dark:from-primary/10 dark:via-primary/15 dark:to-primary/10 rounded-xl shadow-md border border-primary/20 overflow-hidden">
+      <CardHeader className="bg-primary/10 dark:bg-primary/20 border-b border-primary/20">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-primary/20 dark:bg-primary/30 rounded-xl">
+            <Megaphone className="w-5 h-5 text-primary" />
+          </div>
+          <CardTitle className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl">
             KBB Duyuruları
           </CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3 pt-0">
+      <CardContent className="space-y-3 p-4">
         {mockAnnouncements.map((announcement) => (
           <Link
             key={announcement.id}
             href={announcement.link || "#"}
-            className="block"
+            className="block group"
           >
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 hover:bg-white/20 transition-colors cursor-pointer">
-              <div className="flex items-start justify-between gap-2 mb-2">
+            <div className="bg-card/80 dark:bg-card/60 backdrop-blur-sm rounded-xl p-3 sm:p-4 hover:bg-card transition-colors cursor-pointer border border-border/50 hover:border-primary/30 hover:shadow-sm">
+              <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-2">
                     {announcement.isImportant && (
-                      <Badge className="bg-yellow-500 text-white font-[Manrope] font-bold text-xs">
+                      <Badge className="bg-amber-500 hover:bg-amber-500 text-white font-[Manrope] font-bold text-xs">
                         Önemli
                       </Badge>
                     )}
-                    <Badge variant="outline" className="border-white/50 text-white font-[Manrope] text-xs">
+                    <Badge variant="secondary" className="font-[Manrope] text-xs bg-primary/10 text-primary border-0">
                       {announcement.category}
                     </Badge>
                   </div>
-                  <h3 className="font-[Manrope] font-bold text-sm sm:text-base text-white mb-1">
+                  <h3 className="font-[Manrope] font-bold text-sm sm:text-base text-foreground mb-1 group-hover:text-primary transition-colors">
                     {announcement.title}
                   </h3>
-                  <p className="font-[Manrope] text-xs sm:text-sm text-white/90 line-clamp-2 mb-2">
+                  <p className="font-[Manrope] text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-2">
                     {announcement.content}
                   </p>
-                  <div className="flex items-center gap-2 text-white/70">
+                  <div className="flex items-center gap-2 text-muted-foreground">
                     <Calendar className="w-3 h-3" />
                     <span className="font-[Manrope] text-xs">
                       {formatDate(announcement.date)}
@@ -100,7 +102,7 @@ export function KBBAnnouncements({ announcements }: KBBAnnouncementsProps) {
                   </div>
                 </div>
                 {announcement.link && (
-                  <div className="flex-shrink-0 text-white hover:text-white/80 transition-colors">
+                  <div className="flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
                     <ExternalLink className="w-4 h-4" />
                   </div>
                 )}
