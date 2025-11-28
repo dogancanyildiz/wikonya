@@ -17,30 +17,26 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background">
+    <div className="min-h-screen bg-background">
       <Hero />
       
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* KBB Announcements */}
-        <div className="mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6">
+        <div className="mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8">
           <KBBAnnouncements />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 mt-4 sm:mt-6 pb-16 md:pb-20">
-          <div className="lg:col-span-8 space-y-4 sm:space-y-6">
-            
- 
-            
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 mt-6 sm:mt-8 pb-16 md:pb-20">
+          <div className="lg:col-span-8 space-y-6 sm:space-y-8">
             {/* Discussion Feed */}
             <DiscussionFeed />
 
-           {/* Popular Comments */}
-           <PopularComments />
-
+            {/* Popular Comments */}
+            <PopularComments />
           </div>
-          <div className="hidden lg:block lg:col-span-4">
+          <aside className="hidden lg:block lg:col-span-4">
             <Sidebar />
-          </div>
+          </aside>
         </div>
       </div>
     </div>
