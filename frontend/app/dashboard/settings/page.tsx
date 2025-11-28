@@ -11,6 +11,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { useApp } from "@/contexts/app-context"
+import { useTheme } from "next-themes"
+import { useColorTheme, colorThemes, type ColorTheme } from "@/lib/utils/hooks/use-color-theme"
 import { 
   User, 
   Bell, 
@@ -23,12 +25,20 @@ import {
   CheckCircle2,
   AlertCircle,
   Trash2,
-  LogOut
+  LogOut,
+  Palette,
+  Sun,
+  Moon,
+  Monitor,
+  Check
 } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export default function SettingsPage() {
   const { state, setUser } = useApp()
   const user = state.user
+  const { theme, setTheme } = useTheme()
+  const { colorTheme, setColorTheme, mounted } = useColorTheme()
 
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -55,7 +65,7 @@ export default function SettingsPage() {
   if (!user) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground">
+        <p className="font-[Manrope] text-muted-foreground">
           Lütfen giriş yapın
         </p>
       </div>
@@ -86,14 +96,20 @@ export default function SettingsPage() {
     }
   }
 
+  const themeOptions = [
+    { id: "light", name: "Açık", icon: Sun },
+    { id: "dark", name: "Koyu", icon: Moon },
+    { id: "system", name: "Sistem", icon: Monitor },
+  ]
+
   return (
     <div className="space-y-6">
       {/* Başlık */}
       <div>
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-2xl sm:text-3xl">
+        <h1 className="font-[Manrope] text-foreground font-bold text-2xl sm:text-3xl">
           Ayarlar
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-1">
+        <p className="font-[Manrope] text-muted-foreground mt-1">
           Hesap ve uygulama ayarlarınızı yönetin
         </p>
       </div>
@@ -116,11 +132,11 @@ export default function SettingsPage() {
       )}
 
       {/* Profil Ayarları */}
-      <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+      <Card className="bg-card rounded-xl shadow-md border border-border">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <User className="w-5 h-5 text-[#03624c]" />
-            <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg">
+            <User className="w-5 h-5 text-primary" />
+            <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
               Profil Bilgileri
             </CardTitle>
           </div>
@@ -132,7 +148,7 @@ export default function SettingsPage() {
           {/* Avatar */}
           <div className="flex items-center gap-4">
             <Avatar className="w-20 h-20">
-              <AvatarFallback className="bg-[#03624c] text-white font-[Manrope] font-bold text-2xl">
+              <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-bold text-2xl">
                 {user.initials}
               </AvatarFallback>
             </Avatar>
@@ -141,7 +157,7 @@ export default function SettingsPage() {
                 <Camera className="w-4 h-4 mr-2" />
                 Fotoğraf Değiştir
               </Button>
-              <p className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground mt-2">
+              <p className="font-[Manrope] text-xs text-muted-foreground mt-2">
                 JPG, PNG veya GIF. Max 2MB.
               </p>
             </div>
@@ -206,19 +222,116 @@ export default function SettingsPage() {
           <Button
             onClick={handleSaveProfile}
             disabled={isLoading}
-            className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] font-bold"
+            className="bg-primary hover:bg-primary/90 font-[Manrope] font-bold"
           >
             {isLoading ? "Kaydediliyor..." : "Değişiklikleri Kaydet"}
           </Button>
         </CardContent>
       </Card>
 
-      {/* Bildirim Ayarları */}
-      <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+      {/* Tema Ayarları */}
+      <Card className="bg-card rounded-xl shadow-md border border-border">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Bell className="w-5 h-5 text-[#03624c]" />
-            <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg">
+            <Palette className="w-5 h-5 text-primary" />
+            <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
+              Görünüm Ayarları
+            </CardTitle>
+          </div>
+          <CardDescription className="font-[Manrope]">
+            Tema ve renk tercihlerinizi özelleştirin
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Light/Dark Mode */}
+          <div>
+            <Label className="font-[Manrope] font-bold text-sm mb-3 block">
+              Tema Modu
+            </Label>
+            <div className="grid grid-cols-3 gap-3">
+              {themeOptions.map((option) => {
+                const Icon = option.icon
+                const isActive = theme === option.id
+                return (
+                  <button
+                    key={option.id}
+                    onClick={() => setTheme(option.id)}
+                    className={cn(
+                      "flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200",
+                      isActive
+                        ? "border-primary bg-primary/10"
+                        : "border-border hover:border-primary/50 hover:bg-accent"
+                    )}
+                  >
+                    <Icon className={cn(
+                      "w-6 h-6",
+                      isActive ? "text-primary" : "text-muted-foreground"
+                    )} />
+                    <span className={cn(
+                      "font-[Manrope] font-semibold text-sm",
+                      isActive ? "text-primary" : "text-muted-foreground"
+                    )}>
+                      {option.name}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Color Theme */}
+          <div>
+            <Label className="font-[Manrope] font-bold text-sm mb-3 block">
+              Renk Teması
+            </Label>
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+              {mounted && colorThemes.map((colorOption) => {
+                const isActive = colorTheme === colorOption.id
+                const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+                const displayColor = isDark ? colorOption.darkColor : colorOption.lightColor
+                
+                return (
+                  <button
+                    key={colorOption.id}
+                    onClick={() => setColorTheme(colorOption.id)}
+                    className={cn(
+                      "flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all duration-200",
+                      isActive
+                        ? "border-primary bg-primary/10"
+                        : "border-border hover:border-primary/50 hover:bg-accent"
+                    )}
+                    title={colorOption.name}
+                  >
+                    <div 
+                      className="w-8 h-8 rounded-full flex items-center justify-center shadow-sm"
+                      style={{ backgroundColor: displayColor }}
+                    >
+                      {isActive && (
+                        <Check className="w-4 h-4 text-white" />
+                      )}
+                    </div>
+                    <span className={cn(
+                      "font-[Manrope] font-medium text-xs",
+                      isActive ? "text-primary" : "text-muted-foreground"
+                    )}>
+                      {colorOption.name}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Bildirim Ayarları */}
+      <Card className="bg-card rounded-xl shadow-md border border-border">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Bell className="w-5 h-5 text-primary" />
+            <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
               Bildirim Ayarları
             </CardTitle>
           </div>
@@ -229,12 +342,12 @@ export default function SettingsPage() {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Mail className="w-5 h-5 text-[#4d4d4d]/60 dark:text-muted-foreground" />
+              <Mail className="w-5 h-5 text-muted-foreground" />
               <div>
-                <p className="font-[Manrope] font-semibold text-sm text-[#4d4d4d] dark:text-foreground">
+                <p className="font-[Manrope] font-semibold text-sm text-foreground">
                   E-posta Bildirimleri
                 </p>
-                <p className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground">
+                <p className="font-[Manrope] text-xs text-muted-foreground">
                   Önemli güncellemeler e-posta ile gönderilsin
                 </p>
               </div>
@@ -249,12 +362,12 @@ export default function SettingsPage() {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Bell className="w-5 h-5 text-[#4d4d4d]/60 dark:text-muted-foreground" />
+              <Bell className="w-5 h-5 text-muted-foreground" />
               <div>
-                <p className="font-[Manrope] font-semibold text-sm text-[#4d4d4d] dark:text-foreground">
+                <p className="font-[Manrope] font-semibold text-sm text-foreground">
                   Push Bildirimleri
                 </p>
-                <p className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground">
+                <p className="font-[Manrope] text-xs text-muted-foreground">
                   Tarayıcı bildirimleri
                 </p>
               </div>
@@ -269,10 +382,10 @@ export default function SettingsPage() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-[Manrope] font-semibold text-sm text-[#4d4d4d] dark:text-foreground">
+              <p className="font-[Manrope] font-semibold text-sm text-foreground">
                 Yorum Bildirimleri
               </p>
-              <p className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground">
+              <p className="font-[Manrope] text-xs text-muted-foreground">
                 Yazılarınıza yorum yapıldığında
               </p>
             </div>
@@ -284,10 +397,10 @@ export default function SettingsPage() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-[Manrope] font-semibold text-sm text-[#4d4d4d] dark:text-foreground">
+              <p className="font-[Manrope] font-semibold text-sm text-foreground">
                 Beğeni Bildirimleri
               </p>
-              <p className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground">
+              <p className="font-[Manrope] text-xs text-muted-foreground">
                 Yazılarınız beğenildiğinde
               </p>
             </div>
@@ -299,10 +412,10 @@ export default function SettingsPage() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-[Manrope] font-semibold text-sm text-[#4d4d4d] dark:text-foreground">
+              <p className="font-[Manrope] font-semibold text-sm text-foreground">
                 Mesaj Bildirimleri
               </p>
-              <p className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground">
+              <p className="font-[Manrope] text-xs text-muted-foreground">
                 Yeni mesaj aldığınızda
               </p>
             </div>
@@ -315,11 +428,11 @@ export default function SettingsPage() {
       </Card>
 
       {/* Gizlilik Ayarları */}
-      <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+      <Card className="bg-card rounded-xl shadow-md border border-border">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-[#03624c]" />
-            <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg">
+            <Shield className="w-5 h-5 text-primary" />
+            <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
               Gizlilik Ayarları
             </CardTitle>
           </div>
@@ -330,12 +443,12 @@ export default function SettingsPage() {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Eye className="w-5 h-5 text-[#4d4d4d]/60 dark:text-muted-foreground" />
+              <Eye className="w-5 h-5 text-muted-foreground" />
               <div>
-                <p className="font-[Manrope] font-semibold text-sm text-[#4d4d4d] dark:text-foreground">
+                <p className="font-[Manrope] font-semibold text-sm text-foreground">
                   Herkese Açık Profil
                 </p>
-                <p className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground">
+                <p className="font-[Manrope] text-xs text-muted-foreground">
                   Profilinizi herkes görebilsin
                 </p>
               </div>
@@ -350,10 +463,10 @@ export default function SettingsPage() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-[Manrope] font-semibold text-sm text-[#4d4d4d] dark:text-foreground">
+              <p className="font-[Manrope] font-semibold text-sm text-foreground">
                 Aktivite Göster
               </p>
-              <p className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground">
+              <p className="font-[Manrope] text-xs text-muted-foreground">
                 Son aktiviteleriniz profilinde görünsün
               </p>
             </div>
@@ -365,10 +478,10 @@ export default function SettingsPage() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-[Manrope] font-semibold text-sm text-[#4d4d4d] dark:text-foreground">
+              <p className="font-[Manrope] font-semibold text-sm text-foreground">
                 GençCoin Bakiyesi Göster
               </p>
-              <p className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground">
+              <p className="font-[Manrope] text-xs text-muted-foreground">
                 Coin bakiyeniz profilinde görünsün
               </p>
             </div>
@@ -381,11 +494,11 @@ export default function SettingsPage() {
       </Card>
 
       {/* Güvenlik Ayarları */}
-      <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+      <Card className="bg-card rounded-xl shadow-md border border-border">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Lock className="w-5 h-5 text-[#03624c]" />
-            <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg">
+            <Lock className="w-5 h-5 text-primary" />
+            <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
               Güvenlik
             </CardTitle>
           </div>
@@ -404,19 +517,19 @@ export default function SettingsPage() {
       </Card>
 
       {/* Tehlikeli Alan */}
-      <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-red-200 dark:border-red-800">
+      <Card className="bg-card rounded-xl shadow-md border border-destructive/30">
         <CardHeader>
-          <CardTitle className="font-[Manrope] text-red-600 dark:text-red-400 font-bold text-lg">
+          <CardTitle className="font-[Manrope] text-destructive font-bold text-lg">
             Tehlikeli Alan
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button variant="outline" className="w-full justify-start font-[Manrope] text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/20">
+          <Button variant="outline" className="w-full justify-start font-[Manrope] text-destructive border-destructive/30 hover:bg-destructive/10">
             <LogOut className="w-4 h-4 mr-2" />
             Tüm Cihazlardan Çıkış Yap
           </Button>
 
-          <Button variant="outline" className="w-full justify-start font-[Manrope] text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/20">
+          <Button variant="outline" className="w-full justify-start font-[Manrope] text-destructive border-destructive/30 hover:bg-destructive/10">
             <Trash2 className="w-4 h-4 mr-2" />
             Hesabı Sil
           </Button>
@@ -425,4 +538,3 @@ export default function SettingsPage() {
     </div>
   )
 }
-
