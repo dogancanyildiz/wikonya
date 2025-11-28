@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 
 export default function InternshipDetailLoading() {
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background">
+    <div className="min-h-screen bg-background">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
         {/* Back Button Skeleton */}
         <Skeleton className="h-10 w-24 mb-6" />

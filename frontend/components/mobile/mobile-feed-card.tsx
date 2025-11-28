@@ -48,8 +48,8 @@ export function MobileFeedCard({
       <CardContent className="p-4">
         {/* Header */}
         <div className="flex items-center gap-3 mb-3">
-          <Avatar className="w-9 h-9 sm:w-10 sm:h-10 border-2 border-[#f2f4f3] dark:border-border">
-            <AvatarFallback className="bg-[#03624C] text-white font-[Manrope] font-bold text-xs sm:text-sm">
+          <Avatar className="w-9 h-9 sm:w-10 sm:h-10 border-2 border-border">
+            <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold text-xs sm:text-sm">
               {authorInitials}
             </AvatarFallback>
           </Avatar>
@@ -87,7 +87,7 @@ export function MobileFeedCard({
             onClick={handleLike}
             className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
           >
-            <ThumbsUp className={`w-4 h-4 ${isLiked ? 'text-primary fill-[#03624c]' : 'text-foreground/60 dark:text-muted-foreground'}`} strokeWidth={2.5} />
+            <ThumbsUp className={`w-4 h-4 ${isLiked ? 'text-primary fill-primary' : 'text-foreground/60 dark:text-muted-foreground'}`} strokeWidth={2.5} />
             <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-bold text-xs sm:text-xs">
               {likeCount}
             </span>

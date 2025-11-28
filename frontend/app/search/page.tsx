@@ -134,26 +134,26 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
         {/* Search Header */}
         <div className="mb-4 sm:mb-6">
-          <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">
+          <h1 className="font-[Manrope] text-foreground font-extrabold text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">
             Arama
           </h1>
           <form onSubmit={handleSubmit} className="relative">
             <div className="relative flex items-center bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg">
-              <Search className="absolute left-4 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-[#03624c]" />
+              <Search className="absolute left-4 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               <Input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Konuları, soruları, yorumları keşfet..."
-                className="w-full h-[60px] pl-12 sm:pl-16 pr-28 sm:pr-32 bg-transparent rounded-[20px] font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
+                className="w-full h-[60px] pl-12 sm:pl-16 pr-28 sm:pr-32 bg-transparent rounded-[20px] font-[Manrope] font-medium text-foreground placeholder:text-foreground/40 dark:placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
               />
               <Button
                 type="submit"
-                className="absolute right-2 h-[48px] px-6 sm:px-8 bg-[#03624c] hover:bg-[#03624c]/90 rounded-[16px] font-[Manrope] font-semibold text-white"
+                className="absolute right-2 h-[48px] px-6 sm:px-8 bg-primary hover:bg-primary/90 rounded-[16px] font-[Manrope] font-semibold text-white"
                 disabled={isLoading}
               >
                 {isLoading ? "Aranıyor..." : "Ara"}
@@ -226,13 +226,13 @@ export default function SearchPage() {
                                   </Badge>
                                 ))}
                               </div>
-                              <h3 className="font-[Manrope] font-bold text-lg sm:text-xl text-[#4d4d4d] dark:text-foreground mb-2 hover:text-[#03624c] transition-colors">
+                              <h3 className="font-[Manrope] font-bold text-lg sm:text-xl text-foreground mb-2 hover:text-primary transition-colors">
                                 {topic.title}
                               </h3>
-                              <p className="font-[Manrope] text-sm text-[#4d4d4d]/70 dark:text-muted-foreground line-clamp-2 mb-3">
+                              <p className="font-[Manrope] text-sm text-foreground/70 dark:text-muted-foreground line-clamp-2 mb-3">
                                 {topic.content}
                               </p>
-                              <div className="flex items-center gap-4 text-xs text-[#4d4d4d]/60 dark:text-muted-foreground">
+                              <div className="flex items-center gap-4 text-xs text-foreground/60 dark:text-muted-foreground">
                                 <span>{topic.views.toLocaleString()} görüntülenme</span>
                                 <span>{topic.comments} yorum</span>
                                 <span>{topic.likes} beğeni</span>
@@ -273,17 +273,17 @@ export default function SearchPage() {
                         <div className="flex items-start gap-3">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <span className="font-[Manrope] font-bold text-sm text-[#4d4d4d] dark:text-foreground">
+                              <span className="font-[Manrope] font-bold text-sm text-foreground">
                                 {comment.author}
                               </span>
-                              <span className="font-[Manrope] text-xs text-[#4d4d4d]/60 dark:text-muted-foreground">
+                              <span className="font-[Manrope] text-xs text-foreground/60 dark:text-muted-foreground">
                                 {comment.timeAgo}
                               </span>
                             </div>
-                            <p className="font-[Manrope] text-sm text-[#4d4d4d] dark:text-foreground mb-2">
+                            <p className="font-[Manrope] text-sm text-foreground mb-2">
                               {comment.content}
                             </p>
-                            <div className="flex items-center gap-4 text-xs text-[#4d4d4d]/60 dark:text-muted-foreground">
+                            <div className="flex items-center gap-4 text-xs text-foreground/60 dark:text-muted-foreground">
                               <span>{comment.upvotes} beğeni</span>
                               {comment.logicalVotes && comment.logicalVotes > 0 && (
                                 <span>{comment.logicalVotes} mantıklı</span>
@@ -315,7 +315,7 @@ export default function SearchPage() {
             {activeTab === "users" && (
               <Card>
                 <CardContent className="p-8 text-center">
-                  <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
+                  <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground">
                     Kullanıcı arama özelliği yakında eklenecek
                   </p>
                 </CardContent>
@@ -329,7 +329,7 @@ export default function SearchPage() {
               <Card>
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="font-[Manrope] font-bold text-lg text-[#4d4d4d] dark:text-foreground flex items-center gap-2">
+                    <h2 className="font-[Manrope] font-bold text-lg text-foreground flex items-center gap-2">
                       <Clock className="w-4 h-4" />
                       Son Aramalar
                     </h2>
@@ -340,7 +340,7 @@ export default function SearchPage() {
                         setRecentSearches([])
                         localStorage.removeItem("recentSearches")
                       }}
-                      className="font-[Manrope] text-xs text-[#4d4d4d]/60 dark:text-muted-foreground"
+                      className="font-[Manrope] text-xs text-foreground/60 dark:text-muted-foreground"
                     >
                       Temizle
                     </Button>
@@ -369,7 +369,7 @@ export default function SearchPage() {
             {/* Popular Searches */}
             <Card>
               <CardContent className="p-4 sm:p-6">
-                <h2 className="font-[Manrope] font-bold text-lg text-[#4d4d4d] dark:text-foreground mb-4 flex items-center gap-2">
+                <h2 className="font-[Manrope] font-bold text-lg text-foreground mb-4 flex items-center gap-2">
                   <TrendingUp className="w-4 h-4" />
                   Popüler Aramalar
                 </h2>

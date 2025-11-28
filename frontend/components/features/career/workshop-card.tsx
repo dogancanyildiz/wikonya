@@ -114,7 +114,7 @@ export function WorkshopCard({
           </div>
           <div className="w-full h-1 sm:h-1.5 bg-gray-100 dark:bg-accent rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-primary to-[#03624c]/80 rounded-full transition-all"
+              className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all"
               style={{ width: `${(participants / maxParticipants) * 100}%` }}
             ></div>
           </div>

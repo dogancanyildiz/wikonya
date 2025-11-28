@@ -10,7 +10,7 @@ export function CareerStats() {
       label: "Aktif Staj İlanı",
       value: "12",
       icon: Briefcase,
-      color: "from-primary to-[#03624c]/80",
+      color: "from-primary to-primary/80",
     },
     {
       id: 2,

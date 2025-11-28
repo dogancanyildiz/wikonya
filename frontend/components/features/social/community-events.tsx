@@ -41,7 +41,7 @@ export function CommunityEvents() {
   ]
 
   return (
-    <Card className="rounded-xl shadow-md border-border">
+    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl">

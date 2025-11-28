@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function TopicDetailPage() {
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background">
+    <div className="min-h-screen bg-background">
       <TopicDetailPageContent />
     </div>
   )

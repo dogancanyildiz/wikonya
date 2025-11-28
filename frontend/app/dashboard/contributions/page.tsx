@@ -136,10 +136,10 @@ export default function ContributionsPage() {
     <div className="space-y-6">
       {/* Başlık */}
       <div>
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-2xl sm:text-3xl">
+        <h1 className="font-[Manrope] text-foreground font-bold text-2xl sm:text-3xl">
           Katkılarım
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-1">
+        <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground mt-1">
           Açtığınız başlıklar, düzenlemeler ve yorumlar
         </p>
       </div>
@@ -149,14 +149,14 @@ export default function ContributionsPage() {
         <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[#03624c]/10 dark:bg-[#03624c]/20 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-5 h-5 text-[#03624c]" />
+              <div className="w-10 h-10 bg-primary/10 dark:bg-primary/20 rounded-lg flex items-center justify-center">
+                <BookOpen className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl">
+                <p className="font-[Manrope] text-foreground font-bold text-xl">
                   {stats.topics}
                 </p>
-                <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-xs">
+                <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground text-xs">
                   Başlık
                 </p>
               </div>
@@ -171,10 +171,10 @@ export default function ContributionsPage() {
                 <Edit className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl">
+                <p className="font-[Manrope] text-foreground font-bold text-xl">
                   {stats.edits}
                 </p>
-                <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-xs">
+                <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground text-xs">
                   Düzenleme
                 </p>
               </div>
@@ -189,10 +189,10 @@ export default function ContributionsPage() {
                 <MessageCircle className="w-5 h-5 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl">
+                <p className="font-[Manrope] text-foreground font-bold text-xl">
                   {stats.comments}
                 </p>
-                <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-xs">
+                <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground text-xs">
                   Yorum
                 </p>
               </div>
@@ -200,7 +200,7 @@ export default function ContributionsPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#03624c] to-[#024d3c] rounded-[20px] border-0">
+        <Card className="bg-gradient-to-br from-primary to-primary/90 rounded-[20px] border-0">
           <CardContent className="p-4">
             <p className="font-[Manrope] text-white font-bold text-xl">
               +{stats.totalCoins}
@@ -215,7 +215,7 @@ export default function ContributionsPage() {
       {/* Katkı Listesi */}
       <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
         <CardHeader>
-          <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl">
+          <CardTitle className="font-[Manrope] text-foreground font-bold text-xl">
             Katkı Geçmişi
           </CardTitle>
         </CardHeader>
@@ -247,7 +247,7 @@ export default function ContributionsPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2 flex-wrap">
                           {contribution.type === "topic" && (
-                            <BookOpen className="w-4 h-4 text-[#03624c]" />
+                            <BookOpen className="w-4 h-4 text-primary" />
                           )}
                           {contribution.type === "wiki_edit" && (
                             <Edit className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -258,12 +258,12 @@ export default function ContributionsPage() {
                           {contribution.topicId ? (
                             <Link
                               href={`/topic/${contribution.topicId}`}
-                              className="font-[Manrope] font-bold text-sm sm:text-base text-[#4d4d4d] dark:text-foreground hover:text-[#03624c] transition-colors"
+                              className="font-[Manrope] font-bold text-sm sm:text-base text-foreground hover:text-primary transition-colors"
                             >
                               {contribution.title}
                             </Link>
                           ) : (
-                            <span className="font-[Manrope] font-bold text-sm sm:text-base text-[#4d4d4d] dark:text-foreground">
+                            <span className="font-[Manrope] font-bold text-sm sm:text-base text-foreground">
                               {contribution.title}
                             </span>
                           )}
@@ -271,13 +271,13 @@ export default function ContributionsPage() {
                         </div>
 
                         {contribution.content && (
-                          <p className="font-[Manrope] text-xs sm:text-sm text-[#4d4d4d]/70 dark:text-muted-foreground line-clamp-2 mb-3">
+                          <p className="font-[Manrope] text-xs sm:text-sm text-foreground/70 dark:text-muted-foreground line-clamp-2 mb-3">
                             {contribution.content}
                           </p>
                         )}
 
                         <div className="flex items-center gap-4 flex-wrap">
-                          <div className="flex items-center gap-1 text-[#4d4d4d]/60 dark:text-muted-foreground">
+                          <div className="flex items-center gap-1 text-foreground/60 dark:text-muted-foreground">
                             <Calendar className="w-3 h-3" />
                             <span className="font-[Manrope] text-xs">
                               {formatDate(contribution.createdAt)}
@@ -285,7 +285,7 @@ export default function ContributionsPage() {
                           </div>
                           
                           {contribution.views && (
-                            <div className="flex items-center gap-1 text-[#4d4d4d]/60 dark:text-muted-foreground">
+                            <div className="flex items-center gap-1 text-foreground/60 dark:text-muted-foreground">
                               <Eye className="w-3 h-3" />
                               <span className="font-[Manrope] text-xs">
                                 {contribution.views.toLocaleString()}
@@ -294,7 +294,7 @@ export default function ContributionsPage() {
                           )}
 
                           {contribution.likes !== undefined && (
-                            <div className="flex items-center gap-1 text-[#4d4d4d]/60 dark:text-muted-foreground">
+                            <div className="flex items-center gap-1 text-foreground/60 dark:text-muted-foreground">
                               <ThumbsUp className="w-3 h-3" />
                               <span className="font-[Manrope] text-xs">
                                 {contribution.likes}
@@ -303,7 +303,7 @@ export default function ContributionsPage() {
                           )}
 
                           {contribution.coins && (
-                            <Badge className="bg-[#03624c] text-white font-[Manrope] font-bold text-xs">
+                            <Badge className="bg-primary text-white font-[Manrope] font-bold text-xs">
                               +{contribution.coins} GençCoin
                             </Badge>
                           )}
@@ -314,7 +314,7 @@ export default function ContributionsPage() {
                 ))
               ) : (
                 <div className="text-center py-12">
-                  <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
+                  <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground">
                     Henüz {activeTab === "topics" ? "başlık" : activeTab === "edits" ? "düzenleme" : "yorum"} yok
                   </p>
                 </div>

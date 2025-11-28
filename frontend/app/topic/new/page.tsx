@@ -125,17 +125,17 @@ export default function NewTopicPage() {
             <span className="hidden sm:inline">Geri Dön</span>
           </Button>
         </Link>
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-2xl sm:text-3xl md:text-4xl">
+        <h1 className="font-[Manrope] text-foreground font-extrabold text-2xl sm:text-3xl md:text-4xl">
           Yeni Başlık Aç
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-2 text-sm sm:text-base">
+        <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground mt-2 text-sm sm:text-base">
           Bilgi paylaşmak için yeni bir başlık oluşturun. +20 GençCoin kazanacaksınız!
         </p>
       </div>
 
       <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
         <CardHeader>
-          <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl sm:text-2xl">
+          <CardTitle className="font-[Manrope] text-foreground font-bold text-xl sm:text-2xl">
             Başlık Bilgileri
           </CardTitle>
           <CardDescription className="font-[Manrope]">
@@ -229,7 +229,7 @@ export default function NewTopicPage() {
               <Button
                 type="submit"
                 disabled={isLoading || !title.trim() || !category || !content.trim()}
-                className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] font-bold px-8"
+                className="bg-primary hover:bg-primary/90 font-[Manrope] font-bold px-8"
               >
                 {isLoading ? (
                   <>

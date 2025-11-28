@@ -123,7 +123,7 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
           <div className="flex flex-col items-center gap-3 sm:gap-4">
             <div className="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
               {/* Circle Background */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/10 to-[#03624c]/5 dark:from-primary/20 dark:to-[#03624c]/10 border-4 border-primary"></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 border-4 border-primary"></div>
               
               {/* Score */}
               <div className="relative z-10 text-center">

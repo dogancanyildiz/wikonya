@@ -67,7 +67,7 @@ export function ScholarshipCard({
                 className="w-8 h-8 sm:w-9 sm:h-9 bg-accent hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg flex items-center justify-center transition-all"
               >
                 <Bookmark
-                  className={`w-3 h-3 sm:w-4 sm:h-4 ${isBookmarked ? 'fill-[#03624c] text-primary' : 'text-foreground/60 dark:text-muted-foreground'}`}
+                  className={`w-3 h-3 sm:w-4 sm:h-4 ${isBookmarked ? 'fill-primary text-primary' : 'text-foreground/60 dark:text-muted-foreground'}`}
                   strokeWidth={2.5}
                 />
               </button>

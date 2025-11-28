@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function DiscussionPage() {
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background">
+    <div className="min-h-screen bg-background">
       <DiscussionPageContent />
     </div>
   )

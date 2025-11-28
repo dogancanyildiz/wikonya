@@ -359,7 +359,7 @@ export function CommentFeed() {
               setCommentError(null)
             }}
             placeholder="Deneyimlerinizi ve düşüncelerinizi paylaşın..."
-            className="w-full p-3 sm:p-4 bg-accent rounded-xl font-[Manrope] text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-[#03624c] font-medium min-h-[100px] sm:min-h-[120px] text-sm sm:text-base"
+            className="w-full p-3 sm:p-4 bg-accent rounded-xl font-[Manrope] text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary font-medium min-h-[100px] sm:min-h-[120px] text-sm sm:text-base"
             disabled={isSubmitting}
             aria-label="Yorum metni"
           />

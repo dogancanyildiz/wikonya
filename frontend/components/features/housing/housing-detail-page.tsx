@@ -222,7 +222,7 @@ export function HousingDetailPage() {
                     onClick={() => setSelectedImageIndex(index)}
                     className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                       selectedImageIndex === index
-                        ? 'border-primary ring-2 ring-[#03624c]/20'
+                        ? 'border-primary ring-2 ring-primary/20'
                         : 'border-transparent hover:border-gray-300 dark:hover:border-border'
                     }`}
                   >

@@ -51,7 +51,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Sol Panel - Branding (sadece desktop) */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#03624c] via-[#024d3c] to-[#013d2f] relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-primary/90 to-[#013d2f] relative overflow-hidden">
         {/* Decorative glow elements */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
@@ -111,32 +111,32 @@ export default function LoginPage() {
       </div>
 
       {/* Sağ Panel / Mobil - Login Form */}
-      <div className="w-full lg:w-1/2 bg-[#f2f4f3] dark:bg-background flex items-center justify-center p-6 sm:p-8 lg:p-12">
+      <div className="w-full lg:w-1/2 bg-background flex items-center justify-center p-6 sm:p-8 lg:p-12">
         <div className="w-full max-w-md">
           {/* Mobile Header */}
           <div className="lg:hidden mb-10">
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-[#03624c] flex items-center justify-center group-hover:bg-[#024d3c] transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                 <Home className="w-5 h-5 text-white" />
               </div>
-              <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-black text-2xl">
-                KONYA <span className="text-[#03624c]">GENÇ</span>
+              <span className="font-[Manrope] text-foreground font-black text-2xl">
+                KONYA <span className="text-primary">GENÇ</span>
               </span>
             </Link>
           </div>
 
           {/* Welcome */}
           <div className="mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#03624c]/10 dark:bg-[#03624c]/20 rounded-full mb-4">
-              <Sparkles className="w-4 h-4 text-[#03624c]" />
-              <span className="font-[Manrope] text-[#03624c] font-semibold text-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 dark:bg-primary/20 rounded-full mb-4">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="font-[Manrope] text-primary font-semibold text-sm">
                 Hoş geldin!
               </span>
             </div>
-            <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-black text-3xl sm:text-4xl mb-2">
+            <h2 className="font-[Manrope] text-foreground font-black text-3xl sm:text-4xl mb-2">
               Giriş Yap
             </h2>
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
+            <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium">
               Genç Kültür Kart ID veya üniversite email&apos;inizle giriş yapın
             </p>
           </div>
@@ -156,12 +156,12 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <Label 
                   htmlFor="email" 
-                  className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-sm"
+                  className="font-[Manrope] text-foreground font-bold text-sm"
                 >
                   Email veya Genç Kültür Kart ID
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#4d4d4d]/40 dark:text-muted-foreground" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 dark:text-muted-foreground" />
                   <Input
                     id="email"
                     type="text"
@@ -170,10 +170,10 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="h-14 pl-12 pr-4 bg-[#f2f4f3] dark:bg-accent border-0 rounded-xl font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-[#03624c]"
+                    className="h-14 pl-12 pr-4 bg-accent border-0 rounded-xl font-[Manrope] font-medium text-foreground placeholder:text-foreground/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary"
                   />
                 </div>
-                <p className="font-[Manrope] text-[10px] text-[#4d4d4d]/50 dark:text-muted-foreground leading-relaxed">
+                <p className="font-[Manrope] text-[10px] text-foreground/50 dark:text-muted-foreground leading-relaxed">
                   Test: yeni_gelen@example.com, seyyah@example.com, gezgin@example.com
                 </p>
               </div>
@@ -182,19 +182,19 @@ export default function LoginPage() {
                 <div className="flex items-center justify-between">
                   <Label 
                     htmlFor="password" 
-                    className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-sm"
+                    className="font-[Manrope] text-foreground font-bold text-sm"
                   >
                     Şifre
                   </Label>
                   <button
                     type="button"
-                    className="font-[Manrope] text-[#03624c] font-semibold text-xs hover:underline"
+                    className="font-[Manrope] text-primary font-semibold text-xs hover:underline"
                   >
                     Şifremi unuttum
                   </button>
                 </div>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#4d4d4d]/40 dark:text-muted-foreground" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 dark:text-muted-foreground" />
                   <Input
                     id="password"
                     type="password"
@@ -202,14 +202,14 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isLoading}
-                    className="h-14 pl-12 pr-4 bg-[#f2f4f3] dark:bg-accent border-0 rounded-xl font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-[#03624c]"
+                    className="h-14 pl-12 pr-4 bg-accent border-0 rounded-xl font-[Manrope] font-medium text-foreground placeholder:text-foreground/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary"
                   />
                 </div>
               </div>
 
               <Button 
                 type="submit" 
-                className="w-full h-14 bg-[#03624c] hover:bg-[#024d3c] text-white rounded-xl font-[Manrope] font-bold text-base transition-all duration-200 shadow-[0_4px_14px_rgba(3,98,76,0.4)] hover:shadow-[0_6px_20px_rgba(3,98,76,0.5)]" 
+                className="w-full h-14 bg-primary hover:bg-primary/90 text-white rounded-xl font-[Manrope] font-bold text-base transition-all duration-200 shadow-[0_4px_14px_rgba(3,98,76,0.4)] hover:shadow-[0_6px_20px_rgba(3,98,76,0.5)]" 
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -226,11 +226,11 @@ export default function LoginPage() {
 
           {/* Register Link */}
           <div className="text-center mt-8">
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
+            <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium">
               Hesabınız yok mu?{" "}
               <Link 
                 href="/auth/register" 
-                className="text-[#03624c] font-bold hover:underline"
+                className="text-primary font-bold hover:underline"
               >
                 Kayıt olun
               </Link>
@@ -239,7 +239,7 @@ export default function LoginPage() {
 
           {/* Footer */}
           <div className="text-center mt-10">
-            <p className="font-[Manrope] text-[#4d4d4d]/40 dark:text-muted-foreground/60 text-xs">
+            <p className="font-[Manrope] text-foreground/40 dark:text-muted-foreground/60 text-xs">
               © 2024 Konya Büyükşehir Belediyesi
             </p>
           </div>

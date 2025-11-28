@@ -2,7 +2,7 @@ import { JobDetailPage as JobDetailPageContent } from "@/components/features/car
 
 export default function JobDetailPage() {
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background">
+    <div className="min-h-screen bg-background">
       <JobDetailPageContent />
     </div>
   )

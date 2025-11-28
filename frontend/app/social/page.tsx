@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function SocialPage() {
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background">
+    <div className="min-h-screen bg-background">
       <SocialPageContent />
     </div>
   )

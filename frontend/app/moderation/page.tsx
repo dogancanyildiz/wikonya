@@ -68,10 +68,10 @@ export default function ModerationPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8">
       <div className="mb-4 sm:mb-6">
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-extrabold text-2xl sm:text-3xl md:text-4xl mb-2">
+        <h1 className="font-[Manrope] text-foreground font-extrabold text-2xl sm:text-3xl md:text-4xl mb-2">
           Moderasyon Paneli
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-sm sm:text-base">
+        <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground text-sm sm:text-base">
           İçerik onayları ve düzenleme tekliflerini yönetin
         </p>
       </div>
@@ -93,7 +93,7 @@ export default function ModerationPage() {
           <TabsContent value="topics">
             <Card>
               <CardHeader>
-                <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl sm:text-2xl">
+                <CardTitle className="font-[Manrope] text-foreground font-bold text-xl sm:text-2xl">
                   Onay Bekleyen Başlıklar
                 </CardTitle>
                 <CardDescription className="font-[Manrope]">
@@ -115,7 +115,7 @@ export default function ModerationPage() {
           <TabsContent value="proposals">
             <Card>
               <CardHeader>
-                <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl sm:text-2xl">
+                <CardTitle className="font-[Manrope] text-foreground font-bold text-xl sm:text-2xl">
                   Onay Bekleyen Düzenleme Teklifleri
                 </CardTitle>
                 <CardDescription className="font-[Manrope]">
@@ -137,7 +137,7 @@ export default function ModerationPage() {
           <TabsContent value="flagged">
             <Card>
               <CardHeader>
-                <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xl sm:text-2xl">
+                <CardTitle className="font-[Manrope] text-foreground font-bold text-xl sm:text-2xl">
                   Bayraklanan İçerikler
                 </CardTitle>
                 <CardDescription className="font-[Manrope]">

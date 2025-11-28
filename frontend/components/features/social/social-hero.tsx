@@ -203,7 +203,7 @@ export function SocialHero() {
                           </span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Star className="w-3 h-3 text-primary fill-[#03624c]" />
+                          <Star className="w-3 h-3 text-primary fill-primary" />
                           <span className="font-[Manrope] text-foreground font-bold text-xs">
                             {venue.rating}
                           </span>

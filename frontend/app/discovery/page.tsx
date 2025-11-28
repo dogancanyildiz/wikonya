@@ -2,7 +2,7 @@ import { KonyaDiscoveryPage } from "@/components/features/discovery/konya-discov
 
 export default function DiscoveryPage() {
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background">
+    <div className="min-h-screen bg-background">
       <KonyaDiscoveryPage />
     </div>
   )

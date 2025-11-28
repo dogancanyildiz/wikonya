@@ -101,7 +101,7 @@ export default function WalletPage() {
   if (!user) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground">
+        <p className="font-[Manrope] text-foreground">
           Lütfen giriş yapın
         </p>
       </div>
@@ -112,10 +112,10 @@ export default function WalletPage() {
     <div className="space-y-6">
       {/* Başlık */}
       <div>
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-2xl sm:text-3xl">
+        <h1 className="font-[Manrope] text-foreground font-bold text-2xl sm:text-3xl">
           Cüzdan & GençCoin
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-1">
+        <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground mt-1">
           Kazandığınız coinleri takip edin ve Kültür Kart&apos;a aktarın
         </p>
       </div>
@@ -123,7 +123,7 @@ export default function WalletPage() {
       {/* Bakiye Kartları */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Toplam Bakiye */}
-        <Card className="bg-gradient-to-br from-[#03624c] to-[#024d3c] rounded-[20px] border-0">
+        <Card className="bg-gradient-to-br from-primary to-primary/90 rounded-[20px] border-0">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center gap-2 mb-2">
               <CoinIcon />
@@ -147,14 +147,14 @@ export default function WalletPage() {
         <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center justify-between mb-2">
-              <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs">
+              <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs">
                 Bu Ay Kazanılan
               </p>
               <div className="w-8 h-8 bg-green-100 dark:bg-green-500/20 rounded-lg flex items-center justify-center">
                 <ArrowUpRight className="w-4 h-4 text-green-600 dark:text-green-400" />
               </div>
             </div>
-            <div className="font-[Manrope] text-[#03624c] font-bold text-2xl">
+            <div className="font-[Manrope] text-primary font-bold text-2xl">
               +{monthlyEarned}
             </div>
           </CardContent>
@@ -164,14 +164,14 @@ export default function WalletPage() {
         <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center justify-between mb-2">
-              <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs">
+              <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs">
                 Toplam Kazanç
               </p>
               <div className="w-8 h-8 bg-[#f2f4f3] dark:bg-accent rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-[#03624c]" />
+                <TrendingUp className="w-4 h-4 text-primary" />
               </div>
             </div>
-            <div className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-2xl">
+            <div className="font-[Manrope] text-foreground font-bold text-2xl">
               {totalEarned.toLocaleString()}
             </div>
           </CardContent>
@@ -181,7 +181,7 @@ export default function WalletPage() {
         <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center justify-between mb-2">
-              <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-xs">
+              <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs">
                 Karta Aktarılan
               </p>
               <div className="w-8 h-8 bg-purple-100 dark:bg-purple-500/20 rounded-lg flex items-center justify-center">
@@ -201,7 +201,7 @@ export default function WalletPage() {
       {/* İşlem Geçmişi */}
       <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
         <CardHeader>
-          <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg sm:text-xl">
+          <CardTitle className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl">
             İşlem Geçmişi
           </CardTitle>
         </CardHeader>
@@ -232,12 +232,12 @@ export default function WalletPage() {
                     </div>
 
                     <div className="flex-1">
-                      <p className="font-[Manrope] font-semibold text-sm text-[#4d4d4d] dark:text-foreground">
+                      <p className="font-[Manrope] font-semibold text-sm text-foreground">
                         {transaction.action}
                       </p>
                       <div className="flex items-center gap-2 mt-1">
-                        <Calendar className="w-3 h-3 text-[#4d4d4d]/50 dark:text-muted-foreground" />
-                        <span className="font-[Manrope] text-xs text-[#4d4d4d]/50 dark:text-muted-foreground">
+                        <Calendar className="w-3 h-3 text-foreground/50 dark:text-muted-foreground" />
+                        <span className="font-[Manrope] text-xs text-foreground/50 dark:text-muted-foreground">
                           {transaction.date}
                         </span>
                       </div>

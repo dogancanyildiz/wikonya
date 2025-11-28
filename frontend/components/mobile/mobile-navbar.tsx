@@ -146,7 +146,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
               >
                 <Bell className="w-5 h-5 text-foreground" strokeWidth={2.5} />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#03624C] rounded-full"></span>
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full"></span>
                 )}
               </Button>
             </PopoverTrigger>
@@ -291,7 +291,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                   </div>
                   <button
                     onClick={toggleTheme}
-                    className={`relative w-14 h-7 rounded-full transition-all duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#03624c] focus:ring-offset-2 ${
+                    className={`relative w-14 h-7 rounded-full transition-all duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                       isDark 
                         ? 'bg-primary shadow-lg shadow-primary/30' 
                         : 'bg-accent'

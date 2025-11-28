@@ -89,7 +89,7 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
             className="p-1"
           >
             <Bookmark 
-              className={`w-4 h-4 sm:w-5 sm:h-5 ${isBookmarked ? 'fill-[#03624c] text-primary' : 'text-foreground'}`} 
+              className={`w-4 h-4 sm:w-5 sm:h-5 ${isBookmarked ? 'fill-primary text-primary' : 'text-foreground'}`} 
               strokeWidth={2.5} 
             />
           </button>
@@ -141,7 +141,7 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
           </div>
 
           {/* Reliability Score */}
-          <div className="bg-gradient-to-br from-primary/10 to-[#03624c]/5 dark:from-primary/20 dark:to-[#03624c]/10 rounded-2xl p-3 sm:p-4 border-2 border-primary">
+          <div className="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-2xl p-3 sm:p-4 border-2 border-primary">
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground mb-1 font-bold text-[10px] sm:text-[11px]">
@@ -215,8 +215,8 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
                     {/* Comment Content */}
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <Avatar className="w-7 h-7 sm:w-8 sm:h-8 border-2 border-[#f2f4f3] dark:border-border">
-                          <AvatarFallback className="bg-[#03624C] text-white font-[Manrope] font-bold text-[10px] sm:text-xs">
+                        <Avatar className="w-7 h-7 sm:w-8 sm:h-8 border-2 border-border">
+                          <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold text-[10px] sm:text-xs">
                             {comment.initials}
                           </AvatarFallback>
                         </Avatar>

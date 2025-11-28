@@ -118,16 +118,16 @@ export default function MessagesPage() {
       {/* Başlık */}
       <div>
         <div className="flex items-center gap-3">
-          <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-2xl sm:text-3xl">
+          <h1 className="font-[Manrope] text-foreground font-bold text-2xl sm:text-3xl">
             Mesajlar
           </h1>
           {totalUnread > 0 && (
-            <Badge className="bg-[#03624c] text-white font-[Manrope] font-bold">
+            <Badge className="bg-primary text-white font-[Manrope] font-bold">
               {totalUnread} yeni
             </Badge>
           )}
         </div>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-1">
+        <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground mt-1">
           Diğer kullanıcılarla mesajlaşın
         </p>
       </div>
@@ -138,7 +138,7 @@ export default function MessagesPage() {
           <div className={`border-r border-gray-200 dark:border-border ${selectedConversation ? 'hidden md:block' : ''}`}>
             <div className="p-4 border-b border-gray-200 dark:border-border">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4d4d4d]/50 dark:text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/50 dark:text-muted-foreground" />
                 <Input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -159,7 +159,7 @@ export default function MessagesPage() {
                   <div className="flex items-start gap-3">
                     <div className="relative">
                       <Avatar className="w-12 h-12">
-                        <AvatarFallback className="bg-[#03624c] text-white font-[Manrope] font-bold">
+                        <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold">
                           {conv.user.initials}
                         </AvatarFallback>
                       </Avatar>
@@ -169,19 +169,19 @@ export default function MessagesPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="font-[Manrope] font-bold text-sm text-[#4d4d4d] dark:text-foreground truncate">
+                        <p className="font-[Manrope] font-bold text-sm text-foreground truncate">
                           {conv.user.name}
                         </p>
-                        <span className="font-[Manrope] text-[10px] text-[#4d4d4d]/50 dark:text-muted-foreground whitespace-nowrap">
+                        <span className="font-[Manrope] text-[10px] text-foreground/50 dark:text-muted-foreground whitespace-nowrap">
                           {conv.timestamp}
                         </span>
                       </div>
-                      <p className="font-[Manrope] text-xs text-[#4d4d4d]/60 dark:text-muted-foreground truncate">
+                      <p className="font-[Manrope] text-xs text-foreground/60 dark:text-muted-foreground truncate">
                         {conv.lastMessage}
                       </p>
                     </div>
                     {conv.unreadCount > 0 && (
-                      <Badge className="bg-[#03624c] text-white font-[Manrope] text-xs h-5 min-w-[20px] flex items-center justify-center">
+                      <Badge className="bg-primary text-white font-[Manrope] text-xs h-5 min-w-[20px] flex items-center justify-center">
                         {conv.unreadCount}
                       </Badge>
                     )}
@@ -207,7 +207,7 @@ export default function MessagesPage() {
                   </Button>
                   <div className="relative">
                     <Avatar className="w-10 h-10">
-                      <AvatarFallback className="bg-[#03624c] text-white font-[Manrope] font-bold">
+                      <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold">
                         {selectedConversation.user.initials}
                       </AvatarFallback>
                     </Avatar>
@@ -216,10 +216,10 @@ export default function MessagesPage() {
                     )}
                   </div>
                   <div className="flex-1">
-                    <p className="font-[Manrope] font-bold text-sm text-[#4d4d4d] dark:text-foreground">
+                    <p className="font-[Manrope] font-bold text-sm text-foreground">
                       {selectedConversation.user.name}
                     </p>
-                    <p className="font-[Manrope] text-xs text-[#4d4d4d]/60 dark:text-muted-foreground">
+                    <p className="font-[Manrope] text-xs text-foreground/60 dark:text-muted-foreground">
                       {selectedConversation.user.isOnline ? 'Çevrimiçi' : 'Çevrimdışı'} • {selectedConversation.user.role}
                     </p>
                   </div>
@@ -242,13 +242,13 @@ export default function MessagesPage() {
                             <div
                               className={`px-4 py-2 rounded-2xl ${
                                 isOwn
-                                  ? 'bg-[#03624c] text-white rounded-br-sm'
-                                  : 'bg-[#f2f4f3] dark:bg-accent text-[#4d4d4d] dark:text-foreground rounded-bl-sm'
+                                  ? 'bg-primary text-white rounded-br-sm'
+                                  : 'bg-[#f2f4f3] dark:bg-accent text-foreground rounded-bl-sm'
                               }`}
                             >
                               <p className="font-[Manrope] text-sm">{message.content}</p>
                             </div>
-                            <p className={`font-[Manrope] text-[10px] text-[#4d4d4d]/50 dark:text-muted-foreground mt-1 ${isOwn ? 'text-right' : ''}`}>
+                            <p className={`font-[Manrope] text-[10px] text-foreground/50 dark:text-muted-foreground mt-1 ${isOwn ? 'text-right' : ''}`}>
                               {message.timestamp}
                             </p>
                           </div>
@@ -276,7 +276,7 @@ export default function MessagesPage() {
                     <Button
                       onClick={handleSendMessage}
                       disabled={!messageInput.trim()}
-                      className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope]"
+                      className="bg-primary hover:bg-primary/90 font-[Manrope]"
                     >
                       <Send className="w-4 h-4" />
                     </Button>
@@ -287,9 +287,9 @@ export default function MessagesPage() {
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-[#f2f4f3] dark:bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Send className="w-8 h-8 text-[#4d4d4d]/30 dark:text-muted-foreground" />
+                    <Send className="w-8 h-8 text-foreground/30 dark:text-muted-foreground" />
                   </div>
-                  <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
+                  <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground">
                     Mesajlaşmaya başlamak için bir sohbet seçin
                   </p>
                 </div>

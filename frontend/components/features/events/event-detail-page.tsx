@@ -244,7 +244,7 @@ export function EventDetailPage() {
                     className={`h-full rounded-full transition-all duration-500 ${
                       isFull 
                         ? 'bg-red-500' 
-                        : 'bg-gradient-to-r from-primary to-[#03624c]/80'
+                        : 'bg-gradient-to-r from-primary to-primary/80'
                     }`}
                     style={{ width: `${filledPercentage}%` }}
                   />

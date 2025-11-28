@@ -46,7 +46,7 @@ export function AcademicStats() {
           >
             <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary/10 to-[#03624c]/5 dark:from-primary/20 dark:to-[#03624c]/10 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-xl flex items-center justify-center">
                   <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" strokeWidth={2.5} />
                 </div>
               </div>

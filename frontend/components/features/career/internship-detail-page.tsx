@@ -171,7 +171,7 @@ export function InternshipDetailPage() {
                     onClick={() => setIsBookmarked(!isBookmarked)}
                     className="bg-accent hover:bg-primary/10 dark:hover:bg-primary/20"
                   >
-                    <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-[#03624c] text-primary' : 'text-foreground'}`} />
+                    <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-primary text-primary' : 'text-foreground'}`} />
                   </Button>
                   <Button
                     variant="secondary"

@@ -2,7 +2,7 @@ import { HousingDetailPage as HousingDetailPageContent } from "@/components/feat
 
 export default function HousingDetailPage() {
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background">
+    <div className="min-h-screen bg-background">
       <HousingDetailPageContent />
     </div>
   )

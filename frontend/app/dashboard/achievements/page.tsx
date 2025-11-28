@@ -258,10 +258,10 @@ export default function AchievementsPage() {
     <div className="space-y-6">
       {/* Başlık */}
       <div>
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-2xl sm:text-3xl">
+        <h1 className="font-[Manrope] text-foreground font-bold text-2xl sm:text-3xl">
           Başarılar
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-1">
+        <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground mt-1">
           Rozetler ve başarılarınızı takip edin
         </p>
       </div>
@@ -294,14 +294,14 @@ export default function AchievementsPage() {
         <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
           <CardContent className="p-5">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-[#03624c]/10 dark:bg-[#03624c]/20 rounded-xl flex items-center justify-center">
-                <Trophy className="w-8 h-8 text-[#03624c]" />
+              <div className="w-14 h-14 bg-primary/10 dark:bg-primary/20 rounded-xl flex items-center justify-center">
+                <Trophy className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-3xl">
+                <p className="font-[Manrope] text-foreground font-bold text-3xl">
                   {unlockedCount}/{totalAchievements}
                 </p>
-                <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-sm">
+                <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground text-sm">
                   Rozet Kazanıldı
                 </p>
               </div>
@@ -321,10 +321,10 @@ export default function AchievementsPage() {
                 <Target className="w-8 h-8 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-sm">
+                <p className="font-[Manrope] text-foreground font-bold text-sm">
                   Popüler
                 </p>
-                <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-xs">
+                <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground text-xs">
                   89/100 beğeni
                 </p>
                 <Progress value={89} className="h-1.5 mt-2 w-24" />
@@ -342,8 +342,8 @@ export default function AchievementsPage() {
         return (
           <Card key={category.id} className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
             <CardHeader>
-              <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg flex items-center gap-2">
-                <Icon className="w-5 h-5 text-[#03624c]" />
+              <CardTitle className="font-[Manrope] text-foreground font-bold text-lg flex items-center gap-2">
+                <Icon className="w-5 h-5 text-primary" />
                 {category.label}
               </CardTitle>
             </CardHeader>
@@ -358,14 +358,14 @@ export default function AchievementsPage() {
                       key={achievement.id}
                       className={`relative p-4 rounded-xl border ${
                         achievement.unlocked 
-                          ? 'bg-[#f2f4f3] dark:bg-accent border-[#03624c]/20' 
+                          ? 'bg-[#f2f4f3] dark:bg-accent border-primary/20' 
                           : 'bg-gray-50 dark:bg-accent/50 border-gray-200 dark:border-border opacity-75'
                       }`}
                     >
                       <div className="flex items-start gap-3">
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                           achievement.unlocked 
-                            ? 'bg-[#03624c]' 
+                            ? 'bg-primary' 
                             : 'bg-gray-200 dark:bg-gray-700'
                         }`}>
                           {achievement.unlocked ? (
@@ -379,7 +379,7 @@ export default function AchievementsPage() {
                           <div className="flex items-center gap-2 mb-1">
                             <p className={`font-[Manrope] font-bold text-sm ${
                               achievement.unlocked 
-                                ? 'text-[#4d4d4d] dark:text-foreground' 
+                                ? 'text-foreground' 
                                 : 'text-gray-400 dark:text-gray-500'
                             }`}>
                               {achievement.name}
@@ -391,7 +391,7 @@ export default function AchievementsPage() {
                           
                           <p className={`font-[Manrope] text-xs mb-2 ${
                             achievement.unlocked 
-                              ? 'text-[#4d4d4d]/60 dark:text-muted-foreground' 
+                              ? 'text-foreground/60 dark:text-muted-foreground' 
                               : 'text-gray-400 dark:text-gray-500'
                           }`}>
                             {achievement.description}
@@ -400,21 +400,21 @@ export default function AchievementsPage() {
                           {!achievement.unlocked && (
                             <div className="space-y-1">
                               <Progress value={progressPercent} className="h-1.5" />
-                              <p className="font-[Manrope] text-[10px] text-[#4d4d4d]/50 dark:text-muted-foreground">
+                              <p className="font-[Manrope] text-[10px] text-foreground/50 dark:text-muted-foreground">
                                 {achievement.progress.toLocaleString()} / {achievement.total.toLocaleString()}
                               </p>
                             </div>
                           )}
                           
                           {achievement.unlocked && achievement.unlockedAt && (
-                            <p className="font-[Manrope] text-[10px] text-[#03624c]">
+                            <p className="font-[Manrope] text-[10px] text-primary">
                               ✓ {achievement.unlockedAt} kazanıldı
                             </p>
                           )}
                         </div>
 
                         {achievement.coins > 0 && (
-                          <Badge className="bg-[#03624c] text-white font-[Manrope] text-xs">
+                          <Badge className="bg-primary text-white font-[Manrope] text-xs">
                             +{achievement.coins}
                           </Badge>
                         )}

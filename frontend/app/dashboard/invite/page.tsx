@@ -52,7 +52,7 @@ export default function InvitePage() {
   if (!user) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground">
+        <p className="font-[Manrope] text-foreground">
           Lütfen giriş yapın
         </p>
       </div>
@@ -119,17 +119,17 @@ export default function InvitePage() {
     <div className="space-y-6">
       {/* Başlık */}
       <div>
-        <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-2xl sm:text-3xl">
+        <h1 className="font-[Manrope] text-foreground font-bold text-2xl sm:text-3xl">
           Arkadaşını Davet Et
         </h1>
-        <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-1">
+        <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground mt-1">
           Arkadaşlarını davet et, ikiniz de GençCoin kazanın!
         </p>
       </div>
 
       {/* İstatistikler */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-br from-[#03624c] to-[#024d3c] rounded-[20px] border-0">
+        <Card className="bg-gradient-to-br from-primary to-primary/90 rounded-[20px] border-0">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -154,10 +154,10 @@ export default function InvitePage() {
                 <Sparkles className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
               </div>
               <div>
-                <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-2xl">
+                <p className="font-[Manrope] text-foreground font-bold text-2xl">
                   +{totalEarnedFromReferrals}
                 </p>
-                <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-sm">
+                <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground text-sm">
                   Kazanılan Coin
                 </p>
               </div>
@@ -168,14 +168,14 @@ export default function InvitePage() {
         <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-[#03624c]/10 dark:bg-[#03624c]/20 rounded-xl flex items-center justify-center">
-                <Gift className="w-6 h-6 text-[#03624c]" />
+              <div className="w-12 h-12 bg-primary/10 dark:bg-primary/20 rounded-xl flex items-center justify-center">
+                <Gift className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-2xl">
+                <p className="font-[Manrope] text-foreground font-bold text-2xl">
                   100
                 </p>
-                <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground text-sm">
+                <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground text-sm">
                   Davet Başına Coin
                 </p>
               </div>
@@ -185,7 +185,7 @@ export default function InvitePage() {
       </div>
 
       {/* Davet Kartı */}
-      <Card className="bg-gradient-to-br from-[#03624c] to-[#024d3c] rounded-[20px] border-0">
+      <Card className="bg-gradient-to-br from-primary to-primary/90 rounded-[20px] border-0">
         <CardHeader>
           <div className="flex items-center gap-2">
             <Gift className="w-6 h-6 text-white" />
@@ -244,7 +244,7 @@ export default function InvitePage() {
               </Button>
               <Button
                 onClick={handleShare}
-                className="bg-white text-[#03624c] hover:bg-white/90 font-[Manrope] font-bold"
+                className="bg-white text-primary hover:bg-white/90 font-[Manrope] font-bold"
               >
                 <Share2 className="w-4 h-4 mr-2" />
                 Paylaş
@@ -267,7 +267,7 @@ export default function InvitePage() {
       {/* Referans Kodu Kullan */}
       <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
         <CardHeader>
-          <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg">
+          <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
             Referans Kodu Kullan
           </CardTitle>
           <CardDescription className="font-[Manrope]">
@@ -289,7 +289,7 @@ export default function InvitePage() {
             <Button
               onClick={handleRedeemCode}
               disabled={isRedeeming || !referralCode.trim()}
-              className="bg-[#03624c] hover:bg-[#03624c]/90 font-[Manrope] font-bold"
+              className="bg-primary hover:bg-primary/90 font-[Manrope] font-bold"
             >
               {isRedeeming ? "Kullanılıyor..." : "Kullan"}
             </Button>
@@ -300,7 +300,7 @@ export default function InvitePage() {
       {/* Davet Edilen Kullanıcılar */}
       <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
         <CardHeader>
-          <CardTitle className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg">
+          <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
             Davet Ettiğin Arkadaşlar
           </CardTitle>
         </CardHeader>
@@ -313,20 +313,20 @@ export default function InvitePage() {
                   className="flex items-center gap-4 p-4 bg-[#f2f4f3] dark:bg-accent rounded-xl"
                 >
                   <Avatar className="w-12 h-12">
-                    <AvatarFallback className="bg-[#03624c] text-white font-[Manrope] font-bold">
+                    <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold">
                       {invitedUser.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <p className="font-[Manrope] font-bold text-sm text-[#4d4d4d] dark:text-foreground">
+                    <p className="font-[Manrope] font-bold text-sm text-foreground">
                       {invitedUser.name}
                     </p>
-                    <div className="flex items-center gap-1 text-[#4d4d4d]/50 dark:text-muted-foreground">
+                    <div className="flex items-center gap-1 text-foreground/50 dark:text-muted-foreground">
                       <Calendar className="w-3 h-3" />
                       <span className="font-[Manrope] text-xs">{invitedUser.joinedAt}</span>
                     </div>
                   </div>
-                  <Badge className="bg-[#03624c] text-white font-[Manrope] font-bold">
+                  <Badge className="bg-primary text-white font-[Manrope] font-bold">
                     +{invitedUser.coinsEarned} GençCoin
                   </Badge>
                 </div>
@@ -335,12 +335,12 @@ export default function InvitePage() {
           ) : (
             <div className="text-center py-8">
               <div className="w-16 h-16 bg-[#f2f4f3] dark:bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-[#4d4d4d]/30 dark:text-muted-foreground" />
+                <Users className="w-8 h-8 text-foreground/30 dark:text-muted-foreground" />
               </div>
-              <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground">
+              <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground">
                 Henüz kimseyi davet etmedin
               </p>
-              <p className="font-[Manrope] text-[#4d4d4d]/40 dark:text-muted-foreground text-sm mt-1">
+              <p className="font-[Manrope] text-foreground/40 dark:text-muted-foreground text-sm mt-1">
                 Davet linkini paylaşarak GençCoin kazanmaya başla!
               </p>
             </div>

@@ -52,7 +52,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex">
       {/* Sol Panel - Branding (sadece desktop) */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#03624c] via-[#024d3c] to-[#013d2f] relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-primary/90 to-[#013d2f] relative overflow-hidden">
         {/* Decorative glow elements */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 right-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
@@ -100,32 +100,32 @@ export default function RegisterPage() {
       </div>
 
       {/* Sağ Panel / Mobil - Register Form */}
-      <div className="w-full lg:w-1/2 bg-[#f2f4f3] dark:bg-background flex items-center justify-center p-6 sm:p-8 lg:p-12 overflow-y-auto">
+      <div className="w-full lg:w-1/2 bg-background flex items-center justify-center p-6 sm:p-8 lg:p-12 overflow-y-auto">
         <div className="w-full max-w-md my-auto">
           {/* Mobile Header */}
           <div className="lg:hidden mb-8">
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-[#03624c] flex items-center justify-center group-hover:bg-[#024d3c] transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                 <Home className="w-5 h-5 text-white" />
               </div>
-              <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-black text-2xl">
-                KONYA <span className="text-[#03624c]">GENÇ</span>
+              <span className="font-[Manrope] text-foreground font-black text-2xl">
+                KONYA <span className="text-primary">GENÇ</span>
               </span>
             </Link>
           </div>
 
           {/* Welcome */}
           <div className="mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#03624c]/10 dark:bg-[#03624c]/20 rounded-full mb-4">
-              <Rocket className="w-4 h-4 text-[#03624c]" />
-              <span className="font-[Manrope] text-[#03624c] font-semibold text-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 dark:bg-primary/20 rounded-full mb-4">
+              <Rocket className="w-4 h-4 text-primary" />
+              <span className="font-[Manrope] text-primary font-semibold text-sm">
                 Yolculuğa başla
               </span>
             </div>
-            <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-black text-3xl sm:text-4xl mb-2">
+            <h2 className="font-[Manrope] text-foreground font-black text-3xl sm:text-4xl mb-2">
               Kayıt Ol
             </h2>
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
+            <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium">
               Üniversite email&apos;inizle hemen ücretsiz hesap oluşturun
             </p>
           </div>
@@ -145,12 +145,12 @@ export default function RegisterPage() {
               <div className="space-y-2">
                 <Label 
                   htmlFor="name" 
-                  className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-sm"
+                  className="font-[Manrope] text-foreground font-bold text-sm"
                 >
                   Ad Soyad
                 </Label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#4d4d4d]/40 dark:text-muted-foreground" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 dark:text-muted-foreground" />
                   <Input
                     id="name"
                     type="text"
@@ -159,7 +159,7 @@ export default function RegisterPage() {
                     onChange={(e) => setName(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="h-14 pl-12 pr-4 bg-[#f2f4f3] dark:bg-accent border-0 rounded-xl font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-[#03624c]"
+                    className="h-14 pl-12 pr-4 bg-accent border-0 rounded-xl font-[Manrope] font-medium text-foreground placeholder:text-foreground/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary"
                   />
                 </div>
               </div>
@@ -167,12 +167,12 @@ export default function RegisterPage() {
               <div className="space-y-2">
                 <Label 
                   htmlFor="email" 
-                  className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-sm"
+                  className="font-[Manrope] text-foreground font-bold text-sm"
                 >
                   Üniversite Email
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#4d4d4d]/40 dark:text-muted-foreground" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 dark:text-muted-foreground" />
                   <Input
                     id="email"
                     type="text"
@@ -181,10 +181,10 @@ export default function RegisterPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="h-14 pl-12 pr-4 bg-[#f2f4f3] dark:bg-accent border-0 rounded-xl font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-[#03624c]"
+                    className="h-14 pl-12 pr-4 bg-accent border-0 rounded-xl font-[Manrope] font-medium text-foreground placeholder:text-foreground/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary"
                   />
                 </div>
-                <p className="font-[Manrope] text-[10px] text-[#4d4d4d]/50 dark:text-muted-foreground">
+                <p className="font-[Manrope] text-[10px] text-foreground/50 dark:text-muted-foreground">
                   Sadece üniversite email&apos;i (.edu.tr) veya test email&apos;i kullanılabilir
                 </p>
               </div>
@@ -192,12 +192,12 @@ export default function RegisterPage() {
               <div className="space-y-2">
                 <Label 
                   htmlFor="password" 
-                  className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-sm"
+                  className="font-[Manrope] text-foreground font-bold text-sm"
                 >
                   Şifre
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#4d4d4d]/40 dark:text-muted-foreground" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/40 dark:text-muted-foreground" />
                   <Input
                     id="password"
                     type="password"
@@ -205,14 +205,14 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isLoading}
-                    className="h-14 pl-12 pr-4 bg-[#f2f4f3] dark:bg-accent border-0 rounded-xl font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-[#03624c]"
+                    className="h-14 pl-12 pr-4 bg-accent border-0 rounded-xl font-[Manrope] font-medium text-foreground placeholder:text-foreground/40 dark:placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary"
                   />
                 </div>
               </div>
 
               <Button 
                 type="submit" 
-                className="w-full h-14 bg-[#03624c] hover:bg-[#024d3c] text-white rounded-xl font-[Manrope] font-bold text-base transition-all duration-200 shadow-[0_4px_14px_rgba(3,98,76,0.4)] hover:shadow-[0_6px_20px_rgba(3,98,76,0.5)]" 
+                className="w-full h-14 bg-primary hover:bg-primary/90 text-white rounded-xl font-[Manrope] font-bold text-base transition-all duration-200 shadow-[0_4px_14px_rgba(3,98,76,0.4)] hover:shadow-[0_6px_20px_rgba(3,98,76,0.5)]" 
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -225,11 +225,11 @@ export default function RegisterPage() {
                 )}
               </Button>
 
-              <p className="font-[Manrope] text-[10px] text-[#4d4d4d]/50 dark:text-muted-foreground text-center leading-relaxed pt-2">
+              <p className="font-[Manrope] text-[10px] text-foreground/50 dark:text-muted-foreground text-center leading-relaxed pt-2">
                 Kayıt olarak{" "}
-                <Link href="#" className="text-[#03624c] hover:underline">Kullanım Şartları</Link>
+                <Link href="#" className="text-primary hover:underline">Kullanım Şartları</Link>
                 {" "}ve{" "}
-                <Link href="#" className="text-[#03624c] hover:underline">Gizlilik Politikası</Link>
+                <Link href="#" className="text-primary hover:underline">Gizlilik Politikası</Link>
                 &apos;nı kabul etmiş olursunuz.
               </p>
             </form>
@@ -237,11 +237,11 @@ export default function RegisterPage() {
 
           {/* Login Link */}
           <div className="text-center mt-8">
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
+            <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium">
               Zaten hesabınız var mı?{" "}
               <Link 
                 href="/auth/login" 
-                className="text-[#03624c] font-bold hover:underline"
+                className="text-primary font-bold hover:underline"
               >
                 Giriş yapın
               </Link>
@@ -250,7 +250,7 @@ export default function RegisterPage() {
 
           {/* Footer */}
           <div className="text-center mt-10">
-            <p className="font-[Manrope] text-[#4d4d4d]/40 dark:text-muted-foreground/60 text-xs">
+            <p className="font-[Manrope] text-foreground/40 dark:text-muted-foreground/60 text-xs">
               © 2024 Konya Büyükşehir Belediyesi
             </p>
           </div>
