@@ -1,8 +1,19 @@
+import type { Metadata } from "next"
 import { Hero } from "@/components/layout/hero"
 import { DiscussionFeed } from "@/components/features/home/discussion-feed"
 import { Sidebar } from "@/components/layout/sidebar"
 import { PopularComments } from "@/components/features/home/popular-comments"
 import { KBBAnnouncements } from "@/components/features/home/kbb-announcements"
+
+export const metadata: Metadata = {
+  title: "Ana Sayfa | Konya Genç - Bilgi Evreni",
+  description: "Konya'daki üniversite öğrencilerinin bilgi paylaşım platformu. Akademik kaynaklar, barınma rehberleri, etkinlikler ve daha fazlası.",
+  openGraph: {
+    title: "Konya Genç - Bilgi Evreni",
+    description: "Konya'daki üniversite öğrencilerinin bilgi paylaşım platformu",
+    type: "website",
+  },
+}
 
 export default function Home() {
   return (

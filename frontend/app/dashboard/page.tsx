@@ -1,8 +1,19 @@
+import type { Metadata } from "next"
 import { ProfileCard } from "@/components/dashboard/profile-card"
 import { StatsCard } from "@/components/dashboard/stats-card"
 import { ActivityFeed } from "@/components/dashboard/activity-feed"
 import { XPProgressBar } from "@/components/dashboard/xp-progress-bar"
 import { WalletCard } from "@/components/dashboard/wallet-card"
+
+export const metadata: Metadata = {
+  title: "Dashboard | Konya Genç",
+  description: "Konya Genç kullanıcı dashboard'u. Profil, coin bakiyesi, aktiviteler ve katkılarınızı görüntüleyin.",
+  openGraph: {
+    title: "Dashboard | Konya Genç",
+    description: "Kullanıcı dashboard'u - Profil, coin bakiyesi ve aktiviteler",
+    type: "website",
+  },
+}
 
 export default function DashboardPage() {
   return (
