@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
-import { TopicApprovalList } from "@/components/moderation/topic-approval-list"
-import { WikiProposalList } from "@/components/moderation/wiki-proposal-list"
-import { FlaggedContentList } from "@/components/moderation/flagged-content-list"
+import { TopicApprovalList } from "@/components/features/moderation/topic-approval-list"
+import { WikiProposalList } from "@/components/features/moderation/wiki-proposal-list"
+import { FlaggedContentList } from "@/components/features/moderation/flagged-content-list"
 import { Topic, WikiEditProposal } from "@/lib/types"
 
 export default function ModerationPage() {

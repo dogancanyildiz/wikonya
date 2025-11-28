@@ -74,14 +74,14 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background pb-20 sm:pb-24">
+    <div className="min-h-screen bg-accent dark:bg-background pb-20 sm:pb-24">
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-white dark:bg-card border-b border-gray-200 dark:border-border">
+      <div className="sticky top-0 z-50 bg-card border-b border-border">
         <div className="flex items-center gap-3 h-14 px-4">
           <button onClick={handleBack} className="p-1">
-            <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 text-[#4d4d4d] dark:text-foreground" strokeWidth={2.5} />
+            <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 text-foreground" strokeWidth={2.5} />
           </button>
-          <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground flex-1 truncate font-bold text-sm sm:text-base">
+          <span className="font-[Manrope] text-foreground flex-1 truncate font-bold text-sm sm:text-base">
             Konu Detayı
           </span>
           <button 
@@ -89,25 +89,25 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
             className="p-1"
           >
             <Bookmark 
-              className={`w-4 h-4 sm:w-5 sm:h-5 ${isBookmarked ? 'fill-[#03624c] text-[#03624c]' : 'text-[#4d4d4d] dark:text-foreground'}`} 
+              className={`w-4 h-4 sm:w-5 sm:h-5 ${isBookmarked ? 'fill-[#03624c] text-primary' : 'text-foreground'}`} 
               strokeWidth={2.5} 
             />
           </button>
           <button className="p-1">
-            <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#4d4d4d] dark:text-foreground" strokeWidth={2.5} />
+            <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" strokeWidth={2.5} />
           </button>
         </div>
       </div>
 
       {/* Topic Header */}
-      <Card className="bg-white dark:bg-card m-3 sm:m-4 mb-3 border border-border">
+      <Card className="bg-card m-3 sm:m-4 mb-3 border border-border">
         <CardContent className="p-4">
-          <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-3 font-extrabold text-xl sm:text-2xl leading-snug">
+          <h1 className="font-[Manrope] text-foreground mb-3 font-extrabold text-xl sm:text-2xl leading-snug">
             Selçuk Hukuk Final Notları
           </h1>
 
           {/* Meta */}
-          <div className="flex items-center gap-3 sm:gap-4 mb-3 text-[#4d4d4d]/60 dark:text-muted-foreground flex-wrap">
+          <div className="flex items-center gap-3 sm:gap-4 mb-3 text-foreground/60 dark:text-muted-foreground flex-wrap">
             <div className="flex items-center gap-1">
               <Eye className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={2.5} />
               <span className="font-[Manrope] font-medium text-[10px] sm:text-xs">
@@ -133,7 +133,7 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
             {["Ders Notu", "Hukuk", "Final"].map((tag) => (
               <span
                 key={tag}
-                className="px-2 sm:px-3 py-1 bg-white dark:bg-card border-2 border-[#03624c] rounded-full font-[Manrope] text-[#03624c] font-bold text-[10px] sm:text-[11px]"
+                className="px-2 sm:px-3 py-1 bg-card border-2 border-primary rounded-full font-[Manrope] text-primary font-bold text-[10px] sm:text-[11px]"
               >
                 {tag}
               </span>
@@ -141,21 +141,21 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
           </div>
 
           {/* Reliability Score */}
-          <div className="bg-gradient-to-br from-[#03624c]/10 to-[#03624c]/5 dark:from-[#03624c]/20 dark:to-[#03624c]/10 rounded-2xl p-3 sm:p-4 border-2 border-[#03624c]">
+          <div className="bg-gradient-to-br from-primary/10 to-[#03624c]/5 dark:from-primary/20 dark:to-[#03624c]/10 rounded-2xl p-3 sm:p-4 border-2 border-primary">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mb-1 font-bold text-[10px] sm:text-[11px]">
+                <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground mb-1 font-bold text-[10px] sm:text-[11px]">
                   GÜVENİLİRLİK SKORU
                 </p>
-                <p className="font-[Manrope] text-[#03624c] font-extrabold text-2xl sm:text-3xl lg:text-[36px]">
+                <p className="font-[Manrope] text-primary font-extrabold text-2xl sm:text-3xl lg:text-[36px]">
                   98%
                 </p>
               </div>
               <div className="text-right">
-                <p className="font-[Manrope] text-[#03624c] mb-1 font-bold text-lg sm:text-xl">
+                <p className="font-[Manrope] text-primary mb-1 font-bold text-lg sm:text-xl">
                   4.8/5
                 </p>
-                <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-[10px] sm:text-[11px]">
+                <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-[10px] sm:text-[11px]">
                   Ortalama Puan
                 </p>
               </div>
@@ -163,11 +163,11 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
           </div>
 
           {/* Content Preview */}
-          <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200 dark:border-border">
-            <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-2 font-bold text-sm sm:text-base">
+          <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-border">
+            <h3 className="font-[Manrope] text-foreground mb-2 font-bold text-sm sm:text-base">
               Özet Bilgi
             </h3>
-            <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground leading-relaxed font-medium text-xs sm:text-sm">
+            <p className="font-[Manrope] text-foreground leading-relaxed font-medium text-xs sm:text-sm">
               Selçuk Üniversitesi Hukuk Fakültesi final sınavlarına hazırlık için derlenmiş kapsamlı ders notları.
             </p>
           </div>
@@ -176,7 +176,7 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
 
       {/* Comments Section */}
       <div className="px-3 sm:px-4">
-        <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-3 font-bold text-base sm:text-lg">
+        <h3 className="font-[Manrope] text-foreground mb-3 font-bold text-base sm:text-lg">
           Yorumlar (48)
         </h3>
 
@@ -186,7 +186,7 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
             return (
               <Card
                 key={comment.id}
-                className="bg-white dark:bg-card rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border"
+                className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border"
               >
                 <CardContent className="p-4">
                   <div className="flex gap-3">
@@ -195,7 +195,7 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
                       <button
                         onClick={() => handleVote(comment.id)}
                         className={`p-1.5 rounded-lg transition-colors ${
-                          voteState.upvoted ? 'bg-[#03624c] text-white' : 'bg-[#f2f4f3] dark:bg-accent text-[#4d4d4d] dark:text-foreground'
+                          voteState.upvoted ? 'bg-primary text-white' : 'bg-accent text-foreground'
                         }`}
                       >
                         <ArrowUp
@@ -204,10 +204,10 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
                           fill={voteState.upvoted ? 'white' : 'none'}
                         />
                       </button>
-                      <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xs sm:text-sm">
+                      <span className="font-[Manrope] text-foreground font-bold text-xs sm:text-sm">
                         {voteState.count}
                       </span>
-                      <button className="p-1.5 rounded-lg bg-[#f2f4f3] dark:bg-accent text-[#4d4d4d] dark:text-foreground">
+                      <button className="p-1.5 rounded-lg bg-accent text-foreground">
                         <ArrowDown className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={3} />
                       </button>
                     </div>
@@ -221,18 +221,18 @@ export function MobileTopicDetailPage({ onBack }: MobileTopicDetailPageProps) {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-xs sm:text-sm">
+                          <p className="font-[Manrope] text-foreground font-bold text-xs sm:text-sm">
                             {comment.author}
                           </p>
-                          <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-[10px] sm:text-xs">
+                          <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-[10px] sm:text-xs">
                             {comment.time}
                           </p>
                         </div>
                       </div>
-                      <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-2 font-medium text-xs sm:text-sm leading-relaxed">
+                      <p className="font-[Manrope] text-foreground mb-2 font-medium text-xs sm:text-sm leading-relaxed">
                         {comment.content}
                       </p>
-                      <button className="flex items-center gap-1 text-[#03624c] hover:opacity-70 transition-opacity">
+                      <button className="flex items-center gap-1 text-primary hover:opacity-70 transition-opacity">
                         <Reply className="w-3 h-3 sm:w-3.5 sm:h-3.5" strokeWidth={2.5} />
                         <span className="font-[Manrope] font-bold text-[10px] sm:text-xs">
                           Yanıtla

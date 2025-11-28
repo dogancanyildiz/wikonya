@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { CareerPage as CareerPageContent } from "@/components/career/career-page"
+import { CareerPage as CareerPageContent } from "@/components/features/career/career-page"
 
 export const metadata: Metadata = {
   title: "Kariyer & Gelişim | Konya Genç",

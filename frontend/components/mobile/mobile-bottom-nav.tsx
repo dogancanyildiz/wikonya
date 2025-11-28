@@ -31,7 +31,7 @@ export function MobileBottomNav({ activeTab, onNavigate }: MobileBottomNavProps)
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-card border-t border-gray-200 dark:border-border pb-safe z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border pb-safe z-50">
       <div className="flex items-center justify-around h-14 sm:h-16 px-2">
         {navItems.map((item) => {
           const Icon = item.icon
@@ -45,13 +45,13 @@ export function MobileBottomNav({ activeTab, onNavigate }: MobileBottomNavProps)
               className="flex flex-col items-center justify-center gap-1 px-2 py-1 min-w-[60px] active:scale-95 transition-transform"
             >
               <Icon
-                className={active ? "text-[#03624c]" : "text-[#4d4d4d]/60 dark:text-muted-foreground"}
+                className={active ? "text-primary" : "text-foreground/60 dark:text-muted-foreground"}
                 size={22}
                 strokeWidth={2.5}
                 fill={active ? "#03624c" : "none"}
               />
               <span
-                className={`font-[Manrope] ${active ? "text-[#03624c] font-bold" : "text-[#4d4d4d]/60 dark:text-muted-foreground font-semibold"}`}
+                className={`font-[Manrope] ${active ? "text-primary font-bold" : "text-foreground/60 dark:text-muted-foreground font-semibold"}`}
                 style={{ fontSize: '10px' }}
               >
                 {item.label}

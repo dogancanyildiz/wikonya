@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { HousingPage as HousingPageContent } from "@/components/housing/housing-page"
+import { HousingPage as HousingPageContent } from "@/components/features/housing/housing-page"
 
 export const metadata: Metadata = {
   title: "Barınma & Yaşam | Konya Genç",

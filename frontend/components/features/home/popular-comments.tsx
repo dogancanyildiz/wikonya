@@ -59,11 +59,11 @@ export function PopularComments({ comments }: PopularCommentsProps) {
   ]
 
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-center gap-2 mb-4">
-          <MessageCircle className="w-5 h-5 text-[#03624c]" />
-          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg sm:text-xl">
+          <MessageCircle className="w-5 h-5 text-primary" />
+          <h2 className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl">
             Popüler Yorumlar
           </h2>
         </div>
@@ -72,38 +72,38 @@ export function PopularComments({ comments }: PopularCommentsProps) {
             <Link
               key={comment.id}
               href={`/topic/${comment.topicId}#comment-${comment.id}`}
-              className="block p-3 sm:p-4 bg-[#f2f4f3] dark:bg-accent rounded-xl hover:shadow-md transition-all group"
+              className="block p-3 sm:p-4 bg-accent rounded-xl hover:shadow-md transition-all group"
             >
               <div className="flex items-start gap-3 mb-2">
                 <Avatar className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
-                  <AvatarFallback className="bg-[#03624c] text-white font-[Manrope] font-bold text-xs">
+                  <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold text-xs">
                     {comment.author.initials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-[Manrope] font-bold text-sm text-[#4d4d4d] dark:text-foreground">
+                    <span className="font-[Manrope] font-bold text-sm text-foreground">
                       {comment.author.name}
                     </span>
-                    <span className="font-[Manrope] text-xs text-[#4d4d4d]/60 dark:text-muted-foreground">
+                    <span className="font-[Manrope] text-xs text-foreground/60 dark:text-muted-foreground">
                       {comment.timeAgo}
                     </span>
                   </div>
-                  <p className="font-[Manrope] text-sm text-[#4d4d4d] dark:text-foreground line-clamp-2 mb-2">
+                  <p className="font-[Manrope] text-sm text-foreground line-clamp-2 mb-2">
                     {comment.content}
                   </p>
-                  <p className="font-[Manrope] text-xs text-[#03624c] font-semibold mb-2">
+                  <p className="font-[Manrope] text-xs text-primary font-semibold mb-2">
                     → {comment.topicTitle}
                   </p>
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1 text-[#03624c]">
+                    <div className="flex items-center gap-1 text-primary">
                       <ThumbsUp className="w-3 h-3" />
                       <span className="font-[Manrope] font-semibold text-xs">
                         {comment.upvotes}
                       </span>
                     </div>
                     {comment.logicalVotes > 0 && (
-                      <div className="flex items-center gap-1 text-[#03624c]">
+                      <div className="flex items-center gap-1 text-primary">
                         <MessageCircle className="w-3 h-3" />
                         <span className="font-[Manrope] font-semibold text-xs">
                           {comment.logicalVotes} mantıklı

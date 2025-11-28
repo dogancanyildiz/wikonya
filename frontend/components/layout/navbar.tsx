@@ -99,7 +99,7 @@ export function Navbar() {
     switch (type) {
       case "coin_earned":
       case "reward":
-        return "bg-[#03624c]/10 dark:bg-[#03624c]/20 text-[#03624c]"
+        return "bg-primary/10 dark:bg-primary/20 text-primary"
       case "role_promoted":
       case "badge_earned":
       case "achievement":

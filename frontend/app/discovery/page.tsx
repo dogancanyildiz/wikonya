@@ -1,4 +1,4 @@
-import { KonyaDiscoveryPage } from "@/components/discovery/konya-discovery-page"
+import { KonyaDiscoveryPage } from "@/components/features/discovery/konya-discovery-page"
 
 export default function DiscoveryPage() {
   return (

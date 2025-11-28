@@ -1,4 +1,4 @@
-import { InternshipDetailPage as InternshipDetailPageContent } from "@/components/career/internship-detail-page"
+import { InternshipDetailPage as InternshipDetailPageContent } from "@/components/features/career/internship-detail-page"
 
 export default function InternshipDetailPage() {
   return (

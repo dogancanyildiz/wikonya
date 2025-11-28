@@ -1,4 +1,4 @@
-import { VenueDetailPage as VenueDetailPageContent } from "@/components/social/venue-detail-page"
+import { VenueDetailPage as VenueDetailPageContent } from "@/components/features/social/venue-detail-page"
 
 export default function VenueDetailPage() {
   return (

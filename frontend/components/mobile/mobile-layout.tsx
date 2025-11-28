@@ -31,7 +31,7 @@ export function MobileLayout({ children }: MobileLayoutProps) {
     return (
       <>
         <MobileNavbar />
-        <div className={`min-h-screen bg-[#f2f4f3] dark:bg-background ${!hideBottomNav ? "pb-20 sm:pb-24" : ""}`}>
+        <div className={`min-h-screen bg-accent dark:bg-background ${!hideBottomNav ? "pb-20 sm:pb-24" : ""}`}>
           {children}
         </div>
         {!hideBottomNav && <MobileBottomNav />}

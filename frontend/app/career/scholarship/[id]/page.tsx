@@ -1,4 +1,4 @@
-import { ScholarshipDetailPage as ScholarshipDetailPageContent } from "@/components/career/scholarship-detail-page"
+import { ScholarshipDetailPage as ScholarshipDetailPageContent } from "@/components/features/career/scholarship-detail-page"
 
 export default function ScholarshipDetailPage() {
   return (

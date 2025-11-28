@@ -53,11 +53,11 @@ export function KBBAnnouncementDetailPage({ announcementId }: { announcementId: 
     return (
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
         <div className="text-center py-12">
-          <h1 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-4 font-extrabold text-2xl sm:text-3xl">
+          <h1 className="font-[Manrope] text-foreground mb-4 font-extrabold text-2xl sm:text-3xl">
             Duyuru Bulunamadı
           </h1>
           <Link href="/">
-            <Button className="bg-[#03624c] text-white hover:bg-[#03624c]/90">
+            <Button className="bg-primary text-white hover:bg-primary/90">
               Ana Sayfaya Dön
             </Button>
           </Link>
@@ -77,7 +77,7 @@ export function KBBAnnouncementDetailPage({ announcementId }: { announcementId: 
       <Link href="/">
         <Button 
           variant="ghost" 
-          className="mb-4 sm:mb-6 font-[Manrope] text-[#4d4d4d] dark:text-foreground hover:bg-[#f2f4f3] dark:hover:bg-accent"
+          className="mb-4 sm:mb-6 font-[Manrope] text-foreground hover:bg-accent dark:hover:bg-accent"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Geri Dön
@@ -85,7 +85,7 @@ export function KBBAnnouncementDetailPage({ announcementId }: { announcementId: 
       </Link>
 
       {/* Announcement Card */}
-      <Card className="bg-gradient-to-br from-[#03624c] to-[#024d3c] rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-[#03624c]">
+      <Card className="bg-gradient-to-br from-primary to-primary/80 rounded-xl shadow-md dark:shadow-lg border border-primary">
         <CardContent className="p-6 sm:p-8">
           <div className="flex items-center gap-2 mb-4 sm:mb-6">
             <Megaphone className="w-6 h-6 sm:w-8 sm:h-8 text-white" />

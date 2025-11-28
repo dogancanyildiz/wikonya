@@ -44,7 +44,7 @@ export function MobileFeedCard({
   }
 
   const content = (
-    <Card className="bg-white dark:bg-card rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-lg active:scale-[0.98] transition-transform border border-border">
+    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg active:scale-[0.98] transition-transform border border-border">
       <CardContent className="p-4">
         {/* Header */}
         <div className="flex items-center gap-3 mb-3">
@@ -54,16 +54,16 @@ export function MobileFeedCard({
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground truncate font-bold text-sm sm:text-sm">
+            <p className="font-[Manrope] text-foreground truncate font-bold text-sm sm:text-sm">
               {author}
             </p>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 bg-[#f2f4f3] dark:bg-accent rounded-full font-[Manrope] text-[#03624c] font-bold text-[9px] sm:text-[10px]">
+              <span className="px-2 py-0.5 bg-accent rounded-full font-[Manrope] text-primary font-bold text-[9px] sm:text-[10px]">
                 {category}
               </span>
               <div className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-[#4d4d4d]/60 dark:text-muted-foreground" />
-                <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium text-[10px] sm:text-xs">
+                <Clock className="w-3 h-3 text-foreground/60 dark:text-muted-foreground" />
+                <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-[10px] sm:text-xs">
                   {timeAgo}
                 </span>
               </div>
@@ -72,35 +72,35 @@ export function MobileFeedCard({
         </div>
 
         {/* Title */}
-        <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground mb-2 font-extrabold text-base sm:text-lg leading-snug">
+        <h3 className="font-[Manrope] text-foreground mb-2 font-extrabold text-base sm:text-lg leading-snug">
           {title}
         </h3>
 
         {/* Excerpt */}
-        <p className="font-[Manrope] text-[#4d4d4d]/70 dark:text-muted-foreground mb-3 line-clamp-2 font-medium text-sm sm:text-sm leading-relaxed">
+        <p className="font-[Manrope] text-foreground/70 dark:text-muted-foreground mb-3 line-clamp-2 font-medium text-sm sm:text-sm leading-relaxed">
           {excerpt}
         </p>
 
         {/* Stats */}
-        <div className="flex items-center gap-4 pt-3 border-t border-gray-100 dark:border-border">
+        <div className="flex items-center gap-4 pt-3 border-t border-border">
           <button
             onClick={handleLike}
             className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
           >
-            <ThumbsUp className={`w-4 h-4 ${isLiked ? 'text-[#03624c] fill-[#03624c]' : 'text-[#4d4d4d]/60 dark:text-muted-foreground'}`} strokeWidth={2.5} />
-            <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-bold text-xs sm:text-xs">
+            <ThumbsUp className={`w-4 h-4 ${isLiked ? 'text-primary fill-[#03624c]' : 'text-foreground/60 dark:text-muted-foreground'}`} strokeWidth={2.5} />
+            <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-bold text-xs sm:text-xs">
               {likeCount}
             </span>
           </button>
           <div className="flex items-center gap-1.5">
-            <MessageCircle className="w-4 h-4 text-[#4d4d4d]/60 dark:text-muted-foreground" strokeWidth={2.5} />
-            <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-bold text-xs sm:text-xs">
+            <MessageCircle className="w-4 h-4 text-foreground/60 dark:text-muted-foreground" strokeWidth={2.5} />
+            <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-bold text-xs sm:text-xs">
               {comments}
             </span>
           </div>
           <div className="flex items-center gap-1.5 ml-auto">
-            <Eye className="w-4 h-4 text-[#4d4d4d]/60 dark:text-muted-foreground" strokeWidth={2.5} />
-            <span className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-bold text-xs sm:text-xs">
+            <Eye className="w-4 h-4 text-foreground/60 dark:text-muted-foreground" strokeWidth={2.5} />
+            <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-bold text-xs sm:text-xs">
               {views}
             </span>
           </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { EventsPage as EventsPageContent } from "@/components/events/events-page"
+import { EventsPage as EventsPageContent } from "@/components/features/events/events-page"
 
 export const metadata: Metadata = {
   title: "Etkinlikler | Konya Genç",

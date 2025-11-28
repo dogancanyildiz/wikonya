@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { DiscussionPage as DiscussionPageContent } from "@/components/discussion/discussion-page"
+import { DiscussionPage as DiscussionPageContent } from "@/components/features/discussion/discussion-page"
 
 export const metadata: Metadata = {
   title: "Tartışmalar | Konya Genç",

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, Loader2, ArrowLeft } from "lucide-react"
-import { MarkdownEditor } from "@/components/topic/markdown-editor"
+import { MarkdownEditor } from "@/components/features/topic/markdown-editor"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from "next/link"
 

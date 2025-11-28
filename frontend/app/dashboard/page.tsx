@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import { ProfileCard } from "@/components/dashboard/profile-card"
-import { StatsCard } from "@/components/dashboard/stats-card"
-import { ActivityFeed } from "@/components/dashboard/activity-feed"
-import { XPProgressBar } from "@/components/dashboard/xp-progress-bar"
-import { WalletCard } from "@/components/dashboard/wallet-card"
+import { ProfileCard } from "@/components/features/dashboard/profile-card"
+import { StatsCard } from "@/components/features/dashboard/stats-card"
+import { ActivityFeed } from "@/components/features/dashboard/activity-feed"
+import { XPProgressBar } from "@/components/features/dashboard/xp-progress-bar"
+import { WalletCard } from "@/components/features/dashboard/wallet-card"
 
 export const metadata: Metadata = {
   title: "Dashboard | Konya Genç",

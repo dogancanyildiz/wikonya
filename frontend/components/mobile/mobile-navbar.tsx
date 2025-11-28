@@ -59,7 +59,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
   const getNotificationTypeColor = (type: string) => {
     switch (type) {
       case "coin_earned":
-        return "bg-[#03624c]/10 dark:bg-[#03624c]/20 text-[#03624c]"
+        return "bg-primary/10 dark:bg-primary/20 text-primary"
       case "role_promoted":
       case "badge_earned":
         return "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"
@@ -126,12 +126,12 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
   const isDark = mounted && theme === "dark"
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-card border-b border-gray-200 dark:border-border">
+    <nav className="sticky top-0 z-50 bg-card border-b border-border">
       <div className="flex items-center justify-between h-14 sm:h-16 px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center group hover:opacity-80 transition-opacity">
-          <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-black text-lg sm:text-xl">
-            KONYA <span className="text-[#03624c]">GENÇ</span>
+          <span className="font-[Manrope] text-foreground font-black text-lg sm:text-xl">
+            KONYA <span className="text-primary">GENÇ</span>
           </span>
         </Link>
 
@@ -144,7 +144,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                 size="icon"
                 className="relative"
               >
-                <Bell className="w-5 h-5 text-[#4d4d4d] dark:text-foreground" strokeWidth={2.5} />
+                <Bell className="w-5 h-5 text-foreground" strokeWidth={2.5} />
                 {unreadCount > 0 && (
                   <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#03624C] rounded-full"></span>
                 )}
@@ -154,11 +154,11 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
               <div className="flex flex-col max-h-[600px]">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-border">
-                  <h3 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg">
+                  <h3 className="font-[Manrope] text-foreground font-bold text-lg">
                     Bildirimler
                   </h3>
                   {unreadCount > 0 && (
-                    <span className="px-2.5 py-1 bg-[#03624c] text-white rounded-full font-[Manrope] font-bold text-xs">
+                    <span className="px-2.5 py-1 bg-primary text-white rounded-full font-[Manrope] font-bold text-xs">
                       {unreadCount} yeni
                     </span>
                   )}
@@ -182,8 +182,8 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                                 router.push(notification.actionUrl)
                               }
                             }}
-                            className={`p-4 hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors cursor-pointer ${
-                              !notification.read ? 'bg-[#03624c]/5 dark:bg-[#03624c]/10' : ''
+                            className={`p-4 hover:bg-accent dark:hover:bg-accent transition-colors cursor-pointer ${
+                              !notification.read ? 'bg-primary/5 dark:bg-primary/10' : ''
                             }`}
                           >
                             <div className="flex items-start gap-3">
@@ -194,19 +194,19 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                                 <div className="flex items-start justify-between gap-2 mb-1">
                                   <h4 className={`font-[Manrope] font-bold text-sm ${
                                     !notification.read 
-                                      ? 'text-[#4d4d4d] dark:text-foreground' 
-                                      : 'text-[#4d4d4d]/70 dark:text-muted-foreground'
+                                      ? 'text-foreground' 
+                                      : 'text-foreground/70 dark:text-muted-foreground'
                                   }`}>
                                     {notification.title}
                                   </h4>
                                   {!notification.read && (
-                                    <div className="w-2 h-2 bg-[#03624c] rounded-full flex-shrink-0 mt-1.5"></div>
+                                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5"></div>
                                   )}
                                 </div>
-                                <p className="font-[Manrope] text-[#4d4d4d]/70 dark:text-muted-foreground text-xs mb-2 leading-relaxed">
+                                <p className="font-[Manrope] text-foreground/70 dark:text-muted-foreground text-xs mb-2 leading-relaxed">
                                   {notification.message}
                                 </p>
-                                <span className="font-[Manrope] text-[#4d4d4d]/50 dark:text-muted-foreground text-[11px]">
+                                <span className="font-[Manrope] text-foreground/50 dark:text-muted-foreground text-[11px]">
                                   {timeAgo}
                                 </span>
                               </div>
@@ -217,8 +217,8 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                     </div>
                   ) : (
                     <div className="p-8 text-center">
-                      <Bell className="w-12 h-12 text-[#4d4d4d]/30 dark:text-muted-foreground/30 mx-auto mb-3" />
-                      <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground font-medium">
+                      <Bell className="w-12 h-12 text-foreground/30 dark:text-muted-foreground/30 mx-auto mb-3" />
+                      <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium">
                         Bildiriminiz yok
                       </p>
                     </div>
@@ -230,7 +230,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                   <div className="p-3 border-t border-border">
                     <Button
                       variant="ghost"
-                      className="w-full font-[Manrope] text-[#03624c] hover:bg-[#03624c]/10 dark:hover:bg-[#03624c]/20 font-bold text-sm"
+                      className="w-full font-[Manrope] text-primary hover:bg-primary/10 dark:hover:bg-primary/20 font-bold text-sm"
                     >
                       Tümünü Görüntüle
                     </Button>
@@ -246,7 +246,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                 size="icon"
                 onClick={onMenuClick}
               >
-                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-[#4d4d4d] dark:text-foreground" strokeWidth={3} />
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-foreground" strokeWidth={3} />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] sm:w-[320px] flex flex-col">
@@ -258,7 +258,7 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                   <button
                     key={item.href}
                     onClick={() => handleLinkClick(item.href)}
-                    className="w-full text-left block px-4 py-3 rounded-lg hover:bg-[#f2f4f3] dark:hover:bg-accent transition-colors font-[Manrope] text-[#4d4d4d] dark:text-foreground font-semibold"
+                    className="w-full text-left block px-4 py-3 rounded-lg hover:bg-accent dark:hover:bg-accent transition-colors font-[Manrope] text-foreground font-semibold"
                   >
                     {item.label}
                   </button>
@@ -278,14 +278,14 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
               </nav>
               
               {/* Theme Toggle Switch */}
-              <div className="mt-auto pt-6 pb-4 border-t border-gray-200 dark:border-border">
+              <div className="mt-auto pt-6 pb-4 border-t border-border">
                 <div className="flex items-center justify-between px-4">
                   <div className="flex items-center gap-3">
                     <div className="relative w-5 h-5">
-                      <Sun className={`absolute inset-0 w-5 h-5 transition-all duration-500 ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'} text-[#03624c]`} />
-                      <Moon className={`absolute inset-0 w-5 h-5 transition-all duration-500 ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'} text-[#03624c]`} />
+                      <Sun className={`absolute inset-0 w-5 h-5 transition-all duration-500 ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'} text-primary`} />
+                      <Moon className={`absolute inset-0 w-5 h-5 transition-all duration-500 ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'} text-primary`} />
                     </div>
-                    <span className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-semibold text-sm transition-colors duration-300">
+                    <span className="font-[Manrope] text-foreground font-semibold text-sm transition-colors duration-300">
                       {isDark ? "Gece Modu" : "Gündüz Modu"}
                     </span>
                   </div>
@@ -293,8 +293,8 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                     onClick={toggleTheme}
                     className={`relative w-14 h-7 rounded-full transition-all duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#03624c] focus:ring-offset-2 ${
                       isDark 
-                        ? 'bg-[#03624c] shadow-lg shadow-[#03624c]/30' 
-                        : 'bg-[#f2f4f3] dark:bg-accent'
+                        ? 'bg-primary shadow-lg shadow-primary/30' 
+                        : 'bg-accent'
                     }`}
                     aria-label="Toggle theme"
                   >
@@ -305,9 +305,9 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                     >
                       <div className="relative w-3 h-3">
                         {isDark ? (
-                          <Moon className="absolute inset-0 w-3 h-3 text-[#03624c] transition-all duration-500" />
+                          <Moon className="absolute inset-0 w-3 h-3 text-primary transition-all duration-500" />
                         ) : (
-                          <Sun className="absolute inset-0 w-3 h-3 text-[#03624c] transition-all duration-500" />
+                          <Sun className="absolute inset-0 w-3 h-3 text-primary transition-all duration-500" />
                         )}
                       </div>
                     </div>

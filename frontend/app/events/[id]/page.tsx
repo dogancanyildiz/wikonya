@@ -1,4 +1,4 @@
-import { EventDetailPage as EventDetailPageContent } from "@/components/events/event-detail-page"
+import { EventDetailPage as EventDetailPageContent } from "@/components/features/events/event-detail-page"
 
 export default function EventDetailPage() {
   return (

@@ -11,7 +11,7 @@ import { AlertCircle, Save, Loader2 } from "lucide-react"
 import { COIN_MATRIX } from "@/lib/constants"
 import { getConversionConfig } from "@/lib/constants/conversion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AdminDashboard } from "@/components/admin/admin-dashboard"
+import { AdminDashboard } from "@/components/features/admin/admin-dashboard"
 
 export default function AdminPage() {
   const { canAccessAdminPanel } = usePermissions()

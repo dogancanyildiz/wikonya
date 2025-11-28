@@ -1,4 +1,4 @@
-import { PublicUserProfile as PublicUserProfileContent } from "@/components/user/public-user-profile"
+import { PublicUserProfile as PublicUserProfileContent } from "@/components/features/user/public-user-profile"
 
 export default function PublicUserProfilePage() {
   return (

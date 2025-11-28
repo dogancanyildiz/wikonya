@@ -30,8 +30,8 @@ export function SearchForm({ onSubmit, placeholder = "Konuları, soruları keşf
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className={className}>
-        <div className="relative flex items-center bg-white dark:bg-card rounded-[20px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-lg hover:shadow-[0_15px_50px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-shadow duration-300">
-          <Search className="absolute left-4 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-[#03624c]" aria-hidden="true" />
+        <div className="relative flex items-center bg-card rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-lg hover:shadow-[0_15px_50px_rgba(0,0,0,0.12)] dark:hover:shadow-xl transition-shadow duration-300">
+          <Search className="absolute left-4 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-primary" aria-hidden="true" />
           <FormField
             control={form.control}
             name="query"
@@ -42,7 +42,7 @@ export function SearchForm({ onSubmit, placeholder = "Konuları, soruları keşf
                     {...field}
                     type="text"
                     placeholder={placeholder}
-                    className="w-full h-[60px] pl-12 sm:pl-16 pr-28 sm:pr-32 bg-transparent rounded-[20px] font-[Manrope] font-medium text-[#4d4d4d] dark:text-foreground placeholder:text-[#4d4d4d]/40 dark:placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
+                    className="w-full h-[60px] pl-12 sm:pl-16 pr-28 sm:pr-32 bg-transparent rounded-xl font-[Manrope] font-medium text-foreground placeholder:text-foreground/40 dark:placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
                     aria-label="Arama kutusu"
                   />
                 </FormControl>
@@ -52,7 +52,7 @@ export function SearchForm({ onSubmit, placeholder = "Konuları, soruları keşf
           />
           <Button
             type="submit"
-            className="absolute right-2 h-[48px] px-6 sm:px-8 bg-[#03624c] hover:bg-[#03624c]/90 rounded-[16px] font-[Manrope] font-semibold text-white"
+            className="absolute right-2 h-[48px] px-6 sm:px-8 bg-primary hover:bg-primary/90 rounded-[16px] font-[Manrope] font-semibold text-white"
             aria-label="Ara"
           >
             Ara

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { AcademicPage as AcademicPageContent } from "@/components/academic/academic-page"
+import { AcademicPage as AcademicPageContent } from "@/components/features/academic/academic-page"
 
 export const metadata: Metadata = {
   title: "Akademik Destek | Konya Genç",

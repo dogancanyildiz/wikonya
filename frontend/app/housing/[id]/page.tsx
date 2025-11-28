@@ -1,4 +1,4 @@
-import { HousingDetailPage as HousingDetailPageContent } from "@/components/housing/housing-detail-page"
+import { HousingDetailPage as HousingDetailPageContent } from "@/components/features/housing/housing-detail-page"
 
 export default function HousingDetailPage() {
   return (

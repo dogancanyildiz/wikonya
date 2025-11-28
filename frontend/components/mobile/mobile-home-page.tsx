@@ -94,14 +94,14 @@ export function MobileHomePage({ onNavigateToTopic }: MobileHomePageProps) {
   ]
 
   return (
-    <div className="min-h-screen bg-[#f2f4f3] dark:bg-background pb-20 sm:pb-24">
+    <div className="min-h-screen bg-accent dark:bg-background pb-20 sm:pb-24">
       <MobileNavbar />
       <MobileSearchBar />
 
       {/* Trending Section */}
       <div className="px-4 py-4">
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-base sm:text-lg">
+          <h2 className="font-[Manrope] text-foreground font-bold text-base sm:text-lg">
             Trendler
           </h2>
         </div>
@@ -119,12 +119,12 @@ export function MobileHomePage({ onNavigateToTopic }: MobileHomePageProps) {
       {/* Feed Section */}
       <div className="px-4 py-2">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-base sm:text-lg">
+          <h2 className="font-[Manrope] text-foreground font-bold text-base sm:text-lg">
             Son Tartışmalar
           </h2>
           <Link 
             href="/discussions"
-            className="font-[Manrope] text-[#03624c] font-bold text-xs sm:text-sm hover:underline"
+            className="font-[Manrope] text-primary font-bold text-xs sm:text-sm hover:underline"
           >
             Tümü
           </Link>

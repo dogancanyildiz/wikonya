@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { CoinIcon } from "@/components/common/icons/coin-icon"
-import { CoinConverter } from "@/components/dashboard/coin-converter"
+import { CoinConverter } from "@/components/features/dashboard/coin-converter"
 import { useApp } from "@/contexts/app-context"
 import { 
   TrendingUp, 

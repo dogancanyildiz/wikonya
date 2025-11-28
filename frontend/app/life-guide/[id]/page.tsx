@@ -1,4 +1,4 @@
-import { LifeGuideDetailPage } from "@/components/housing/life-guide-detail-page"
+import { LifeGuideDetailPage } from "@/components/features/housing/life-guide-detail-page"
 
 export default async function LifeGuideDetailPageRoute({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

@@ -58,11 +58,11 @@ export function TrendingTopics({ topics }: TrendingTopicsProps) {
   ]
 
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-5 h-5 text-[#03624c]" />
-          <h2 className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg sm:text-xl">
+          <TrendingUp className="w-5 h-5 text-primary" />
+          <h2 className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl">
             Trend Başlıklar
           </h2>
         </div>
@@ -71,24 +71,24 @@ export function TrendingTopics({ topics }: TrendingTopicsProps) {
             <Link
               key={topic.id}
               href={`/topic/${topic.id}`}
-              className="block p-3 sm:p-4 bg-[#f2f4f3] dark:bg-accent rounded-xl hover:shadow-md transition-all group"
+              className="block p-3 sm:p-4 bg-accent rounded-xl hover:shadow-md transition-all group"
             >
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-[Manrope] font-extrabold text-[#03624c] text-sm sm:text-base">
+                    <span className="font-[Manrope] font-extrabold text-primary text-sm sm:text-base">
                       #{index + 1}
                     </span>
                     <Badge variant="outline" className="font-[Manrope] text-xs">
                       {topic.category}
                     </Badge>
                   </div>
-                  <h3 className="font-[Manrope] font-bold text-sm sm:text-base text-[#4d4d4d] dark:text-foreground group-hover:text-[#03624c] transition-colors line-clamp-2">
+                  <h3 className="font-[Manrope] font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors line-clamp-2">
                     {topic.title}
                   </h3>
                 </div>
               </div>
-              <div className="flex items-center gap-4 text-xs text-[#4d4d4d]/60 dark:text-muted-foreground">
+              <div className="flex items-center gap-4 text-xs text-foreground/60 dark:text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Eye className="w-3 h-3" />
                   <span className="font-[Manrope] font-medium">

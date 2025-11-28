@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { TopicDetailPage as TopicDetailPageContent } from "@/components/topic/topic-detail-page"
+import { TopicDetailPage as TopicDetailPageContent } from "@/components/features/topic/topic-detail-page"
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

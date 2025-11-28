@@ -1,4 +1,4 @@
-import { KonyaDiscoveryDetailPage } from "@/components/discovery/konya-discovery-detail-page"
+import { KonyaDiscoveryDetailPage } from "@/components/features/discovery/konya-discovery-detail-page"
 
 export default async function DiscoveryDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { SocialPage as SocialPageContent } from "@/components/social/social-page"
+import { SocialPage as SocialPageContent } from "@/components/features/social/social-page"
 
 export const metadata: Metadata = {
   title: "Sosyal Yaşam & Mekan Rehberi | Konya Genç",
