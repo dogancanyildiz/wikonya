@@ -56,7 +56,7 @@ export function PublicUserProfile() {
           <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
             <CardContent className="p-4 sm:p-6 lg:p-8">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-                <Avatar className="w-24 h-24 sm:w-32 sm:h-32 border-4 border-[#f2f4f3] dark:border-border">
+                <Avatar className="w-24 h-24 sm:w-32 sm:h-32 border-4 border-border">
                   <AvatarFallback className="bg-primary text-white font-[Manrope] font-extrabold text-3xl sm:text-4xl">
                     {user.initials}
                   </AvatarFallback>
