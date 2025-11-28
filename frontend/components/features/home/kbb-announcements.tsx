@@ -57,16 +57,16 @@ export function KBBAnnouncements({ announcements }: KBBAnnouncementsProps) {
   }
 
   return (
-    <Card className="bg-gradient-to-br from-[#03624c] to-[#024d3c] rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-[#03624c]">
+    <Card className="bg-gradient-to-br from-primary to-primary/80 rounded-xl shadow-md border-primary">
       <CardHeader>
         <div className="flex items-center gap-2">
-          <Megaphone className="w-6 h-6 text-white" />
-          <CardTitle className="font-[Manrope] text-white font-bold text-lg sm:text-xl">
+          <Megaphone className="w-6 h-6 text-primary-foreground" />
+          <CardTitle className="font-[Manrope] text-primary-foreground font-bold text-lg sm:text-xl">
             KBB Duyuruları
           </CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-3 pt-0">
         {mockAnnouncements.map((announcement) => (
           <Link
             key={announcement.id}

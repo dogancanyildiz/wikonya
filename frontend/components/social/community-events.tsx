@@ -56,7 +56,7 @@ export function CommunityEvents() {
           </Link>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3 sm:space-y-4">
+      <CardContent className="space-y-3 sm:space-y-4 pt-0">
         {events.map((event) => {
           const filledPercentage = (event.participants / event.maxParticipants) * 100
           

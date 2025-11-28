@@ -36,7 +36,7 @@ export function TopicSidebar() {
             </span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2 sm:space-y-3">
+        <CardContent className="space-y-2 sm:space-y-3 pt-0">
           {contributors.map((contributor) => (
             <div
               key={contributor.id}
@@ -70,7 +70,7 @@ export function TopicSidebar() {
             </span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-2 pt-0">
           {relatedTopics.map((topic) => (
             <div
               key={topic.id}
@@ -97,7 +97,7 @@ export function TopicSidebar() {
             </span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-2 pt-0">
           {resources.map((resource) => (
             <div
               key={resource.id}

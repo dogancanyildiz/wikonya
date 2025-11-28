@@ -81,7 +81,7 @@ export function LifeGuideSidebar() {
             </span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2 sm:space-y-3">
+        <CardContent className="space-y-2 sm:space-y-3 pt-0">
           <div className="flex items-start gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-[#03624c] mt-2 flex-shrink-0"></div>
             <p className="font-[Manrope] text-[#4d4d4d]/70 dark:text-muted-foreground font-medium text-xs sm:text-[13px] leading-relaxed">
