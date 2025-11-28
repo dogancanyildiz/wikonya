@@ -85,7 +85,7 @@ export function ReferralSystem() {
           Arkadaşını davet et, ikiniz de 100 GençCoin kazan!
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 pt-0">
         {error && (
           <Alert variant="destructive" className="bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800">
             <AlertCircle className="h-4 w-4" />

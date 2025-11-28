@@ -83,7 +83,7 @@ export function CoinConverter() {
           GençCoin&apos;lerinizi Genç Kültür Kart puanına dönüştürün
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 pt-0">
         {error && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
