@@ -17,16 +17,16 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       {/* Top Section: Profile (50%) + Wallet & Stats (50%) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch">
         {/* Left: Profile Card (50%) */}
         <div className="lg:col-span-1 flex">
           <ProfileCard />
         </div>
 
         {/* Right: Wallet & Stats stacked (50%) */}
-        <div className="lg:col-span-1 space-y-[10px] flex flex-col">
+        <div className="lg:col-span-1 space-y-4 flex flex-col">
           <div className="flex-1">
             <WalletCard />
           </div>
@@ -35,7 +35,7 @@ export default function DashboardPage() {
       </div>
 
       {/* XP Progress Bar */}
-      <div className="mt-4 sm:mt-6">
+      <div className="mt-6 sm:mt-8">
         <XPProgressBar />
       </div>
 

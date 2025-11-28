@@ -40,26 +40,26 @@ export function StatsCard() {
   ]
 
   return (
-    <div className="grid grid-cols-2 gap-[5px]">
+    <div className="grid grid-cols-2 gap-2">
       {stats.map((stat) => {
         const Icon = stat.icon
         return (
           <Card
             key={stat.id}
-            className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg hover:shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:hover:shadow-xl transition-shadow border border-border"
+            className="rounded-xl shadow-md hover:shadow-lg transition-shadow border-border"
           >
             <CardContent className="p-3 sm:p-4">
               <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#f2f4f3] dark:bg-accent rounded-xl flex items-center justify-center">
-                  <Icon className="w-3 h-3 sm:w-4 sm:h-4 text-[#03624c]" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-accent rounded-lg flex items-center justify-center">
+                  <Icon className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
                 </div>
               </div>
               
-              <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-lg sm:text-xl lg:text-[18px] leading-tight">
+              <p className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl lg:text-[18px] leading-tight">
                 {stat.value}
               </p>
               
-              <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mt-0.5 sm:mt-1 font-medium text-[10px] sm:text-xs">
+              <p className="font-[Manrope] text-muted-foreground mt-0.5 sm:mt-1 font-medium text-[10px] sm:text-xs">
                 {stat.label}
               </p>
             </CardContent>

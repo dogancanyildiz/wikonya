@@ -13,9 +13,9 @@ export function WalletCard() {
 
   if (!user) {
     return (
-      <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border h-full flex flex-col">
+      <Card className="rounded-xl shadow-md border-border h-full flex flex-col">
         <CardContent className="p-3 sm:p-5 flex items-center justify-center">
-          <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground text-sm">
+          <p className="font-[Manrope] text-foreground text-sm">
             Lütfen giriş yapın
           </p>
         </CardContent>
@@ -30,19 +30,19 @@ export function WalletCard() {
   const totalEarned = user.totalCoins + totalSpent
 
   return (
-    <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border h-full flex flex-col">
+    <Card className="rounded-xl shadow-md border-border h-full flex flex-col">
       <CardContent className="p-3 sm:p-5 flex flex-col flex-1">
         <div className="mb-3 sm:mb-4">
           <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
             <CoinIcon />
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground uppercase tracking-wider font-bold text-[10px] sm:text-xs">
+            <p className="font-[Manrope] text-muted-foreground uppercase tracking-wider font-bold text-[10px] sm:text-xs">
               Toplam GençCoin
             </p>
           </div>
-          <div className="font-[Manrope] text-[#03624c] leading-none mb-1 font-black text-3xl sm:text-4xl lg:text-[36px]">
+          <div className="font-[Manrope] text-primary leading-none mb-1 font-black text-3xl sm:text-4xl lg:text-[36px]">
             {user.totalCoins.toLocaleString()}
           </div>
-          <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+          <div className="flex items-center gap-2 text-primary">
             <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
             <span className="font-[Manrope] font-semibold text-[10px] sm:text-xs">
               +{weeklyEarned} bu hafta
@@ -50,37 +50,37 @@ export function WalletCard() {
           </div>
         </div>
 
-            <Link href="/dashboard/wallet" className="w-full">
-              <Button 
-                className="w-full h-8 sm:h-10 bg-[#03624c] hover:bg-[#03624c]/90 rounded-xl font-[Manrope] text-white mb-2 font-bold text-xs sm:text-sm"
-              >
-                Kültür Kart&apos;a Aktar
-                <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-              </Button>
-            </Link>
+        <Link href="/dashboard/wallet" className="w-full">
+          <Button 
+            className="w-full h-8 sm:h-10 bg-primary hover:bg-primary/90 rounded-lg font-[Manrope] text-primary-foreground mb-2 font-bold text-xs sm:text-sm"
+          >
+            Kültür Kart&apos;a Aktar
+            <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
+          </Button>
+        </Link>
 
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-200 dark:border-border">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-border">
           <div>
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mb-0.5 font-medium text-[9px] sm:text-[10px]">
+            <p className="font-[Manrope] text-muted-foreground mb-0.5 font-medium text-[9px] sm:text-[10px]">
               Bu Ay Kazanılan
             </p>
-            <p className="font-[Manrope] text-[#03624c] font-bold text-base sm:text-lg lg:text-xl">
+            <p className="font-[Manrope] text-primary font-bold text-base sm:text-lg lg:text-xl">
               {monthlyEarned}
             </p>
           </div>
           <div>
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mb-0.5 font-medium text-[9px] sm:text-[10px]">
+            <p className="font-[Manrope] text-muted-foreground mb-0.5 font-medium text-[9px] sm:text-[10px]">
               Harcanan
             </p>
-            <p className="font-[Manrope] text-[#4d4d4d] dark:text-foreground font-bold text-base sm:text-lg lg:text-xl">
+            <p className="font-[Manrope] text-foreground font-bold text-base sm:text-lg lg:text-xl">
               {totalSpent}
             </p>
           </div>
           <div>
-            <p className="font-[Manrope] text-[#4d4d4d]/60 dark:text-muted-foreground mb-0.5 font-medium text-[9px] sm:text-[10px]">
+            <p className="font-[Manrope] text-muted-foreground mb-0.5 font-medium text-[9px] sm:text-[10px]">
               Toplam Kazanç
             </p>
-            <p className="font-[Manrope] text-[#03624c] font-bold text-base sm:text-lg lg:text-xl">
+            <p className="font-[Manrope] text-primary font-bold text-base sm:text-lg lg:text-xl">
               {totalEarned.toLocaleString()}
             </p>
           </div>
