@@ -312,7 +312,7 @@ export function ScholarshipDetailPage() {
                 Başvuru
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-0">
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-[#f2f4f3] dark:bg-accent rounded-xl">
                   <span className="font-[Manrope] text-sm text-[#4d4d4d]/60 dark:text-muted-foreground">
@@ -359,7 +359,7 @@ export function ScholarshipDetailPage() {
                 Kurum Bilgileri
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-0">
               <div>
                 <p className="font-[Manrope] font-bold text-base text-[#4d4d4d] dark:text-foreground mb-2">
                   {scholarship.organizationInfo.name}
