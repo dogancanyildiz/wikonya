@@ -23,19 +23,21 @@ export const colorThemes: ColorThemeConfig[] = [
 const STORAGE_KEY = "color-theme"
 
 export function useColorTheme() {
-  const [colorTheme, setColorThemeState] = useState<ColorTheme>("green")
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
+  // Initialize state from localStorage if available
+  const getInitialTheme = (): ColorTheme => {
+    if (typeof window === "undefined") return "green"
     const stored = localStorage.getItem(STORAGE_KEY) as ColorTheme | null
     if (stored && colorThemes.some((t) => t.id === stored)) {
-      setColorThemeState(stored)
-      applyTheme(stored)
+      return stored
     }
-  }, [])
+    return "green"
+  }
+
+  const [colorTheme, setColorThemeState] = useState<ColorTheme>(getInitialTheme)
+  const [mounted] = useState(() => typeof window !== "undefined")
 
   const applyTheme = (theme: ColorTheme) => {
+    if (typeof window === "undefined") return
     const root = document.documentElement
     if (theme === "green") {
       root.removeAttribute("data-theme")
@@ -43,6 +45,11 @@ export function useColorTheme() {
       root.setAttribute("data-theme", theme)
     }
   }
+
+  useEffect(() => {
+    // Apply theme on mount
+    applyTheme(colorTheme)
+  }, [colorTheme])
 
   const setColorTheme = (theme: ColorTheme) => {
     setColorThemeState(theme)

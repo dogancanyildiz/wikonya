@@ -12,7 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { useApp } from "@/contexts/app-context"
 import { useTheme } from "next-themes"
-import { useColorTheme, colorThemes, type ColorTheme } from "@/lib/utils/hooks/use-color-theme"
+import { useColorTheme, colorThemes } from "@/lib/utils/hooks/use-color-theme"
 import { 
   User, 
   Bell, 
