@@ -115,12 +115,12 @@ export function PopularComments({ comments }: PopularCommentsProps) {
                         Mantıklı
                       </span>
                     </div>
-                    <div className="flex items-center gap-1 text-primary">
-                      <MessageCircle className="w-3 h-3" />
-                      <span className="font-[Manrope] font-semibold text-xs">
+                      <div className="flex items-center gap-1 text-primary">
+                        <MessageCircle className="w-3 h-3" />
+                        <span className="font-[Manrope] font-semibold text-xs">
                         {comment.comments}
-                      </span>
-                    </div>
+                        </span>
+                      </div>
                   </div>
                 </div>
               </div>
