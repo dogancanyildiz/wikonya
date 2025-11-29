@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { ThumbsUp, MessageCircle } from "lucide-react"
+import { ThumbsUp, MessageCircle, Lightbulb } from "lucide-react"
 import Link from "next/link"
 
 interface PopularComment {
@@ -16,6 +16,7 @@ interface PopularComment {
   topicId: number
   upvotes: number
   logicalVotes: number
+  comments: number
   timeAgo: string
 }
 
@@ -34,6 +35,7 @@ export function PopularComments({ comments }: PopularCommentsProps) {
       topicId: 1,
       upvotes: 42,
       logicalVotes: 35,
+      comments: 8,
       timeAgo: "2 saat önce",
     },
     {
@@ -44,6 +46,7 @@ export function PopularComments({ comments }: PopularCommentsProps) {
       topicId: 1,
       upvotes: 28,
       logicalVotes: 20,
+      comments: 5,
       timeAgo: "5 saat önce",
     },
     {
@@ -54,6 +57,7 @@ export function PopularComments({ comments }: PopularCommentsProps) {
       topicId: 2,
       upvotes: 35,
       logicalVotes: 28,
+      comments: 12,
       timeAgo: "1 gün önce",
     },
   ]
@@ -102,14 +106,21 @@ export function PopularComments({ comments }: PopularCommentsProps) {
                         {comment.upvotes}
                       </span>
                     </div>
-                    {comment.logicalVotes > 0 && (
-                      <div className="flex items-center gap-1 text-primary">
-                        <MessageCircle className="w-3 h-3" />
-                        <span className="font-[Manrope] font-semibold text-xs">
-                          {comment.logicalVotes} mantıklı
-                        </span>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1 text-primary">
+                      <Lightbulb className="w-3 h-3" />
+                      <span className="font-[Manrope] font-semibold text-xs">
+                        {comment.logicalVotes}
+                      </span>
+                      <span className="font-[Manrope] font-medium text-[10px] text-foreground/60 dark:text-muted-foreground hidden sm:inline">
+                        Mantıklı
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 text-primary">
+                      <MessageCircle className="w-3 h-3" />
+                      <span className="font-[Manrope] font-semibold text-xs">
+                        {comment.comments}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
