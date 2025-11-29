@@ -7,6 +7,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useApp } from "@/contexts/app-context"
 
 export function KonyaDiscoveryPage() {
   // Must Visit Places data
@@ -409,6 +410,63 @@ function FAQCard({ faq }: {
     makesSense: number
   }
 }) {
+  const { state } = useApp()
+  const [localFaq, setLocalFaq] = useState(faq)
+  const [isLiked, setIsLiked] = useState(false)
+  const [isMakesSense, setIsMakesSense] = useState(false)
+  const [showComments, setShowComments] = useState(false)
+  const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!state.user) return
+
+    const newIsLiked = !isLiked
+    setIsLiked(newIsLiked)
+
+    if (newIsLiked) {
+      const animationKey = `like-${faq.id}`
+      setAnimations({ ...animations, [animationKey]: true })
+      setTimeout(() => {
+        setAnimations({ ...animations, [animationKey]: false })
+      }, 600)
+    }
+
+    setLocalFaq({
+      ...localFaq,
+      likes: newIsLiked ? localFaq.likes + 1 : localFaq.likes - 1,
+    })
+  }
+
+  const handleMakesSense = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!state.user) return
+
+    const newIsMakesSense = !isMakesSense
+    setIsMakesSense(newIsMakesSense)
+
+    if (newIsMakesSense) {
+      const animationKey = `logical-${faq.id}`
+      setAnimations({ ...animations, [animationKey]: true })
+      setTimeout(() => {
+        setAnimations({ ...animations, [animationKey]: false })
+      }, 600)
+    }
+
+    setLocalFaq({
+      ...localFaq,
+      makesSense: newIsMakesSense ? localFaq.makesSense + 1 : localFaq.makesSense - 1,
+    })
+  }
+
+  const handleComments = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setShowComments(!showComments)
+  }
+
   return (
     <Card className="bg-card border border-border rounded-xl shadow-md dark:shadow-lg">
       <CardContent className="p-4 sm:p-6">
@@ -442,27 +500,69 @@ function FAQCard({ faq }: {
             </p>
 
             <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-              <button className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors cursor-pointer">
-                <ThumbsUp className="w-4 h-4" />
-                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{faq.likes}</span>
+              <button 
+                onClick={handleLike}
+                className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                  isLiked ? 'bg-primary/10 dark:bg-primary/20' : ''
+                }`}
+                aria-label={`${localFaq.likes} beğeni`}
+              >
+                <ThumbsUp className={`w-4 h-4 text-primary ${isLiked ? 'fill-primary' : ''}`} />
+                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{localFaq.likes}</span>
+                {animations[`like-${faq.id}`] && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                    +1
+                  </span>
+                )}
               </button>
-              <button className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors cursor-pointer">
-                <Lightbulb className="w-4 h-4" />
-                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{faq.makesSense}</span>
-                <span className="font-[Manrope] font-medium text-[10px] sm:text-xs text-foreground/50 dark:text-muted-foreground/70 hidden sm:inline">Mantıklı</span>
+              <button 
+                onClick={handleMakesSense}
+                className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                  isMakesSense ? 'bg-primary/10 dark:bg-primary/20' : ''
+                }`}
+                aria-label={`${localFaq.makesSense} mantıklı`}
+              >
+                <Lightbulb className={`w-4 h-4 text-primary ${isMakesSense ? 'fill-primary' : ''}`} />
+                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{localFaq.makesSense}</span>
+                <span className="font-[Manrope] font-medium text-[10px] sm:text-xs text-foreground/60 dark:text-muted-foreground hidden sm:inline">Mantıklı</span>
+                {animations[`logical-${faq.id}`] && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                    +1
+                  </span>
+                )}
               </button>
-              <button className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors cursor-pointer">
-                <MessageCircle className="w-4 h-4" />
-                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{faq.comments}</span>
+              <button 
+                onClick={handleComments}
+                className={`flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                  showComments ? 'bg-primary/10 dark:bg-primary/20' : ''
+                }`}
+                aria-label={`${localFaq.comments} yorum`}
+              >
+                <MessageCircle className="w-4 h-4 text-primary" />
+                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{localFaq.comments}</span>
               </button>
               <Link 
                 href={`/discovery/faq/${faq.id}`}
                 className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors ml-auto cursor-pointer"
+                onClick={(e) => e.stopPropagation()}
               >
                 <BookOpen className="w-4 h-4" />
                 <span className="font-[Manrope] font-semibold text-xs sm:text-sm">Devamını Oku</span>
               </Link>
             </div>
+            {showComments && (
+              <div className="mt-4 pt-4 border-t border-border">
+                <p className="font-[Manrope] text-sm text-muted-foreground mb-2">
+                  Yorumlar burada görünecek. Detay sayfasında daha fazla yorum görebilirsiniz.
+                </p>
+                <Link 
+                  href={`/discovery/faq/${faq.id}`}
+                  className="text-primary hover:underline font-[Manrope] text-sm font-semibold"
+                >
+                  Tüm yorumları gör →
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

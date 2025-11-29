@@ -1,11 +1,17 @@
 "use client"
 
-import { ArrowLeft, Clock, ThumbsUp, MessageCircle, Share2, BookOpen, Lightbulb } from "lucide-react"
+import { ArrowLeft, Clock, ThumbsUp, MessageCircle, Share2, BookOpen, Lightbulb, Send } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { useApp } from "@/contexts/app-context"
 
 // FAQ Data - konya-discovery-page.tsx'teki ile aynı
 const faqData = [
@@ -280,10 +286,74 @@ const faqData = [
   }
 ]
 
-export function FAQDetailPage({ faqId }: { faqId: number }) {
-  const faq = faqData.find(f => f.id === faqId)
+// Simple markdown parser for bold and lists
+function parseMarkdown(text: string) {
+  const lines = text.split('\n')
+  const result: JSX.Element[] = []
+  
+  lines.forEach((line, index) => {
+    if (line.trim() === '') {
+      result.push(<br key={index} />)
+      return
+    }
+    
+    // Bold text **text**
+    let processedLine = line
+    const boldRegex = /\*\*(.*?)\*\*/g
+    const parts: (string | JSX.Element)[] = []
+    let lastIndex = 0
+    let match
+    
+    while ((match = boldRegex.exec(line)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(line.substring(lastIndex, match.index))
+      }
+      parts.push(<strong key={`bold-${index}-${match.index}`} className="font-bold text-foreground">{match[1]}</strong>)
+      lastIndex = match.index + match[0].length
+    }
+    
+    if (lastIndex < line.length) {
+      parts.push(line.substring(lastIndex))
+    }
+    
+    if (parts.length === 0) {
+      parts.push(line)
+    }
+    
+    // Check if it's a list item
+    if (line.trim().startsWith('- ')) {
+      result.push(
+        <li key={index} className="ml-4 mb-1 font-[Manrope] text-foreground/70 dark:text-muted-foreground">
+          {parts}
+        </li>
+      )
+    } else {
+      result.push(
+        <p key={index} className="mb-2 font-[Manrope] text-foreground/70 dark:text-muted-foreground leading-relaxed">
+          {parts}
+        </p>
+      )
+    }
+  })
+  
+  return result
+}
 
-  if (!faq) {
+export function FAQDetailPage({ faqId }: { faqId: number }) {
+  const { state } = useApp()
+  const faq = faqData.find(f => f.id === faqId)
+  const [localFaq, setLocalFaq] = useState(faq ? { ...faq } : null)
+  const [isLiked, setIsLiked] = useState(false)
+  const [isMakesSense, setIsMakesSense] = useState(false)
+  const [showComments, setShowComments] = useState(true)
+  const [commentInput, setCommentInput] = useState("")
+  const [comments, setComments] = useState([
+    { id: 1, author: "Ahmet Yılmaz", authorInitials: "AY", content: "Çok faydalı bir bilgi, teşekkürler!", timestamp: "2 saat önce", likes: 5 },
+    { id: 2, author: "Zeynep Kaya", authorInitials: "ZK", content: "Ben de bu mekanları denedim, gerçekten harika!", timestamp: "5 saat önce", likes: 3 },
+  ])
+  const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
+
+  if (!faq || !localFaq) {
     return (
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
         <div className="text-center py-12">
@@ -308,10 +378,94 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
           text: faq.answer,
           url: window.location.href,
         })
+        toast.success("Paylaşıldı", {
+          description: "İçerik başarıyla paylaşıldı",
+          duration: 3000,
+        })
       } catch (err) {
-        console.error("Share failed:", err)
+        // User cancelled or error
+        if (err instanceof Error && err.name !== 'AbortError') {
+          toast.error("Paylaşım başarısız", {
+            description: "İçerik paylaşılamadı. Lütfen tekrar deneyin.",
+            duration: 3000,
+          })
+        }
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href)
+        toast.success("Link kopyalandı", {
+          description: "Bağlantı panoya kopyalandı",
+          duration: 3000,
+        })
+      } catch (err) {
+        toast.error("Kopyalama başarısız", {
+          description: "Link kopyalanamadı",
+          duration: 3000,
+        })
       }
     }
+  }
+
+  const handleLike = () => {
+    if (!state.user) return
+
+    const newIsLiked = !isLiked
+    setIsLiked(newIsLiked)
+
+    if (newIsLiked) {
+      const animationKey = `like-${faq.id}`
+      setAnimations({ ...animations, [animationKey]: true })
+      setTimeout(() => {
+        setAnimations({ ...animations, [animationKey]: false })
+      }, 600)
+    }
+
+    setLocalFaq({
+      ...localFaq,
+      likes: newIsLiked ? localFaq.likes + 1 : localFaq.likes - 1,
+    })
+  }
+
+  const handleMakesSense = () => {
+    if (!state.user) return
+
+    const newIsMakesSense = !isMakesSense
+    setIsMakesSense(newIsMakesSense)
+
+    if (newIsMakesSense) {
+      const animationKey = `logical-${faq.id}`
+      setAnimations({ ...animations, [animationKey]: true })
+      setTimeout(() => {
+        setAnimations({ ...animations, [animationKey]: false })
+      }, 600)
+    }
+
+    setLocalFaq({
+      ...localFaq,
+      makesSense: newIsMakesSense ? localFaq.makesSense + 1 : localFaq.makesSense - 1,
+    })
+  }
+
+  const handleSendComment = () => {
+    if (!commentInput.trim() || !state.user) return
+
+    const newComment = {
+      id: Date.now(),
+      author: state.user.name,
+      authorInitials: state.user.initials,
+      content: commentInput.trim(),
+      timestamp: "Az önce",
+      likes: 0,
+    }
+
+    setComments([...comments, newComment])
+    setCommentInput("")
+    setLocalFaq({
+      ...localFaq,
+      comments: localFaq.comments + 1,
+    })
   }
 
   return (
@@ -359,24 +513,59 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
                     <h1 className="font-[Manrope] text-foreground mb-4 font-extrabold text-2xl sm:text-3xl lg:text-4xl">
                       {faq.question}
                     </h1>
+                    
+                    {/* Answer right below question */}
+                    <div className="mb-4 p-4 bg-accent rounded-xl">
+                      <p className="font-[Manrope] text-foreground/80 dark:text-muted-foreground leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Actions */}
               <div className="flex items-center gap-3 pt-4 border-t border-border">
-                <button className="flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
-                  <ThumbsUp className="w-4 h-4 text-primary" />
-                  <span className="font-[Manrope] font-bold text-sm text-foreground">{faq.likes}</span>
+                <button 
+                  onClick={handleLike}
+                  className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                    isLiked ? 'bg-primary/10 dark:bg-primary/20' : ''
+                  }`}
+                  aria-label={`${localFaq.likes} beğeni`}
+                >
+                  <ThumbsUp className={`w-4 h-4 text-primary ${isLiked ? 'fill-primary' : ''}`} />
+                  <span className="font-[Manrope] font-bold text-sm text-foreground">{localFaq.likes}</span>
+                  {animations[`like-${faq.id}`] && (
+                    <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                      +1
+                    </span>
+                  )}
                 </button>
-                <button className="flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
-                  <Lightbulb className="w-4 h-4 text-primary" />
-                  <span className="font-[Manrope] font-bold text-sm text-foreground">{faq.makesSense}</span>
+                <button 
+                  onClick={handleMakesSense}
+                  className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                    isMakesSense ? 'bg-primary/10 dark:bg-primary/20' : ''
+                  }`}
+                  aria-label={`${localFaq.makesSense} mantıklı`}
+                >
+                  <Lightbulb className={`w-4 h-4 text-primary ${isMakesSense ? 'fill-primary' : ''}`} />
+                  <span className="font-[Manrope] font-bold text-sm text-foreground">{localFaq.makesSense}</span>
                   <span className="font-[Manrope] font-medium text-xs text-foreground/60 dark:text-muted-foreground hidden sm:inline">Mantıklı</span>
+                  {animations[`logical-${faq.id}`] && (
+                    <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                      +1
+                    </span>
+                  )}
                 </button>
-                <button className="flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                <button 
+                  onClick={() => setShowComments(!showComments)}
+                  className={`flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                    showComments ? 'bg-primary/10 dark:bg-primary/20' : ''
+                  }`}
+                  aria-label={`${localFaq.comments} yorum`}
+                >
                   <MessageCircle className="w-4 h-4 text-primary" />
-                  <span className="font-[Manrope] font-bold text-sm text-foreground">{faq.comments}</span>
+                  <span className="font-[Manrope] font-bold text-sm text-foreground">{localFaq.comments}</span>
                 </button>
                 <Button
                   variant="ghost"
@@ -401,12 +590,85 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
             </CardHeader>
             <CardContent>
               <div className="prose prose-sm dark:prose-invert max-w-none">
-                <div className="font-[Manrope] text-foreground/70 dark:text-muted-foreground leading-relaxed whitespace-pre-line">
-                  {faq.detailedAnswer}
+                <div className="font-[Manrope] text-foreground/70 dark:text-muted-foreground leading-relaxed">
+                  <ul className="list-none space-y-2">
+                    {parseMarkdown(faq.detailedAnswer)}
+                  </ul>
                 </div>
               </div>
             </CardContent>
           </Card>
+
+          {/* Comments Section */}
+          {showComments && (
+            <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
+              <CardHeader>
+                <CardTitle className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-primary" />
+                  Yorumlar ({localFaq.comments})
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ScrollArea className="h-[400px] pr-4">
+                  <div className="space-y-4">
+                    {comments.map((comment) => (
+                      <div key={comment.id} className="flex gap-3 pb-4 border-b border-border last:border-0">
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-bold text-xs">
+                            {comment.authorInitials}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-[Manrope] font-bold text-sm text-foreground">
+                              {comment.author}
+                            </span>
+                            <span className="font-[Manrope] text-xs text-muted-foreground">
+                              {comment.timestamp}
+                            </span>
+                          </div>
+                          <p className="font-[Manrope] text-sm text-foreground/80 dark:text-muted-foreground mb-2">
+                            {comment.content}
+                          </p>
+                          <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
+                            <ThumbsUp className="w-3 h-3" />
+                            <span>{comment.likes}</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+                
+                {/* Comment Input */}
+                {state.user && (
+                  <div className="pt-4 border-t border-border">
+                    <div className="flex gap-2">
+                      <Textarea
+                        value={commentInput}
+                        onChange={(e) => setCommentInput(e.target.value)}
+                        placeholder="Yorumunuzu yazın..."
+                        className="font-[Manrope] min-h-[80px]"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault()
+                            handleSendComment()
+                          }
+                        }}
+                      />
+                      <Button
+                        onClick={handleSendComment}
+                        disabled={!commentInput.trim()}
+                        className="bg-primary hover:bg-primary/90 font-[Manrope] font-bold self-end"
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Sidebar */}
