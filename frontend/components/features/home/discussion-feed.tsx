@@ -348,6 +348,48 @@ const allDiscussions = [
     isLiked: false,
     isMakesSense: false,
   },
+  {
+    id: 25,
+    author: "Serkan Yıldız",
+    authorInitials: "SY",
+    category: "Akademik",
+    title: "Diferansiyel Denklemler Ders Notları",
+    excerpt: "Diferansiyel denklemler dersine ait notlarımı paylaşmak istiyorum. İhtiyacı olan var mı?",
+    timeAgo: "1 saat önce",
+    likes: 5,
+    makesSense: 3,
+    comments: 0,
+    isLiked: false,
+    isMakesSense: false,
+  },
+  {
+    id: 26,
+    author: "Gamze Kaya",
+    authorInitials: "GK",
+    category: "Sosyal",
+    title: "Kampüs İçi Spor Salonu",
+    excerpt: "Kampüs içinde spor salonu var mı? Ücretli mi ücretsiz mi? Deneyimi olan var mı?",
+    timeAgo: "3 saat önce",
+    likes: 8,
+    makesSense: 5,
+    comments: 0,
+    isLiked: false,
+    isMakesSense: false,
+  },
+  {
+    id: 27,
+    author: "Onur Demir",
+    authorInitials: "OD",
+    category: "Barınma",
+    title: "KYK Yurdu Başvuru Süreci",
+    excerpt: "KYK yurdu için başvuru nasıl yapılıyor? Gerekli belgeler neler? Deneyimi olan paylaşabilir mi?",
+    timeAgo: "6 saat önce",
+    likes: 12,
+    makesSense: 8,
+    comments: 0,
+    isLiked: false,
+    isMakesSense: false,
+  },
 ]
 
 const ITEMS_PER_PAGE = 8
@@ -357,10 +399,35 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
   const [currentPage, setCurrentPage] = useState(1)
   const [localDiscussions, setLocalDiscussions] = useState(allDiscussions)
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
-  const totalPages = Math.ceil(localDiscussions.length / ITEMS_PER_PAGE)
+  const [filter, setFilter] = useState<"newest" | "popular" | "unanswered">("newest")
+  
+  // Filtreleme ve sıralama
+  const filteredAndSortedDiscussions = [...localDiscussions].filter(discussion => {
+    if (filter === "unanswered") {
+      return discussion.comments === 0
+    }
+    return true
+  }).sort((a, b) => {
+    if (filter === "newest") {
+      // En yeni - id'ye göre (daha yüksek id = daha yeni)
+      return b.id - a.id
+    } else if (filter === "popular") {
+      // En popüler - likes'a göre
+      return b.likes - a.likes
+    }
+    return 0
+  })
+  
+  const totalPages = Math.ceil(filteredAndSortedDiscussions.length / ITEMS_PER_PAGE)
   
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-  const discussions = localDiscussions.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  const discussions = filteredAndSortedDiscussions.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  
+  // Filtre değiştiğinde sayfayı sıfırla
+  const handleFilterChange = (newFilter: "newest" | "popular" | "unanswered") => {
+    setFilter(newFilter)
+    setCurrentPage(1)
+  }
 
   const handleLike = (discussionId: number, e: React.MouseEvent) => {
     e.preventDefault()
@@ -419,13 +486,37 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <h2 className="font-[Manrope] font-bold text-foreground text-xl sm:text-2xl">Yeni Tartışmalar</h2>
         <div className="flex items-center gap-2 flex-wrap">
-          <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-[Manrope] font-semibold">
+          <Button 
+            onClick={() => handleFilterChange("newest")}
+            variant={filter === "newest" ? "default" : "outline"}
+            className={`font-[Manrope] font-semibold ${
+              filter === "newest" 
+                ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+                : "hover:bg-primary hover:text-primary-foreground"
+            }`}
+          >
             Yeni
           </Button>
-          <Button variant="outline" className="font-[Manrope] font-semibold hover:bg-primary hover:text-primary-foreground">
+          <Button 
+            onClick={() => handleFilterChange("popular")}
+            variant={filter === "popular" ? "default" : "outline"}
+            className={`font-[Manrope] font-semibold ${
+              filter === "popular" 
+                ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+                : "hover:bg-primary hover:text-primary-foreground"
+            }`}
+          >
             Popüler
           </Button>
-          <Button variant="outline" className="font-[Manrope] font-semibold hover:bg-primary hover:text-primary-foreground">
+          <Button 
+            onClick={() => handleFilterChange("unanswered")}
+            variant={filter === "unanswered" ? "default" : "outline"}
+            className={`font-[Manrope] font-semibold ${
+              filter === "unanswered" 
+                ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+                : "hover:bg-primary hover:text-primary-foreground"
+            }`}
+          >
             Cevaplanmamış
           </Button>
         </div>
