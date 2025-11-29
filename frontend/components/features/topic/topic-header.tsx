@@ -265,7 +265,7 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
                   size="sm"
                   onClick={() => handleVote("not_useful")}
                   className={`font-[Manrope] font-bold text-xs sm:text-sm ${
-                    userVote === "not_useful" ? "bg-red-600 hover:bg-red-700" : ""
+                    userVote === "not_useful" ? "bg-rose-200 hover:bg-rose-300 dark:bg-rose-300/30 dark:hover:bg-rose-300/40 text-rose-700 dark:text-rose-400" : ""
                   }`}
                 >
                   <ThumbsDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
