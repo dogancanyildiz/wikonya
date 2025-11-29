@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useApp } from "@/contexts/app-context"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
+import { useNotifications } from "@/lib/utils/hooks/use-notifications"
 import { WikiEditDialog } from "./wiki-edit-dialog"
 import { WikiHistory } from "./wiki-history"
 import { WikiContent, WikiRevision } from "@/lib/types"
@@ -21,6 +22,7 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
   const { state } = useApp()
   const { canEditWiki, canProposeWikiEdit } = usePermissions()
   const { rewardCoins } = useCoinReward()
+  const { notifyWikiReverted } = useNotifications()
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [revisions, setRevisions] = useState<WikiRevision[]>([])
@@ -326,12 +328,20 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
             // Revert işlemi - gerçek uygulamada API çağrısı yapılacak
             const revision = revisions.find((r) => r.id === revisionId)
             if (revision && wikiContent) {
+              const revertedBy = state.user?.name || "Bir moderatör"
+              const topicTitle = "Selçuk Hukuk Final Notları" // Gerçek uygulamada topic title'dan gelecek
+              
               setWikiContent({
                 ...wikiContent,
                 content: revision.content,
                 version: revision.version + 1,
                 updatedAt: new Date().toISOString(),
               })
+              
+              // Wiki düzenleyen kullanıcıya bildirim gönder
+              if (wikiContent.author.id !== state.user?.id) {
+                notifyWikiReverted(topicId, topicTitle, revertedBy, revision.version)
+              }
             }
           }}
         />

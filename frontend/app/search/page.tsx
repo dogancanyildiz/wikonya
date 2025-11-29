@@ -7,9 +7,34 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty"
-import { Search, BookOpen, MessageCircle, User, Clock, TrendingUp } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Search, BookOpen, MessageCircle, User, Clock, TrendingUp, Filter, X } from "lucide-react"
 import Link from "next/link"
 import { Topic, Comment } from "@/lib/types"
+
+const CATEGORIES = [
+  { value: "all", label: "Tüm Kategoriler" },
+  { value: "academic", label: "Akademik Destek" },
+  { value: "social", label: "Sosyal Yaşam & Mekan" },
+  { value: "housing", label: "Barınma & Yaşam" },
+  { value: "career", label: "Kariyer & Gelişim" },
+  { value: "discovery", label: "Konya Keşif" },
+] as const
+
+const DATE_FILTERS = [
+  { value: "all", label: "Tüm Zamanlar" },
+  { value: "24h", label: "Son 24 Saat" },
+  { value: "7d", label: "Son Hafta" },
+  { value: "30d", label: "Son Ay" },
+  { value: "1y", label: "Son Yıl" },
+] as const
+
+const SORT_OPTIONS = [
+  { value: "relevance", label: "En İlgili" },
+  { value: "newest", label: "En Yeni" },
+  { value: "popular", label: "En Popüler" },
+  { value: "most_comments", label: "En Çok Yorum" },
+] as const
 
 export default function SearchPage() {
   const searchParams = useSearchParams()
@@ -17,6 +42,10 @@ export default function SearchPage() {
   const [query, setQuery] = useState(searchParams.get("q") || "")
   const [activeTab, setActiveTab] = useState<"topics" | "comments" | "users">("topics")
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [selectedDateFilter, setSelectedDateFilter] = useState<string>("all")
+  const [selectedSort, setSelectedSort] = useState<string>("relevance")
+  const [showFilters, setShowFilters] = useState(false)
   const [recentSearches, setRecentSearches] = useState<string[]>([])
   const [popularSearches] = useState([
     "Selçuk Üniversitesi",
@@ -162,42 +191,120 @@ export default function SearchPage() {
           </form>
         </div>
 
-        {/* Tabs */}
+        {/* Filters and Tabs */}
         {query && (
-          <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
-            <Button
-              variant={activeTab === "topics" ? "default" : "outline"}
-              onClick={() => setActiveTab("topics")}
-              className="font-[Manrope] font-bold text-xs sm:text-sm"
-              size="sm"
-            >
-              <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-              <span className="hidden sm:inline">Başlıklar</span>
-              <span className="sm:hidden">Başlık</span>
-              <span className="ml-1">({results.topics.length})</span>
-            </Button>
-            <Button
-              variant={activeTab === "comments" ? "default" : "outline"}
-              onClick={() => setActiveTab("comments")}
-              className="font-[Manrope] font-bold text-xs sm:text-sm"
-              size="sm"
-            >
-              <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-              <span className="hidden sm:inline">Yorumlar</span>
-              <span className="sm:hidden">Yorum</span>
-              <span className="ml-1">({results.comments.length})</span>
-            </Button>
-            <Button
-              variant={activeTab === "users" ? "default" : "outline"}
-              onClick={() => setActiveTab("users")}
-              className="font-[Manrope] font-bold text-xs sm:text-sm"
-              size="sm"
-            >
-              <User className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-              <span className="hidden sm:inline">Kullanıcılar</span>
-              <span className="sm:hidden">Kullanıcı</span>
-              <span className="ml-1">({results.users.length})</span>
-            </Button>
+          <div className="space-y-4 mb-4 sm:mb-6">
+            {/* Filters */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowFilters(!showFilters)}
+                className="font-[Manrope] font-bold text-xs sm:text-sm"
+              >
+                <Filter className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                Filtreler
+                {(selectedCategory !== "all" || selectedDateFilter !== "all" || selectedSort !== "relevance") && (
+                  <Badge className="ml-2 bg-primary text-primary-foreground">Aktif</Badge>
+                )}
+              </Button>
+              
+              {showFilters && (
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger className="w-full sm:w-[180px] font-[Manrope] text-xs sm:text-sm">
+                      <SelectValue placeholder="Kategori" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CATEGORIES.map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={selectedDateFilter} onValueChange={setSelectedDateFilter}>
+                    <SelectTrigger className="w-full sm:w-[150px] font-[Manrope] text-xs sm:text-sm">
+                      <SelectValue placeholder="Tarih" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {DATE_FILTERS.map((filter) => (
+                        <SelectItem key={filter.value} value={filter.value}>
+                          {filter.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={selectedSort} onValueChange={setSelectedSort}>
+                    <SelectTrigger className="w-full sm:w-[150px] font-[Manrope] text-xs sm:text-sm">
+                      <SelectValue placeholder="Sırala" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SORT_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {(selectedCategory !== "all" || selectedDateFilter !== "all" || selectedSort !== "relevance") && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setSelectedCategory("all")
+                        setSelectedDateFilter("all")
+                        setSelectedSort("relevance")
+                      }}
+                      className="font-[Manrope] text-xs sm:text-sm"
+                    >
+                      <X className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                      Temizle
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Tabs */}
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant={activeTab === "topics" ? "default" : "outline"}
+                onClick={() => setActiveTab("topics")}
+                className="font-[Manrope] font-bold text-xs sm:text-sm"
+                size="sm"
+              >
+                <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Başlıklar</span>
+                <span className="sm:hidden">Başlık</span>
+                <span className="ml-1">({results.topics.length})</span>
+              </Button>
+              <Button
+                variant={activeTab === "comments" ? "default" : "outline"}
+                onClick={() => setActiveTab("comments")}
+                className="font-[Manrope] font-bold text-xs sm:text-sm"
+                size="sm"
+              >
+                <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Yorumlar</span>
+                <span className="sm:hidden">Yorum</span>
+                <span className="ml-1">({results.comments.length})</span>
+              </Button>
+              <Button
+                variant={activeTab === "users" ? "default" : "outline"}
+                onClick={() => setActiveTab("users")}
+                className="font-[Manrope] font-bold text-xs sm:text-sm"
+                size="sm"
+              >
+                <User className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Kullanıcılar</span>
+                <span className="sm:hidden">Kullanıcı</span>
+                <span className="ml-1">({results.users.length})</span>
+              </Button>
+            </div>
           </div>
         )}
 

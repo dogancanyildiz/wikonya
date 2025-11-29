@@ -4,12 +4,14 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Edit, MessageCircle, Calendar, Eye, ThumbsUp } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { BookOpen, Edit, MessageCircle, Calendar, Eye, ThumbsUp, ThumbsDown, TrendingUp, Filter, X } from "lucide-react"
 import Link from "next/link"
 
 interface Contribution {
   id: number
-  type: "topic" | "wiki_edit" | "comment"
+  type: "topic" | "wiki_edit" | "comment" | "wiki_vote" | "coin_earned"
   title: string
   content?: string
   topicId?: number
@@ -19,6 +21,9 @@ interface Contribution {
   likes?: number
   dislikes?: number
   status?: "approved" | "pending" | "rejected"
+  voteType?: "useful" | "not_useful"
+  actionType?: string
+  version?: number
 }
 
 // Mock data - gerçek uygulamada API'den gelecek
@@ -56,6 +61,7 @@ const contributions: Contribution[] = [
     createdAt: "2025-11-22T10:00:00.000Z",
     coins: 15,
     status: "approved",
+    version: 3,
   },
   {
     id: 4,
@@ -66,6 +72,7 @@ const contributions: Contribution[] = [
     createdAt: "2025-11-24T10:00:00.000Z",
     coins: 10,
     status: "pending",
+    version: 2,
   },
   {
     id: 5,
@@ -87,10 +94,32 @@ const contributions: Contribution[] = [
     coins: 2,
     likes: 5,
   },
+  {
+    id: 7,
+    type: "wiki_vote",
+    title: "Selçuk Hukuk Final Notları",
+    content: "Wiki düzenlemeniz yararlı oy aldı",
+    topicId: 1,
+    createdAt: "2025-11-23T10:00:00.000Z",
+    coins: 5,
+    voteType: "useful",
+  },
+  {
+    id: 8,
+    type: "coin_earned",
+    title: "Yorum Beğenildi",
+    content: "Yorumunuz 12 kişi tarafından beğenildi",
+    topicId: 1,
+    createdAt: "2025-11-26T14:00:00.000Z",
+    coins: 12,
+    actionType: "comment_received_like",
+  },
 ]
 
 export default function ContributionsPage() {
-  const [activeTab, setActiveTab] = useState<"topics" | "edits" | "comments">("topics")
+  const [activeTab, setActiveTab] = useState<"all" | "topics" | "edits" | "comments" | "votes" | "coins">("all")
+  const [dateFilter, setDateFilter] = useState<string>("all")
+  const [showFilters, setShowFilters] = useState(false)
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -106,9 +135,25 @@ export default function ContributionsPage() {
   }
 
   const filteredContributions = contributions.filter((c) => {
-    if (activeTab === "topics") return c.type === "topic"
-    if (activeTab === "edits") return c.type === "wiki_edit"
-    if (activeTab === "comments") return c.type === "comment"
+    // Tab filtresi
+    if (activeTab === "topics" && c.type !== "topic") return false
+    if (activeTab === "edits" && c.type !== "wiki_edit") return false
+    if (activeTab === "comments" && c.type !== "comment") return false
+    if (activeTab === "votes" && c.type !== "wiki_vote") return false
+    if (activeTab === "coins" && c.type !== "coin_earned") return false
+    
+    // Tarih filtresi
+    if (dateFilter !== "all") {
+      const contributionDate = new Date(c.createdAt)
+      const now = new Date()
+      const diffMs = now.getTime() - contributionDate.getTime()
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+      
+      if (dateFilter === "7d" && diffDays > 7) return false
+      if (dateFilter === "30d" && diffDays > 30) return false
+      if (dateFilter === "90d" && diffDays > 90) return false
+    }
+    
     return true
   })
 
@@ -116,6 +161,8 @@ export default function ContributionsPage() {
     topics: contributions.filter(c => c.type === "topic").length,
     edits: contributions.filter(c => c.type === "wiki_edit").length,
     comments: contributions.filter(c => c.type === "comment").length,
+    votes: contributions.filter(c => c.type === "wiki_vote").length,
+    coins: contributions.filter(c => c.type === "coin_earned").length,
     totalCoins: contributions.reduce((sum, c) => sum + (c.coins || 0), 0),
   }
 
@@ -215,24 +262,86 @@ export default function ContributionsPage() {
       {/* Katkı Listesi */}
       <Card className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
         <CardHeader>
-          <CardTitle className="font-[Manrope] text-foreground font-bold text-xl">
-            Katkı Geçmişi
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="font-[Manrope] text-foreground font-bold text-xl">
+              Katkı Geçmişi
+            </CardTitle>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowFilters(!showFilters)}
+                className="font-[Manrope] font-bold text-xs sm:text-sm"
+              >
+                <Filter className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                Filtreler
+                {dateFilter !== "all" && (
+                  <Badge className="ml-2 bg-primary text-primary-foreground">Aktif</Badge>
+                )}
+              </Button>
+            </div>
+          </div>
+          {showFilters && (
+            <div className="flex items-center gap-3 mt-4">
+              <Select value={dateFilter} onValueChange={setDateFilter}>
+                <SelectTrigger className="w-full sm:w-[180px] font-[Manrope] text-xs sm:text-sm">
+                  <SelectValue placeholder="Tarih" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tüm Zamanlar</SelectItem>
+                  <SelectItem value="7d">Son 7 Gün</SelectItem>
+                  <SelectItem value="30d">Son 30 Gün</SelectItem>
+                  <SelectItem value="90d">Son 90 Gün</SelectItem>
+                </SelectContent>
+              </Select>
+              {dateFilter !== "all" && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setDateFilter("all")}
+                  className="font-[Manrope] text-xs sm:text-sm"
+                >
+                  <X className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                  Temizle
+                </Button>
+              )}
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 font-[Manrope] mb-6">
-              <TabsTrigger value="topics">
-                <BookOpen className="w-4 h-4 mr-2" />
-                Başlıklar ({stats.topics})
+            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 font-[Manrope] mb-6">
+              <TabsTrigger value="all" className="text-xs">
+                Tümü
               </TabsTrigger>
-              <TabsTrigger value="edits">
-                <Edit className="w-4 h-4 mr-2" />
-                Düzenlemeler ({stats.edits})
+              <TabsTrigger value="topics" className="text-xs">
+                <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Başlık</span>
+                <span className="sm:hidden">B</span>
+                ({stats.topics})
               </TabsTrigger>
-              <TabsTrigger value="comments">
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Yorumlar ({stats.comments})
+              <TabsTrigger value="edits" className="text-xs">
+                <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Düzenle</span>
+                <span className="sm:hidden">D</span>
+                ({stats.edits})
+              </TabsTrigger>
+              <TabsTrigger value="comments" className="text-xs">
+                <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Yorum</span>
+                <span className="sm:hidden">Y</span>
+                ({stats.comments})
+              </TabsTrigger>
+              <TabsTrigger value="votes" className="text-xs">
+                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Oy</span>
+                <span className="sm:hidden">O</span>
+                ({stats.votes})
+              </TabsTrigger>
+              <TabsTrigger value="coins" className="text-xs">
+                <span className="hidden sm:inline">Coin</span>
+                <span className="sm:hidden">C</span>
+                ({stats.coins})
               </TabsTrigger>
             </TabsList>
 
@@ -255,6 +364,16 @@ export default function ContributionsPage() {
                           {contribution.type === "comment" && (
                             <MessageCircle className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                           )}
+                          {contribution.type === "wiki_vote" && (
+                            contribution.voteType === "useful" ? (
+                              <ThumbsUp className="w-4 h-4 text-green-600 dark:text-green-400" />
+                            ) : (
+                              <ThumbsDown className="w-4 h-4 text-red-600 dark:text-red-400" />
+                            )
+                          )}
+                          {contribution.type === "coin_earned" && (
+                            <TrendingUp className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
+                          )}
                           {contribution.topicId ? (
                             <Link
                               href={`/topic/${contribution.topicId}`}
@@ -274,6 +393,33 @@ export default function ContributionsPage() {
                           <p className="font-[Manrope] text-xs sm:text-sm text-foreground/70 dark:text-muted-foreground line-clamp-2 mb-3">
                             {contribution.content}
                           </p>
+                        )}
+                        
+                        {contribution.type === "wiki_edit" && contribution.version && (
+                          <Badge variant="outline" className="mb-2 font-[Manrope] text-xs">
+                            Sürüm {contribution.version}
+                          </Badge>
+                        )}
+                        
+                        {contribution.type === "wiki_vote" && (
+                          <Badge 
+                            variant="outline" 
+                            className={`mb-2 font-[Manrope] text-xs ${
+                              contribution.voteType === "useful" 
+                                ? "bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 border-green-200 dark:border-green-500/30"
+                                : "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/30"
+                            }`}
+                          >
+                            {contribution.voteType === "useful" ? "Yararlı Oy Aldı" : "Yararsız Oy Aldı"}
+                          </Badge>
+                        )}
+                        
+                        {contribution.type === "coin_earned" && contribution.actionType && (
+                          <Badge variant="outline" className="mb-2 font-[Manrope] text-xs">
+                            {contribution.actionType === "comment_received_like" && "Yorum Beğenildi"}
+                            {contribution.actionType === "wiki_received_useful_vote" && "Wiki Yararlı Oy Aldı"}
+                            {contribution.actionType === "wiki_received_not_useful_vote" && "Wiki Yararsız Oy Aldı"}
+                          </Badge>
                         )}
 
                         <div className="flex items-center gap-4 flex-wrap">

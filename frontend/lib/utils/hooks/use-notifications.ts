@@ -15,6 +15,7 @@ import {
   createTopicRejectedNotification,
   createProposalApprovedNotification,
   createProposalRejectedNotification,
+  createWikiRevertedNotification,
   getUnreadCount,
   sortNotificationsByDate,
 } from "@/lib/notifications/notification-system"
@@ -122,6 +123,18 @@ export function useNotifications() {
     [addNotification]
   )
 
+  const notifyWikiReverted = useCallback(
+    (topicId: number, topicTitle: string, revertedBy: string, version: number) => {
+      const notification = createWikiRevertedNotification(topicId, topicTitle, revertedBy, version)
+      addNotification(notification)
+      toast.warning("↩️ Wiki Geri Alındı", {
+        description: `${revertedBy} tarafından v${version} sürümüne geri alındı`,
+        duration: 4000,
+      })
+    },
+    [addNotification]
+  )
+
   const unreadCount = getUnreadCount(state.notifications)
   const sortedNotifications = sortNotificationsByDate(state.notifications)
 
@@ -139,6 +152,7 @@ export function useNotifications() {
     notifyTopicRejected,
     notifyProposalApproved,
     notifyProposalRejected,
+    notifyWikiReverted,
   }
 }
 

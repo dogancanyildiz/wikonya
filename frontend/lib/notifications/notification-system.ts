@@ -9,6 +9,7 @@ export type NotificationType =
   | "comment_liked"
   | "comment_replied"
   | "wiki_edited"
+  | "wiki_reverted"
   | "topic_approved"
   | "topic_rejected"
   | "proposal_approved"
@@ -148,6 +149,20 @@ export function createProposalRejectedNotification(reason?: string): Notificatio
     read: false,
     createdAt: new Date().toISOString(),
     metadata: { reason },
+  }
+}
+
+export function createWikiRevertedNotification(topicId: number, topicTitle: string, revertedBy: string, version: number): Notification {
+  return {
+    id: `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    type: "wiki_reverted",
+    title: "Wiki Düzenlemeniz Geri Alındı",
+    message: `${revertedBy} tarafından "${topicTitle}" başlığındaki wiki düzenlemeniz v${version} sürümüne geri alındı`,
+    icon: "↩️",
+    read: false,
+    createdAt: new Date().toISOString(),
+    actionUrl: `/topic/${topicId}`,
+    metadata: { topicId, topicTitle, revertedBy, version },
   }
 }
 
