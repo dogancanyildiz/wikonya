@@ -1,9 +1,18 @@
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 import { ProfileCard } from "@/components/features/dashboard/profile-card"
 import { StatsCard } from "@/components/features/dashboard/stats-card"
-import { ActivityFeed } from "@/components/features/dashboard/activity-feed"
 import { WalletCard } from "@/components/features/dashboard/wallet-card"
 import { SocialResponsibilityCard } from "@/components/features/dashboard/social-responsibility-card"
+
+// Lazy load heavy components
+const ActivityFeed = dynamic(
+  () => import("@/components/features/dashboard/activity-feed").then((mod) => ({ default: mod.ActivityFeed })),
+  { 
+    loading: () => <div className="h-64 animate-pulse bg-muted rounded-xl" />,
+    ssr: false 
+  }
+)
 
 export const metadata: Metadata = {
   title: "Dashboard | Konya Genç",

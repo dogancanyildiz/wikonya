@@ -6,9 +6,32 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
-import { TopicApprovalList } from "@/components/features/moderation/topic-approval-list"
-import { WikiProposalList } from "@/components/features/moderation/wiki-proposal-list"
-import { FlaggedContentList } from "@/components/features/moderation/flagged-content-list"
+import dynamic from "next/dynamic"
+
+// Lazy load moderation components
+const TopicApprovalList = dynamic(
+  () => import("@/components/features/moderation/topic-approval-list").then((mod) => ({ default: mod.TopicApprovalList })),
+  { 
+    loading: () => <div className="h-32 animate-pulse bg-muted rounded-xl" />,
+    ssr: false 
+  }
+)
+
+const WikiProposalList = dynamic(
+  () => import("@/components/features/moderation/wiki-proposal-list").then((mod) => ({ default: mod.WikiProposalList })),
+  { 
+    loading: () => <div className="h-32 animate-pulse bg-muted rounded-xl" />,
+    ssr: false 
+  }
+)
+
+const FlaggedContentList = dynamic(
+  () => import("@/components/features/moderation/flagged-content-list").then((mod) => ({ default: mod.FlaggedContentList })),
+  { 
+    loading: () => <div className="h-32 animate-pulse bg-muted rounded-xl" />,
+    ssr: false 
+  }
+)
 import { Topic, WikiEditProposal } from "@/lib/types"
 
 export default function ModerationPage() {
