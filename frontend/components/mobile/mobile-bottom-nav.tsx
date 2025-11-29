@@ -23,7 +23,7 @@ export function MobileBottomNav({ activeTab, onNavigate }: MobileBottomNavProps)
   const isActive = (itemId: string, href: string) => {
     if (activeTab) return activeTab === itemId
     if (itemId === "home") return pathname === "/"
-    if (itemId === "trending") return pathname === "/" // Trending de ana sayfada
+    if (itemId === "trending") return pathname === "/" // Trend ana sayfada
     if (itemId === "create") return pathname?.startsWith("/topic/new")
     if (itemId === "search") return pathname?.startsWith("/search")
     if (itemId === "profile") return pathname?.startsWith("/dashboard")

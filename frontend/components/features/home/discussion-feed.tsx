@@ -289,7 +289,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
   return (
     <section>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-        <h2 className="font-[Manrope] font-bold text-foreground text-xl sm:text-2xl">Fresh Discussions</h2>
+        <h2 className="font-[Manrope] font-bold text-foreground text-xl sm:text-2xl">Yeni Tartışmalar</h2>
         <div className="flex items-center gap-2 flex-wrap">
           <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-[Manrope] font-semibold">
             Yeni

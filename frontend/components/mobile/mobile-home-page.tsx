@@ -98,7 +98,7 @@ export function MobileHomePage({ onNavigateToTopic }: MobileHomePageProps) {
       <MobileNavbar />
       <MobileSearchBar />
 
-      {/* Trending Section */}
+      {/* Trend Bölümü */}
       <div className="px-4 py-4">
         <div className="flex items-center gap-2 mb-4">
           <h2 className="font-[Manrope] text-foreground font-bold text-base sm:text-lg">

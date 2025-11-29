@@ -67,7 +67,7 @@ export default function SearchPage() {
     users: [],
   })
 
-  // Load recent searches from localStorage
+  // localStorage'dan son aramaları yükle
   useEffect(() => {
     const stored = localStorage.getItem("recentSearches")
     if (stored) {
@@ -92,7 +92,7 @@ export default function SearchPage() {
 
     setIsLoading(true)
     try {
-      // Save to recent searches
+      // Son aramalara kaydet
       const trimmedQuery = query.trim()
       if (trimmedQuery) {
         const updated = [trimmedQuery, ...recentSearches.filter(s => s !== trimmedQuery)].slice(0, 5)
@@ -431,7 +431,7 @@ export default function SearchPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Recent Searches */}
+            {/* Son Aramalar */}
             {recentSearches.length > 0 && (
               <Card>
                 <CardContent className="p-4 sm:p-6">
@@ -473,7 +473,7 @@ export default function SearchPage() {
               </Card>
             )}
 
-            {/* Popular Searches */}
+            {/* Popüler Aramalar */}
             <Card>
               <CardContent className="p-4 sm:p-6">
                 <h2 className="font-[Manrope] font-bold text-lg text-foreground mb-4 flex items-center gap-2">

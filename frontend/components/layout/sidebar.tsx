@@ -65,7 +65,7 @@ export function Sidebar({}: SidebarProps = {}) {
       {/* KBB Announcements */}
       <KBBAnnouncements />
 
-      {/* Popular Comments */}
+      {/* Popüler Yorumlar */}
       <Card className="rounded-xl shadow-md border border-border">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base">

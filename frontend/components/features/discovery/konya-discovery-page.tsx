@@ -223,7 +223,7 @@ export function KonyaDiscoveryPage() {
         </div>
       </section>
 
-      {/* FAQ Section - Fresh Discussions Format */}
+      {/* FAQ Section - Yeni Tartışmalar Formatı */}
       <section>
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <h2 className="font-[Manrope] font-bold text-foreground text-xl sm:text-2xl">
@@ -403,7 +403,7 @@ function RouteCard({ route }: {
   )
 }
 
-// FAQ Card Component - Fresh Discussions Format
+// FAQ Card Component - Yeni Tartışmalar Formatı
 function FAQCard({ faq }: {
   faq: {
     id: number

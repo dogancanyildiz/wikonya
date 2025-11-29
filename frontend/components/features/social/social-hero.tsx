@@ -17,7 +17,7 @@ export function SocialHero() {
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false)
   const [selectedVenueId, setSelectedVenueId] = useState<number | null>(null)
 
-  // Trending venues with their actual IDs from venue-grid
+  // Trend olan mekanlar ve venue-grid'deki gerçek ID'leri
   const trendingVenues = [
     { id: 5, name: "Okuma Odası Kitap Cafe", category: "Ders Çalışma", visitors: "245" },
     { id: 1, name: "Meram Kıraathanesi", category: "Kahve & Tatlı", visitors: "189" },
@@ -97,7 +97,7 @@ export function SocialHero() {
         </div>
       </div>
 
-      {/* Right Side - Top 3 Trending */}
+      {/* Sağ Taraf - En Çok Trend Olan 3 Mekan */}
       <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border h-[400px] sm:h-[500px] flex flex-col">
         <CardContent className="p-6 sm:p-8 flex flex-col flex-1">
           <div className="flex items-center gap-2 mb-4 sm:mb-6">
