@@ -18,6 +18,7 @@ import {
   Award,
   Gift
 } from "lucide-react"
+import { getTransactions } from "@/lib/mock-data"
 
 interface Transaction {
   id: number
@@ -28,68 +29,40 @@ interface Transaction {
   icon: React.ElementType
 }
 
+// Icon mapping
+const iconMap: Record<string, React.ElementType> = {
+  "💬": MessageSquare,
+  "👍": ThumbsUp,
+  "✏️": Edit,
+  "🎁": Gift,
+  "📖": BookOpen,
+  "🏆": Award,
+}
+
 export default function WalletPage() {
   const { state } = useApp()
   const [activeTab, setActiveTab] = useState<"all" | "earned" | "spent">("all")
   const user = state.user
 
-  // Mock veriler
-  const weeklyEarned = 240
-  const monthlyEarned = 485
-  const totalSpent = 120
-  const totalEarned = (user?.totalCoins || 0) + totalSpent
-  const transferredToKart = 500
+  // Mock veriler - mock-data.json dosyasından alınıyor
+  const mockTransactions = getTransactions()
+  const transactions: Transaction[] = mockTransactions.map(t => ({
+    ...t,
+    icon: iconMap[t.icon] || MessageSquare,
+  }))
 
-  const transactions: Transaction[] = [
-    {
-      id: 1,
-      type: "earned",
-      action: "Yorum yazımı",
-      amount: 15,
-      date: "2 saat önce",
-      icon: MessageSquare,
-    },
-    {
-      id: 2,
-      type: "earned",
-      action: "45 beğeni aldı",
-      amount: 45,
-      date: "5 saat önce",
-      icon: ThumbsUp,
-    },
-    {
-      id: 3,
-      type: "earned",
-      action: "Wiki düzenleme",
-      amount: 20,
-      date: "1 gün önce",
-      icon: Edit,
-    },
-    {
-      id: 4,
-      type: "transferred",
-      action: "Kültür Kart'a aktarım",
-      amount: -500,
-      date: "3 gün önce",
-      icon: Gift,
-    },
-    {
-      id: 5,
-      type: "earned",
-      action: "Yeni başlık açma",
-      amount: 30,
-      date: "5 gün önce",
-      icon: BookOpen,
-    },
-    {
-      id: 6,
-      type: "earned",
-      action: "Rozet kazanıldı: Bilgi Ustası",
-      amount: 100,
-      date: "1 hafta önce",
-      icon: Award,
-    },
-  ]
+  const weeklyEarned = transactions
+    .filter(t => t.type === "earned" && t.date.includes("saat") || t.date.includes("gün"))
+    .reduce((sum, t) => sum + t.amount, 0)
+  const monthlyEarned = transactions
+    .filter(t => t.type === "earned")
+    .reduce((sum, t) => sum + t.amount, 0)
+  const totalSpent = Math.abs(transactions
+    .filter(t => t.type === "spent" || t.type === "transferred")
+    .reduce((sum, t) => sum + t.amount, 0))
+  const totalEarned = (user?.totalCoins || 0) + totalSpent
+  const transferredToKart = Math.abs(transactions
+    .find(t => t.action.includes("Kültür Kart"))?.amount || 0)
 
   const filteredTransactions = transactions.filter((t) => {
     if (activeTab === "all") return true

@@ -1,0 +1,1111 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Yeni Kullanıcı",
+      "initials": "YK",
+      "email": "yeni_gelen@example.com",
+      "avatar": "",
+      "role": "yeni_gelen",
+      "totalCoins": 250,
+      "badges": [],
+      "xp": {
+        "current": 250,
+        "nextLevel": 500,
+        "progress": 50
+      },
+      "joinedAt": "2024-11-01T10:00:00.000Z",
+      "location": "Konya",
+      "bio": "Platformu yeni keşfediyorum!",
+      "university": "Selçuk Üniversitesi"
+    },
+    {
+      "id": 2,
+      "name": "Seyyah Kullanıcı",
+      "initials": "SK",
+      "email": "seyyah@example.com",
+      "avatar": "",
+      "role": "seyyah",
+      "totalCoins": 1200,
+      "badges": [
+        {
+          "id": "first_comment",
+          "name": "İlk Yorum",
+          "icon": "💬",
+          "description": "İlk yorumunu yaptın!",
+          "earnedAt": "2024-11-05T14:30:00.000Z"
+        }
+      ],
+      "xp": {
+        "current": 1200,
+        "nextLevel": 2500,
+        "progress": 48
+      },
+      "joinedAt": "2024-10-01T10:00:00.000Z",
+      "location": "Meram, Konya",
+      "bio": "Platforma katkıda bulunmayı seviyorum!",
+      "university": "Selçuk Üniversitesi"
+    },
+    {
+      "id": 3,
+      "name": "Gezgin Kullanıcı",
+      "initials": "GK",
+      "email": "gezgin@example.com",
+      "avatar": "",
+      "role": "gezgin",
+      "totalCoins": 2500,
+      "badges": [
+        {
+          "id": "first_comment",
+          "name": "İlk Yorum",
+          "icon": "💬",
+          "description": "İlk yorumunu yaptın!",
+          "earnedAt": "2024-09-15T10:00:00.000Z"
+        },
+        {
+          "id": "wiki_editor",
+          "name": "Wiki Editörü",
+          "icon": "✏️",
+          "description": "10 wiki düzenlemesi yaptın!",
+          "earnedAt": "2024-10-20T15:00:00.000Z"
+        }
+      ],
+      "xp": {
+        "current": 2500,
+        "nextLevel": 5000,
+        "progress": 50
+      },
+      "joinedAt": "2024-09-01T10:00:00.000Z",
+      "location": "Selçuklu, Konya",
+      "bio": "Konya'yı keşfetmeyi seviyorum!",
+      "university": "Selçuk Üniversitesi"
+    },
+    {
+      "id": 4,
+      "name": "Admin",
+      "initials": "AD",
+      "email": "admin@example.com",
+      "avatar": "",
+      "role": "konya_bilgesi",
+      "totalCoins": 10000,
+      "badges": [],
+      "xp": {
+        "current": 10000,
+        "nextLevel": 20000,
+        "progress": 50
+      },
+      "joinedAt": "2024-01-01T10:00:00.000Z",
+      "location": "Konya",
+      "bio": "Platform yöneticisi",
+      "university": "Selçuk Üniversitesi"
+    },
+    {
+      "id": 5,
+      "name": "Ahmet Yılmaz",
+      "initials": "AY",
+      "email": "ahmet@example.com",
+      "avatar": "",
+      "role": "gezgin",
+      "totalCoins": 800,
+      "badges": [],
+      "xp": {
+        "current": 800,
+        "nextLevel": 1500,
+        "progress": 53
+      },
+      "joinedAt": "2024-10-15T10:00:00.000Z",
+      "location": "Konya",
+      "bio": "",
+      "university": "Selçuk Üniversitesi"
+    },
+    {
+      "id": 6,
+      "name": "Zeynep Kaya",
+      "initials": "ZK",
+      "email": "zeynep@example.com",
+      "avatar": "",
+      "role": "kasif_meraklisi",
+      "totalCoins": 1500,
+      "badges": [],
+      "xp": {
+        "current": 1500,
+        "nextLevel": 3000,
+        "progress": 50
+      },
+      "joinedAt": "2024-09-20T10:00:00.000Z",
+      "location": "Konya",
+      "bio": "",
+      "university": "Selçuk Üniversitesi"
+    },
+    {
+      "id": 7,
+      "name": "Mehmet Demir",
+      "initials": "MD",
+      "email": "mehmet@example.com",
+      "avatar": "",
+      "role": "seyyah",
+      "totalCoins": 600,
+      "badges": [],
+      "xp": {
+        "current": 600,
+        "nextLevel": 1200,
+        "progress": 50
+      },
+      "joinedAt": "2024-11-01T10:00:00.000Z",
+      "location": "Konya",
+      "bio": "",
+      "university": "Selçuk Üniversitesi"
+    }
+  ],
+  "topics": [
+    {
+      "id": 1,
+      "title": "Selçuk Hukuk Final Notları",
+      "content": "Final sınavlarına hazırlık için kapsamlı ders notları...",
+      "wikiContent": {
+        "id": 1,
+        "topicId": 1,
+        "content": "Selçuk Üniversitesi Hukuk Fakültesi final sınavları için hazırlanmış kapsamlı ders notları. Anayasa Hukuku, Medeni Hukuk, Ceza Hukuku ve diğer temel dersler için özetler içermektedir.",
+        "version": 1,
+        "createdAt": "2024-11-20T10:00:00.000Z",
+        "updatedAt": "2024-11-20T10:00:00.000Z",
+        "author": {
+          "id": 4,
+          "name": "Admin",
+          "initials": "AD",
+          "role": "konya_bilgesi"
+        },
+        "usefulVotes": 45,
+        "notUsefulVotes": 2,
+        "isCurrent": true
+      },
+      "author": {
+        "id": 4,
+        "name": "Admin",
+        "initials": "AD",
+        "role": "konya_bilgesi"
+      },
+      "category": "Akademik",
+      "createdAt": "2024-11-20T10:00:00.000Z",
+      "updatedAt": "2024-11-20T10:00:00.000Z",
+      "views": 3200,
+      "likes": 145,
+      "comments": 48,
+      "tags": ["Ders Notu", "Hukuk Fakültesi"],
+      "reliabilityScore": 98,
+      "status": "approved",
+      "approvedBy": {
+        "id": 4,
+        "name": "Admin",
+        "initials": "AD",
+        "role": "konya_bilgesi"
+      },
+      "approvedAt": "2024-11-20T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "title": "Konya'da Öğrenci Dostu Restoranlar",
+      "content": "Bütçe dostu ve lezzetli yemek seçenekleri...",
+      "wikiContent": {
+        "id": 2,
+        "topicId": 2,
+        "content": "Konya'da öğrenciler için bütçe dostu ve lezzetli yemek seçenekleri. Merkez ve kampüs çevresindeki restoranlar, fiyat aralıkları ve öğrenci indirimleri hakkında bilgiler.",
+        "version": 2,
+        "createdAt": "2024-11-18T10:00:00.000Z",
+        "updatedAt": "2024-11-22T10:00:00.000Z",
+        "author": {
+          "id": 3,
+          "name": "Gezgin Kullanıcı",
+          "initials": "GK",
+          "role": "gezgin"
+        },
+        "usefulVotes": 38,
+        "notUsefulVotes": 1,
+        "isCurrent": true
+      },
+      "author": {
+        "id": 3,
+        "name": "Gezgin Kullanıcı",
+        "initials": "GK",
+        "role": "gezgin"
+      },
+      "category": "Sosyal",
+      "createdAt": "2024-11-18T10:00:00.000Z",
+      "updatedAt": "2024-11-22T10:00:00.000Z",
+      "views": 2800,
+      "likes": 120,
+      "comments": 35,
+      "tags": ["Restoran", "Yemek"],
+      "reliabilityScore": 92,
+      "status": "approved",
+      "approvedBy": {
+        "id": 4,
+        "name": "Admin",
+        "initials": "AD",
+        "role": "konya_bilgesi"
+      },
+      "approvedAt": "2024-11-18T10:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "title": "Bosna Hersek Mahallesi Ev Kiralama Rehberi",
+      "content": "Mahalle hakkında detaylı bilgiler ve kiralama tüyoları...",
+      "wikiContent": {
+        "id": 3,
+        "topicId": 3,
+        "content": "Bosna Hersek Mahallesi'nde ev kiralama rehberi. Mahalle hakkında genel bilgiler, ulaşım imkanları, güvenlik, fiyat aralıkları ve kiralama tüyoları.",
+        "version": 1,
+        "createdAt": "2024-11-15T10:00:00.000Z",
+        "updatedAt": "2024-11-15T10:00:00.000Z",
+        "author": {
+          "id": 6,
+          "name": "Zeynep Kaya",
+          "initials": "ZK",
+          "role": "kasif_meraklisi"
+        },
+        "usefulVotes": 28,
+        "notUsefulVotes": 0,
+        "isCurrent": true
+      },
+      "author": {
+        "id": 6,
+        "name": "Zeynep Kaya",
+        "initials": "ZK",
+        "role": "kasif_meraklisi"
+      },
+      "category": "Barınma",
+      "createdAt": "2024-11-15T10:00:00.000Z",
+      "updatedAt": "2024-11-15T10:00:00.000Z",
+      "views": 2100,
+      "likes": 98,
+      "comments": 42,
+      "tags": ["Ev", "Kiralama"],
+      "reliabilityScore": 88,
+      "status": "approved",
+      "approvedBy": {
+        "id": 4,
+        "name": "Admin",
+        "initials": "AD",
+        "role": "konya_bilgesi"
+      },
+      "approvedAt": "2024-11-15T10:00:00.000Z"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "author": "Ayşe Yılmaz",
+      "authorInitials": "AY",
+      "timeAgo": "2 saat önce",
+      "content": "Bu notlar gerçekten çok işime yaradı! Özellikle anayasa hukuku kısmı çok detaylı ve anlaşılır şekilde hazırlanmış.",
+      "upvotes": 42,
+      "downvotes": 2,
+      "logicalVotes": 35,
+      "replies": 8,
+      "isUpvoted": false,
+      "isDownvoted": false,
+      "isLogical": false,
+      "topicId": 1,
+      "parentId": null
+    },
+    {
+      "id": 2,
+      "author": "Mehmet Demir",
+      "authorInitials": "MD",
+      "timeAgo": "5 saat önce",
+      "content": "Notlar iyi hazırlanmış ama bazı konularda daha fazla örnek olabilirdi. Yine de genel olarak faydalı bir kaynak.",
+      "upvotes": 28,
+      "downvotes": 1,
+      "logicalVotes": 20,
+      "replies": 5,
+      "isUpvoted": false,
+      "isDownvoted": false,
+      "isLogical": false,
+      "topicId": 1,
+      "parentId": null
+    },
+    {
+      "id": 3,
+      "author": "Zeynep Kaya",
+      "authorInitials": "ZK",
+      "timeAgo": "1 gün önce",
+      "content": "Final öncesi son gün bu notlara çalıştım ve çok yardımcı oldu. Özellikle özet tablolar sayesinde konuları daha iyi kavradım.",
+      "upvotes": 35,
+      "downvotes": 0,
+      "logicalVotes": 28,
+      "replies": 12,
+      "isUpvoted": false,
+      "isDownvoted": false,
+      "isLogical": false,
+      "topicId": 1,
+      "parentId": null
+    }
+  ],
+  "discussions": [
+    {
+      "id": 1,
+      "author": "Gezgin Kullanıcı",
+      "authorInitials": "GK",
+      "category": "Akademik",
+      "title": "Veri Yapıları Final Hazırlık",
+      "excerpt": "Final sınavına hazırlananlar için önemli konular ve örnek sorular...",
+      "timeAgo": "2 saat önce",
+      "likes": 45,
+      "comments": 23
+    },
+    {
+      "id": 2,
+      "author": "Seyyah Kullanıcı",
+      "authorInitials": "SK",
+      "category": "Sosyal",
+      "title": "Kampüste En İyi Çalışma Mekanları",
+      "excerpt": "Konya'daki üniversite öğrencileri için sessiz ve verimli çalışma alanları...",
+      "timeAgo": "5 saat önce",
+      "likes": 38,
+      "comments": 15
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "title": "Trekking Topluluğu Buluşması",
+      "category": "student",
+      "image": "https://images.unsplash.com/photo-1631801753372-589f27049c4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkZW50cyUyMGhpa2luZyUyMG1vdW50YWlufGVufDF8fHx8MTc2NDE3NTgzOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "date": "30 Kasım 2024",
+      "time": "09:00",
+      "endTime": "17:00",
+      "location": "Alaaldin Tepesi",
+      "fullAddress": "Alaaldin Tepesi, Konya",
+      "participants": 24,
+      "maxParticipants": 30,
+      "description": "Doğa yürüyüşü ve piknik etkinliği",
+      "organizer": {
+        "name": "Trekking Topluluğu",
+        "avatar": "",
+        "role": "student"
+      },
+      "requirements": ["Rahat kıyafet", "Su şişesi"],
+      "coordinates": {
+        "lat": 37.8746,
+        "lng": 32.4932
+      }
+    },
+    {
+      "id": 2,
+      "title": "Kitap Kulübü - Orhan Pamuk",
+      "category": "student",
+      "image": "https://images.unsplash.com/photo-1624340236923-4e6e8724695d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib29rc3RvcmUlMjBjYWZlfGVufDF8fHx8MTc2NDE3NTgzOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "date": "2 Aralık 2024",
+      "time": "18:30",
+      "endTime": "20:30",
+      "location": "Kitap & Kahve",
+      "fullAddress": "Kitap & Kahve, Konya",
+      "participants": 12,
+      "maxParticipants": 15,
+      "description": "Orhan Pamuk'un eserlerini tartışıyoruz",
+      "organizer": {
+        "name": "Kitap Kulübü",
+        "avatar": "",
+        "role": "student"
+      },
+      "requirements": [],
+      "coordinates": {
+        "lat": 37.8750,
+        "lng": 32.4940
+      }
+    },
+    {
+      "id": 3,
+      "title": "Board Game Night",
+      "category": "student",
+      "image": "https://images.unsplash.com/photo-1762744594797-bcfd17a8c032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYW1lJTIwY2FmZSUyMGJvYXJkJTIwZ2FtZXN8ZW58MXx8fHwxNzY0MTc1ODQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "date": "5 Aralık 2024",
+      "time": "20:00",
+      "endTime": "23:00",
+      "location": "Game Zone Cafe",
+      "fullAddress": "Game Zone Cafe, Konya",
+      "participants": 8,
+      "maxParticipants": 20,
+      "description": "Strateji ve kutu oyunları gecesi",
+      "organizer": {
+        "name": "Oyun Topluluğu",
+        "avatar": "",
+        "role": "student"
+      },
+      "requirements": [],
+      "coordinates": {
+        "lat": 37.8780,
+        "lng": 32.4970
+      }
+    },
+    {
+      "id": 4,
+      "title": "Gençlik Merkezi Açılış Töreni",
+      "category": "kbb",
+      "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3V0aCUyMGNlbnRlcnxlbnwxfHx8fDE3NjQxNzU4NDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "date": "10 Aralık 2024",
+      "time": "14:00",
+      "endTime": "17:00",
+      "location": "Konya Gençlik Merkezi",
+      "fullAddress": "Konya Gençlik Merkezi, Konya",
+      "participants": 150,
+      "maxParticipants": 200,
+      "description": "Yeni gençlik merkezinin açılış töreni ve tanıtım etkinliği",
+      "organizer": {
+        "name": "Konya Büyükşehir Belediyesi",
+        "avatar": "",
+        "role": "kbb"
+      },
+      "requirements": [],
+      "coordinates": {
+        "lat": 37.8746,
+        "lng": 32.4932
+      }
+    },
+    {
+      "id": 5,
+      "title": "Kültür Kart Tanıtım Günü",
+      "category": "kbb",
+      "image": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJkJTIwcGF5bWVudHxlbnwxfHx8fDE3NjQxNzU4NDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "date": "15 Aralık 2024",
+      "time": "11:00",
+      "endTime": "15:00",
+      "location": "Konya Büyükşehir Belediyesi",
+      "fullAddress": "Konya Büyükşehir Belediyesi, Konya",
+      "participants": 80,
+      "maxParticipants": 100,
+      "description": "Genç Kültür Kart'ın özellikleri ve avantajları hakkında bilgilendirme",
+      "organizer": {
+        "name": "Konya Büyükşehir Belediyesi",
+        "avatar": "",
+        "role": "kbb"
+      },
+      "requirements": [],
+      "coordinates": {
+        "lat": 37.8746,
+        "lng": 32.4932
+      }
+    },
+    {
+      "id": 6,
+      "title": "Öğrenci Konseri - Yerel Sanatçılar",
+      "category": "kbb",
+      "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb25jZXJ0JTIwbXVzaWN8ZW58MXx8fHwxNzY0MTc1ODQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "date": "20 Aralık 2024",
+      "time": "19:00",
+      "endTime": "22:00",
+      "location": "Konya Kültür Merkezi",
+      "fullAddress": "Konya Kültür Merkezi, Konya",
+      "participants": 200,
+      "maxParticipants": 300,
+      "description": "Konyalı genç sanatçıların performansları",
+      "organizer": {
+        "name": "Konya Büyükşehir Belediyesi",
+        "avatar": "",
+        "role": "kbb"
+      },
+      "requirements": [],
+      "coordinates": {
+        "lat": 37.8746,
+        "lng": 32.4932
+      }
+    }
+  ],
+  "housing": [
+    {
+      "id": 1,
+      "title": "Selçuklu Modern Residence - Kampüse Yakın",
+      "category": "private",
+      "location": "Bosna Hersek, Selçuklu",
+      "fullAddress": "Bosna Hersek Mahallesi, Selçuklu, Konya",
+      "price": 8000,
+      "priceText": "8.000₺",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "area": 85,
+      "tags": ["Özel Yurt", "Eşyalı"],
+      "views": 456,
+      "images": [
+        "https://images.unsplash.com/photo-1662454419736-de132ff75638?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBhcGFydG1lbnQlMjBiZWRyb29tfGVufDF8fHx8MTc2NDE0MzU1NHww&ixlib=rb-4.1.0&q=80&w=1080"
+      ],
+      "description": "Kampüse çok yakın modern residence. Eşyalı, güvenlikli ve öğrenci dostu.",
+      "features": [
+        {
+          "icon": "🛏️",
+          "label": "Eşyalı"
+        },
+        {
+          "icon": "🔒",
+          "label": "Güvenlik"
+        },
+        {
+          "icon": "📶",
+          "label": "WiFi"
+        }
+      ],
+      "availableFrom": "2024-12-01",
+      "postedDate": "2024-11-20",
+      "contact": {
+        "name": "Ahmet Yılmaz",
+        "phone": "+90 532 123 4567",
+        "email": "ahmet@example.com"
+      },
+      "coordinates": {
+        "lat": 37.8750,
+        "lng": 32.4940
+      },
+      "distance": 1.2,
+      "rating": 4.5,
+      "reviews": 12
+    },
+    {
+      "id": 2,
+      "title": "KYK Erkek Öğrenci Yurdu - Merkezi Konum",
+      "category": "government",
+      "location": "Meram, Merkez",
+      "fullAddress": "Meram, Merkez, Konya",
+      "price": 3500,
+      "priceText": "3.500₺",
+      "bedrooms": 4,
+      "bathrooms": 2,
+      "area": 120,
+      "tags": ["KYK"],
+      "views": 892,
+      "images": [
+        "https://images.unsplash.com/photo-1520277739336-7bf67edfa768?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkZW50JTIwZG9ybWl0b3J5JTIwcm9vbXxlbnwxfHx8fDE3NjQxNzYxNzh8MA&ixlib=rb-4.1.0&q=80&w=1080"
+      ],
+      "description": "Merkezi konumda, ulaşımı kolay KYK yurdu.",
+      "features": [
+        {
+          "icon": "🍽️",
+          "label": "Yemekhane"
+        },
+        {
+          "icon": "📚",
+          "label": "Kütüphane"
+        }
+      ],
+      "availableFrom": "2024-12-01",
+      "postedDate": "2024-11-15",
+      "contact": {
+        "name": "KYK Müdürlüğü",
+        "phone": "+90 332 123 4567",
+        "email": "kyk@example.com"
+      },
+      "coordinates": {
+        "lat": 37.8746,
+        "lng": 32.4932
+      },
+      "distance": 0.8,
+      "rating": 4.2,
+      "reviews": 45
+    }
+  ],
+  "housingReviews": [
+    {
+      "id": 1,
+      "housingId": 1,
+      "user": {
+        "id": 2,
+        "name": "Seyyah Kullanıcı",
+        "initials": "SK",
+        "role": "seyyah"
+      },
+      "rating": 5,
+      "comment": "Çok temiz ve güvenli bir yer. Kampüse yakın olması büyük avantaj.",
+      "createdAt": "2024-11-25T10:00:00.000Z",
+      "helpful": 8
+    },
+    {
+      "id": 2,
+      "housingId": 1,
+      "user": {
+        "id": 3,
+        "name": "Gezgin Kullanıcı",
+        "initials": "GK",
+        "role": "gezgin"
+      },
+      "rating": 4,
+      "comment": "Fiyat biraz yüksek ama konum ve kalite açısından değer.",
+      "createdAt": "2024-11-24T10:00:00.000Z",
+      "helpful": 5
+    }
+  ],
+  "jobs": [
+    {
+      "id": 1,
+      "company": "Tech Solutions",
+      "companyLogo": "",
+      "role": "Frontend Developer",
+      "location": "Konya",
+      "fullAddress": "Selçuklu, Konya",
+      "type": "Part-Time",
+      "postedDays": 5,
+      "salary": "8.000₺ - 12.000₺",
+      "description": "React ve Next.js bilen frontend developer aranıyor.",
+      "requirements": ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+      "responsibilities": ["UI geliştirme", "Kod yazma", "Test yazma"],
+      "benefits": ["Esnek çalışma", "Uzaktan çalışma imkanı"],
+      "companyInfo": {
+        "name": "Tech Solutions",
+        "description": "Yazılım geliştirme şirketi",
+        "website": "https://techsolutions.com",
+        "email": "info@techsolutions.com",
+        "phone": "+90 332 123 4567",
+        "employees": "50-100",
+        "industry": "Teknoloji"
+      }
+    }
+  ],
+  "internships": [
+    {
+      "id": 1,
+      "company": "Digital Agency",
+      "companyLogo": "",
+      "role": "Web Development Intern",
+      "location": "Konya",
+      "fullAddress": "Meram, Konya",
+      "type": "Full-Time",
+      "postedDays": 3,
+      "duration": "3 ay",
+      "description": "Web geliştirme stajyeri aranıyor.",
+      "requirements": ["HTML", "CSS", "JavaScript"],
+      "responsibilities": ["Web sitesi geliştirme", "Kod yazma"],
+      "benefits": ["Sertifika", "Referans mektubu"],
+      "companyInfo": {
+        "name": "Digital Agency",
+        "description": "Dijital ajans",
+        "website": "https://digitalagency.com",
+        "email": "info@digitalagency.com",
+        "phone": "+90 332 987 6543"
+      }
+    }
+  ],
+  "scholarships": [
+    {
+      "id": 1,
+      "organization": "Konya Büyükşehir Belediyesi",
+      "organizationLogo": "",
+      "title": "Gençlik Bursu",
+      "amount": "1.000₺/ay",
+      "location": "Konya",
+      "deadline": "2024-12-31",
+      "deadlineDays": 30,
+      "requirements": ["Öğrenci belgesi", "Gelir belgesi", "Başvuru formu"],
+      "description": "Konya'da okuyan öğrenciler için aylık burs imkanı.",
+      "applicationProcess": "Online başvuru yapılabilir.",
+      "contact": {
+        "email": "burs@konya.bel.tr",
+        "phone": "+90 332 123 4567",
+        "website": "https://konya.bel.tr"
+      }
+    }
+  ],
+  "venues": [
+    {
+      "id": 1,
+      "image": "https://images.unsplash.com/photo-1646681828239-843f5ed340de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjb2ZmZWUlMjBzaG9wfGVufDF8fHx8MTc2NDE1ODY4NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "name": "Meram Kıraathanesi",
+      "location": "Meram, Merkez",
+      "fullAddress": "Meram, Merkez, Konya",
+      "rating": 4.8,
+      "reviews": 156,
+      "crowdLevel": "medium",
+      "category": "Kahve & Tatlı",
+      "description": "Geleneksel Türk kahvesi ve çay servisi yapan sıcak bir mekan.",
+      "features": ["WiFi", "Sessiz Ortam", "Dış Mekan"],
+      "openingHours": {
+        "monday": "08:00 - 22:00",
+        "tuesday": "08:00 - 22:00",
+        "wednesday": "08:00 - 22:00",
+        "thursday": "08:00 - 22:00",
+        "friday": "08:00 - 23:00",
+        "saturday": "09:00 - 23:00",
+        "sunday": "09:00 - 22:00"
+      },
+      "priceRange": "₺₺",
+      "coordinates": {
+        "lat": 37.8746,
+        "lng": 32.4932
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1646681828239-843f5ed340de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjb2ZmZWUlMjBzaG9wfGVufDF8fHx8MTc2NDE1ODY4NXww&ixlib=rb-4.1.0&q=80&w=1080"
+      ]
+    },
+    {
+      "id": 2,
+      "image": "https://images.unsplash.com/photo-1737018363337-c11847e9f39b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsaWJyYXJ5JTIwc3R1ZHklMjBzcGFjZXxlbnwxfHx8fDE3NjQxNzU4Mzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "name": "Study Hub Cafe",
+      "location": "Bosna Hersek, Selçuklu",
+      "fullAddress": "Bosna Hersek Mahallesi, Selçuklu, Konya",
+      "rating": 4.9,
+      "reviews": 234,
+      "crowdLevel": "low",
+      "category": "Ders Çalışma",
+      "description": "Sessiz ve verimli çalışma ortamı sunan modern kafe.",
+      "features": ["WiFi", "Sessiz Ortam", "Priz", "Çalışma Masaları"],
+      "openingHours": {
+        "monday": "07:00 - 23:00",
+        "tuesday": "07:00 - 23:00",
+        "wednesday": "07:00 - 23:00",
+        "thursday": "07:00 - 23:00",
+        "friday": "07:00 - 00:00",
+        "saturday": "08:00 - 00:00",
+        "sunday": "08:00 - 23:00"
+      },
+      "priceRange": "₺₺",
+      "coordinates": {
+        "lat": 37.8750,
+        "lng": 32.4940
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1737018363337-c11847e9f39b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsaWJyYXJ5JTIwc3R1ZHklMjBzcGFjZXxlbnwxfHx8fDE3NjQxNzU4Mzh8MA&ixlib=rb-4.1.0&q=80&w=1080"
+      ]
+    }
+  ],
+  "venueReviews": [
+    {
+      "id": 1,
+      "venueId": 1,
+      "user": {
+        "id": 2,
+        "name": "Seyyah Kullanıcı",
+        "initials": "SK",
+        "role": "seyyah"
+      },
+      "rating": 5,
+      "comment": "Harika bir mekan! Kahvesi ve atmosferi çok güzel.",
+      "createdAt": "2024-11-25T10:00:00.000Z",
+      "helpful": 12
+    }
+  ],
+  "discoveryPlaces": [
+    {
+      "id": 1,
+      "title": "Mevlana Müzesi",
+      "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "description": "Konya'nın en önemli tarihi ve kültürel mekanlarından biri.",
+      "category": "Tarihi Yerler",
+      "howToReach": {
+        "byBus": "Merkez'den 1 numaralı otobüs ile ulaşılabilir",
+        "byTram": "Tramvay ile Mevlana durağında inilebilir",
+        "byCar": "Merkez'e 5 dakika mesafede",
+        "byWalking": "Merkez'den 10 dakika yürüme mesafesi"
+      },
+      "bestTimeToVisit": {
+        "timeOfDay": "Sabah erken saatler",
+        "dayOfWeek": "Hafta içi",
+        "season": "Tüm mevsimler",
+        "specialNotes": "Hafta sonları çok kalabalık olabilir"
+      },
+      "coordinates": {
+        "lat": 37.8746,
+        "lng": 32.4932
+      }
+    }
+  ],
+  "faqs": [
+    {
+      "id": 1,
+      "question": "GençCoin nedir?",
+      "answer": "GençCoin, platformda katkıda bulunarak kazanabileceğiniz sanal para birimidir.",
+      "category": "Genel",
+      "views": 1250,
+      "helpful": 89,
+      "createdAt": "2024-11-01T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "question": "Coin nasıl kazanılır?",
+      "answer": "Başlık açarak, wiki düzenleyerek, yorum yaparak ve beğeni alarak coin kazanabilirsiniz.",
+      "category": "Genel",
+      "views": 980,
+      "helpful": 67,
+      "createdAt": "2024-11-01T10:00:00.000Z"
+    }
+  ],
+  "academicResources": [
+    {
+      "id": 1,
+      "title": "Veri Yapıları Ders Notları",
+      "fileType": "PDF",
+      "fileSize": "2.5 MB",
+      "uploadedBy": "Gezgin Kullanıcı",
+      "uploaderInitials": "GK",
+      "uploadDate": "2 gün önce",
+      "downloads": 145,
+      "views": 320,
+      "category": "Mühendislik",
+      "university": "Selçuk Üniversitesi",
+      "department": "Bilgisayar Mühendisliği",
+      "course": "Veri Yapıları"
+    }
+  ],
+  "announcements": [
+    {
+      "id": 1,
+      "title": "Genç Kültür Kart Başvuruları Başladı",
+      "content": "Konya Büyükşehir Belediyesi Genç Kültür Kart başvuruları başlamıştır.",
+      "image": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "category": "Duyuru",
+      "createdAt": "2024-11-25T10:00:00.000Z",
+      "views": 1250,
+      "isImportant": true,
+      "author": "Konya Büyükşehir Belediyesi"
+    }
+  ],
+  "lifeGuides": [
+    {
+      "id": 1,
+      "title": "Konya'da Ulaşım Rehberi",
+      "description": "Konya'da toplu taşıma, tramvay ve otobüs hatları hakkında bilgiler.",
+      "icon": "🚌",
+      "link": "/life-guide/1",
+      "content": "Konya'da ulaşım rehberi içeriği...",
+      "category": "Ulaşım",
+      "views": 850
+    }
+  ],
+  "contributions": [
+    {
+      "id": 1,
+      "type": "topic",
+      "title": "Selçuk Hukuk Final Notları",
+      "content": "2024 yılı hukuk fakültesi final sınavları için hazırlanmış kapsamlı notlar...",
+      "createdAt": "2024-11-25T10:00:00.000Z",
+      "topicId": 1,
+      "coins": 30,
+      "views": 1245,
+      "likes": 89,
+      "dislikes": 2,
+      "status": "approved"
+    },
+    {
+      "id": 2,
+      "type": "wiki_edit",
+      "title": "Konya'da Öğrenci Dostu Restoranlar",
+      "content": "Fiyat bilgilerini güncelledim ve yeni mekanlar ekledim...",
+      "createdAt": "2024-11-22T10:00:00.000Z",
+      "topicId": 2,
+      "coins": 15,
+      "status": "approved",
+      "version": 3
+    }
+  ],
+  "achievements": [
+    {
+      "id": "first_comment",
+      "name": "İlk Yorum",
+      "description": "İlk yorumunu yaptın!",
+      "icon": "💬",
+      "category": "contribution",
+      "progress": 1,
+      "total": 1,
+      "unlocked": true,
+      "unlockedAt": "2024-11-05T14:30:00.000Z",
+      "coins": 10,
+      "rarity": "common"
+    },
+    {
+      "id": "wiki_editor",
+      "name": "Wiki Editörü",
+      "description": "10 wiki düzenlemesi yaptın!",
+      "icon": "✏️",
+      "category": "contribution",
+      "progress": 3,
+      "total": 10,
+      "unlocked": false,
+      "unlockedAt": null,
+      "coins": 50,
+      "rarity": "rare"
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "type": "earned",
+      "action": "Yorum yazımı",
+      "amount": 15,
+      "date": "2 saat önce",
+      "icon": "💬"
+    },
+    {
+      "id": 2,
+      "type": "earned",
+      "action": "45 beğeni aldı",
+      "amount": 45,
+      "date": "5 saat önce",
+      "icon": "👍"
+    },
+    {
+      "id": 3,
+      "type": "earned",
+      "action": "Wiki düzenleme",
+      "amount": 20,
+      "date": "1 gün önce",
+      "icon": "✏️"
+    },
+    {
+      "id": 4,
+      "type": "transferred",
+      "action": "Kültür Kart'a aktarım",
+      "amount": -500,
+      "date": "3 gün önce",
+      "icon": "🎁"
+    }
+  ],
+  "conversations": [
+    {
+      "id": 1,
+      "user": {
+        "id": 5,
+        "name": "Ahmet Yılmaz",
+        "initials": "AY",
+        "role": "gezgin",
+        "isOnline": true
+      },
+      "lastMessage": "Notlar için teşekkürler!",
+      "timestamp": "10 dk önce",
+      "unreadCount": 2,
+      "messages": [
+        {
+          "id": 1,
+          "content": "Merhaba, Selçuk Hukuk notlarını paylaşabilir misin?",
+          "senderId": 5,
+          "timestamp": "Dün 14:30",
+          "isRead": true
+        },
+        {
+          "id": 2,
+          "content": "Tabii, şimdi gönderiyorum",
+          "senderId": 1,
+          "timestamp": "Dün 14:35",
+          "isRead": true
+        },
+        {
+          "id": 3,
+          "content": "Harika, çok yardımcı olacak",
+          "senderId": 5,
+          "timestamp": "Dün 14:36",
+          "isRead": true
+        },
+        {
+          "id": 4,
+          "content": "Notlar için teşekkürler!",
+          "senderId": 5,
+          "timestamp": "10 dk önce",
+          "isRead": false
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "user": {
+        "id": 6,
+        "name": "Zeynep Kaya",
+        "initials": "ZK",
+        "role": "kasif_meraklisi",
+        "isOnline": true
+      },
+      "lastMessage": "Ev arkadaşı konusunda ilerleme var mı?",
+      "timestamp": "1 saat önce",
+      "unreadCount": 0,
+      "messages": [
+        {
+          "id": 1,
+          "content": "Merhaba, Bosna Hersek'te ev arıyormuşsun?",
+          "senderId": 6,
+          "timestamp": "2 gün önce",
+          "isRead": true
+        },
+        {
+          "id": 2,
+          "content": "Evet, 2+1 bir daire arıyorum",
+          "senderId": 1,
+          "timestamp": "2 gün önce",
+          "isRead": true
+        },
+        {
+          "id": 3,
+          "content": "Ben de arıyorum, beraber bakalım mı?",
+          "senderId": 6,
+          "timestamp": "2 gün önce",
+          "isRead": true
+        },
+        {
+          "id": 4,
+          "content": "Olur, iyi fikir!",
+          "senderId": 1,
+          "timestamp": "1 gün önce",
+          "isRead": true
+        },
+        {
+          "id": 5,
+          "content": "Ev arkadaşı konusunda ilerleme var mı?",
+          "senderId": 6,
+          "timestamp": "1 saat önce",
+          "isRead": true
+        }
+      ]
+    }
+  ],
+  "invitedUsers": [
+    {
+      "id": 2,
+      "name": "Seyyah Kullanıcı",
+      "initials": "SK",
+      "joinedAt": "2024-10-01",
+      "coinsEarned": 50
+    }
+  ],
+  "wikiEditProposals": [],
+  "flaggedContent": [],
+  "adminStats": {
+    "totalUsers": 1500,
+    "totalTopics": 320,
+    "totalComments": 1250,
+    "totalCoinsDistributed": 50000,
+    "activeUsers": 450,
+    "pendingApprovals": 12,
+    "flaggedContent": 5
+  },
+  "coinMatrix": {
+    "createTopic": 30,
+    "editWiki": 15,
+    "comment": 2,
+    "wikiVoteUseful": 1,
+    "wikiVoteNotUseful": -1,
+    "commentLike": 1,
+    "commentLogical": 2,
+    "socialResponsibilityProject": 50
+  },
+  "conversionConfig": {
+    "rate": 100,
+    "minAmount": 500,
+    "maxAmountPerDay": 5000
+  },
+  "trendingTopics": [
+    {
+      "id": 1,
+      "title": "Selçuk Hukuk Final Notları",
+      "category": "Akademik",
+      "views": 3200,
+      "comments": 48,
+      "trend": "up"
+    },
+    {
+      "id": 2,
+      "title": "Konya'da Öğrenci Dostu Restoranlar",
+      "category": "Sosyal",
+      "views": 2800,
+      "comments": 35,
+      "trend": "up"
+    }
+  ],
+  "searchResults": {
+    "topics": [],
+    "comments": [],
+    "users": []
+  }
+}
+

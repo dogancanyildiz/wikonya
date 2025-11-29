@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThumbsUp, MessageCircle, Lightbulb } from "lucide-react"
 import Link from "next/link"
+import { getComments, getTopicById } from "@/lib/mock-data"
 
 interface PopularComment {
   id: number
@@ -26,41 +27,22 @@ interface PopularCommentsProps {
 
 export function PopularComments({ comments }: PopularCommentsProps) {
   // Mock data - gerçek uygulamada API'den gelecek
-  const mockComments: PopularComment[] = comments || [
-    {
-      id: 1,
-      author: { name: "Ayşe Yılmaz", initials: "AY" },
-      content: "Bu notlar gerçekten çok işime yaradı! Özellikle anayasa hukuku kısmı çok detaylı ve anlaşılır şekilde hazırlanmış.",
-      topicTitle: "Selçuk Hukuk Final Notları",
-      topicId: 1,
-      upvotes: 42,
-      logicalVotes: 35,
-      comments: 8,
-      timeAgo: "2 saat önce",
-    },
-    {
-      id: 2,
-      author: { name: "Mehmet Demir", initials: "MD" },
-      content: "Notlar iyi hazırlanmış ama bazı konularda daha fazla örnek olabilirdi. Yine de genel olarak faydalı bir kaynak.",
-      topicTitle: "Selçuk Hukuk Final Notları",
-      topicId: 1,
-      upvotes: 28,
-      logicalVotes: 20,
-      comments: 5,
-      timeAgo: "5 saat önce",
-    },
-    {
-      id: 3,
-      author: { name: "Zeynep Kaya", initials: "ZK" },
-      content: "Final öncesi son gün bu notlara çalıştım ve çok yardımcı oldu. Özellikle özet tablolar sayesinde konuları daha iyi kavradım.",
-      topicTitle: "Veri Yapıları Final Hazırlık",
-      topicId: 2,
-      upvotes: 35,
-      logicalVotes: 28,
-      comments: 12,
-      timeAgo: "1 gün önce",
-    },
-  ]
+  // mock-data.json dosyasından veri alınıyor
+  const mockCommentsData = getComments()
+  const mockComments: PopularComment[] = comments || mockCommentsData.map(comment => {
+    const topic = getTopicById(comment.topicId || 0)
+    return {
+      id: comment.id,
+      author: { name: comment.author, initials: comment.authorInitials },
+      content: comment.content,
+      topicTitle: topic?.title || "",
+      topicId: comment.topicId || 0,
+      upvotes: comment.upvotes,
+      logicalVotes: comment.logicalVotes || 0,
+      comments: comment.replies,
+      timeAgo: comment.timeAgo,
+    }
+  })
 
   return (
     <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">

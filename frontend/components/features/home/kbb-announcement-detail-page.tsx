@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Megaphone, Calendar, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { getAnnouncementById } from "@/lib/mock-data"
 
 interface KBBAnnouncement {
   id: number
@@ -16,38 +17,18 @@ interface KBBAnnouncement {
   isImportant?: boolean
 }
 
-// Mock data - gerçek uygulamada API'den gelecek
-const baseTimestamp = 1700000000000
-const announcementsData: KBBAnnouncement[] = [
-  {
-    id: 1,
-    title: "Genç Kültür Kart Yeni Özellikler",
-    content: "Genç Kültür Kart'a yeni avantajlar eklendi. Artık daha fazla kültürel etkinlik ve mekanda indirimlerden yararlanabilirsiniz. Kartınızı güncelleyerek yeni özellikleri keşfedin. Detaylı bilgi için KBB web sitesini ziyaret edebilir veya ilgili birimlerle iletişime geçebilirsiniz.",
-    date: new Date(baseTimestamp).toISOString(),
-    category: "Duyuru",
-    link: "/announcements/1",
-    isImportant: true,
-  },
-  {
-    id: 2,
-    title: "Konya Gençlik Festivali 2024",
-    content: "Bu yıl düzenlenecek gençlik festivali için kayıtlar başladı! Festival kapsamında konserler, atölyeler, spor etkinlikleri ve daha birçok aktivite yer alacak. Tüm gençlerimizi bekliyoruz. Kayıt için son tarih 15 Mart 2024. Detaylı program ve kayıt bilgileri için web sitemizi ziyaret edin.",
-    date: new Date(baseTimestamp - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    category: "Etkinlik",
-    link: "/announcements/2",
-  },
-  {
-    id: 3,
-    title: "Sosyal Sorumluluk Projeleri",
-    content: "Yeni sosyal sorumluluk projelerine katılarak +100 GençCoin kazanabilirsiniz. Projelerimiz çevre, eğitim, sağlık ve kültür alanlarında gerçekleştirilecek. Katılım için başvuru formunu doldurmanız yeterli. Proje detayları ve başvuru için ilgili sayfayı ziyaret edin.",
-    date: new Date(baseTimestamp - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    category: "Proje",
-    link: "/announcements/3",
-  },
-]
-
 export function KBBAnnouncementDetailPage({ announcementId }: { announcementId: number }) {
-  const announcement = announcementsData.find(a => a.id === announcementId)
+  // Mock data - mock-data.json dosyasından alınıyor
+  const mockAnnouncement = getAnnouncementById(announcementId)
+  const announcement: KBBAnnouncement | undefined = mockAnnouncement ? {
+    id: mockAnnouncement.id,
+    title: mockAnnouncement.title,
+    content: mockAnnouncement.content,
+    date: mockAnnouncement.createdAt,
+    category: mockAnnouncement.category,
+    link: `/announcements/${mockAnnouncement.id}`,
+    isImportant: mockAnnouncement.isImportant,
+  } : undefined
 
   if (!announcement) {
     return (

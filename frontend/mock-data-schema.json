@@ -3,47 +3,150 @@
   "title": "WikiKonya Mock Data Schema",
   "description": "Tüm sayfalar için mock data formatı",
   "type": "object",
+  "$defs": {
+    "coordinates": {
+      "type": "object",
+      "properties": {
+        "lat": { "type": "number" },
+        "lng": { "type": "number" }
+      }
+    },
+    "userRef": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "name": { "type": "string" },
+        "initials": { "type": "string" },
+        "role": { "type": "string" }
+      }
+    },
+    "userRefWithOnline": {
+      "allOf": [
+        { "$ref": "#/$defs/userRef" },
+        {
+          "properties": {
+            "isOnline": { "type": "boolean" }
+          }
+        }
+      ]
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "website": { "type": "string" }
+      }
+    },
+    "companyInfo": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "website": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "employees": { "type": "string" },
+        "industry": { "type": "string" }
+      }
+    },
+    "openingHours": {
+      "type": "object",
+      "properties": {
+        "monday": { "type": "string" },
+        "tuesday": { "type": "string" },
+        "wednesday": { "type": "string" },
+        "thursday": { "type": "string" },
+        "friday": { "type": "string" },
+        "saturday": { "type": "string" },
+        "sunday": { "type": "string" }
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "user": { "$ref": "#/$defs/userRef" },
+        "rating": { "type": "number", "minimum": 1, "maximum": 5 },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "helpful": { "type": "number" }
+      },
+      "required": ["id", "user", "rating", "comment", "createdAt"]
+    },
+    "jobType": {
+      "type": "string",
+      "enum": ["Part-Time", "Full-Time", "Remote", "Hybrid"]
+    },
+    "statusEnum": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected"]
+    },
+    "crowdLevelEnum": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "careerBase": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "company": { "type": "string" },
+        "companyLogo": { "type": "string" },
+        "role": { "type": "string" },
+        "location": { "type": "string" },
+        "fullAddress": { "type": "string" },
+        "type": { "$ref": "#/$defs/jobType" },
+        "postedDays": { "type": "number" },
+        "description": { "type": "string" },
+        "requirements": { "type": "array", "items": { "type": "string" } },
+        "responsibilities": { "type": "array", "items": { "type": "string" } },
+        "benefits": { "type": "array", "items": { "type": "string" } },
+        "companyInfo": { "$ref": "#/$defs/companyInfo" }
+      }
+    }
+  },
   "properties": {
     "users": {
       "type": "array",
       "description": "Kullanıcı verileri",
       "items": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "name": { "type": "string" },
-          "initials": { "type": "string" },
-          "email": { "type": "string" },
-          "avatar": { "type": "string" },
-          "role": { "type": "string", "enum": ["yeni_gelen", "seyyah", "gezgin", "kasif_meraklisi", "konya_bilgesi"] },
-          "totalCoins": { "type": "number" },
-          "badges": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": { "type": "string" },
-                "name": { "type": "string" },
-                "icon": { "type": "string" },
-                "description": { "type": "string" },
-                "earnedAt": { "type": "string" }
-              }
-            }
-          },
-          "xp": {
-            "type": "object",
+        "allOf": [
+          { "$ref": "#/$defs/userRef" },
+          {
             "properties": {
-              "current": { "type": "number" },
-              "nextLevel": { "type": "number" },
-              "progress": { "type": "number", "minimum": 0, "maximum": 100 }
-            }
-          },
-          "joinedAt": { "type": "string", "format": "date-time" },
-          "location": { "type": "string" },
-          "bio": { "type": "string" },
-          "university": { "type": "string" }
-        },
-        "required": ["id", "name", "initials", "role", "totalCoins", "badges", "xp", "joinedAt"]
+              "email": { "type": "string" },
+              "avatar": { "type": "string" },
+              "totalCoins": { "type": "number" },
+              "badges": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "icon": { "type": "string" },
+                    "description": { "type": "string" },
+                    "earnedAt": { "type": "string" }
+                  }
+                }
+              },
+              "xp": {
+                "type": "object",
+                "properties": {
+                  "current": { "type": "number" },
+                  "nextLevel": { "type": "number" },
+                  "progress": { "type": "number", "minimum": 0, "maximum": 100 }
+                }
+              },
+              "joinedAt": { "type": "string", "format": "date-time" },
+              "location": { "type": "string" },
+              "bio": { "type": "string" },
+              "university": { "type": "string" }
+            },
+            "required": ["totalCoins", "badges", "xp", "joinedAt"]
+          }
+        ]
       }
     },
     "topics": {
@@ -64,13 +167,13 @@
               "version": { "type": "number" },
               "createdAt": { "type": "string", "format": "date-time" },
               "updatedAt": { "type": "string", "format": "date-time" },
-              "author": { "type": "object" },
+              "author": { "$ref": "#/$defs/userRef" },
               "usefulVotes": { "type": "number" },
               "notUsefulVotes": { "type": "number" },
               "isCurrent": { "type": "boolean" }
             }
           },
-          "author": { "type": "object" },
+          "author": { "$ref": "#/$defs/userRef" },
           "category": { "type": "string" },
           "createdAt": { "type": "string", "format": "date-time" },
           "updatedAt": { "type": "string", "format": "date-time" },
@@ -79,8 +182,8 @@
           "comments": { "type": "number" },
           "tags": { "type": "array", "items": { "type": "string" } },
           "reliabilityScore": { "type": "number", "minimum": 0, "maximum": 100 },
-          "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
-          "approvedBy": { "type": "object" },
+          "status": { "$ref": "#/$defs/statusEnum" },
+          "approvedBy": { "$ref": "#/$defs/userRef" },
           "approvedAt": { "type": "string", "format": "date-time" },
           "rejectionReason": { "type": "string" }
         },
@@ -157,13 +260,7 @@
             }
           },
           "requirements": { "type": "array", "items": { "type": "string" } },
-          "coordinates": {
-            "type": "object",
-            "properties": {
-              "lat": { "type": "number" },
-              "lng": { "type": "number" }
-            }
-          }
+          "coordinates": { "$ref": "#/$defs/coordinates" }
         },
         "required": ["id", "title", "category", "date", "time", "location", "description"]
       }
@@ -200,21 +297,8 @@
           },
           "availableFrom": { "type": "string", "format": "date" },
           "postedDate": { "type": "string", "format": "date" },
-          "contact": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string" },
-              "phone": { "type": "string" },
-              "email": { "type": "string" }
-            }
-          },
-          "coordinates": {
-            "type": "object",
-            "properties": {
-              "lat": { "type": "number" },
-              "lng": { "type": "number" }
-            }
-          },
+          "contact": { "$ref": "#/$defs/contact" },
+          "coordinates": { "$ref": "#/$defs/coordinates" },
           "distance": { "type": "number" },
           "rating": { "type": "number" },
           "reviews": { "type": "number" }
@@ -226,92 +310,45 @@
       "type": "array",
       "description": "Barınma yorumları",
       "items": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "housingId": { "type": "number" },
-          "user": {
-            "type": "object",
+        "allOf": [
+          { "$ref": "#/$defs/review" },
+          {
             "properties": {
-              "name": { "type": "string" },
-              "initials": { "type": "string" },
-              "role": { "type": "string" }
-            }
-          },
-          "rating": { "type": "number", "minimum": 1, "maximum": 5 },
-          "comment": { "type": "string" },
-          "createdAt": { "type": "string", "format": "date-time" },
-          "helpful": { "type": "number" }
-        },
-        "required": ["id", "housingId", "user", "rating", "comment", "createdAt"]
+              "housingId": { "type": "number" }
+            },
+            "required": ["housingId"]
+          }
+        ]
       }
     },
     "jobs": {
       "type": "array",
       "description": "İş ilanları",
       "items": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "company": { "type": "string" },
-          "companyLogo": { "type": "string" },
-          "role": { "type": "string" },
-          "location": { "type": "string" },
-          "fullAddress": { "type": "string" },
-          "type": { "type": "string", "enum": ["Part-Time", "Full-Time", "Remote", "Hybrid"] },
-          "postedDays": { "type": "number" },
-          "salary": { "type": "string" },
-          "description": { "type": "string" },
-          "requirements": { "type": "array", "items": { "type": "string" } },
-          "responsibilities": { "type": "array", "items": { "type": "string" } },
-          "benefits": { "type": "array", "items": { "type": "string" } },
-          "companyInfo": {
-            "type": "object",
+        "allOf": [
+          { "$ref": "#/$defs/careerBase" },
+          {
             "properties": {
-              "name": { "type": "string" },
-              "description": { "type": "string" },
-              "website": { "type": "string" },
-              "email": { "type": "string" },
-              "phone": { "type": "string" },
-              "employees": { "type": "string" },
-              "industry": { "type": "string" }
-            }
+              "salary": { "type": "string" }
+            },
+            "required": ["id", "company", "role", "location", "type", "description"]
           }
-        },
-        "required": ["id", "company", "role", "location", "type", "description"]
+        ]
       }
     },
     "internships": {
       "type": "array",
       "description": "Staj ilanları",
       "items": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "company": { "type": "string" },
-          "companyLogo": { "type": "string" },
-          "role": { "type": "string" },
-          "location": { "type": "string" },
-          "fullAddress": { "type": "string" },
-          "type": { "type": "string", "enum": ["Part-Time", "Full-Time", "Remote", "Hybrid"] },
-          "postedDays": { "type": "number" },
-          "duration": { "type": "string" },
-          "description": { "type": "string" },
-          "requirements": { "type": "array", "items": { "type": "string" } },
-          "responsibilities": { "type": "array", "items": { "type": "string" } },
-          "benefits": { "type": "array", "items": { "type": "string" } },
-          "companyInfo": {
-            "type": "object",
+        "allOf": [
+          { "$ref": "#/$defs/careerBase" },
+          {
             "properties": {
-              "name": { "type": "string" },
-              "description": { "type": "string" },
-              "website": { "type": "string" },
-              "email": { "type": "string" },
-              "phone": { "type": "string" }
-            }
+              "duration": { "type": "string" }
+            },
+            "required": ["id", "company", "role", "location", "description"]
           }
-        },
-        "required": ["id", "company", "role", "location", "description"]
+        ]
       }
     },
     "scholarships": {
@@ -331,14 +368,7 @@
           "requirements": { "type": "array", "items": { "type": "string" } },
           "description": { "type": "string" },
           "applicationProcess": { "type": "string" },
-          "contact": {
-            "type": "object",
-            "properties": {
-              "email": { "type": "string" },
-              "phone": { "type": "string" },
-              "website": { "type": "string" }
-            }
-          }
+          "contact": { "$ref": "#/$defs/contact" }
         },
         "required": ["id", "organization", "title", "amount", "deadline", "requirements"]
       }
@@ -356,30 +386,13 @@
           "fullAddress": { "type": "string" },
           "rating": { "type": "number", "minimum": 0, "maximum": 5 },
           "reviews": { "type": "number" },
-          "crowdLevel": { "type": "string", "enum": ["low", "medium", "high"] },
+          "crowdLevel": { "$ref": "#/$defs/crowdLevelEnum" },
           "category": { "type": "string" },
           "description": { "type": "string" },
           "features": { "type": "array", "items": { "type": "string" } },
-          "openingHours": {
-            "type": "object",
-            "properties": {
-              "monday": { "type": "string" },
-              "tuesday": { "type": "string" },
-              "wednesday": { "type": "string" },
-              "thursday": { "type": "string" },
-              "friday": { "type": "string" },
-              "saturday": { "type": "string" },
-              "sunday": { "type": "string" }
-            }
-          },
+          "openingHours": { "$ref": "#/$defs/openingHours" },
           "priceRange": { "type": "string" },
-          "coordinates": {
-            "type": "object",
-            "properties": {
-              "lat": { "type": "number" },
-              "lng": { "type": "number" }
-            }
-          },
+          "coordinates": { "$ref": "#/$defs/coordinates" },
           "images": { "type": "array", "items": { "type": "string" } }
         },
         "required": ["id", "name", "location", "rating", "reviews", "crowdLevel", "category"]
@@ -389,24 +402,15 @@
       "type": "array",
       "description": "Mekan yorumları",
       "items": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "venueId": { "type": "number" },
-          "user": {
-            "type": "object",
+        "allOf": [
+          { "$ref": "#/$defs/review" },
+          {
             "properties": {
-              "name": { "type": "string" },
-              "initials": { "type": "string" },
-              "role": { "type": "string" }
-            }
-          },
-          "rating": { "type": "number", "minimum": 1, "maximum": 5 },
-          "comment": { "type": "string" },
-          "createdAt": { "type": "string", "format": "date-time" },
-          "helpful": { "type": "number" }
-        },
-        "required": ["id", "venueId", "user", "rating", "comment", "createdAt"]
+              "venueId": { "type": "number" }
+            },
+            "required": ["venueId"]
+          }
+        ]
       }
     },
     "discoveryPlaces": {
@@ -438,13 +442,7 @@
               "specialNotes": { "type": "string" }
             }
           },
-          "coordinates": {
-            "type": "object",
-            "properties": {
-              "lat": { "type": "number" },
-              "lng": { "type": "number" }
-            }
-          }
+          "coordinates": { "$ref": "#/$defs/coordinates" }
         },
         "required": ["id", "title", "description", "category"]
       }
@@ -542,7 +540,7 @@
           "views": { "type": "number" },
           "likes": { "type": "number" },
           "dislikes": { "type": "number" },
-          "status": { "type": "string", "enum": ["approved", "pending", "rejected"] },
+          "status": { "$ref": "#/$defs/statusEnum" },
           "voteType": { "type": "string", "enum": ["useful", "not_useful"] },
           "actionType": { "type": "string" },
           "version": { "type": "number" }
@@ -594,16 +592,7 @@
         "type": "object",
         "properties": {
           "id": { "type": "number" },
-          "user": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "number" },
-              "name": { "type": "string" },
-              "initials": { "type": "string" },
-              "role": { "type": "string" },
-              "isOnline": { "type": "boolean" }
-            }
-          },
+          "user": { "$ref": "#/$defs/userRefWithOnline" },
           "lastMessage": { "type": "string" },
           "timestamp": { "type": "string" },
           "unreadCount": { "type": "number" },
@@ -650,10 +639,10 @@
           "topicId": { "type": "number" },
           "currentContent": { "type": "string" },
           "proposedContent": { "type": "string" },
-          "author": { "type": "object" },
-          "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+          "author": { "$ref": "#/$defs/userRef" },
+          "status": { "$ref": "#/$defs/statusEnum" },
           "createdAt": { "type": "string", "format": "date-time" },
-          "reviewedBy": { "type": "object" },
+          "reviewedBy": { "$ref": "#/$defs/userRef" },
           "reviewedAt": { "type": "string", "format": "date-time" },
           "reviewNote": { "type": "string" }
         },
@@ -670,10 +659,10 @@
           "type": { "type": "string", "enum": ["topic", "comment", "wiki"] },
           "contentId": { "type": "number" },
           "reason": { "type": "string" },
-          "reportedBy": { "type": "object" },
+          "reportedBy": { "$ref": "#/$defs/userRef" },
           "reportedAt": { "type": "string", "format": "date-time" },
           "status": { "type": "string", "enum": ["pending", "resolved", "dismissed"] },
-          "resolvedBy": { "type": "object" },
+          "resolvedBy": { "$ref": "#/$defs/userRef" },
           "resolvedAt": { "type": "string", "format": "date-time" }
         },
         "required": ["id", "type", "contentId", "reason", "reportedBy", "reportedAt", "status"]
@@ -739,18 +728,9 @@
         "comments": { "type": "array" },
         "users": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "number" },
-              "name": { "type": "string" },
-              "initials": { "type": "string" },
-              "role": { "type": "string" }
-            }
-          }
+          "items": { "$ref": "#/$defs/userRef" }
         }
       }
     }
   }
 }
-

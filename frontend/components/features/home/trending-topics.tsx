@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { TrendingUp, Eye, MessageCircle } from "lucide-react"
 import Link from "next/link"
 import { Topic } from "@/lib/types"
+import { getTopics } from "@/lib/mock-data"
 
 interface TrendingTopicsProps {
   topics?: Topic[]
@@ -12,50 +13,8 @@ interface TrendingTopicsProps {
 
 export function TrendingTopics({ topics }: TrendingTopicsProps) {
   // Mock data - gerçek uygulamada API'den gelecek
-  const mockTopics: Topic[] = topics || [
-    {
-      id: 1,
-      title: "Selçuk Hukuk Final Notları",
-      content: "Final sınavlarına hazırlık için kapsamlı ders notları...",
-      category: "Akademik",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      views: 3200,
-      likes: 145,
-      comments: 48,
-      tags: ["Ders Notu", "Hukuk Fakültesi"],
-      author: { id: 1, name: "Admin", initials: "AD", role: "konya_bilgesi", totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() },
-      reliabilityScore: 98,
-    },
-    {
-      id: 2,
-      title: "Konya'da Öğrenci Dostu Restoranlar",
-      content: "Bütçe dostu ve lezzetli yemek seçenekleri...",
-      category: "Sosyal",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      views: 2800,
-      likes: 120,
-      comments: 35,
-      tags: ["Restoran", "Yemek"],
-      author: { id: 2, name: "User", initials: "US", role: "gezgin", totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() },
-      reliabilityScore: 92,
-    },
-    {
-      id: 3,
-      title: "Bosna Hersek Mahallesi Ev Kiralama Rehberi",
-      content: "Mahalle hakkında detaylı bilgiler ve kiralama tüyoları...",
-      category: "Barınma",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      views: 2100,
-      likes: 98,
-      comments: 42,
-      tags: ["Ev", "Kiralama"],
-      author: { id: 3, name: "User2", initials: "U2", role: "seyyah", totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() },
-      reliabilityScore: 88,
-    },
-  ]
+  // mock-data.json dosyasından veri alınıyor
+  const mockTopics: Topic[] = topics || getTopics()
 
   return (
     <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">

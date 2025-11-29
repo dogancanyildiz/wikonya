@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
+import { getEvents } from "@/lib/mock-data"
 
 interface Event {
   id: number
@@ -28,91 +29,11 @@ export function EventsPage() {
   const [activeTab, setActiveTab] = useState<"all" | "student" | "kbb">("all")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
-  const studentEvents: Event[] = [
-    {
-      id: 1,
-      title: "Trekking Topluluğu Buluşması",
-      image: "https://images.unsplash.com/photo-1631801753372-589f27049c4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkZW50cyUyMGhpa2luZyUyMG1vdW50YWlufGVufDF8fHx8MTc2NDE3NTgzOXww&ixlib=rb-4.1.0&q=80&w=1080",
-      date: "30 Kasım 2024",
-      time: "09:00",
-      location: "Alaaldin Tepesi",
-      participants: 24,
-      maxParticipants: 30,
-      category: "student",
-      description: "Doğa yürüyüşü ve piknik etkinliği",
-      organizer: "Trekking Topluluğu",
-    },
-    {
-      id: 2,
-      title: "Kitap Kulübü - Orhan Pamuk",
-      image: "https://images.unsplash.com/photo-1624340236923-4e6e8724695d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib29rc3RvcmUlMjBjYWZlfGVufDF8fHx8MTc2NDE3NTgzOXww&ixlib=rb-4.1.0&q=80&w=1080",
-      date: "2 Aralık 2024",
-      time: "18:30",
-      location: "Kitap & Kahve",
-      participants: 12,
-      maxParticipants: 15,
-      category: "student",
-      description: "Orhan Pamuk'un eserlerini tartışıyoruz",
-      organizer: "Kitap Kulübü",
-    },
-    {
-      id: 3,
-      title: "Board Game Night",
-      image: "https://images.unsplash.com/photo-1762744594797-bcfd17a8c032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYW1lJTIwY2FmZSUyMGJvYXJkJTIwZ2FtZXN8ZW58MXx8fHwxNzY0MTc1ODQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      date: "5 Aralık 2024",
-      time: "20:00",
-      location: "Game Zone Cafe",
-      participants: 8,
-      maxParticipants: 20,
-      category: "student",
-      description: "Strateji ve kutu oyunları gecesi",
-      organizer: "Oyun Topluluğu",
-    },
-  ]
-
-  const kbbEvents: Event[] = [
-    {
-      id: 4,
-      title: "Gençlik Merkezi Açılış Töreni",
-      image: "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3V0aCUyMGNlbnRlcnxlbnwxfHx8fDE3NjQxNzU4NDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      date: "10 Aralık 2024",
-      time: "14:00",
-      location: "Konya Gençlik Merkezi",
-      participants: 150,
-      maxParticipants: 200,
-      category: "kbb",
-      description: "Yeni gençlik merkezinin açılış töreni ve tanıtım etkinliği",
-      organizer: "Konya Büyükşehir Belediyesi",
-    },
-    {
-      id: 5,
-      title: "Kültür Kart Tanıtım Günü",
-      image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXJkJTIwcGF5bWVudHxlbnwxfHx8fDE3NjQxNzU4NDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      date: "15 Aralık 2024",
-      time: "11:00",
-      location: "Konya Büyükşehir Belediyesi",
-      participants: 80,
-      maxParticipants: 100,
-      category: "kbb",
-      description: "Genç Kültür Kart'ın özellikleri ve avantajları hakkında bilgilendirme",
-      organizer: "Konya Büyükşehir Belediyesi",
-    },
-    {
-      id: 6,
-      title: "Öğrenci Konseri - Yerel Sanatçılar",
-      image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb25jZXJ0JTIwbXVzaWN8ZW58MXx8fHwxNzY0MTc1ODQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      date: "20 Aralık 2024",
-      time: "19:00",
-      location: "Konya Kültür Merkezi",
-      participants: 200,
-      maxParticipants: 300,
-      category: "kbb",
-      description: "Konyalı genç sanatçıların performansları",
-      organizer: "Konya Büyükşehir Belediyesi",
-    },
-  ]
-
-  const allEvents = [...studentEvents, ...kbbEvents]
+  // Mock data - mock-data.json dosyasından alınıyor
+  const allMockEvents = getEvents()
+  const studentEvents: Event[] = allMockEvents.filter(e => e.category === "student") as Event[]
+  const kbbEvents: Event[] = allMockEvents.filter(e => e.category === "kbb") as Event[]
+  const allEvents = allMockEvents as Event[]
 
   const filteredEvents = allEvents.filter(event => {
     if (activeTab === "all") return true

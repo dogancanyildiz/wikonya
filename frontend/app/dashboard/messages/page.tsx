@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Search, Send, MoreVertical, Circle, ArrowLeft } from "lucide-react"
+import { getConversations } from "@/lib/mock-data"
 
 interface Message {
   id: number
@@ -39,8 +40,8 @@ export default function MessagesPage() {
 
   const currentUserId = 1
 
-  // Mock data
-  const conversations: Conversation[] = [
+  // Mock data - mock-data.json dosyasından alınıyor
+  const conversations: Conversation[] = getConversations() as Conversation[]
     {
       id: 1,
       user: {
