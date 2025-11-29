@@ -56,18 +56,54 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
   }
 
   const handleVote = (voteType: "useful" | "not_useful") => {
-    if (!state.user) return
+    if (!state.user || !wikiContent) return
     
     if (userVote === voteType) {
       // Aynı oyu tekrar tıklarsa geri al
       setUserVote(null)
+      // Oy geri alındığında wiki düzenleyen kullanıcıdan coin çıkarılmalı (backend'de yapılacak)
+      // Şimdilik sadece UI güncelleniyor
     } else {
       setUserVote(voteType)
-      // Coin kazanma
-      if (voteType === "useful") {
-        rewardCoins("wiki_vote_useful", { topicId })
+      
+      // Oy veren kullanıcı coin kazanmaz (sadece oy veriyor)
+      // Wiki düzenleyen kullanıcı coin kazanır/kaybeder
+      const wikiAuthor = wikiContent.author
+      const isVotingOwnWiki = wikiAuthor.id === state.user.id
+      
+      if (!isVotingOwnWiki) {
+        // Wiki düzenleyen kullanıcıya coin ver/çıkar
+        // Not: Gerçek uygulamada bu backend'de yapılmalı
+        // Şimdilik frontend'de simüle ediyoruz
+        if (voteType === "useful") {
+          // Wiki düzenleyen kullanıcı yararlı oy aldı
+          // Gerçek uygulamada backend'de wikiAuthor'a coin verilecek
+          // Şimdilik sadece oy sayısını güncelliyoruz
+          setWikiContent({
+            ...wikiContent,
+            usefulVotes: wikiContent.usefulVotes + 1,
+          })
+        } else {
+          // Wiki düzenleyen kullanıcı yararsız oy aldı
+          // Gerçek uygulamada backend'de wikiAuthor'dan coin çıkarılacak
+          setWikiContent({
+            ...wikiContent,
+            notUsefulVotes: wikiContent.notUsefulVotes + 1,
+          })
+        }
       } else {
-        rewardCoins("wiki_vote_not_useful", { topicId })
+        // Kendi wiki'sine oy veriyor, sadece oy sayısını güncelle
+        if (voteType === "useful") {
+          setWikiContent({
+            ...wikiContent,
+            usefulVotes: wikiContent.usefulVotes + 1,
+          })
+        } else {
+          setWikiContent({
+            ...wikiContent,
+            notUsefulVotes: wikiContent.notUsefulVotes + 1,
+          })
+        }
       }
     }
   }

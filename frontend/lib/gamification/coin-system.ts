@@ -16,7 +16,10 @@ export type CoinAction =
   | "comment"
   | "wiki_vote_useful"
   | "wiki_vote_not_useful"
+  | "wiki_received_useful_vote"
+  | "wiki_received_not_useful_vote"
   | "comment_like"
+  | "comment_received_like"
   | "comment_logical"
   | "social_responsibility_project"
 
@@ -32,10 +35,22 @@ export function getBaseCoinsForAction(action: CoinAction): number {
     case "comment":
       return COIN_MATRIX.comment
     case "wiki_vote_useful":
-      return COIN_MATRIX.wikiVoteUseful
+      // Oy veren kullanıcı coin kazanmaz (sadece oy veriyor)
+      return 0
     case "wiki_vote_not_useful":
+      // Oy veren kullanıcı coin kaybetmez (sadece oy veriyor)
+      return 0
+    case "wiki_received_useful_vote":
+      // Wiki düzenleyen kullanıcı yararlı oy aldığında +5 coin kazanır
+      return COIN_MATRIX.wikiVoteUseful
+    case "wiki_received_not_useful_vote":
+      // Wiki düzenleyen kullanıcı yararsız oy aldığında -10 coin kaybeder
       return COIN_MATRIX.wikiVoteNotUseful
     case "comment_like":
+      // Oy veren kullanıcı coin kazanmaz (sadece beğeniyor)
+      return 0
+    case "comment_received_like":
+      // Yorum sahibi beğeni aldığında +1 coin kazanır
       return COIN_MATRIX.commentLike
     case "comment_logical":
       return COIN_MATRIX.commentLogical
@@ -59,7 +74,9 @@ export function calculateCoinsEarned(action: CoinAction, userRole: UserRole): nu
  * Ayrıca rozet kontrolü yapar
  */
 export function addCoinsToUser(user: User, coins: number): User {
-  const newTotalCoins = Math.max(0, user.totalCoins + coins)
+  // Negatif coin'e izin ver (yararsız oy durumunda -10 coin olabilir)
+  // case.md'ye göre: "Negatif bakiye olabilir, caydırıcılık için önemli"
+  const newTotalCoins = user.totalCoins + coins
   const updatedUser = {
     ...user,
     totalCoins: newTotalCoins,

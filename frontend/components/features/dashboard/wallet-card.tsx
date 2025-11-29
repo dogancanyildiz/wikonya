@@ -29,9 +29,20 @@ export function WalletCard() {
   const totalSpent = 120
   const totalEarned = user.totalCoins + totalSpent
 
+  const isNegative = user.totalCoins < 0
+
   return (
-    <Card className="rounded-xl shadow-md border-border h-full flex flex-col">
+    <Card className={`rounded-xl shadow-md border-border h-full flex flex-col ${
+      isNegative ? 'border-red-500/50 dark:border-red-500/30 bg-red-50/50 dark:bg-red-950/20' : ''
+    }`}>
       <CardContent className="p-3 sm:p-5 flex flex-col flex-1">
+        {isNegative && (
+          <div className="mb-3 p-2 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg">
+            <p className="font-[Manrope] text-red-700 dark:text-red-400 text-xs font-bold">
+              ⚠️ Negatif bakiye: {user.totalCoins.toLocaleString()} GençCoin. Daha fazla katkı yaparak bakiyenizi artırın.
+            </p>
+          </div>
+        )}
         <div className="mb-3 sm:mb-4">
           <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
             <CoinIcon />
@@ -39,7 +50,9 @@ export function WalletCard() {
               Toplam GençCoin
             </p>
           </div>
-          <div className="font-[Manrope] text-primary leading-none mb-1 font-black text-3xl sm:text-4xl lg:text-[36px]">
+          <div className={`font-[Manrope] leading-none mb-1 font-black text-3xl sm:text-4xl lg:text-[36px] ${
+            isNegative ? 'text-red-600 dark:text-red-400' : 'text-primary'
+          }`}>
             {user.totalCoins.toLocaleString()}
           </div>
           <div className="flex items-center gap-2 text-primary">

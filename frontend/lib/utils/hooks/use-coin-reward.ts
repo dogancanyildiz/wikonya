@@ -39,18 +39,32 @@ export function useCoinReward() {
       // Transaction oluştur (loglama için)
       const transaction = createCoinTransaction(user.id, action, user.role, metadata)
 
-      // Coin kazanma bildirimi
-      const actionNames: Record<CoinAction, string> = {
-        create_topic: "Yeni başlık açtınız",
-        edit_wiki: "Wiki düzenlemesi yaptınız",
-        comment: "Yorum yaptınız",
-        wiki_vote_useful: "Wiki'ye yararlı oyu verdiniz",
-        wiki_vote_not_useful: "Wiki'ye yararsız oyu verdiniz",
-        comment_like: "Yorum beğendiniz",
-        comment_logical: "Mantıklı yorum işaretlediniz",
-        social_responsibility_project: "Sosyal sorumluluk projesi tamamladınız",
+      // Coin kazanma/kaybetme bildirimi
+      if (coinsEarned !== 0) {
+        const actionNames: Record<CoinAction, string> = {
+          create_topic: "Yeni başlık açtınız",
+          edit_wiki: "Wiki düzenlemesi yaptınız",
+          comment: "Yorum yaptınız",
+          wiki_vote_useful: "", // Oy veren coin kazanmaz
+          wiki_vote_not_useful: "", // Oy veren coin kaybetmez
+          wiki_received_useful_vote: "Wiki düzenlemeniz yararlı oy aldı",
+          wiki_received_not_useful_vote: "Wiki düzenlemeniz yararsız oy aldı",
+          comment_like: "", // Beğenen coin kazanmaz
+          comment_received_like: "Yorumunuz beğenildi",
+          comment_logical: "Mantıklı yorum işaretlediniz",
+          social_responsibility_project: "Sosyal sorumluluk projesi tamamladınız",
+        }
+        const message = actionNames[action] || "Aktivite"
+        if (message) {
+          notifyCoinEarned(coinsEarned, message)
+        }
+        
+        // Negatif coin uyarısı (case.md'ye göre negatif bakiye olabilir ama caydırıcılık için önemli)
+        if (userWithUpdatedRole.totalCoins < 0) {
+          // Negatif bakiye durumunda özel bir uyarı gösterilebilir
+          // Şimdilik toast notification yeterli
+        }
       }
-      notifyCoinEarned(coinsEarned, actionNames[action] || "Aktivite")
 
       // Rol terfi kontrolü
       if (userWithUpdatedRole.role !== oldRole) {

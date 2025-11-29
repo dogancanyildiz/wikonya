@@ -90,12 +90,19 @@ export function CommentFeed() {
   ])
 
   const handleVote = (commentId: number, voteType: 'up' | 'down') => {
+    if (!state.user) return
+    
     setComments(comments.map(comment => {
       if (comment.id === commentId) {
         if (voteType === 'up') {
           if (comment.isUpvoted) {
+            // Beğeniyi geri al
             return { ...comment, upvotes: comment.upvotes - 1, isUpvoted: false }
           } else {
+            // Beğeni ver
+            // Not: Oy veren kullanıcı coin kazanmaz (sadece beğeniyor)
+            // Yorum sahibi beğeni aldığında +1 coin kazanır (backend'de yapılacak)
+            // Şimdilik sadece oy sayısını güncelliyoruz
             return {
               ...comment,
               upvotes: comment.upvotes + 1,
@@ -106,8 +113,11 @@ export function CommentFeed() {
           }
         } else {
           if (comment.isDownvoted) {
+            // Beğenmemeyi geri al
             return { ...comment, downvotes: comment.downvotes - 1, isDownvoted: false }
           } else {
+            // Beğenme ver
+            // Not: Oy veren kullanıcı coin kaybetmez (sadece beğenmiyor)
             return {
               ...comment,
               downvotes: comment.downvotes + 1,
@@ -371,11 +381,20 @@ export function CommentFeed() {
               </span>
               {state.user && (() => {
                 const remaining = getRemainingActions(state.user, "comment")
-                if (remaining.limit !== null && remaining.remaining < remaining.limit) {
+                if (remaining.limit !== null) {
+                  const isLow = remaining.remaining <= 2
                   return (
-                    <span className="font-[Manrope] text-primary font-semibold text-xs">
-                      Kalan yorum hakkı: {remaining.remaining} / {remaining.limit} ({remaining.timeWindow})
-                    </span>
+                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${
+                      isLow 
+                        ? 'bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20' 
+                        : 'bg-accent'
+                    }`}>
+                      <span className={`font-[Manrope] font-semibold text-xs ${
+                        isLow ? 'text-amber-700 dark:text-amber-400' : 'text-muted-foreground'
+                      }`}>
+                        Kalan yorum hakkı: <span className="font-bold">{remaining.remaining}</span> / {remaining.limit} ({remaining.timeWindow})
+                      </span>
+                    </div>
                   )
                 }
                 return null

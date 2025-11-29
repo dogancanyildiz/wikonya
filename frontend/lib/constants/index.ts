@@ -220,13 +220,15 @@ export const USER_ROLES = {
 } as const
 
 // Coin Earning Matrix (Base points for "Yeni Gelen" role)
+// Not: wikiVoteUseful ve wikiVoteNotUseful artık wiki_received_useful_vote ve wiki_received_not_useful_vote için kullanılıyor
+// Oy veren kullanıcı coin kazanmaz, oy alan (düzenleyen/yorum yazan) kullanıcı coin kazanır/kaybeder
 export const COIN_MATRIX = {
   createTopic: 20,
   editWiki: 10,
   comment: 2,
-  wikiVoteUseful: 5,
-  wikiVoteNotUseful: -10,
-  commentLike: 1,
+  wikiVoteUseful: 5, // Wiki düzenleyen kullanıcı yararlı oy aldığında
+  wikiVoteNotUseful: -10, // Wiki düzenleyen kullanıcı yararsız oy aldığında
+  commentLike: 1, // Yorum sahibi beğeni aldığında
   commentLogical: 2,
   socialResponsibilityProject: 100,
 } as const
