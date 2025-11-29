@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Clock, ThumbsUp, MessageCircle, Share2, BookOpen, Lightbulb, Send } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -87,8 +87,14 @@ function generateComments(count: number, faqId: number) {
   return comments
 }
 
+// Deterministic comment count generator (her FAQ ID için aynı sayı)
+function getCommentCount(faqId: number): number {
+  // Her FAQ ID için deterministik bir sayı üret (3-13 arası)
+  const seed = faqId * 7 + 13
+  return (seed % 11) + 3 // 3-13 arası
+}
+
 // FAQ Data - konya-discovery-page.tsx'teki ile aynı
-// Her FAQ için 3-13 arası rastgele yorum sayısı belirle
 const faqData = [
   {
     id: 1,
@@ -456,11 +462,26 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
   const [showComments, setShowComments] = useState(true)
   const [commentInput, setCommentInput] = useState("")
   // FAQ'nin gerçek yorum sayısına göre yorumlar oluştur
-  const [comments, setComments] = useState(() => {
-    if (!faq) return []
-    return generateComments(faq.comments, faq.id)
-  })
+  const [comments, setComments] = useState<Array<{
+    id: number
+    author: string
+    authorInitials: string
+    content: string
+    timestamp: string
+    likes: number
+  }>>([])
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
+
+  // FAQ değiştiğinde yorumları güncelle
+  useEffect(() => {
+    if (faq) {
+      setLocalFaq({ ...faq })
+      setComments(generateComments(faq.comments, faq.id))
+      setIsLiked(false)
+      setIsMakesSense(false)
+      setCommentInput("")
+    }
+  }, [faqId, faq])
 
   if (!faq || !localFaq) {
     return (
