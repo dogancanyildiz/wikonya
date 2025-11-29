@@ -13,8 +13,8 @@ export function CareerPage() {
 
   const categories = [
     { id: "jobs", name: "İş/Staj", count: 12, icon: Briefcase },
-    { id: "events", name: "Etkinlik", count: 5, icon: Calendar },
     { id: "scholarships", name: "Burs", count: 3, icon: GraduationCap },
+    { id: "events", name: "Etkinlik", count: 5, icon: Calendar },
   ]
 
   return (
@@ -100,14 +100,14 @@ export function CareerPage() {
         </div>
       )}
 
-      {selectedMainCategory === "events" && (
-        <DevelopmentHub />
-      )}
-
       {selectedMainCategory === "scholarships" && (
         <div className="mb-4 sm:mb-6 md:mb-8">
           <ScholarshipBoard />
         </div>
+      )}
+
+      {selectedMainCategory === "events" && (
+        <DevelopmentHub />
       )}
     </div>
   )
