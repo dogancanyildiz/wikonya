@@ -157,7 +157,7 @@ const faqData = [
 - Yaz ayları: Çeşitli festivaller ve etkinlikler düzenlenir`,
     timeAgo: "3 gün önce",
     likes: 38,
-    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
+    comments: getCommentCount(2), // 3-13 arası deterministik
     makesSense: 19,
     category: "Ziyaret Planı",
     relatedQuestions: [
@@ -199,7 +199,7 @@ const faqData = [
 - İçeride yaklaşık 1-2 saat geçirebilirsiniz`,
     timeAgo: "4 gün önce",
     likes: 52,
-    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
+    comments: getCommentCount(3), // 3-13 arası deterministik
     makesSense: 31,
     category: "Müze & Tarihi Yerler",
     relatedQuestions: [
@@ -251,7 +251,7 @@ const faqData = [
 - Merkez'de konaklıyorsanız çoğu yere yürüyerek gidebilirsiniz`,
     timeAgo: "5 gün önce",
     likes: 29,
-    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
+    comments: getCommentCount(4), // 3-13 arası deterministik
     makesSense: 15,
     category: "Ulaşım",
     relatedQuestions: [
@@ -293,7 +293,7 @@ const faqData = [
 - Geleneksel tatlılar için özel tatlıcıları ziyaret edin`,
     timeAgo: "1 hafta önce",
     likes: 67,
-    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
+    comments: getCommentCount(5), // 3-13 arası deterministik
     makesSense: 42,
     category: "Yemek & Restoran",
     relatedQuestions: [
@@ -343,7 +343,7 @@ const faqData = [
 - Kampüs içinde yemek yeme seçenekleri mevcuttur`,
     timeAgo: "1 hafta önce",
     likes: 41,
-    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
+    comments: getCommentCount(6), // 3-13 arası deterministik
     makesSense: 28,
     category: "Ulaşım",
     relatedQuestions: [
