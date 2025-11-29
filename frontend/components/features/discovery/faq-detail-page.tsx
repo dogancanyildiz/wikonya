@@ -1,0 +1,447 @@
+"use client"
+
+import { ArrowLeft, Clock, ThumbsUp, MessageCircle, Share2, BookOpen, Lightbulb } from "lucide-react"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+
+// FAQ Data - konya-discovery-page.tsx'teki ile aynı
+const baseTimestamp = 1700000000000
+const faqData = [
+  {
+    id: 1,
+    author: "Konya Rehberi",
+    authorInitials: "KR",
+    question: "Etli ekmek nerede yenir?",
+    answer: "Konya'nın en meşhur etli ekmek mekanları: Meram'da bulunan tarihi etli ekmek fırınları, Alaaddin Tepesi çevresindeki restoranlar ve şehir merkezindeki geleneksel fırınlar. Özellikle 'Fırın Kebabı' olarak bilinen yerlerde en lezzetli etli ekmeği bulabilirsiniz. Meram ve Karatay ilçelerindeki eski mahalle fırınları da çok popülerdir.",
+    detailedAnswer: `Konya'nın en meşhur etli ekmek mekanları şunlardır:
+
+**Meram Bölgesi:**
+- Meram'da bulunan tarihi etli ekmek fırınları yüzyıllardır aynı lezzeti sunmaktadır
+- Özellikle Meram Çarşısı çevresindeki fırınlar çok popülerdir
+- Geleneksel odun fırınında pişen etli ekmeklerin tadı bir başkadır
+
+**Alaaddin Tepesi Çevresi:**
+- Şehir merkezindeki restoranlar turistler için ideal konumdadır
+- Hem geleneksel hem de modern sunum seçenekleri bulunur
+- Öğle ve akşam yemekleri için mükemmel bir seçenektir
+
+**Karatay İlçesi:**
+- Eski mahalle fırınları otantik deneyim sunar
+- Yerel halkın tercih ettiği mekanlar genellikle bu bölgededir
+- Fiyatlar daha uygun ve porsiyonlar daha büyüktür
+
+**Öneriler:**
+- Öğle saatlerinde (12:00-14:00) en taze etli ekmekleri bulabilirsiniz
+- Akşam saatlerinde (18:00-20:00) daha kalabalık olur, rezervasyon önerilir
+- Hafta sonları çok yoğun olur, hafta içi tercih edilirse daha rahat yersiniz`,
+    timeAgo: "2 gün önce",
+    likes: 45,
+    comments: 12,
+    makesSense: 23,
+    category: "Yemek & Restoran",
+    relatedQuestions: [
+      { id: 2, question: "Konya'nın en ünlü yemekleri nelerdir?" },
+      { id: 5, question: "Konya'da nerede kahvaltı yapılır?" }
+    ]
+  },
+  {
+    id: 2,
+    author: "Konya Rehberi",
+    authorInitials: "KR",
+    question: "Konya'da ne zaman gidilir?",
+    answer: "Konya'yı ziyaret etmek için en ideal zamanlar ilkbahar (Nisan-Mayıs) ve sonbahar (Eylül-Ekim) aylarıdır. Özellikle Aralık ayında Mevlana Şeb-i Arus törenleri için çok özel bir atmosfer olur. Yaz ayları çok sıcak olabilir, kış ayları ise soğuk ama kar manzarası güzel olabilir.",
+    detailedAnswer: `Konya'yı ziyaret etmek için en ideal zamanlar:
+
+**İlkbahar (Nisan-Mayıs):**
+- Hava sıcaklığı çok uygun, ortalama 15-25°C
+- Doğa yeşillenir, parklar ve bahçeler çok güzel olur
+- Turist sayısı henüz çok fazla değildir
+- Fiyatlar daha uygun olur
+
+**Yaz (Haziran-Ağustos):**
+- Çok sıcak olur, gündüz 35-40°C'ye çıkabilir
+- Sabah erken saatlerde (06:00-10:00) veya akşam saatlerinde (18:00-22:00) gezmek daha rahat olur
+- İç mekanlar (müzeler, camiler) daha serin olur
+- Turist sayısı en yüksek seviyededir
+
+**Sonbahar (Eylül-Ekim):**
+- En ideal mevsim, hava çok uygun
+- Turist kalabalığı azalır
+- Fiyatlar daha uygun olur
+- Doğa renkleri çok güzeldir
+
+**Kış (Kasım-Mart):**
+- Soğuk olur ama kar manzarası güzel olabilir
+- Aralık ayında Mevlana Şeb-i Arus törenleri çok özel bir atmosfer yaratır
+- İç mekanlar daha sıcak olur
+- Turist sayısı en azdır, daha sakin bir deneyim sunar
+
+**Özel Etkinlikler:**
+- Aralık ayı: Mevlana Şeb-i Arus törenleri (mutlaka görülmeli)
+- Nisan-Mayıs: Kiraz çiçekleri açtığında Japon Parkı çok güzel olur
+- Yaz ayları: Çeşitli festivaller ve etkinlikler düzenlenir`,
+    timeAgo: "3 gün önce",
+    likes: 38,
+    comments: 8,
+    makesSense: 19,
+    category: "Ziyaret Planı",
+    relatedQuestions: [
+      { id: 1, question: "Etli ekmek nerede yenir?" },
+      { id: 3, question: "Mevlana Müzesi'ne giriş ücretli mi?" }
+    ]
+  },
+  {
+    id: 3,
+    author: "Konya Rehberi",
+    authorInitials: "KR",
+    question: "Mevlana Müzesi'ne giriş ücretli mi?",
+    answer: "Evet, Mevlana Müzesi'ne giriş ücretlidir. Ancak Müze Kart geçerlidir. Müze Kart ile yılda iki kez ücretsiz giriş yapabilirsiniz. Pazartesi günleri kapalıdır, ziyaret saatleri 09:00-17:00 arasındadır.",
+    detailedAnswer: `Mevlana Müzesi giriş bilgileri:
+
+**Giriş Ücretleri:**
+- Tam bilet: 150 TL (2024)
+- Öğrenci: 50 TL (öğrenci belgesi ile)
+- Müze Kart: Geçerli (yılda 2 kez ücretsiz giriş)
+- 18 yaş altı: Ücretsiz
+
+**Ziyaret Saatleri:**
+- Açılış: 09:00
+- Kapanış: 17:00 (kış), 19:00 (yaz)
+- Pazartesi: Kapalı
+- Bayram günleri: Özel program
+
+**Müze Kart:**
+- Türkiye'deki tüm müzeler için geçerlidir
+- Yılda 2 kez ücretsiz giriş hakkı verir
+- Online veya müze girişinde satın alınabilir
+- Öğrenciler için indirimli seçenekler mevcuttur
+
+**Ziyaret İpuçları:**
+- Sabah erken saatlerde (09:00-11:00) daha az kalabalık olur
+- Hafta içi günler hafta sonlarından daha sakin olur
+- Rehberli turlar mevcuttur (ek ücret)
+- Fotoğraf çekmek serbesttir (flaş kullanmayın)
+- İçeride yaklaşık 1-2 saat geçirebilirsiniz`,
+    timeAgo: "4 gün önce",
+    likes: 52,
+    comments: 15,
+    makesSense: 31,
+    category: "Müze & Tarihi Yerler",
+    relatedQuestions: [
+      { id: 2, question: "Konya'da ne zaman gidilir?" },
+      { id: 4, question: "Konya'da ulaşım nasıl sağlanır?" }
+    ]
+  },
+  {
+    id: 4,
+    author: "Konya Rehberi",
+    authorInitials: "KR",
+    question: "Konya'da ulaşım nasıl sağlanır?",
+    answer: "Konya'da ulaşım oldukça kolaydır. Tramvay hattı şehrin ana arterlerinden geçer. Otobüs hatları geniş bir ağa sahiptir. Şehir merkezi yürüyüş mesafesinde birçok yeri kapsar. Taksi ve dolmuşlar da yaygın olarak kullanılır.",
+    detailedAnswer: `Konya'da ulaşım seçenekleri:
+
+**Tramvay:**
+- Şehrin ana arterlerinden geçer
+- Merkez'den Mevlana, Alaaddin, Selçuk Üniversitesi gibi önemli noktalara ulaşım sağlar
+- Bilet: 5 TL (2024)
+- İndirimli biletler öğrenciler için mevcuttur
+- Sık aralıklarla çalışır (5-10 dakika)
+
+**Otobüs:**
+- Geniş bir hat ağına sahiptir
+- Şehrin her yerine ulaşım sağlar
+- Bilet: 5 TL
+- Kent Kart ile daha uygun fiyatlı
+- Mobil uygulama ile hat bilgilerine erişilebilir
+
+**Taksi:**
+- Yaygın olarak kullanılır
+- Taksimetre ile çalışır
+- Merkez içi kısa mesafeler için uygun
+- Gece saatlerinde ek ücret alınabilir
+
+**Dolmuş:**
+- Belirli güzergahlarda çalışır
+- Daha uygun fiyatlıdır
+- Yerel halk tarafından sık kullanılır
+
+**Yürüyüş:**
+- Şehir merkezi yürüyüş mesafesinde birçok yeri kapsar
+- Mevlana, Alaaddin Tepesi, şehir merkezi arası yürünebilir mesafededir
+- Sağlıklı ve ekonomik bir seçenektir
+
+**Öneriler:**
+- Kent Kart almak uzun süreli ziyaretler için avantajlıdır
+- Mobil uygulamalar ile hat bilgilerine erişilebilir
+- Merkez'de konaklıyorsanız çoğu yere yürüyerek gidebilirsiniz`,
+    timeAgo: "5 gün önce",
+    likes: 29,
+    comments: 6,
+    makesSense: 15,
+    category: "Ulaşım",
+    relatedQuestions: [
+      { id: 3, question: "Mevlana Müzesi'ne giriş ücretli mi?" },
+      { id: 6, question: "Kelebekler Vadisi'ne nasıl gidilir?" }
+    ]
+  },
+  {
+    id: 5,
+    author: "Konya Rehberi",
+    authorInitials: "KR",
+    question: "Konya'nın en ünlü yemekleri nelerdir?",
+    answer: "Konya mutfağının en ünlü yemekleri: Etli ekmek, fırın kebabı, bamya çorbası, Mevlana böreği, tirit, etli pide ve sac kavurma. Tatlı olarak ise höşmerim ve peynirli irmik helvası çok meşhurdur.",
+    detailedAnswer: `Konya mutfağının en ünlü yemekleri:
+
+**Ana Yemekler:**
+- **Etli Ekmek:** Konya'nın simgesi, ince açılmış hamur üzerine kıyma ve baharat
+- **Fırın Kebabı:** Özel fırınlarda pişirilen, çok lezzetli bir kebab çeşidi
+- **Bamya Çorbası:** Geleneksel çorba, özellikle kış aylarında çok sevilir
+- **Mevlana Böreği:** İnce yufka ile yapılan, özel bir börek çeşidi
+- **Tirit:** Et suyu, ekmek ve et ile yapılan geleneksel yemek
+- **Etli Pide:** Kalın hamur üzerine et ve baharat
+- **Sac Kavurma:** Sac üzerinde pişirilen et yemeği
+
+**Tatlılar:**
+- **Höşmerim:** Peynirli, çok özel bir tatlı
+- **Peynirli İrmik Helvası:** Konya'ya özgü bir helva çeşidi
+- **Tahinli Pide:** Tatlı bir pide çeşidi
+- **Cevizli Sucuk:** Ceviz ve pekmezle yapılan geleneksel tatlı
+
+**Nerede Yenir:**
+- Meram bölgesindeki restoranlar geleneksel lezzetleri sunar
+- Alaaddin Tepesi çevresinde modern ve geleneksel seçenekler bulunur
+- Şehir merkezindeki lokantalar turistler için idealdir
+
+**Öneriler:**
+- Etli ekmek mutlaka denenmeli
+- Fırın kebabı özel fırınlarda daha lezzetli olur
+- Geleneksel tatlılar için özel tatlıcıları ziyaret edin`,
+    timeAgo: "1 hafta önce",
+    likes: 67,
+    comments: 19,
+    makesSense: 42,
+    category: "Yemek & Restoran",
+    relatedQuestions: [
+      { id: 1, question: "Etli ekmek nerede yenir?" },
+      { id: 2, question: "Konya'da ne zaman gidilir?" }
+    ]
+  },
+  {
+    id: 6,
+    author: "Konya Rehberi",
+    authorInitials: "KR",
+    question: "Kelebekler Vadisi'ne nasıl gidilir?",
+    answer: "Tropikal Kelebek Bahçesi (Kelebekler Vadisi), Selçuk Üniversitesi kampüsü içinde yer alır. 12 ve 31 numaralı otobüslerle ulaşabilirsiniz. Merkez'den yaklaşık 20 dakika sürer. Kampüs içinde olduğu için araba ile gitmek de mümkündür, otopark mevcuttur.",
+    detailedAnswer: `Tropikal Kelebek Bahçesi (Kelebekler Vadisi) ulaşım bilgileri:
+
+**Konum:**
+- Selçuk Üniversitesi kampüsü içinde yer alır
+- Kampüsün doğu tarafında, Bilim Merkezi'nin yanında
+- Merkez'den yaklaşık 8-10 km uzaklıkta
+
+**Otobüs ile:**
+- 12 numaralı otobüs: Merkez'den direkt kampüse gider
+- 31 numaralı otobüs: Kampüs içinden geçer
+- Süre: Merkez'den yaklaşık 20-25 dakika
+- Bilet: 5 TL
+
+**Tramvay + Otobüs:**
+- Tramvay ile Selçuk Üniversitesi durağına gelin
+- Oradan kampüs içi servis veya otobüs ile devam edin
+- Toplam süre: 25-30 dakika
+
+**Araba ile:**
+- Kampüs içinde otopark mevcuttur
+- Merkez'den yaklaşık 15-20 dakika sürer
+- Navigasyon ile kolayca bulunabilir
+
+**Ziyaret Bilgileri:**
+- Açılış: 09:00
+- Kapanış: 17:00
+- Giriş ücreti: 50 TL (öğrenci: 25 TL)
+- İçeride sıcaklık 26-28°C, hafif giyinmeniz önerilir
+- Fotoğraf çekmek serbesttir
+
+**Öneriler:**
+- Sabah saatlerinde (10:00-12:00) kelebekler daha aktif olur
+- Hafta içi daha az kalabalık olur
+- Kampüs içinde yemek yeme seçenekleri mevcuttur`,
+    timeAgo: "1 hafta önce",
+    likes: 41,
+    comments: 10,
+    makesSense: 28,
+    category: "Ulaşım",
+    relatedQuestions: [
+      { id: 4, question: "Konya'da ulaşım nasıl sağlanır?" },
+      { id: 3, question: "Mevlana Müzesi'ne giriş ücretli mi?" }
+    ]
+  }
+]
+
+export function FAQDetailPage({ faqId }: { faqId: number }) {
+  const faq = faqData.find(f => f.id === faqId)
+
+  if (!faq) {
+    return (
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
+        <div className="text-center py-12">
+          <h1 className="font-[Manrope] text-foreground mb-4 font-extrabold text-2xl sm:text-3xl">
+            Soru Bulunamadı
+          </h1>
+          <Link href="/discovery">
+            <Button className="bg-primary text-white hover:bg-primary/90 font-[Manrope] font-bold">
+              Geri Dön
+            </Button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })
+  }
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: faq.question,
+          text: faq.answer,
+          url: window.location.href,
+        })
+      } catch (err) {
+        console.error("Share failed:", err)
+      }
+    }
+  }
+
+  return (
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
+      {/* Back Button */}
+      <Link href="/discovery">
+        <Button
+          variant="ghost"
+          className="mb-4 sm:mb-6 font-[Manrope] text-foreground hover:text-primary"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Geri Dön
+        </Button>
+      </Link>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        {/* Main Content */}
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+          {/* Question Header */}
+          <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start gap-4 flex-1">
+                  <Avatar className="w-12 h-12 sm:w-14 sm:h-14 border-2 border-border">
+                    <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-bold text-lg sm:text-xl">
+                      {faq.authorInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                      <span className="font-[Manrope] font-bold text-foreground text-base sm:text-lg">
+                        {faq.author}
+                      </span>
+                      <Badge className="bg-primary/10 text-primary border-0 font-[Manrope] font-semibold text-xs sm:text-sm">
+                        Rehber
+                      </Badge>
+                      <Badge variant="secondary" className="font-[Manrope] text-xs sm:text-sm">
+                        {faq.category}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground mb-4">
+                      <Clock className="w-4 h-4" />
+                      <span className="font-[Manrope] font-medium text-xs sm:text-sm">{faq.timeAgo}</span>
+                    </div>
+                    <h1 className="font-[Manrope] text-foreground mb-4 font-extrabold text-2xl sm:text-3xl lg:text-4xl">
+                      {faq.question}
+                    </h1>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-3 pt-4 border-t border-border">
+                <button className="flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                  <ThumbsUp className="w-4 h-4 text-primary" />
+                  <span className="font-[Manrope] font-bold text-sm text-foreground">{faq.likes}</span>
+                </button>
+                <button className="flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                  <Lightbulb className="w-4 h-4 text-primary" />
+                  <span className="font-[Manrope] font-bold text-sm text-foreground">{faq.makesSense}</span>
+                  <span className="font-[Manrope] font-medium text-xs text-foreground/60 dark:text-muted-foreground hidden sm:inline">Mantıklı</span>
+                </button>
+                <button className="flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                  <MessageCircle className="w-4 h-4 text-primary" />
+                  <span className="font-[Manrope] font-bold text-sm text-foreground">{faq.comments}</span>
+                </button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleShare}
+                  className="ml-auto font-[Manrope] font-semibold"
+                >
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Paylaş
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Detailed Answer */}
+          <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
+            <CardHeader>
+              <CardTitle className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-primary" />
+                Detaylı Cevap
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                <div className="font-[Manrope] text-foreground/70 dark:text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {faq.detailedAnswer}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-4 sm:space-y-6">
+          {/* Related Questions */}
+          <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
+            <CardHeader>
+              <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
+                İlgili Sorular
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {faq.relatedQuestions.map((related) => (
+                <Link
+                  key={related.id}
+                  href={`/discovery/faq/${related.id}`}
+                  className="block p-3 bg-accent rounded-xl hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors group"
+                >
+                  <p className="font-[Manrope] font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
+                    {related.question}
+                  </p>
+                </Link>
+              ))}
+            </CardContent>
+          </Card>
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
