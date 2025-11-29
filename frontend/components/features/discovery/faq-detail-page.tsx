@@ -8,7 +8,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 
 // FAQ Data - konya-discovery-page.tsx'teki ile aynı
-const baseTimestamp = 1700000000000
 const faqData = [
   {
     id: 1,
@@ -299,11 +298,6 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
         </div>
       </div>
     )
-  }
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })
   }
 
   const handleShare = async () => {

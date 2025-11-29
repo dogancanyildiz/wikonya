@@ -11,7 +11,22 @@ interface DiscussionFeedProps {
   onNavigateToTopic?: () => void
 }
 
-const allDiscussions = [
+interface Discussion {
+  id: number
+  author: string
+  authorInitials: string
+  category: string
+  title: string
+  excerpt: string
+  timeAgo: string
+  likes: number
+  makesSense: number
+  comments: number
+  isLiked: boolean
+  isMakesSense: boolean
+}
+
+const allDiscussions: Discussion[] = [
   {
     id: 1,
     author: "Ahmet Yılmaz",
@@ -397,7 +412,7 @@ const ITEMS_PER_PAGE = 8
 export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }: DiscussionFeedProps) {
   const { state } = useApp()
   const [currentPage, setCurrentPage] = useState(1)
-  const [localDiscussions, setLocalDiscussions] = useState(allDiscussions)
+  const [localDiscussions, setLocalDiscussions] = useState<Discussion[]>(allDiscussions)
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
   const [filter, setFilter] = useState<"newest" | "popular" | "unanswered">("newest")
   
@@ -437,7 +452,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
     const discussion = localDiscussions.find(d => d.id === discussionId)
     if (!discussion) return
 
-    const isLiked = (discussion as any).isLiked || false
+    const isLiked = discussion.isLiked || false
     const newIsLiked = !isLiked
 
     if (newIsLiked) {
@@ -450,7 +465,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
 
     setLocalDiscussions(localDiscussions.map(d => 
       d.id === discussionId 
-        ? { ...d, likes: newIsLiked ? d.likes + 1 : d.likes - 1, isLiked: newIsLiked } as typeof d & { isLiked: boolean }
+        ? { ...d, likes: newIsLiked ? d.likes + 1 : d.likes - 1, isLiked: newIsLiked }
         : d
     ))
   }
@@ -463,7 +478,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
     const discussion = localDiscussions.find(d => d.id === discussionId)
     if (!discussion) return
 
-    const isMakesSense = (discussion as any).isMakesSense || false
+    const isMakesSense = discussion.isMakesSense || false
     const newIsMakesSense = !isMakesSense
 
     if (newIsMakesSense) {
@@ -476,7 +491,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
 
     setLocalDiscussions(localDiscussions.map(d => 
       d.id === discussionId 
-        ? { ...d, makesSense: newIsMakesSense ? d.makesSense + 1 : d.makesSense - 1, isMakesSense: newIsMakesSense } as typeof d & { isMakesSense: boolean }
+        ? { ...d, makesSense: newIsMakesSense ? d.makesSense + 1 : d.makesSense - 1, isMakesSense: newIsMakesSense }
         : d
     ))
   }
@@ -563,11 +578,11 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
                     <button 
                       onClick={(e) => handleLike(discussion.id, e)}
                       className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
-                        (discussion as any).isLiked ? 'bg-primary/10 dark:bg-primary/20' : ''
+                        discussion.isLiked ? 'bg-primary/10 dark:bg-primary/20' : ''
                       }`}
                       aria-label={`${discussion.likes} beğeni`}
                     >
-                      <ThumbsUp className={`w-4 h-4 text-primary ${(discussion as any).isLiked ? 'fill-primary' : ''}`} />
+                      <ThumbsUp className={`w-4 h-4 text-primary ${discussion.isLiked ? 'fill-primary' : ''}`} />
                       <span className="font-[Manrope] font-bold text-sm text-foreground">{discussion.likes}</span>
                       {animations[`like-${discussion.id}`] && (
                         <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
@@ -578,11 +593,11 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
                     <button 
                       onClick={(e) => handleMakesSense(discussion.id, e)}
                       className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
-                        (discussion as any).isMakesSense ? 'bg-primary/10 dark:bg-primary/20' : ''
+                        discussion.isMakesSense ? 'bg-primary/10 dark:bg-primary/20' : ''
                       }`}
                       aria-label={`${discussion.makesSense} mantıklı`}
                     >
-                      <Lightbulb className={`w-4 h-4 text-primary ${(discussion as any).isMakesSense ? 'fill-primary' : ''}`} />
+                      <Lightbulb className={`w-4 h-4 text-primary ${discussion.isMakesSense ? 'fill-primary' : ''}`} />
                       <span className="font-[Manrope] font-bold text-sm text-foreground">{discussion.makesSense}</span>
                       <span className="font-[Manrope] font-medium text-xs text-foreground/60 dark:text-muted-foreground hidden sm:inline">Mantıklı</span>
                       {animations[`logical-${discussion.id}`] && (

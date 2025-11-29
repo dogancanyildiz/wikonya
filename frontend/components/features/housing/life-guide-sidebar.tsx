@@ -1,6 +1,6 @@
 "use client"
 
-import { Bus, Home, ShoppingBasket, Zap, Utensils, ArrowRight } from "lucide-react"
+import { Bus, Home, ShoppingBasket, Zap, ArrowRight } from "lucide-react"
 import { LifeGuideCard } from "./life-guide-card"
 import Link from "next/link"
 
