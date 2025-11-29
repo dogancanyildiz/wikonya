@@ -221,12 +221,47 @@ export default function SettingsPage() {
     }
   }
 
-  // Connected accounts data
-  const connectedAccounts = [
-    { id: "google", name: "Google", icon: "🔵", connected: true, email: "user@gmail.com" },
-    { id: "apple", name: "Apple", icon: "⚫", connected: false, email: null },
-    { id: "genckart", name: "GençKart", icon: "💳", connected: true, email: "user@genckart.com" },
-  ]
+  // Connected accounts state
+  const [connectedAccounts, setConnectedAccounts] = useState([
+    { id: "google", name: "Google", icon: "🔵", connected: true, email: "user@gmail.com", authUrl: "https://accounts.google.com/oauth/authorize" },
+    { id: "apple", name: "Apple", icon: "⚫", connected: false, email: null, authUrl: "https://appleid.apple.com/auth/authorize" },
+    { id: "genckart", name: "GençKart", icon: "💳", connected: true, email: "user@genckart.com", authUrl: "https://genckart.konya.bel.tr/auth" },
+  ])
+
+  // Disconnect confirmation modal state
+  const [disconnectAccountId, setDisconnectAccountId] = useState<string | null>(null)
+  const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false)
+
+  // Handle disconnect account
+  const handleDisconnectAccount = (accountId: string) => {
+    setDisconnectAccountId(accountId)
+    setIsDisconnectModalOpen(true)
+  }
+
+  // Confirm disconnect
+  const confirmDisconnect = () => {
+    if (disconnectAccountId) {
+      setConnectedAccounts(prev => 
+        prev.map(account => 
+          account.id === disconnectAccountId 
+            ? { ...account, connected: false, email: null }
+            : account
+        )
+      )
+      toast.success("Bağlantı kesildi", {
+        description: "Hesap bağlantısı başarıyla kaldırıldı",
+        duration: 3000,
+      })
+      setIsDisconnectModalOpen(false)
+      setDisconnectAccountId(null)
+    }
+  }
+
+  // Handle connect account (open in new tab)
+  const handleConnectAccount = (account: typeof connectedAccounts[0]) => {
+    // Gerçek uygulamada bu URL backend'den gelecek ve OAuth parametreleri içerecek
+    window.open(account.authUrl, "_blank", "noopener,noreferrer")
+  }
 
   const themeOptions = [
     { id: "light", name: "Açık", icon: Sun },
@@ -816,6 +851,7 @@ export default function SettingsPage() {
                     variant="outline"
                     size="sm"
                     className="font-[Manrope] text-destructive hover:bg-destructive/10"
+                    onClick={() => handleDisconnectAccount(account.id)}
                   >
                     <X className="w-4 h-4 mr-2" />
                     Bağlantıyı Kes
@@ -825,6 +861,7 @@ export default function SettingsPage() {
                     variant="default"
                     size="sm"
                     className="font-[Manrope] bg-primary hover:bg-primary/90"
+                    onClick={() => handleConnectAccount(account)}
                   >
                     Bağla
                   </Button>
