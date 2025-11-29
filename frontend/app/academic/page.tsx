@@ -8,6 +8,21 @@ export const metadata: Metadata = {
     title: "Akademik Destek | Konya Genç",
     description: "Ders notları, hoca rehberleri ve akademik kaynaklar",
     type: "website",
+    url: "/academic",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Akademik Destek | Konya Genç",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Akademik Destek | Konya Genç",
+    description: "Ders notları, hoca rehberleri ve akademik kaynaklar",
+    images: ["/og-image.jpg"],
   },
 }
 

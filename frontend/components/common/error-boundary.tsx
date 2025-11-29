@@ -48,31 +48,51 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             </CardHeader>
             <CardContent className="space-y-4 pt-0">
               <p className="font-[Manrope] text-muted-foreground">
-                Üzgünüz, beklenmeyen bir hata oluştu. Lütfen sayfayı yenileyin veya ana sayfaya dönün.
+                Üzgünüz, beklenmeyen bir hata oluştu. Lütfen aşağıdaki seçenekleri deneyin:
               </p>
+              <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground font-[Manrope]">
+                <li>Sayfayı yenileyin</li>
+                <li>Ana sayfaya dönün</li>
+                <li>Birkaç dakika sonra tekrar deneyin</li>
+              </ul>
               {this.state.error && (
                 <details className="text-sm text-muted-foreground">
-                  <summary className="cursor-pointer font-semibold mb-2">
-                    Hata Detayları
+                  <summary className="cursor-pointer font-semibold mb-2 font-[Manrope] hover:text-foreground transition-colors">
+                    Hata Detayları (Geliştiriciler için)
                   </summary>
-                  <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-auto">
+                  <pre className="mt-2 p-3 bg-muted rounded text-xs overflow-auto font-mono">
                     {this.state.error.message}
+                    {this.state.error.stack && (
+                      <>
+                        {"\n\n"}
+                        {this.state.error.stack}
+                      </>
+                    )}
                   </pre>
                 </details>
               )}
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   onClick={() => window.location.reload()}
                   className="font-[Manrope]"
                 >
-                  Sayfayı Yenile
+                  🔄 Sayfayı Yenile
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => window.location.href = "/"}
                   className="font-[Manrope]"
                 >
-                  Ana Sayfaya Dön
+                  🏠 Ana Sayfaya Dön
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    this.setState({ hasError: false, error: null })
+                  }}
+                  className="font-[Manrope]"
+                >
+                  🔁 Tekrar Dene
                 </Button>
               </div>
             </CardContent>

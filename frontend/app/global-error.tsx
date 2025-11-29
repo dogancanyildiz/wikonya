@@ -31,19 +31,31 @@ export default function GlobalError({
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="font-[Manrope] text-muted-foreground">
-                Uygulamada kritik bir hata oluştu. Lütfen sayfayı yenileyin.
+                Uygulamada kritik bir hata oluştu. Lütfen sayfayı yenileyin veya ana sayfaya dönün.
               </p>
+              <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground font-[Manrope]">
+                <li>Sayfayı yenileyin</li>
+                <li>Ana sayfaya dönün</li>
+                <li>Tarayıcı önbelleğini temizleyin</li>
+              </ul>
               {error.digest && (
-                <p className="text-xs text-muted-foreground font-mono">
+                <div className="p-2 bg-muted rounded text-xs font-mono text-muted-foreground">
                   Hata ID: {error.digest}
-                </p>
+                </div>
               )}
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   onClick={reset}
                   className="font-[Manrope]"
                 >
-                  Sayfayı Yenile
+                  🔄 Sayfayı Yenile
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => window.location.href = "/"}
+                  className="font-[Manrope]"
+                >
+                  🏠 Ana Sayfaya Dön
                 </Button>
               </div>
             </CardContent>

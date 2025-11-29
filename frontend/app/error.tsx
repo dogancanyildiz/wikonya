@@ -29,26 +29,38 @@ export default function Error({
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="font-[Manrope] text-muted-foreground">
-            Üzgünüz, beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.
+            Üzgünüz, beklenmeyen bir hata oluştu. Lütfen aşağıdaki seçenekleri deneyin:
           </p>
+          <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground font-[Manrope]">
+            <li>Tekrar deneyin</li>
+            <li>Ana sayfaya dönün</li>
+            <li>Birkaç dakika sonra tekrar deneyin</li>
+          </ul>
           {error.digest && (
-            <p className="text-xs text-muted-foreground font-mono">
+            <div className="p-2 bg-muted rounded text-xs font-mono text-muted-foreground">
               Hata ID: {error.digest}
-            </p>
+            </div>
           )}
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button
               onClick={reset}
               className="font-[Manrope]"
             >
-              Tekrar Dene
+              🔁 Tekrar Dene
             </Button>
             <Button
               variant="outline"
               onClick={() => window.location.href = "/"}
               className="font-[Manrope]"
             >
-              Ana Sayfaya Dön
+              🏠 Ana Sayfaya Dön
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => window.location.reload()}
+              className="font-[Manrope]"
+            >
+              🔄 Sayfayı Yenile
             </Button>
           </div>
         </CardContent>
