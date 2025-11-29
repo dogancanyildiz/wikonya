@@ -1,12 +1,11 @@
 import { SocialHero } from "./social-hero"
-import { SocialFilterChips } from "./social-filter-chips"
 import { VenueGrid } from "./venue-grid"
 import { CommunityEvents } from "./community-events"
 
 export function SocialPage() {
   return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
-      <div className="mb-4 sm:mb-6 md:mb-8">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 md:py-10">
+      <div className="mb-6 sm:mb-8 md:mb-10">
         <h1 className="font-[Manrope] text-foreground mb-2 font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-[42px]">
           Sosyal Yaşam & Mekan Rehberi
         </h1>
@@ -16,7 +15,6 @@ export function SocialPage() {
       </div>
 
       <SocialHero />
-      <SocialFilterChips />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-4 sm:gap-6 lg:gap-8">
         <VenueGrid />

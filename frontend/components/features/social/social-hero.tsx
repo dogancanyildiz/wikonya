@@ -45,53 +45,51 @@ export function SocialHero() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-10 sm:mb-12 md:mb-14">
       {/* Left Side - Venue of the Week */}
-      <div className="relative rounded-xl overflow-hidden h-[400px] sm:h-[500px] shadow-lg dark:shadow-xl group">
+      <div className="relative rounded-2xl overflow-hidden h-[400px] sm:h-[500px]">
         <Image
           src="https://images.unsplash.com/photo-1739723745132-97df9db49db2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwY2FmZSUyMGludGVyaW9yfGVufDF8fHx8MTc2NDE1ODI0MHww&ixlib=rb-4.1.0&q=80&w=1080"
           alt="Kitap & Kahve"
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          className="object-cover"
           unoptimized
         />
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10"></div>
         
         {/* Badge */}
-        <div className="absolute top-4 sm:top-6 left-4 sm:left-6">
-          <div className="px-3 sm:px-4 py-2 bg-primary rounded-full backdrop-blur-sm">
-            <span className="font-[Manrope] text-white font-bold text-xs sm:text-[13px]">
-              Haftanın Mekanı 🔥
+        <div className="absolute top-5 sm:top-6 left-5 sm:left-6">
+          <div className="px-4 py-2 bg-white/95 dark:bg-white rounded-lg">
+            <span className="font-[Manrope] text-primary font-bold text-xs sm:text-sm tracking-wide uppercase">
+              Haftanın Mekanı
             </span>
           </div>
         </div>
 
         {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-          <h2 className="font-[Manrope] text-white mb-2 font-extrabold text-2xl sm:text-3xl lg:text-[36px] leading-tight">
+        <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8">
+          <div className="flex items-center gap-2 mb-3">
+            <Star className="w-5 h-5 text-amber-400 fill-amber-400" strokeWidth={2} />
+            <span className="font-[Manrope] text-white font-bold text-lg">
+              4.9
+            </span>
+          </div>
+          <h2 className="font-[Manrope] text-white mb-3 font-extrabold text-3xl sm:text-4xl lg:text-[44px] leading-tight tracking-tight">
             Kitap & Kahve
           </h2>
-          <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-3">
-            <div className="flex items-center gap-1">
-              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-white/80" strokeWidth={2.5} />
-              <span className="font-[Manrope] text-white/90 font-semibold text-sm sm:text-[15px]">
-                Bosna Hersek, Meram
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 sm:w-5 sm:h-5 text-primary fill-primary" strokeWidth={2.5} />
-              <span className="font-[Manrope] text-white font-bold text-sm sm:text-[15px]">
-                4.9
-              </span>
-            </div>
+          <div className="flex items-center gap-1.5 mb-4">
+            <MapPin className="w-4 h-4 text-white/70" strokeWidth={2} />
+            <span className="font-[Manrope] text-white/80 font-medium text-sm sm:text-base">
+              Bosna Hersek, Meram
+            </span>
           </div>
-          <p className="font-[Manrope] text-white/80 mb-4 font-medium text-xs sm:text-sm leading-relaxed">
+          <p className="font-[Manrope] text-white/70 mb-6 font-normal text-sm sm:text-base leading-relaxed max-w-md">
             Sakin ortam, sınırsız kahve ve kitap seçenekleriyle ders çalışmak için ideal.
           </p>
           <Link href="/social/venue/5">
             <Button 
-              className="px-4 sm:px-6 py-2 sm:py-3 bg-white rounded-xl font-[Manrope] text-primary hover:bg-white/95 transition-colors shadow-lg font-bold text-xs sm:text-sm cursor-pointer"
+              className="px-6 py-3 bg-white rounded-lg font-[Manrope] text-foreground hover:bg-white/90 transition-colors font-bold text-sm cursor-pointer"
             >
               Detayları Gör
             </Button>
@@ -109,34 +107,32 @@ export function SocialHero() {
             </h3>
           </div>
 
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-2">
             {trendingVenues.map((venue, index) => (
               <Link
                 key={venue.id}
                 href={`/social/venue/${venue.id}`}
-                className="block group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl hover:bg-accent dark:hover:bg-accent transition-all cursor-pointer"
+                className="flex items-center gap-4 sm:gap-5 py-4 sm:py-5 border-b border-border last:border-b-0 cursor-pointer group"
               >
-                {/* Rank Badge */}
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                  <span className="font-[Manrope] text-white font-extrabold text-lg sm:text-xl">
-                    {index + 1}
-                  </span>
-                </div>
+                {/* Rank Number */}
+                <span className="font-[Manrope] text-primary font-black text-3xl sm:text-4xl w-8 sm:w-10 flex-shrink-0">
+                  {index + 1}
+                </span>
 
                 {/* Venue Info */}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-[Manrope] text-foreground group-hover:text-primary transition-colors mb-1 font-bold text-base sm:text-[17px]">
+                  <h4 className="font-[Manrope] text-foreground mb-1 font-bold text-base sm:text-lg truncate">
                     {venue.name}
                   </h4>
-                  <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs sm:text-[13px]">
+                  <p className="font-[Manrope] text-foreground/50 dark:text-muted-foreground font-medium text-xs sm:text-sm">
                     {venue.category}
                   </p>
                 </div>
 
                 {/* Visitors Count */}
-                <div className="flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-primary/10 dark:bg-primary/20 rounded-lg">
-                  <Users className="w-3 h-3 sm:w-4 sm:h-4 text-primary" strokeWidth={2.5} />
-                  <span className="font-[Manrope] text-primary font-bold text-xs sm:text-[13px]">
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <Users className="w-4 h-4 text-foreground/40" strokeWidth={2} />
+                  <span className="font-[Manrope] text-foreground/60 font-semibold text-sm">
                     {venue.visitors}
                   </span>
                 </div>
