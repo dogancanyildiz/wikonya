@@ -60,8 +60,8 @@ export function Sidebar({}: SidebarProps = {}) {
   ]
 
   return (
-    <div className="sticky top-24 self-start max-h-[calc(100vh-7rem)] overflow-y-auto scrollbar-thin" aria-label="Yan panel">
-      <div className="space-y-4 pb-4">
+    <div className="sticky top-24" aria-label="Yan panel">
+      <div className="space-y-4">
       {/* KBB Announcements */}
       <KBBAnnouncements />
 
