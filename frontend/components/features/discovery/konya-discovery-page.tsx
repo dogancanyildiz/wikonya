@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, Clock, Navigation, Heart, MessageCircle, ThumbsUp, BookOpen } from "lucide-react"
+import { MapPin, Clock, Navigation, Heart, MessageCircle, ThumbsUp, BookOpen, Lightbulb } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
@@ -121,7 +121,8 @@ export function KonyaDiscoveryPage() {
       answer: "Konya'nın en meşhur etli ekmek mekanları: Meram'da bulunan tarihi etli ekmek fırınları, Alaaddin Tepesi çevresindeki restoranlar ve şehir merkezindeki geleneksel fırınlar. Özellikle 'Fırın Kebabı' olarak bilinen yerlerde en lezzetli etli ekmeği bulabilirsiniz. Meram ve Karatay ilçelerindeki eski mahalle fırınları da çok popülerdir.",
       timeAgo: "2 gün önce",
       likes: 45,
-      comments: 12
+      comments: 12,
+      makesSense: 23
     },
     {
       id: 2,
@@ -131,7 +132,8 @@ export function KonyaDiscoveryPage() {
       answer: "Konya'yı ziyaret etmek için en ideal zamanlar ilkbahar (Nisan-Mayıs) ve sonbahar (Eylül-Ekim) aylarıdır. Özellikle Aralık ayında Mevlana Şeb-i Arus törenleri için çok özel bir atmosfer olur. Yaz ayları çok sıcak olabilir, kış ayları ise soğuk ama kar manzarası güzel olabilir.",
       timeAgo: "3 gün önce",
       likes: 38,
-      comments: 8
+      comments: 8,
+      makesSense: 19
     },
     {
       id: 3,
@@ -141,7 +143,8 @@ export function KonyaDiscoveryPage() {
       answer: "Evet, Mevlana Müzesi'ne giriş ücretlidir. Ancak Müze Kart geçerlidir. Müze Kart ile yılda iki kez ücretsiz giriş yapabilirsiniz. Pazartesi günleri kapalıdır, ziyaret saatleri 09:00-17:00 arasındadır.",
       timeAgo: "4 gün önce",
       likes: 52,
-      comments: 15
+      comments: 15,
+      makesSense: 31
     },
     {
       id: 4,
@@ -151,7 +154,8 @@ export function KonyaDiscoveryPage() {
       answer: "Konya'da ulaşım oldukça kolaydır. Tramvay hattı şehrin ana arterlerinden geçer. Otobüs hatları geniş bir ağa sahiptir. Şehir merkezi yürüyüş mesafesinde birçok yeri kapsar. Taksi ve dolmuşlar da yaygın olarak kullanılır.",
       timeAgo: "5 gün önce",
       likes: 29,
-      comments: 6
+      comments: 6,
+      makesSense: 15
     },
     {
       id: 5,
@@ -161,7 +165,8 @@ export function KonyaDiscoveryPage() {
       answer: "Konya mutfağının en ünlü yemekleri: Etli ekmek, fırın kebabı, bamya çorbası, Mevlana böreği, tirit, etli pide ve sac kavurma. Tatlı olarak ise höşmerim ve peynirli irmik helvası çok meşhurdur.",
       timeAgo: "1 hafta önce",
       likes: 67,
-      comments: 19
+      comments: 19,
+      makesSense: 42
     },
     {
       id: 6,
@@ -171,7 +176,8 @@ export function KonyaDiscoveryPage() {
       answer: "Tropikal Kelebek Bahçesi (Kelebekler Vadisi), Selçuk Üniversitesi kampüsü içinde yer alır. 12 ve 31 numaralı otobüslerle ulaşabilirsiniz. Merkez'den yaklaşık 20 dakika sürer. Kampüs içinde olduğu için araba ile gitmek de mümkündür, otopark mevcuttur.",
       timeAgo: "1 hafta önce",
       likes: 41,
-      comments: 10
+      comments: 10,
+      makesSense: 28
     }
   ]
 
@@ -408,13 +414,14 @@ function FAQCard({ faq }: {
     timeAgo: string
     likes: number
     comments: number
+    makesSense: number
   }
 }) {
   return (
     <Card className="bg-card border border-border rounded-xl hover:shadow-lg transition-all duration-300 cursor-pointer group">
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-start gap-4">
-          <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-[#f2f4f3] dark:border-border">
+          <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-border">
             <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold">
               {faq.authorInitials}
             </AvatarFallback>
@@ -448,13 +455,21 @@ function FAQCard({ faq }: {
                 <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{faq.likes}</span>
               </button>
               <button className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+                <Lightbulb className="w-4 h-4" />
+                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{faq.makesSense}</span>
+                <span className="font-[Manrope] font-medium text-[10px] sm:text-xs text-foreground/50 dark:text-muted-foreground/70 hidden sm:inline">Mantıklı</span>
+              </button>
+              <button className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors cursor-pointer">
                 <MessageCircle className="w-4 h-4" />
                 <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{faq.comments}</span>
               </button>
-              <button className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors ml-auto cursor-pointer">
+              <Link 
+                href={`/discovery/faq/${faq.id}`}
+                className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors ml-auto cursor-pointer"
+              >
                 <BookOpen className="w-4 h-4" />
                 <span className="font-[Manrope] font-semibold text-xs sm:text-sm">Devamını Oku</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
