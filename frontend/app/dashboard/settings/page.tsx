@@ -92,6 +92,17 @@ export default function SettingsPage() {
   const [deletePassword, setDeletePassword] = useState("")
   const [isDeletingAccount, setIsDeletingAccount] = useState(false)
 
+  // Connected accounts state
+  const [connectedAccounts, setConnectedAccounts] = useState([
+    { id: "google", name: "Google", icon: "🔵", connected: true, email: "user@gmail.com", authUrl: "https://accounts.google.com/oauth/authorize" },
+    { id: "apple", name: "Apple", icon: "⚫", connected: false, email: null, authUrl: "https://appleid.apple.com/auth/authorize" },
+    { id: "genckart", name: "GençKart", icon: "💳", connected: true, email: "user@genckart.com", authUrl: "https://genckart.konya.bel.tr/auth" },
+  ])
+
+  // Disconnect confirmation modal state
+  const [disconnectAccountId, setDisconnectAccountId] = useState<string | null>(null)
+  const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false)
+
   if (!user) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -127,7 +138,7 @@ export default function SettingsPage() {
   }
 
   // Notification settings change handler
-  const handleNotificationChange = (value: boolean) => {
+  const handleNotificationChange = () => {
     toast.success("Ayarlarınız değişti", {
       description: "Bildirim ayarlarınız güncellendi",
       duration: 3000,
@@ -135,7 +146,7 @@ export default function SettingsPage() {
   }
 
   // Privacy settings change handler
-  const handlePrivacyChange = (value: boolean) => {
+  const handlePrivacyChange = () => {
     toast.success("Ayarlarınız değişti", {
       description: "Gizlilik ayarlarınız güncellendi",
       duration: 3000,
@@ -170,7 +181,7 @@ export default function SettingsPage() {
       setCurrentPassword("")
       setNewPassword("")
       setConfirmPassword("")
-    } catch (err) {
+    } catch {
       toast.error("Bir hata oluştu", {
         description: "Şifre değiştirilemedi. Lütfen tekrar deneyin.",
       })
@@ -197,7 +208,7 @@ export default function SettingsPage() {
       setDeletePassword("")
       // Redirect to home page
       router.push("/")
-    } catch (err) {
+    } catch {
       toast.error("Bir hata oluştu", {
         description: "Hesap silinemedi. Lütfen tekrar deneyin.",
       })
@@ -216,21 +227,10 @@ export default function SettingsPage() {
         duration: 3000,
       })
       router.push("/auth/login")
-    } catch (err) {
+    } catch {
       toast.error("Bir hata oluştu")
     }
   }
-
-  // Connected accounts state
-  const [connectedAccounts, setConnectedAccounts] = useState([
-    { id: "google", name: "Google", icon: "🔵", connected: true, email: "user@gmail.com", authUrl: "https://accounts.google.com/oauth/authorize" },
-    { id: "apple", name: "Apple", icon: "⚫", connected: false, email: null, authUrl: "https://appleid.apple.com/auth/authorize" },
-    { id: "genckart", name: "GençKart", icon: "💳", connected: true, email: "user@genckart.com", authUrl: "https://genckart.konya.bel.tr/auth" },
-  ])
-
-  // Disconnect confirmation modal state
-  const [disconnectAccountId, setDisconnectAccountId] = useState<string | null>(null)
-  const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false)
 
   // Handle disconnect account
   const handleDisconnectAccount = (accountId: string) => {
@@ -524,7 +524,7 @@ export default function SettingsPage() {
               checked={emailNotifications}
               onCheckedChange={(checked) => {
                 setEmailNotifications(checked)
-                handleNotificationChange(checked)
+                handleNotificationChange()
               }}
             />
           </div>
@@ -547,7 +547,7 @@ export default function SettingsPage() {
               checked={pushNotifications}
               onCheckedChange={(checked) => {
                 setPushNotifications(checked)
-                handleNotificationChange(checked)
+                handleNotificationChange()
               }}
             />
           </div>
@@ -567,7 +567,7 @@ export default function SettingsPage() {
               checked={commentNotifications}
               onCheckedChange={(checked) => {
                 setCommentNotifications(checked)
-                handleNotificationChange(checked)
+                handleNotificationChange()
               }}
             />
           </div>
@@ -585,7 +585,7 @@ export default function SettingsPage() {
               checked={likeNotifications}
               onCheckedChange={(checked) => {
                 setLikeNotifications(checked)
-                handleNotificationChange(checked)
+                handleNotificationChange()
               }}
             />
           </div>
@@ -603,7 +603,7 @@ export default function SettingsPage() {
               checked={messageNotifications}
               onCheckedChange={(checked) => {
                 setMessageNotifications(checked)
-                handleNotificationChange(checked)
+                handleNotificationChange()
               }}
             />
           </div>
@@ -640,7 +640,7 @@ export default function SettingsPage() {
               checked={profilePublic}
               onCheckedChange={(checked) => {
                 setProfilePublic(checked)
-                handlePrivacyChange(checked)
+                handlePrivacyChange()
               }}
             />
           </div>
@@ -660,7 +660,7 @@ export default function SettingsPage() {
               checked={showActivity}
               onCheckedChange={(checked) => {
                 setShowActivity(checked)
-                handlePrivacyChange(checked)
+                handlePrivacyChange()
               }}
             />
           </div>
@@ -678,7 +678,7 @@ export default function SettingsPage() {
               checked={showCoins}
               onCheckedChange={(checked) => {
                 setShowCoins(checked)
-                handlePrivacyChange(checked)
+                handlePrivacyChange()
               }}
             />
           </div>

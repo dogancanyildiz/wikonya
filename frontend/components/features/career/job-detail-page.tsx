@@ -104,7 +104,7 @@ export function JobDetailPage() {
           description: `${job.role} pozisyonuna yaptığınız başvuru iptal edildi.`,
           duration: 3000,
         })
-      } catch (err) {
+      } catch {
         toast.error("Hata", {
           description: "Başvuru iptal edilirken bir hata oluştu.",
           duration: 3000,
@@ -122,7 +122,7 @@ export function JobDetailPage() {
           description: `${job.role} pozisyonuna başvurunuz başarıyla gönderildi.`,
           duration: 3000,
         })
-      } catch (err) {
+      } catch {
         toast.error("Hata", {
           description: "Başvuru gönderilirken bir hata oluştu.",
           duration: 3000,

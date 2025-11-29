@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, Clock, Bookmark, Building2, Briefcase } from "lucide-react"
+import { MapPin, Clock, Bookmark, Building2 } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"

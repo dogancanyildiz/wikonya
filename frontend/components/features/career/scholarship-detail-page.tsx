@@ -115,7 +115,7 @@ export function ScholarshipDetailPage() {
           description: `${scholarship.title} burs programına yaptığınız başvuru iptal edildi.`,
           duration: 3000,
         })
-      } catch (err) {
+      } catch {
         toast.error("Hata", {
           description: "Başvuru iptal edilirken bir hata oluştu.",
           duration: 3000,
@@ -133,7 +133,7 @@ export function ScholarshipDetailPage() {
           description: `${scholarship.title} burs programına başvurunuz başarıyla gönderildi.`,
           duration: 3000,
         })
-      } catch (err) {
+      } catch {
         toast.error("Hata", {
           description: "Başvuru gönderilirken bir hata oluştu.",
           duration: 3000,

@@ -1,6 +1,7 @@
 "use client"
 
-import { ArrowLeft, Clock, ThumbsUp, MessageCircle, Share2, BookOpen, Lightbulb, Send, Flag, AlertCircle } from "lucide-react"
+import React from "react"
+import { ArrowLeft, Clock, ThumbsUp, MessageCircle, Share2, BookOpen, Lightbulb, Flag, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { toast } from "sonner"
@@ -8,9 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useApp } from "@/contexts/app-context"
 import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
@@ -400,9 +399,9 @@ const faqData = [
 // Simple markdown parser for bold and lists
 function parseMarkdown(text: string) {
   const lines = text.split('\n')
-  const result: JSX.Element[] = []
+  const result: React.ReactElement[] = []
   let inList = false
-  let listItems: JSX.Element[] = []
+  let listItems: React.ReactElement[] = []
   
   lines.forEach((line, index) => {
     const trimmedLine = line.trim()
@@ -423,7 +422,7 @@ function parseMarkdown(text: string) {
     
     // Bold text **text**
     const boldRegex = /\*\*(.*?)\*\*/g
-    const parts: (string | JSX.Element)[] = []
+    const parts: (string | React.ReactElement)[] = []
     let lastIndex = 0
     let match
     
@@ -560,7 +559,7 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
           description: "Bağlantı panoya kopyalandı",
           duration: 3000,
         })
-      } catch (err) {
+      } catch {
         toast.error("Kopyalama başarısız", {
           description: "Link kopyalanamadı",
           duration: 3000,
@@ -714,7 +713,7 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
     })
   }
 
-  const handleFlagComment = async (commentId: number) => {
+  const handleFlagComment = async () => {
     if (!state.user) {
       setCommentError("Yorum bildirmek için giriş yapmalısınız.")
       return
@@ -1048,7 +1047,7 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
                                 )}
                               </button>
                               <button 
-                                onClick={() => handleFlagComment(comment.id)}
+                                onClick={handleFlagComment}
                                 className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors ml-auto"
                                 aria-label="Yorumu bildir"
                               >
