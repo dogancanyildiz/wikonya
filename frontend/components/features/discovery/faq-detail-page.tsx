@@ -607,25 +607,6 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
     })
   }
 
-  const handleSendComment = () => {
-    if (!commentInput.trim() || !state.user) return
-
-    const newComment = {
-      id: Date.now(),
-      author: state.user.name,
-      authorInitials: state.user.initials,
-      content: commentInput.trim(),
-      timestamp: "Az önce",
-      likes: 0,
-    }
-
-    setComments([...comments, newComment])
-    setCommentInput("")
-    setLocalFaq({
-      ...localFaq,
-      comments: localFaq.comments + 1,
-    })
-  }
 
   return (
     <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
