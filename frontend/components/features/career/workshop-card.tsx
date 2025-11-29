@@ -1,7 +1,9 @@
 "use client"
 
+import { useState } from "react"
 import { Users, Clock, MapPin } from "lucide-react"
 import Image from "next/image"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -29,10 +31,39 @@ export function WorkshopCard({
   dateMonth,
   time,
   location,
-  participants,
+  participants: initialParticipants,
   maxParticipants,
   isFree,
 }: WorkshopCardProps) {
+  const [isRegistered, setIsRegistered] = useState(false)
+  const [participants, setParticipants] = useState(initialParticipants)
+
+  const handleRegister = () => {
+    if (isRegistered) {
+      setParticipants(prev => prev - 1)
+      setIsRegistered(false)
+      toast.success("Kayıt silindi", {
+        description: `${title} etkinliğinden kaydınız kaldırıldı.`,
+        duration: 3000,
+      })
+    } else {
+      if (participants < maxParticipants) {
+        setParticipants(prev => prev + 1)
+        setIsRegistered(true)
+        toast.success("Kayıt başarılı", {
+          description: `${title} etkinliğine başarıyla kayıt oldunuz.`,
+          duration: 3000,
+        })
+      } else {
+        toast.error("Etkinlik dolu", {
+          description: "Bu etkinlik için kontenjan dolmuştur.",
+          duration: 3000,
+        })
+      }
+    }
+  }
+
+  const isFull = participants >= maxParticipants
   return (
     <Card className="bg-card rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all overflow-hidden group border border-border">
       {/* Image with Date Badge */}
@@ -122,9 +153,17 @@ export function WorkshopCard({
 
         {/* Register Button */}
         <Button 
-          className="w-full py-2 sm:py-2.5 bg-primary text-white rounded-xl font-[Manrope] hover:bg-primary/90 transition-all font-bold text-xs sm:text-sm"
+          onClick={handleRegister}
+          disabled={!isRegistered && isFull}
+          className={`w-full py-2 sm:py-2.5 rounded-xl font-[Manrope] transition-all font-bold text-xs sm:text-sm ${
+            isRegistered
+              ? 'bg-destructive hover:bg-destructive/90 text-white'
+              : isFull
+              ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+              : 'bg-primary hover:bg-primary/90 text-white'
+          }`}
         >
-          Kayıt Ol
+          {isRegistered ? "Kayıtı Sil" : isFull ? "Dolu" : "Kayıt Ol"}
         </Button>
       </CardContent>
     </Card>
