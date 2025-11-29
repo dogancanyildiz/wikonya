@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -134,6 +135,14 @@ export function Navbar() {
             className="flex items-center gap-2 hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md px-2 -ml-2"
             aria-label="Ana sayfaya dön"
           >
+            <Image
+              src="/konya-genc-logo.svg"
+              alt="Konya Genç Logo"
+              width={32}
+              height={32}
+              className="w-7 h-7 sm:w-8 sm:h-8 scale-[1.4]"
+              priority
+            />
             <span className="font-[Manrope] text-foreground font-black text-xl sm:text-2xl tracking-tight">
               KONYA <span className="text-primary">GENÇ</span>
             </span>

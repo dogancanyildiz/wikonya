@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { useApp } from "@/contexts/app-context"
 import { mockLogin, mockVerifyUser } from "@/lib/auth/mock-auth"
 import { Button } from "@/components/ui/button"
@@ -60,8 +61,15 @@ export default function LoginPage() {
 
         <div className="relative z-10 flex flex-col justify-center px-12 xl:px-20">
           <Link href="/" className="mb-12 inline-flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-              <Home className="w-5 h-5 text-white" />
+            <div className="bg-white rounded-xl p-2 shadow-lg">
+              <Image
+                src="/konya-genc-logo.svg"
+                alt="Konya Genç Logo"
+                width={40}
+                height={40}
+                className="w-10 h-10 scale-[1.4]"
+                priority
+              />
             </div>
             <span className="font-[Manrope] text-white font-black text-3xl xl:text-4xl">
               KONYA <span className="text-white/80">GENÇ</span>
@@ -116,8 +124,15 @@ export default function LoginPage() {
           {/* Mobile Header */}
           <div className="lg:hidden mb-10">
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
-                <Home className="w-5 h-5 text-white" />
+              <div className="bg-white rounded-xl p-2 shadow-lg">
+                <Image
+                  src="/konya-genc-logo.svg"
+                  alt="Konya Genç Logo"
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 scale-[1.4]"
+                  priority
+                />
               </div>
               <span className="font-[Manrope] text-foreground font-black text-2xl">
                 KONYA <span className="text-primary">GENÇ</span>

@@ -3,6 +3,7 @@
 import { Menu, Bell, Moon, Sun, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import Image from "next/image"
 import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
@@ -129,7 +130,15 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
     <nav className="sticky top-0 z-50 bg-card border-b border-border">
       <div className="flex items-center justify-between h-14 sm:h-16 px-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center group hover:opacity-80 transition-opacity">
+        <Link href="/" className="flex items-center group hover:opacity-80 transition-opacity gap-2">
+          <Image
+            src="/konya-genc-logo.svg"
+            alt="Konya Genç Logo"
+            width={28}
+            height={28}
+            className="w-6 h-6 sm:w-7 sm:h-7 scale-[1.4]"
+            priority
+          />
           <span className="font-[Manrope] text-foreground font-black text-lg sm:text-xl">
             KONYA <span className="text-primary">GENÇ</span>
           </span>
