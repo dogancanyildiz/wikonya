@@ -498,6 +498,7 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
   // FAQ'nin gerçek yorum sayısına göre yorumlar oluştur
   const [comments, setComments] = useState<FAQComment[]>([])
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
+  const [showAllComments, setShowAllComments] = useState(false)
 
   // FAQ değiştiğinde yorumları güncelle
   useEffect(() => {
@@ -509,6 +510,7 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
       setNewComment("")
       setCommentError(null)
       setReplyingTo(null)
+      setShowAllComments(false)
     }
   }, [faqId, faq])
 
@@ -963,7 +965,7 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3 sm:space-y-4">
-                  {comments.map((comment) => (
+                  {(showAllComments ? comments : comments.slice(0, 3)).map((comment) => (
                     <Card
                       key={comment.id}
                       className="bg-card rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-shadow duration-300 border border-border"
@@ -1063,6 +1065,32 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
                   ))}
                 </div>
 
+                {/* Show More Comments Button */}
+                {comments.length > 3 && !showAllComments && (
+                  <div className="pt-4 border-t border-border">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowAllComments(true)}
+                      className="w-full font-[Manrope] font-semibold"
+                    >
+                      Devamını Göster ({comments.length - 3} yorum daha)
+                    </Button>
+                  </div>
+                )}
+
+                {/* Show Less Button */}
+                {showAllComments && comments.length > 3 && (
+                  <div className="pt-4 border-t border-border">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowAllComments(false)}
+                      className="w-full font-[Manrope] font-semibold"
+                    >
+                      Daha Az Göster
+                    </Button>
+                  </div>
+                )}
+
                 {/* Reply Dialog */}
                 {replyingTo && (
                   <CommentReplyDialog
@@ -1145,28 +1173,6 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
 
         {/* Sidebar */}
         <div className="space-y-4 sm:space-y-6">
-          {/* Related Questions */}
-          <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
-            <CardHeader>
-              <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
-                İlgili Sorular
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {faq.relatedQuestions.map((related) => (
-                <Link
-                  key={related.id}
-                  href={`/discovery/faq/${related.id}`}
-                  className="block p-3 bg-accent rounded-xl hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors group"
-                >
-                  <p className="font-[Manrope] font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
-                    {related.question}
-                  </p>
-                </Link>
-              ))}
-            </CardContent>
-          </Card>
-
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, Clock, Navigation, Heart, MessageCircle, ThumbsUp, BookOpen, Lightbulb } from "lucide-react"
+import { MapPin, Clock, Navigation, Heart, MessageCircle, ThumbsUp, BookOpen, Lightbulb, Flag } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useApp } from "@/contexts/app-context"
+import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
+import { toast } from "sonner"
 
 export function KonyaDiscoveryPage() {
   // Must Visit Places data
@@ -403,6 +405,103 @@ function RouteCard({ route }: {
   )
 }
 
+// Simple deterministic random function (seed-based)
+function seededRandom(seed: number): number {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
+interface FAQComment {
+  id: number
+  author: string
+  authorInitials: string
+  timeAgo: string
+  content: string
+  upvotes: number
+  downvotes: number
+  logicalVotes: number
+  replies: number
+  isUpvoted: boolean
+  isDownvoted: boolean
+  isLogical: boolean
+}
+
+// Generate deterministic comments for FAQ
+function generateComments(count: number, faqId: number): FAQComment[] {
+  const commentTemplates = [
+    "Çok faydalı bir bilgi, teşekkürler!",
+    "Ben de bu mekanları denedim, gerçekten harika!",
+    "Çok detaylı bir açıklama olmuş, elinize sağlık.",
+    "Bu bilgiyi paylaştığınız için teşekkür ederim.",
+    "Kesinlikle katılıyorum, çok doğru bilgiler.",
+    "Ben de aynı deneyimi yaşadım, çok memnun kaldım.",
+    "Yeni bir şey öğrendim, çok teşekkürler!",
+    "Bu konuda daha fazla bilgi var mı?",
+    "Çok yardımcı oldu, sağ olun.",
+    "Harika bir rehber, herkese tavsiye ederim.",
+    "Bu bilgileri not aldım, çok işime yarayacak.",
+    "Çok açıklayıcı ve faydalı bir içerik.",
+    "Teşekkürler, çok yardımcı oldunuz.",
+    "Kesinlikle doğru, ben de aynı şeyi yaşadım.",
+    "Çok güzel bir açıklama, elinize sağlık.",
+  ]
+
+  const authors = [
+    { name: "Ahmet Yılmaz", initials: "AY" },
+    { name: "Zeynep Kaya", initials: "ZK" },
+    { name: "Mehmet Demir", initials: "MD" },
+    { name: "Ayşe Şahin", initials: "AŞ" },
+    { name: "Can Özkan", initials: "CÖ" },
+    { name: "Elif Yıldız", initials: "EY" },
+    { name: "Burak Kaya", initials: "BK" },
+    { name: "Selin Arslan", initials: "SA" },
+    { name: "Emre Çelik", initials: "EÇ" },
+    { name: "Deniz Yılmaz", initials: "DY" },
+  ]
+
+  const timestamps = [
+    "Az önce",
+    "5 dakika önce",
+    "15 dakika önce",
+    "1 saat önce",
+    "2 saat önce",
+    "5 saat önce",
+    "1 gün önce",
+    "2 gün önce",
+    "3 gün önce",
+    "1 hafta önce",
+  ]
+
+  const comments: FAQComment[] = []
+  for (let i = 0; i < count; i++) {
+    const seed = faqId * 1000 + i
+    const authorIndex = Math.floor(seededRandom(seed) * authors.length)
+    const contentIndex = Math.floor(seededRandom(seed + 1) * commentTemplates.length)
+    const timestampIndex = Math.floor(seededRandom(seed + 2) * timestamps.length)
+    const upvotes = Math.floor(seededRandom(seed + 3) * 20) + 5
+    const downvotes = Math.floor(seededRandom(seed + 4) * 5)
+    const logicalVotes = Math.floor(seededRandom(seed + 5) * 15) + 3
+    const replies = Math.floor(seededRandom(seed + 6) * 8)
+
+    comments.push({
+      id: faqId * 1000 + i + 1,
+      author: authors[authorIndex].name,
+      authorInitials: authors[authorIndex].initials,
+      timeAgo: timestamps[timestampIndex],
+      content: commentTemplates[contentIndex],
+      upvotes,
+      downvotes,
+      logicalVotes,
+      replies,
+      isUpvoted: false,
+      isDownvoted: false,
+      isLogical: false,
+    })
+  }
+
+  return comments
+}
+
 // FAQ Card Component - Yeni Tartışmalar Formatı
 function FAQCard({ faq }: {
   faq: {
@@ -418,16 +517,22 @@ function FAQCard({ faq }: {
   }
 }) {
   const { state } = useApp()
+  const { rewardCoins } = useCoinReward()
   const [localFaq, setLocalFaq] = useState(faq)
   const [isLiked, setIsLiked] = useState(false)
   const [isMakesSense, setIsMakesSense] = useState(false)
   const [showComments, setShowComments] = useState(false)
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
+  const [faqComments, setFaqComments] = useState<FAQComment[]>(() => generateComments(faq.comments, faq.id))
+  const [showAllComments, setShowAllComments] = useState(false)
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    if (!state.user) return
+    if (!state.user) {
+      toast.info("Beğenmek için giriş yapmalısınız")
+      return
+    }
 
     const newIsLiked = !isLiked
     setIsLiked(newIsLiked)
@@ -449,7 +554,10 @@ function FAQCard({ faq }: {
   const handleMakesSense = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    if (!state.user) return
+    if (!state.user) {
+      toast.info("Mantıklı işaretlemek için giriş yapmalısınız")
+      return
+    }
 
     const newIsMakesSense = !isMakesSense
     setIsMakesSense(newIsMakesSense)
@@ -460,12 +568,81 @@ function FAQCard({ faq }: {
       setTimeout(() => {
         setAnimations({ ...animations, [animationKey]: false })
       }, 600)
+      rewardCoins("comment_logical", { commentId: faq.id })
     }
 
     setLocalFaq({
       ...localFaq,
       makesSense: newIsMakesSense ? localFaq.makesSense + 1 : localFaq.makesSense - 1,
     })
+  }
+
+  const handleCommentVote = (commentId: number, voteType: 'up' | 'down') => {
+    if (!state.user) {
+      toast.info("Oy vermek için giriş yapmalısınız")
+      return
+    }
+    
+    setFaqComments(faqComments.map(comment => {
+      if (comment.id === commentId) {
+        if (voteType === 'up') {
+          if (comment.isUpvoted) {
+            return { ...comment, upvotes: comment.upvotes - 1, isUpvoted: false }
+          } else {
+            const animationKey = `like-comment-${commentId}`
+            setAnimations({ ...animations, [animationKey]: true })
+            setTimeout(() => {
+              setAnimations({ ...animations, [animationKey]: false })
+            }, 600)
+            return {
+              ...comment,
+              upvotes: comment.upvotes + 1,
+              downvotes: comment.isDownvoted ? comment.downvotes - 1 : comment.downvotes,
+              isUpvoted: true,
+              isDownvoted: false,
+            }
+          }
+        } else {
+          if (comment.isDownvoted) {
+            return { ...comment, downvotes: comment.downvotes - 1, isDownvoted: false }
+          } else {
+            return {
+              ...comment,
+              downvotes: comment.downvotes + 1,
+              upvotes: comment.isUpvoted ? comment.upvotes - 1 : comment.upvotes,
+              isDownvoted: true,
+              isUpvoted: false,
+            }
+          }
+        }
+      }
+      return comment
+    }))
+  }
+
+  const handleCommentLogical = (commentId: number) => {
+    if (!state.user) {
+      toast.info("Oy vermek için giriş yapmalısınız")
+      return
+    }
+
+    setFaqComments(faqComments.map(comment => {
+      if (comment.id === commentId) {
+        const currentVotes = comment.logicalVotes || 0
+        if (comment.isLogical) {
+          return { ...comment, logicalVotes: currentVotes - 1, isLogical: false }
+        } else {
+          rewardCoins("comment_logical", { commentId })
+          const animationKey = `logical-comment-${commentId}`
+          setAnimations({ ...animations, [animationKey]: true })
+          setTimeout(() => {
+            setAnimations({ ...animations, [animationKey]: false })
+          }, 600)
+          return { ...comment, logicalVotes: currentVotes + 1, isLogical: true }
+        }
+      }
+      return comment
+    }))
   }
 
   const handleComments = (e: React.MouseEvent) => {
@@ -558,13 +735,94 @@ function FAQCard({ faq }: {
               </Link>
             </div>
             {showComments && (
-              <div className="mt-4 pt-4 border-t border-border">
-                <p className="font-[Manrope] text-sm text-muted-foreground mb-2">
-                  Yorumlar burada görünecek. Detay sayfasında daha fazla yorum görebilirsiniz.
-                </p>
+              <div className="mt-4 pt-4 border-t border-border space-y-3">
+                <div className="space-y-2">
+                  {(showAllComments ? faqComments : faqComments.slice(0, 3)).map((comment) => (
+                    <div key={comment.id} className="flex gap-2 p-3 bg-accent rounded-lg">
+                      <Avatar className="w-7 h-7 border border-border">
+                        <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold text-[10px]">
+                          {comment.authorInitials}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-[Manrope] font-bold text-xs text-foreground">
+                            {comment.author}
+                          </span>
+                          <span className="font-[Manrope] text-[10px] text-muted-foreground">
+                            {comment.timeAgo}
+                          </span>
+                        </div>
+                        <p className="font-[Manrope] text-xs text-foreground/80 dark:text-muted-foreground mb-2">
+                          {comment.content}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              handleCommentVote(comment.id, 'up')
+                            }}
+                            className={`flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors ${
+                              comment.isUpvoted ? 'text-primary' : ''
+                            }`}
+                          >
+                            <ThumbsUp className={`w-3 h-3 ${comment.isUpvoted ? 'fill-primary' : ''}`} />
+                            <span>{comment.upvotes - comment.downvotes}</span>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              handleCommentLogical(comment.id)
+                            }}
+                            className={`flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors ${
+                              comment.isLogical ? 'text-primary' : ''
+                            }`}
+                          >
+                            <Lightbulb className={`w-3 h-3 ${comment.isLogical ? 'fill-primary' : ''}`} />
+                            <span>{comment.logicalVotes}</span>
+                          </button>
+                          <button className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors">
+                            <MessageCircle className="w-3 h-3" />
+                            <span>{comment.replies}</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {faqComments.length > 3 && !showAllComments && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      setShowAllComments(true)
+                    }}
+                    className="w-full font-[Manrope] text-xs"
+                  >
+                    Devamını Göster ({faqComments.length - 3} yorum daha)
+                  </Button>
+                )}
+                {showAllComments && faqComments.length > 3 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      setShowAllComments(false)
+                    }}
+                    className="w-full font-[Manrope] text-xs"
+                  >
+                    Daha Az Göster
+                  </Button>
+                )}
                 <Link 
                   href={`/discovery/faq/${faq.id}`}
-                  className="text-primary hover:underline font-[Manrope] text-sm font-semibold"
+                  className="block text-center text-primary hover:underline font-[Manrope] text-xs font-semibold"
                 >
                   Tüm yorumları gör →
                 </Link>
