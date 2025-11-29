@@ -111,7 +111,7 @@ const faqData = [
 - Hafta sonları çok yoğun olur, hafta içi tercih edilirse daha rahat yersiniz`,
     timeAgo: "2 gün önce",
     likes: 45,
-    comments: 12,
+    comments: getCommentCount(1), // 3-13 arası deterministik
     makesSense: 23,
     category: "Yemek & Restoran",
     relatedQuestions: [
