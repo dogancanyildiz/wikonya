@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,9 +13,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DEFAULT_AVATAR_URL } from "@/lib/constants"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { useApp } from "@/contexts/app-context"
 import { useTheme } from "next-themes"
 import { useColorTheme, colorThemes } from "@/lib/utils/hooks/use-color-theme"
+import { mockLogout } from "@/lib/auth/mock-auth"
 import { 
   User, 
   Bell, 
@@ -31,13 +42,16 @@ import {
   Sun,
   Moon,
   Monitor,
-  Check
+  Check,
+  X,
+  CreditCard
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export default function SettingsPage() {
   const { state, setUser } = useApp()
   const user = state.user
+  const router = useRouter()
   const { theme, setTheme } = useTheme()
   const { colorTheme, setColorTheme, mounted } = useColorTheme()
 
@@ -62,6 +76,22 @@ export default function SettingsPage() {
   const [profilePublic, setProfilePublic] = useState(true)
   const [showActivity, setShowActivity] = useState(true)
   const [showCoins, setShowCoins] = useState(true)
+
+  // Modal states
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
+  const [isConnectedAccountsModalOpen, setIsConnectedAccountsModalOpen] = useState(false)
+  const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
+  const [isLogoutAllModalOpen, setIsLogoutAllModalOpen] = useState(false)
+  
+  // Password change form
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+
+  // Delete account form
+  const [deletePassword, setDeletePassword] = useState("")
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false)
 
   if (!user) {
     return (
@@ -96,6 +126,108 @@ export default function SettingsPage() {
       setIsLoading(false)
     }
   }
+
+  // Notification settings change handler
+  const handleNotificationChange = (value: boolean) => {
+    toast.success("Ayarlarınız değişti", {
+      description: "Bildirim ayarlarınız güncellendi",
+      duration: 3000,
+    })
+  }
+
+  // Privacy settings change handler
+  const handlePrivacyChange = (value: boolean) => {
+    toast.success("Ayarlarınız değişti", {
+      description: "Gizlilik ayarlarınız güncellendi",
+      duration: 3000,
+    })
+  }
+
+  // Password change handler
+  const handlePasswordChange = async () => {
+    if (!newPassword || !confirmPassword || !currentPassword) {
+      toast.error("Lütfen tüm alanları doldurun")
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("Yeni şifreler eşleşmiyor")
+      return
+    }
+
+    if (newPassword.length < 8) {
+      toast.error("Şifre en az 8 karakter olmalıdır")
+      return
+    }
+
+    setIsChangingPassword(true)
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      toast.success("Şifre değiştirildi", {
+        description: "Şifreniz başarıyla güncellendi",
+        duration: 3000,
+      })
+      setIsPasswordModalOpen(false)
+      setCurrentPassword("")
+      setNewPassword("")
+      setConfirmPassword("")
+    } catch (err) {
+      toast.error("Bir hata oluştu", {
+        description: "Şifre değiştirilemedi. Lütfen tekrar deneyin.",
+      })
+    } finally {
+      setIsChangingPassword(false)
+    }
+  }
+
+  // Delete account handler
+  const handleDeleteAccount = async () => {
+    if (!deletePassword) {
+      toast.error("Lütfen şifrenizi girin")
+      return
+    }
+
+    setIsDeletingAccount(true)
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      toast.success("Hesap silindi", {
+        description: "Hesabınız başarıyla silindi",
+        duration: 3000,
+      })
+      setIsDeleteAccountModalOpen(false)
+      setDeletePassword("")
+      // Redirect to home page
+      router.push("/")
+    } catch (err) {
+      toast.error("Bir hata oluştu", {
+        description: "Hesap silinemedi. Lütfen tekrar deneyin.",
+      })
+    } finally {
+      setIsDeletingAccount(false)
+    }
+  }
+
+  // Logout all devices handler
+  const handleLogoutAll = async () => {
+    setIsLogoutAllModalOpen(false)
+    try {
+      await mockLogout()
+      toast.success("Tüm cihazlardan çıkış yapıldı", {
+        description: "Güvenliğiniz için tüm oturumlar sonlandırıldı",
+        duration: 3000,
+      })
+      router.push("/auth/login")
+    } catch (err) {
+      toast.error("Bir hata oluştu")
+    }
+  }
+
+  // Connected accounts data
+  const connectedAccounts = [
+    { id: "google", name: "Google", icon: "🔵", connected: true, email: "user@gmail.com" },
+    { id: "apple", name: "Apple", icon: "⚫", connected: false, email: null },
+    { id: "genckart", name: "GençKart", icon: "💳", connected: true, email: "user@genckart.com" },
+  ]
 
   const themeOptions = [
     { id: "light", name: "Açık", icon: Sun },
@@ -356,7 +488,10 @@ export default function SettingsPage() {
             </div>
             <Switch
               checked={emailNotifications}
-              onCheckedChange={setEmailNotifications}
+              onCheckedChange={(checked) => {
+                setEmailNotifications(checked)
+                handleNotificationChange(checked)
+              }}
             />
           </div>
 
@@ -376,7 +511,10 @@ export default function SettingsPage() {
             </div>
             <Switch
               checked={pushNotifications}
-              onCheckedChange={setPushNotifications}
+              onCheckedChange={(checked) => {
+                setPushNotifications(checked)
+                handleNotificationChange(checked)
+              }}
             />
           </div>
 
@@ -393,7 +531,10 @@ export default function SettingsPage() {
             </div>
             <Switch
               checked={commentNotifications}
-              onCheckedChange={setCommentNotifications}
+              onCheckedChange={(checked) => {
+                setCommentNotifications(checked)
+                handleNotificationChange(checked)
+              }}
             />
           </div>
 
@@ -408,7 +549,10 @@ export default function SettingsPage() {
             </div>
             <Switch
               checked={likeNotifications}
-              onCheckedChange={setLikeNotifications}
+              onCheckedChange={(checked) => {
+                setLikeNotifications(checked)
+                handleNotificationChange(checked)
+              }}
             />
           </div>
 
@@ -423,7 +567,10 @@ export default function SettingsPage() {
             </div>
             <Switch
               checked={messageNotifications}
-              onCheckedChange={setMessageNotifications}
+              onCheckedChange={(checked) => {
+                setMessageNotifications(checked)
+                handleNotificationChange(checked)
+              }}
             />
           </div>
         </CardContent>
@@ -457,7 +604,10 @@ export default function SettingsPage() {
             </div>
             <Switch
               checked={profilePublic}
-              onCheckedChange={setProfilePublic}
+              onCheckedChange={(checked) => {
+                setProfilePublic(checked)
+                handlePrivacyChange(checked)
+              }}
             />
           </div>
 
@@ -474,7 +624,10 @@ export default function SettingsPage() {
             </div>
             <Switch
               checked={showActivity}
-              onCheckedChange={setShowActivity}
+              onCheckedChange={(checked) => {
+                setShowActivity(checked)
+                handlePrivacyChange(checked)
+              }}
             />
           </div>
 
@@ -489,7 +642,10 @@ export default function SettingsPage() {
             </div>
             <Switch
               checked={showCoins}
-              onCheckedChange={setShowCoins}
+              onCheckedChange={(checked) => {
+                setShowCoins(checked)
+                handlePrivacyChange(checked)
+              }}
             />
           </div>
         </CardContent>
@@ -506,12 +662,20 @@ export default function SettingsPage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button variant="outline" className="w-full justify-start font-[Manrope]">
+          <Button 
+            variant="outline" 
+            className="w-full justify-start font-[Manrope]"
+            onClick={() => setIsPasswordModalOpen(true)}
+          >
             <Lock className="w-4 h-4 mr-2" />
             Şifre Değiştir
           </Button>
 
-          <Button variant="outline" className="w-full justify-start font-[Manrope]">
+          <Button 
+            variant="outline" 
+            className="w-full justify-start font-[Manrope]"
+            onClick={() => setIsConnectedAccountsModalOpen(true)}
+          >
             <Globe className="w-4 h-4 mr-2" />
             Bağlı Hesaplar
           </Button>
@@ -526,17 +690,251 @@ export default function SettingsPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button variant="outline" className="w-full justify-start font-[Manrope] text-destructive border-destructive/30 hover:bg-destructive/10">
+          <Button 
+            variant="outline" 
+            className="w-full justify-start font-[Manrope] text-destructive border-destructive/30 hover:bg-destructive/10"
+            onClick={() => setIsLogoutAllModalOpen(true)}
+          >
             <LogOut className="w-4 h-4 mr-2" />
             Tüm Cihazlardan Çıkış Yap
           </Button>
 
-          <Button variant="outline" className="w-full justify-start font-[Manrope] text-destructive border-destructive/30 hover:bg-destructive/10">
+          <Button 
+            variant="outline" 
+            className="w-full justify-start font-[Manrope] text-destructive border-destructive/30 hover:bg-destructive/10"
+            onClick={() => setIsDeleteAccountModalOpen(true)}
+          >
             <Trash2 className="w-4 h-4 mr-2" />
             Hesabı Sil
           </Button>
         </CardContent>
       </Card>
+
+      {/* Password Change Modal */}
+      <Dialog open={isPasswordModalOpen} onOpenChange={setIsPasswordModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="font-[Manrope] font-bold">Şifre Değiştir</DialogTitle>
+            <DialogDescription className="font-[Manrope]">
+              Güvenliğiniz için mevcut şifrenizi girin ve yeni şifrenizi belirleyin
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="current-password" className="font-[Manrope] font-bold">
+                Mevcut Şifre
+              </Label>
+              <Input
+                id="current-password"
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="font-[Manrope]"
+                placeholder="Mevcut şifrenizi girin"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="new-password" className="font-[Manrope] font-bold">
+                Yeni Şifre
+              </Label>
+              <Input
+                id="new-password"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="font-[Manrope]"
+                placeholder="En az 8 karakter"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirm-password" className="font-[Manrope] font-bold">
+                Yeni Şifre (Tekrar)
+              </Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="font-[Manrope]"
+                placeholder="Yeni şifrenizi tekrar girin"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsPasswordModalOpen(false)
+                setCurrentPassword("")
+                setNewPassword("")
+                setConfirmPassword("")
+              }}
+              className="font-[Manrope]"
+            >
+              İptal
+            </Button>
+            <Button
+              onClick={handlePasswordChange}
+              disabled={isChangingPassword}
+              className="bg-primary hover:bg-primary/90 font-[Manrope] font-bold"
+            >
+              {isChangingPassword ? "Değiştiriliyor..." : "Şifreyi Değiştir"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Connected Accounts Modal */}
+      <Dialog open={isConnectedAccountsModalOpen} onOpenChange={setIsConnectedAccountsModalOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="font-[Manrope] font-bold">Bağlı Hesaplar</DialogTitle>
+            <DialogDescription className="font-[Manrope]">
+              Hesaplarınızı yönetin ve bağlayın
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 py-4">
+            {connectedAccounts.map((account) => (
+              <div
+                key={account.id}
+                className="flex items-center justify-between p-4 border border-border rounded-xl"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl">{account.icon}</div>
+                  <div>
+                    <p className="font-[Manrope] font-semibold text-sm text-foreground">
+                      {account.name}
+                    </p>
+                    {account.connected && account.email && (
+                      <p className="font-[Manrope] text-xs text-muted-foreground">
+                        {account.email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {account.connected ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="font-[Manrope] text-destructive hover:bg-destructive/10"
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Bağlantıyı Kes
+                  </Button>
+                ) : (
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="font-[Manrope] bg-primary hover:bg-primary/90"
+                  >
+                    Bağla
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsConnectedAccountsModalOpen(false)}
+              className="font-[Manrope]"
+            >
+              Kapat
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Account Modal */}
+      <Dialog open={isDeleteAccountModalOpen} onOpenChange={setIsDeleteAccountModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="font-[Manrope] font-bold text-destructive">
+              Hesabı Sil
+            </DialogTitle>
+            <DialogDescription className="font-[Manrope]">
+              Bu işlem geri alınamaz. Hesabınızı silmek için şifrenizi girin.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription className="font-[Manrope]">
+                Hesabınız silindiğinde tüm verileriniz kalıcı olarak silinecektir.
+              </AlertDescription>
+            </Alert>
+            <div className="space-y-2">
+              <Label htmlFor="delete-password" className="font-[Manrope] font-bold">
+                Şifre Onayı
+              </Label>
+              <Input
+                id="delete-password"
+                type="password"
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                className="font-[Manrope]"
+                placeholder="Hesabınızı silmek için şifrenizi girin"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDeleteAccountModalOpen(false)
+                setDeletePassword("")
+              }}
+              className="font-[Manrope]"
+            >
+              İptal
+            </Button>
+            <Button
+              onClick={handleDeleteAccount}
+              disabled={isDeletingAccount || !deletePassword}
+              variant="destructive"
+              className="font-[Manrope] font-bold"
+            >
+              {isDeletingAccount ? "Siliniyor..." : "Hesabı Sil"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Logout All Devices Modal */}
+      <Dialog open={isLogoutAllModalOpen} onOpenChange={setIsLogoutAllModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="font-[Manrope] font-bold">Tüm Cihazlardan Çıkış Yap</DialogTitle>
+            <DialogDescription className="font-[Manrope]">
+              Bu işlem tüm cihazlardaki oturumlarınızı sonlandıracaktır. Emin misiniz?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription className="font-[Manrope]">
+                Tüm cihazlardan çıkış yaptıktan sonra tekrar giriş yapmanız gerekecektir.
+              </AlertDescription>
+            </Alert>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsLogoutAllModalOpen(false)}
+              className="font-[Manrope]"
+            >
+              İptal
+            </Button>
+            <Button
+              onClick={handleLogoutAll}
+              variant="destructive"
+              className="font-[Manrope] font-bold"
+            >
+              Evet, Tüm Cihazlardan Çıkış Yap
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
