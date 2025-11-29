@@ -58,52 +58,52 @@ export function KBBAnnouncements({ announcements }: KBBAnnouncementsProps) {
 
   return (
     <Card className="bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 dark:from-primary/10 dark:via-primary/15 dark:to-primary/10 rounded-xl shadow-md border border-primary/20 overflow-hidden">
-      <CardHeader className="bg-primary/10 dark:bg-primary/20 border-b border-primary/20">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-primary/20 dark:bg-primary/30 rounded-xl">
-            <Megaphone className="w-5 h-5 text-primary" />
+      <CardHeader className="bg-primary/10 dark:bg-primary/20 border-b border-primary/20 py-2 px-3">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 bg-primary/20 dark:bg-primary/30 rounded-lg">
+            <Megaphone className="w-4 h-4 text-primary" />
           </div>
           <CardTitle className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl">
             KBB Duyuruları
           </CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3 p-4">
+      <CardContent className="space-y-2 p-3">
         {mockAnnouncements.map((announcement) => (
           <Link
             key={announcement.id}
             href={announcement.link || "#"}
             className="block group"
           >
-            <div className="bg-card/80 dark:bg-card/60 backdrop-blur-sm rounded-xl p-3 sm:p-4 hover:bg-card transition-colors cursor-pointer border border-border/50 hover:border-primary/30 hover:shadow-sm">
+            <div className="bg-card/80 dark:bg-card/60 backdrop-blur-sm rounded-lg p-2 sm:p-2.5 hover:bg-card transition-colors cursor-pointer border border-border/50 hover:border-primary/30 hover:shadow-sm">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-1.5 mb-1">
                     {announcement.isImportant && (
-                      <Badge className="bg-amber-500 hover:bg-amber-500 text-white font-[Manrope] font-bold text-xs">
+                      <Badge className="bg-amber-500 hover:bg-amber-500 text-white font-[Manrope] font-bold text-[10px] px-1.5 py-0.5">
                         Önemli
                       </Badge>
                     )}
-                    <Badge variant="secondary" className="font-[Manrope] text-xs bg-primary/10 text-primary border-0">
+                    <Badge variant="secondary" className="font-[Manrope] text-[10px] bg-primary/10 text-primary border-0 px-1.5 py-0.5">
                       {announcement.category}
                     </Badge>
                   </div>
-                  <h3 className="font-[Manrope] font-bold text-sm sm:text-base text-foreground mb-1 group-hover:text-primary transition-colors">
+                  <h3 className="font-[Manrope] font-bold text-xs sm:text-sm text-foreground mb-0.5 group-hover:text-primary transition-colors">
                     {announcement.title}
                   </h3>
-                  <p className="font-[Manrope] text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-2">
+                  <p className="font-[Manrope] text-xs text-muted-foreground line-clamp-2 mb-1">
                     {announcement.content}
                   </p>
-                  <div className="flex items-center gap-2 text-muted-foreground">
+                  <div className="flex items-center gap-1.5 text-muted-foreground">
                     <Calendar className="w-3 h-3" />
-                    <span className="font-[Manrope] text-xs">
+                    <span className="font-[Manrope] text-[10px]">
                       {formatDate(announcement.date)}
                     </span>
                   </div>
                 </div>
                 {announcement.link && (
                   <div className="flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </div>
                 )}
               </div>
