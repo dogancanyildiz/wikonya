@@ -290,15 +290,27 @@ const faqData = [
 function parseMarkdown(text: string) {
   const lines = text.split('\n')
   const result: JSX.Element[] = []
+  let inList = false
+  let listItems: JSX.Element[] = []
   
   lines.forEach((line, index) => {
-    if (line.trim() === '') {
-      result.push(<br key={index} />)
+    const trimmedLine = line.trim()
+    
+    if (trimmedLine === '') {
+      if (inList && listItems.length > 0) {
+        result.push(
+          <ul key={`list-${index}`} className="list-disc list-inside mb-4 space-y-1">
+            {listItems}
+          </ul>
+        )
+        listItems = []
+        inList = false
+      }
+      result.push(<br key={`br-${index}`} />)
       return
     }
     
     // Bold text **text**
-    let processedLine = line
     const boldRegex = /\*\*(.*?)\*\*/g
     const parts: (string | JSX.Element)[] = []
     let lastIndex = 0
@@ -321,13 +333,25 @@ function parseMarkdown(text: string) {
     }
     
     // Check if it's a list item
-    if (line.trim().startsWith('- ')) {
-      result.push(
-        <li key={index} className="ml-4 mb-1 font-[Manrope] text-foreground/70 dark:text-muted-foreground">
+    if (trimmedLine.startsWith('- ')) {
+      if (!inList) {
+        inList = true
+      }
+      listItems.push(
+        <li key={index} className="font-[Manrope] text-foreground/70 dark:text-muted-foreground">
           {parts}
         </li>
       )
     } else {
+      if (inList && listItems.length > 0) {
+        result.push(
+          <ul key={`list-${index}`} className="list-disc list-inside mb-4 space-y-1">
+            {listItems}
+          </ul>
+        )
+        listItems = []
+        inList = false
+      }
       result.push(
         <p key={index} className="mb-2 font-[Manrope] text-foreground/70 dark:text-muted-foreground leading-relaxed">
           {parts}
@@ -335,6 +359,15 @@ function parseMarkdown(text: string) {
       )
     }
   })
+  
+  // Close any remaining list
+  if (inList && listItems.length > 0) {
+    result.push(
+      <ul key="list-final" className="list-disc list-inside mb-4 space-y-1">
+        {listItems}
+      </ul>
+    )
+  }
   
   return result
 }
@@ -591,9 +624,7 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
             <CardContent>
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 <div className="font-[Manrope] text-foreground/70 dark:text-muted-foreground leading-relaxed">
-                  <ul className="list-none space-y-2">
-                    {parseMarkdown(faq.detailedAnswer)}
-                  </ul>
+                  {parseMarkdown(faq.detailedAnswer)}
                 </div>
               </div>
             </CardContent>
