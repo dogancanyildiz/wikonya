@@ -19,6 +19,7 @@ import {
   FileText,
   Users
 } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -28,7 +29,8 @@ export function ScholarshipDetailPage() {
   const params = useParams()
   const scholarshipId = params?.id ? Number(params.id) : 1
   const [isBookmarked, setIsBookmarked] = useState(false)
-  const [isApplying, setIsApplying] = useState(false)
+  const [isApplied, setIsApplied] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Mock data - gerçek uygulamada API'den gelecek
   const scholarship = {
@@ -102,13 +104,44 @@ export function ScholarshipDetailPage() {
     }
   }
 
-  const handleApply = () => {
-    setIsApplying(true)
-    // Gerçek uygulamada API çağrısı yapılacak
-    setTimeout(() => {
-      setIsApplying(false)
-      // Başvuru başarılı mesajı gösterilecek
-    }, 2000)
+  const handleApply = async () => {
+    if (isApplied) {
+      // Başvuru iptal et
+      setIsSubmitting(true)
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        setIsApplied(false)
+        toast.success("Başvuru iptal edildi", {
+          description: `${scholarship.title} burs programına yaptığınız başvuru iptal edildi.`,
+          duration: 3000,
+        })
+      } catch (err) {
+        toast.error("Hata", {
+          description: "Başvuru iptal edilirken bir hata oluştu.",
+          duration: 3000,
+        })
+      } finally {
+        setIsSubmitting(false)
+      }
+    } else {
+      // Başvuru yap
+      setIsSubmitting(true)
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        setIsApplied(true)
+        toast.success("Başvuru başarılı", {
+          description: `${scholarship.title} burs programına başvurunuz başarıyla gönderildi.`,
+          duration: 3000,
+        })
+      } catch (err) {
+        toast.error("Hata", {
+          description: "Başvuru gönderilirken bir hata oluştu.",
+          duration: 3000,
+        })
+      } finally {
+        setIsSubmitting(false)
+      }
+    }
   }
 
   return (
@@ -306,7 +339,7 @@ export function ScholarshipDetailPage() {
         {/* Sidebar */}
         <div className="space-y-4 sm:space-y-6">
           {/* Apply Card */}
-          <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border sticky top-4">
+          <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
             <CardHeader>
               <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
                 Başvuru
@@ -343,10 +376,22 @@ export function ScholarshipDetailPage() {
               </div>
               <Button
                 onClick={handleApply}
-                disabled={isApplying || scholarship.deadlineDays <= 0}
-                className="w-full py-3 bg-primary hover:bg-primary/90 font-[Manrope] font-bold"
+                disabled={isSubmitting || scholarship.deadlineDays <= 0}
+                className={`w-full py-3 font-[Manrope] font-bold ${
+                  scholarship.deadlineDays <= 0
+                    ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                    : isApplied
+                    ? 'bg-destructive hover:bg-destructive/90 text-white'
+                    : 'bg-primary hover:bg-primary/90 text-white'
+                }`}
               >
-                {isApplying ? "Başvuruluyor..." : scholarship.deadlineDays <= 0 ? "Başvuru Kapalı" : "Başvur"}
+                {isSubmitting 
+                  ? (isApplied ? "İptal ediliyor..." : "Başvuruluyor...") 
+                  : scholarship.deadlineDays <= 0 
+                  ? "Başvuru Kapalı" 
+                  : isApplied 
+                  ? "Başvuru İptal Et" 
+                  : "Başvur"}
               </Button>
             </CardContent>
           </Card>

@@ -17,6 +17,7 @@ import {
   Phone,
   Globe
 } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -26,7 +27,8 @@ export function JobDetailPage() {
   const params = useParams()
   const jobId = params?.id ? Number(params.id) : 1
   const [isBookmarked, setIsBookmarked] = useState(false)
-  const [isApplying, setIsApplying] = useState(false)
+  const [isApplied, setIsApplied] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Mock data - gerçek uygulamada API'den gelecek
   const job = {
@@ -91,13 +93,44 @@ export function JobDetailPage() {
     }
   }
 
-  const handleApply = () => {
-    setIsApplying(true)
-    // Gerçek uygulamada API çağrısı yapılacak
-    setTimeout(() => {
-      setIsApplying(false)
-      // Başvuru başarılı mesajı gösterilecek
-    }, 2000)
+  const handleApply = async () => {
+    if (isApplied) {
+      // Başvuru iptal et
+      setIsSubmitting(true)
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        setIsApplied(false)
+        toast.success("Başvuru iptal edildi", {
+          description: `${job.role} pozisyonuna yaptığınız başvuru iptal edildi.`,
+          duration: 3000,
+        })
+      } catch (err) {
+        toast.error("Hata", {
+          description: "Başvuru iptal edilirken bir hata oluştu.",
+          duration: 3000,
+        })
+      } finally {
+        setIsSubmitting(false)
+      }
+    } else {
+      // Başvuru yap
+      setIsSubmitting(true)
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        setIsApplied(true)
+        toast.success("Başvuru başarılı", {
+          description: `${job.role} pozisyonuna başvurunuz başarıyla gönderildi.`,
+          duration: 3000,
+        })
+      } catch (err) {
+        toast.error("Hata", {
+          description: "Başvuru gönderilirken bir hata oluştu.",
+          duration: 3000,
+        })
+      } finally {
+        setIsSubmitting(false)
+      }
+    }
   }
 
   return (
@@ -304,10 +337,18 @@ export function JobDetailPage() {
               </div>
               <Button
                 onClick={handleApply}
-                disabled={isApplying}
-                className="w-full py-3 bg-primary hover:bg-primary/90 font-[Manrope] font-bold"
+                disabled={isSubmitting}
+                className={`w-full py-3 font-[Manrope] font-bold ${
+                  isApplied
+                    ? 'bg-destructive hover:bg-destructive/90 text-white'
+                    : 'bg-primary hover:bg-primary/90 text-white'
+                }`}
               >
-                {isApplying ? "Başvuruluyor..." : "Başvur"}
+                {isSubmitting 
+                  ? (isApplied ? "İptal ediliyor..." : "Başvuruluyor...") 
+                  : isApplied 
+                  ? "Başvuru İptal Et" 
+                  : "Başvur"}
               </Button>
             </CardContent>
           </Card>
