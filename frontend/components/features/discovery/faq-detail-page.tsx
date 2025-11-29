@@ -607,6 +607,196 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
     })
   }
 
+  const handleVote = (commentId: number, voteType: 'up' | 'down') => {
+    if (!state.user) {
+      setCommentError("Oy vermek için giriş yapmalısınız.")
+      return
+    }
+    
+    setComments(comments.map(comment => {
+      if (comment.id === commentId) {
+        if (voteType === 'up') {
+          if (comment.isUpvoted) {
+            return { ...comment, upvotes: comment.upvotes - 1, isUpvoted: false }
+          } else {
+            const animationKey = `like-${commentId}`
+            setAnimations({ ...animations, [animationKey]: true })
+            setTimeout(() => {
+              setAnimations({ ...animations, [animationKey]: false })
+            }, 600)
+            return {
+              ...comment,
+              upvotes: comment.upvotes + 1,
+              downvotes: comment.isDownvoted ? comment.downvotes - 1 : comment.downvotes,
+              isUpvoted: true,
+              isDownvoted: false,
+            }
+          }
+        } else {
+          if (comment.isDownvoted) {
+            return { ...comment, downvotes: comment.downvotes - 1, isDownvoted: false }
+          } else {
+            return {
+              ...comment,
+              downvotes: comment.downvotes + 1,
+              upvotes: comment.isUpvoted ? comment.upvotes - 1 : comment.upvotes,
+              isDownvoted: true,
+              isUpvoted: false,
+            }
+          }
+        }
+      }
+      return comment
+    }))
+  }
+
+  const handleLogicalVote = (commentId: number) => {
+    if (!state.user) {
+      setCommentError("Oy vermek için giriş yapmalısınız.")
+      return
+    }
+
+    setComments(comments.map(comment => {
+      if (comment.id === commentId) {
+        const currentVotes = comment.logicalVotes || 0
+        if (comment.isLogical) {
+          return { ...comment, logicalVotes: currentVotes - 1, isLogical: false }
+        } else {
+          rewardCoins("comment_logical", { commentId })
+          const animationKey = `logical-${commentId}`
+          setAnimations({ ...animations, [animationKey]: true })
+          setTimeout(() => {
+            setAnimations({ ...animations, [animationKey]: false })
+          }, 600)
+          return { ...comment, logicalVotes: currentVotes + 1, isLogical: true }
+        }
+      }
+      return comment
+    }))
+  }
+
+  const handleReply = (replyContent: string, parentCommentId: number) => {
+    if (!state.user) return
+
+    const newReply: FAQComment = {
+      id: Date.now(),
+      author: state.user.name,
+      authorInitials: state.user.initials,
+      timeAgo: "Az önce",
+      content: replyContent,
+      upvotes: 0,
+      downvotes: 0,
+      logicalVotes: 0,
+      replies: 0,
+      parentId: parentCommentId,
+      isUpvoted: false,
+      isDownvoted: false,
+      isLogical: false,
+    }
+
+    const animationKey = `comment-${parentCommentId}`
+    setAnimations({ ...animations, [animationKey]: true })
+    setTimeout(() => {
+      setAnimations({ ...animations, [animationKey]: false })
+    }, 600)
+
+    setComments(comments.map(c => 
+      c.id === parentCommentId 
+        ? { ...c, replies: c.replies + 1, repliesList: [...(c.repliesList || []), newReply] }
+        : c
+    ))
+
+    setLocalFaq({
+      ...localFaq,
+      comments: localFaq.comments + 1,
+    })
+  }
+
+  const handleFlagComment = async (commentId: number) => {
+    if (!state.user) {
+      setCommentError("Yorum bildirmek için giriş yapmalısınız.")
+      return
+    }
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      toast.success("Yorum bildirildi", {
+        description: "Moderatörler tarafından incelenecektir.",
+        duration: 3000,
+      })
+    } catch {
+      setCommentError("Yorum bildirilirken bir hata oluştu")
+    }
+  }
+
+  const handleSendComment = async () => {
+    if (!newComment.trim()) {
+      setCommentError("Yorum boş olamaz")
+      return
+    }
+
+    if (!state.user) {
+      setCommentError("Yorum yapmak için giriş yapmalısınız.")
+      return
+    }
+
+    // Rate limit kontrolü
+    const check = canPerformAction(state.user, "comment")
+    if (!check.allowed) {
+      setCommentError(check.reason || "Yorum gönderilemedi")
+      toast.error("⚠️ Rate Limit Aşıldı", {
+        description: check.reason || "Yorum gönderilemedi",
+        duration: 5000,
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+    setCommentError(null)
+
+    try {
+      const result = performAction(state.user, "comment")
+      if (!result.success) {
+        setCommentError(result.reason || "Yorum gönderilemedi")
+        toast.error("⚠️ Rate Limit Aşıldı", {
+          description: result.reason || "Yorum gönderilemedi",
+          duration: 5000,
+        })
+        setIsSubmitting(false)
+        return
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
+      rewardCoins("comment", { content: newComment })
+
+      const newCommentObj: FAQComment = {
+        id: Date.now(),
+        author: state.user.name,
+        authorInitials: state.user.initials,
+        timeAgo: "Az önce",
+        content: newComment,
+        upvotes: 0,
+        downvotes: 0,
+        logicalVotes: 0,
+        replies: 0,
+        isUpvoted: false,
+        isDownvoted: false,
+        isLogical: false,
+      }
+
+      setComments([newCommentObj, ...comments])
+      setNewComment("")
+      setLocalFaq({
+        ...localFaq,
+        comments: localFaq.comments + 1,
+      })
+    } catch (err) {
+      setCommentError(err instanceof Error ? err.message : "Yorum gönderilirken bir hata oluştu")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
