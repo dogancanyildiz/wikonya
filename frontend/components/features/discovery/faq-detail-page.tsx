@@ -13,7 +13,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useApp } from "@/contexts/app-context"
 
-// Generate random comments for FAQ
+// Simple deterministic random function (seed-based)
+function seededRandom(seed: number): number {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
+// Generate deterministic comments for FAQ (same comments for same FAQ ID)
 function generateComments(count: number, faqId: number) {
   const commentTemplates = [
     "Çok faydalı bir bilgi, teşekkürler!",
@@ -61,17 +67,19 @@ function generateComments(count: number, faqId: number) {
 
   const comments = []
   for (let i = 0; i < count; i++) {
-    const author = authors[Math.floor(Math.random() * authors.length)]
-    const content = commentTemplates[Math.floor(Math.random() * commentTemplates.length)]
-    const timestamp = timestamps[Math.floor(Math.random() * timestamps.length)]
-    const likes = Math.floor(Math.random() * 10) // 0-9 arası rastgele beğeni
+    // Deterministic selection based on FAQ ID and comment index
+    const seed = faqId * 1000 + i
+    const authorIndex = Math.floor(seededRandom(seed) * authors.length)
+    const contentIndex = Math.floor(seededRandom(seed + 1) * commentTemplates.length)
+    const timestampIndex = Math.floor(seededRandom(seed + 2) * timestamps.length)
+    const likes = Math.floor(seededRandom(seed + 3) * 10) // 0-9 arası deterministik beğeni
 
     comments.push({
       id: faqId * 1000 + i + 1, // Unique ID
-      author: author.name,
-      authorInitials: author.initials,
-      content,
-      timestamp,
+      author: authors[authorIndex].name,
+      authorInitials: authors[authorIndex].initials,
+      content: commentTemplates[contentIndex],
+      timestamp: timestamps[timestampIndex],
       likes,
     })
   }
