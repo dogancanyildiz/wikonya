@@ -38,7 +38,7 @@ function SidebarContent({ onItemClick }: { onItemClick?: () => void }) {
               className={`
                 w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl transition-all duration-200 font-[Manrope] justify-start
                 ${isActive 
-                  ? 'bg-accent border-l-4 border-primary text-primary dark:text-primary font-bold' 
+                  ? 'bg-accent text-primary dark:text-primary font-bold' 
                   : 'hover:bg-accent/50 dark:hover:bg-accent text-foreground font-semibold'
                 }
               `}
