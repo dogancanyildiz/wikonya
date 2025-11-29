@@ -77,15 +77,21 @@ export default function ModerationPage() {
       </div>
 
       <Tabs defaultValue="topics" className="w-full">
-        <TabsList className="grid w-full font-[Manrope] mb-6" style={{ gridTemplateColumns: canApproveProposals && canModerate ? "repeat(3, 1fr)" : canApproveProposals ? "repeat(2, 1fr)" : "1fr" }}>
+        <TabsList className={`grid w-full font-[Manrope] mb-6 gap-2 ${
+          canApproveProposals && canModerate 
+            ? "grid-cols-1 sm:grid-cols-3" 
+            : canApproveProposals 
+            ? "grid-cols-1 sm:grid-cols-2" 
+            : "grid-cols-1"
+        }`}>
           {canApproveProposals && (
-            <TabsTrigger value="topics">Başlık Onayları</TabsTrigger>
+            <TabsTrigger value="topics" className="w-full sm:w-auto text-xs sm:text-sm">Başlık Onayları</TabsTrigger>
           )}
           {canApproveProposals && (
-            <TabsTrigger value="proposals">Düzenleme Teklifleri</TabsTrigger>
+            <TabsTrigger value="proposals" className="w-full sm:w-auto text-xs sm:text-sm">Düzenleme Teklifleri</TabsTrigger>
           )}
           {canModerate && (
-            <TabsTrigger value="flagged">Bayraklanan İçerikler</TabsTrigger>
+            <TabsTrigger value="flagged" className="w-full sm:w-auto text-xs sm:text-sm">Bayraklanan İçerikler</TabsTrigger>
           )}
         </TabsList>
 

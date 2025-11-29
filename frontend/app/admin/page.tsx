@@ -73,10 +73,10 @@ export default function AdminPage() {
       </div>
 
       <Tabs defaultValue="dashboard" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 font-[Manrope] mb-4 sm:mb-6 text-xs sm:text-sm">
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          <TabsTrigger value="conversion">Dönüşüm Oranı</TabsTrigger>
-          <TabsTrigger value="coin-matrix">Coin Matrisi</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 font-[Manrope] mb-4 sm:mb-6 text-xs sm:text-sm gap-2 sm:gap-0">
+          <TabsTrigger value="dashboard" className="w-full sm:w-auto">Dashboard</TabsTrigger>
+          <TabsTrigger value="conversion" className="w-full sm:w-auto">Dönüşüm Oranı</TabsTrigger>
+          <TabsTrigger value="coin-matrix" className="w-full sm:w-auto">Coin Matrisi</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
@@ -98,16 +98,16 @@ export default function AdminPage() {
                 <Label htmlFor="conversion-rate" className="font-[Manrope] font-bold">
                   Dönüşüm Oranı
                 </Label>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                   <Input
                     id="conversion-rate"
                     type="number"
                     value={conversionRate}
                     onChange={(e) => setConversionRate(e.target.value)}
-                    className="font-[Manrope]"
+                    className="font-[Manrope] w-full sm:w-auto"
                     disabled={isSaving}
                   />
-                  <span className="font-[Manrope] text-sm text-muted-foreground">
+                  <span className="font-[Manrope] text-xs sm:text-sm text-muted-foreground">
                     GençCoin = 1 Kültür Kart Puanı
                   </span>
                 </div>
