@@ -629,43 +629,48 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-center gap-2 mt-8">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-          disabled={currentPage === 1}
-          className="font-[Manrope] font-semibold"
-        >
-          <ChevronLeft className="w-4 h-4 mr-1" />
-          Önceki
-        </Button>
-        
-        <div className="flex items-center gap-1">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <Button
-              key={page}
-              variant={currentPage === page ? "default" : "outline"}
-              size="sm"
-              onClick={() => setCurrentPage(page)}
-              className="font-[Manrope] font-semibold w-9 h-9"
-            >
-              {page}
-            </Button>
-          ))}
-        </div>
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-6 sm:mt-8">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Button
+                key={page}
+                variant="ghost"
+                size="sm"
+                onClick={() => setCurrentPage(page)}
+                className={`h-9 w-9 rounded-lg font-[Manrope] font-bold text-sm
+                  ${currentPage === page
+                    ? 'bg-primary text-white hover:bg-primary/90'
+                    : 'text-foreground/70 hover:text-foreground hover:bg-accent'
+                  }
+                `}
+              >
+                {page}
+              </Button>
+            ))}
+          </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-          disabled={currentPage === totalPages}
-          className="font-[Manrope] font-semibold"
-        >
-          Sonraki
-          <ChevronRight className="w-4 h-4 ml-1" />
-        </Button>
-      </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      )}
     </section>
   )
 })

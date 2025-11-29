@@ -5,7 +5,7 @@ import { JobCard } from "./job-card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
-import { ChevronDown, Briefcase, X } from "lucide-react"
+import { ChevronDown, Briefcase, X, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +13,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+const ITEMS_PER_PAGE = 5
+
 export function JobBoard() {
   const [selectedType, setSelectedType] = useState("all")
+  const [currentPage, setCurrentPage] = useState(1)
 
   const jobTypes = [
     { id: "all", name: "Tümü" },
@@ -87,6 +90,66 @@ export function JobBoard() {
       postedDays: 7,
       salary: "8.000₺",
     },
+    {
+      id: 7,
+      company: "Konya Yazılım",
+      companyLogo: "KY",
+      role: "Backend Developer",
+      location: "Selçuklu, Konya",
+      type: "Full-Time" as const,
+      postedDays: 3,
+      salary: "15.000₺",
+    },
+    {
+      id: 8,
+      company: "Data Analytics Co",
+      companyLogo: "DA",
+      role: "Data Science Intern",
+      location: "Remote",
+      type: "Part-Time" as const,
+      postedDays: 6,
+      salary: "6.500₺",
+    },
+    {
+      id: 9,
+      company: "Creative Studio",
+      companyLogo: "CS",
+      role: "UI/UX Designer",
+      location: "Meram, Konya",
+      type: "Full-Time" as const,
+      postedDays: 2,
+      salary: "13.000₺",
+    },
+    {
+      id: 10,
+      company: "Marketing Pro",
+      companyLogo: "MP",
+      role: "Social Media Manager",
+      location: "Hybrid",
+      type: "Hybrid" as const,
+      postedDays: 4,
+      salary: "9.000₺",
+    },
+    {
+      id: 11,
+      company: "Tech Solutions",
+      companyLogo: "TS",
+      role: "DevOps Engineer",
+      location: "Remote",
+      type: "Remote" as const,
+      postedDays: 8,
+      salary: "18.000₺",
+    },
+    {
+      id: 12,
+      company: "Startup Inc",
+      companyLogo: "SI",
+      role: "Product Manager Intern",
+      location: "Karatay, Konya",
+      type: "Part-Time" as const,
+      postedDays: 1,
+      salary: "5.500₺",
+    },
   ]
 
   const filteredJobs = jobs.filter(job => {
@@ -98,6 +161,18 @@ export function JobBoard() {
     
     return typeMatch
   })
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const endIndex = startIndex + ITEMS_PER_PAGE
+  const paginatedJobs = filteredJobs.slice(startIndex, endIndex)
+
+  // Reset to page 1 when filter changes
+  const handleFilterChange = (type: string) => {
+    setSelectedType(type)
+    setCurrentPage(1)
+  }
 
   return (
     <div>
@@ -121,7 +196,7 @@ export function JobBoard() {
               {jobTypes.map((type) => (
                 <DropdownMenuItem
                   key={type.id}
-                  onClick={() => setSelectedType(type.id)}
+                  onClick={() => handleFilterChange(type.id)}
                   className={selectedType === type.id ? 'bg-primary text-white' : ''}
                 >
                   {type.name}
@@ -132,7 +207,7 @@ export function JobBoard() {
           {selectedType !== "all" && (
             <>
               <Button
-                onClick={() => setSelectedType("all")}
+                onClick={() => handleFilterChange("all")}
                 variant="outline"
                 size="sm"
                 className="font-[Manrope] font-bold text-xs text-foreground/60 dark:text-muted-foreground hover:text-primary"
@@ -149,8 +224,8 @@ export function JobBoard() {
       </div>
 
       <div className="space-y-3 sm:space-y-4">
-        {filteredJobs.length > 0 ? (
-          filteredJobs.map((job) => (
+        {paginatedJobs.length > 0 ? (
+          paginatedJobs.map((job) => (
             <JobCard key={job.id} {...job} />
           ))
         ) : (
@@ -168,7 +243,7 @@ export function JobBoard() {
             </EmptyHeader>
             <EmptyContent>
               <Button
-                onClick={() => setSelectedType("all")}
+                onClick={() => handleFilterChange("all")}
                 variant="outline"
                 className="font-[Manrope] font-bold"
               >
@@ -178,7 +253,50 @@ export function JobBoard() {
           </Empty>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-6 sm:mt-8">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Button
+                key={page}
+                variant="ghost"
+                size="sm"
+                onClick={() => setCurrentPage(page)}
+                className={`h-9 w-9 rounded-lg font-[Manrope] font-bold text-sm
+                  ${currentPage === page
+                    ? 'bg-primary text-white hover:bg-primary/90'
+                    : 'text-foreground/70 hover:text-foreground hover:bg-accent'
+                  }
+                `}
+              >
+                {page}
+              </Button>
+            ))}
+          </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
-

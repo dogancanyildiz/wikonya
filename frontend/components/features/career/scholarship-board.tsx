@@ -5,7 +5,7 @@ import { ScholarshipCard } from "./scholarship-card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
-import { ChevronDown, GraduationCap, X } from "lucide-react"
+import { ChevronDown, GraduationCap, X, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,9 +17,12 @@ import {
   DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu"
 
+const ITEMS_PER_PAGE = 5
+
 export function ScholarshipBoard() {
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [selectedSubCategory, setSelectedSubCategory] = useState("all")
+  const [currentPage, setCurrentPage] = useState(1)
 
   const categories = [
     {
@@ -57,7 +60,6 @@ export function ScholarshipBoard() {
       ],
     },
   ]
-
 
   const scholarships = [
     {
@@ -138,6 +140,58 @@ export function ScholarshipBoard() {
       category: "university",
       subCategory: "kto",
     },
+    {
+      id: 7,
+      organization: "Konya Teknik Üniversitesi",
+      organizationLogo: "KTÜ",
+      title: "Araştırma Bursu",
+      amount: "2.200₺/Ay",
+      location: "Selçuklu, Konya",
+      deadline: "22 Aralık 2024",
+      deadlineDays: 19,
+      type: "Merit" as const,
+      category: "university",
+      subCategory: "ktun",
+    },
+    {
+      id: 8,
+      organization: "Konya Vakıflar Bölge Müdürlüğü",
+      organizationLogo: "KV",
+      title: "Vakıf Burs Programı",
+      amount: "1.800₺/Ay",
+      location: "Konya",
+      deadline: "14 Aralık 2024",
+      deadlineDays: 11,
+      type: "Need-Based" as const,
+      category: "private",
+      subCategory: "vakif",
+    },
+    {
+      id: 9,
+      organization: "Konya Ticaret Odası",
+      organizationLogo: "KTO",
+      title: "İşletme Burs Programı",
+      amount: "2.300₺/Ay",
+      location: "Karatay, Konya",
+      deadline: "16 Aralık 2024",
+      deadlineDays: 13,
+      type: "Merit" as const,
+      category: "private",
+      subCategory: "sirket",
+    },
+    {
+      id: 10,
+      organization: "Konya Gençlik ve Spor İl Müdürlüğü",
+      organizationLogo: "KGS",
+      title: "Sporcu Destek Bursu",
+      amount: "1.500₺/Ay",
+      location: "Konya",
+      deadline: "19 Aralık 2024",
+      deadlineDays: 16,
+      type: "Athletic" as const,
+      category: "government",
+      subCategory: "egitim",
+    },
   ]
 
   const selectedCategoryData = categories.find(c => c.id === selectedCategory)
@@ -147,6 +201,19 @@ export function ScholarshipBoard() {
     
     return categoryMatch && subCategoryMatch
   })
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredScholarships.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const endIndex = startIndex + ITEMS_PER_PAGE
+  const paginatedScholarships = filteredScholarships.slice(startIndex, endIndex)
+
+  // Reset to page 1 when filter changes
+  const handleFilterChange = (category: string, subCategory: string = "all") => {
+    setSelectedCategory(category)
+    setSelectedSubCategory(subCategory)
+    setCurrentPage(1)
+  }
 
   return (
     <div>
@@ -171,20 +238,14 @@ export function ScholarshipBoard() {
                 category.subCategories.length > 0 ? (
                   <DropdownMenuSub key={category.id}>
                     <DropdownMenuSubTrigger
-                      onClick={() => {
-                        setSelectedCategory(category.id)
-                        setSelectedSubCategory("all")
-                      }}
+                      onClick={() => handleFilterChange(category.id, "all")}
                       className={selectedCategory === category.id ? 'bg-primary text-white' : ''}
                     >
                       {category.name}
                     </DropdownMenuSubTrigger>
                     <DropdownMenuSubContent>
                       <DropdownMenuItem
-                        onClick={() => {
-                          setSelectedCategory(category.id)
-                          setSelectedSubCategory("all")
-                        }}
+                        onClick={() => handleFilterChange(category.id, "all")}
                         className={selectedSubCategory === "all" && selectedCategory === category.id ? 'bg-primary text-white' : ''}
                       >
                         Tümü
@@ -193,10 +254,7 @@ export function ScholarshipBoard() {
                       {category.subCategories.map((sub) => (
                         <DropdownMenuItem
                           key={sub.id}
-                          onClick={() => {
-                            setSelectedCategory(category.id)
-                            setSelectedSubCategory(sub.id)
-                          }}
+                          onClick={() => handleFilterChange(category.id, sub.id)}
                           className={selectedSubCategory === sub.id && selectedCategory === category.id ? 'bg-primary text-white' : ''}
                         >
                           {sub.name}
@@ -207,10 +265,7 @@ export function ScholarshipBoard() {
                 ) : (
                   <DropdownMenuItem
                     key={category.id}
-                    onClick={() => {
-                      setSelectedCategory(category.id)
-                      setSelectedSubCategory("all")
-                    }}
+                    onClick={() => handleFilterChange(category.id, "all")}
                     className={selectedCategory === category.id ? 'bg-primary text-white' : ''}
                   >
                     {category.name}
@@ -222,10 +277,7 @@ export function ScholarshipBoard() {
           {(selectedCategory !== "all" || selectedSubCategory !== "all") && (
             <>
               <Button
-                onClick={() => {
-                  setSelectedCategory("all")
-                  setSelectedSubCategory("all")
-                }}
+                onClick={() => handleFilterChange("all", "all")}
                 variant="outline"
                 size="sm"
                 className="font-[Manrope] font-bold text-xs text-foreground/60 dark:text-muted-foreground hover:text-primary"
@@ -242,8 +294,8 @@ export function ScholarshipBoard() {
       </div>
 
       <div className="space-y-3 sm:space-y-4">
-        {filteredScholarships.length > 0 ? (
-          filteredScholarships.map((scholarship) => (
+        {paginatedScholarships.length > 0 ? (
+          paginatedScholarships.map((scholarship) => (
             <ScholarshipCard key={scholarship.id} {...scholarship} />
           ))
         ) : (
@@ -261,10 +313,7 @@ export function ScholarshipBoard() {
             </EmptyHeader>
             <EmptyContent>
               <Button
-                onClick={() => {
-                  setSelectedCategory("all")
-                  setSelectedSubCategory("all")
-                }}
+                onClick={() => handleFilterChange("all", "all")}
                 variant="outline"
                 className="font-[Manrope] font-bold"
               >
@@ -274,7 +323,50 @@ export function ScholarshipBoard() {
           </Empty>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-6 sm:mt-8">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Button
+                key={page}
+                variant="ghost"
+                size="sm"
+                onClick={() => setCurrentPage(page)}
+                className={`h-9 w-9 rounded-lg font-[Manrope] font-bold text-sm
+                  ${currentPage === page
+                    ? 'bg-primary text-white hover:bg-primary/90'
+                    : 'text-foreground/70 hover:text-foreground hover:bg-accent'
+                  }
+                `}
+              >
+                {page}
+              </Button>
+            ))}
+          </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
-

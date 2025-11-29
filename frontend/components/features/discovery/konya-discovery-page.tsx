@@ -182,9 +182,9 @@ export function KonyaDiscoveryPage() {
   ]
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-6 sm:py-8 md:py-10">
       {/* Page Header */}
-      <div className="mb-4 sm:mb-6 md:mb-8">
+      <div className="mb-6 sm:mb-8 md:mb-10">
         <h1 className="font-[Manrope] text-foreground mb-2 font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-[42px]">
           Konya Keşif Rehberi
         </h1>
@@ -194,8 +194,8 @@ export function KonyaDiscoveryPage() {
       </div>
 
       {/* Must Visit Section */}
-      <section className="mb-4 sm:mb-6 md:mb-8">
-        <div className="mb-3 sm:mb-4 md:mb-6">
+      <section className="mb-6 sm:mb-8 md:mb-10">
+        <div className="mb-4 sm:mb-6">
           <h2 className="font-[Manrope] text-foreground font-extrabold text-lg sm:text-xl md:text-2xl lg:text-[28px]">
             Mutlaka Görülmesi Gerekenler
           </h2>
@@ -209,8 +209,8 @@ export function KonyaDiscoveryPage() {
       </section>
 
       {/* Curated Routes Section */}
-      <section className="mb-4 sm:mb-6 md:mb-8">
-        <div className="mb-3 sm:mb-4 md:mb-6">
+      <section className="mb-6 sm:mb-8 md:mb-10">
+        <div className="mb-4 sm:mb-6">
           <h2 className="font-[Manrope] text-foreground font-extrabold text-lg sm:text-xl md:text-2xl lg:text-[28px]">
             Hazır Rotalar
           </h2>
@@ -263,14 +263,14 @@ function PlaceCard({ id, image, title, description, category }: {
   const [isFavorite, setIsFavorite] = useState(false)
 
   return (
-    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all group overflow-hidden border border-border">
+    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border overflow-hidden">
       {/* Image */}
       <div className="relative h-40 sm:h-52 overflow-hidden">
         <Image
           src={image}
           alt={title}
           fill
-          className="object-cover group-hover:scale-110 transition-transform duration-500"
+          className="object-cover"
           unoptimized
         />
         
@@ -284,24 +284,23 @@ function PlaceCard({ id, image, title, description, category }: {
             strokeWidth={2.5}
           />
         </button>
-
-        {/* Category Badge */}
-        <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
-          <div className="px-2 sm:px-3 py-1 sm:py-1.5 bg-primary rounded-lg backdrop-blur-sm">
-            <span className="font-[Manrope] text-white font-bold text-[10px] sm:text-[11px]">
-              {category}
-            </span>
-          </div>
-        </div>
       </div>
 
       {/* Content */}
-      <CardContent className="p-4 sm:p-5">
-        <h3 className="font-[Manrope] text-foreground mb-2 group-hover:text-primary transition-colors font-bold text-base sm:text-lg leading-snug">
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="px-2 py-0.5 bg-primary rounded-lg flex items-center">
+            <span className="font-[Manrope] text-white font-bold text-[10px] sm:text-[11px]">
+              {category}
+            </span>
+          </span>
+        </div>
+
+        <h3 className="font-[Manrope] text-foreground mb-2 font-bold text-base sm:text-lg leading-snug">
           {title}
         </h3>
 
-        <div className="flex items-center gap-1.5 mb-3 sm:mb-4">
+        <div className="flex items-center gap-1.5 mb-3">
           <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-foreground/60 dark:text-muted-foreground" strokeWidth={2.5} />
           <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs sm:text-[13px]">
             {description}
@@ -309,10 +308,10 @@ function PlaceCard({ id, image, title, description, category }: {
         </div>
 
         {/* Action Button */}
-        <div className="pt-3 sm:pt-4 border-t border-border">
+        <div className="flex justify-end">
           <Link href={`/discovery/${id}`}>
             <Button 
-              className="w-full px-4 py-2 sm:py-2.5 bg-primary text-white rounded-lg font-[Manrope] hover:bg-primary/90 transition-colors font-bold text-xs sm:text-sm cursor-pointer"
+              className="inline-flex px-2 py-1 bg-primary text-white rounded-lg font-[Manrope] hover:bg-primary/90 transition-colors font-semibold text-[10px] sm:text-[11px] cursor-pointer"
             >
               Detayları Gör
             </Button>
@@ -339,7 +338,7 @@ function RouteCard({ route }: {
   }
 }) {
   return (
-    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all border border-border">
+    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
       <CardContent className="p-4 sm:p-6">
         {/* Route Header */}
         <div className="mb-4 sm:mb-6">
@@ -363,7 +362,7 @@ function RouteCard({ route }: {
         </div>
 
         {/* Timeline */}
-        <div className="relative mb-4 sm:mb-6">
+        <div className="relative">
           {route.stops.map((stop, index) => (
             <div key={stop.order} className="relative flex gap-3 sm:gap-4 pb-4 sm:pb-6 last:pb-0">
               {/* Timeline Line and Dot */}
@@ -391,13 +390,6 @@ function RouteCard({ route }: {
             </div>
           ))}
         </div>
-
-        {/* Start Route Button */}
-        <Button 
-          className="w-full px-4 py-2 sm:py-2.5 bg-primary text-white rounded-lg font-[Manrope] hover:bg-primary/90 transition-colors font-bold text-xs sm:text-sm"
-        >
-          Rotayı Başlat
-        </Button>
       </CardContent>
     </Card>
   )
@@ -418,7 +410,7 @@ function FAQCard({ faq }: {
   }
 }) {
   return (
-    <Card className="bg-card border border-border rounded-xl hover:shadow-lg transition-all duration-300 cursor-pointer group">
+    <Card className="bg-card border border-border rounded-xl shadow-md dark:shadow-lg">
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-start gap-4">
           <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-border">
@@ -441,7 +433,7 @@ function FAQCard({ faq }: {
               </div>
             </div>
 
-            <h3 className="font-[Manrope] font-bold text-foreground mb-2 group-hover:text-primary transition-colors text-sm sm:text-base">
+            <h3 className="font-[Manrope] font-bold text-foreground mb-2 text-sm sm:text-base">
               {faq.question}
             </h3>
 
