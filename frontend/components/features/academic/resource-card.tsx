@@ -1,9 +1,7 @@
 "use client"
 
-import { FileText, Download, Eye, Calendar } from "lucide-react"
+import { FileText, Download, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Card, CardContent } from "@/components/ui/card"
 
 interface ResourceCardProps {
   title: string
@@ -21,79 +19,64 @@ export function ResourceCard({
   fileType,
   fileSize,
   uploadedBy,
-  uploaderInitials,
   uploadDate,
   downloads,
   views,
 }: ResourceCardProps) {
   return (
-    <Card className="rounded-xl shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-300 group border-border">
-      <CardContent className="p-4 sm:p-6">
-        {/* Icon */}
-        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:from-primary/20 group-hover:to-primary/10 dark:group-hover:from-primary/30 dark:group-hover:to-primary/20 transition-all">
-          <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-primary" strokeWidth={2.5} />
-        </div>
-
-        {/* Title */}
-        <h3 className="font-[Manrope] text-foreground mb-3 line-clamp-2 min-h-[3.5rem] group-hover:text-primary transition-colors font-bold text-base sm:text-lg leading-snug">
-          {title}
-        </h3>
-
-        {/* File Info */}
-        <div className="flex items-center gap-2 mb-4">
-          <span className="px-3 py-1 bg-accent rounded-lg font-[Manrope] text-primary font-bold text-xs">
-            {fileType}
-          </span>
-          <span className="font-[Manrope] text-muted-foreground font-medium text-xs">
-            {fileSize}
-          </span>
-        </div>
-
-        {/* Uploader Info */}
-        <div className="flex items-center gap-2 mb-4 pb-4 border-b border-border">
-          <Avatar className="w-7 h-7 sm:w-8 sm:h-8 border-2 border-border">
-            <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-bold text-[10px] sm:text-[11px]">
-              {uploaderInitials}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="font-[Manrope] text-foreground truncate font-semibold text-xs sm:text-[13px]">
-              {uploadedBy}
-            </p>
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <Calendar className="w-3 h-3" />
-              <span className="font-[Manrope] font-medium text-[10px] sm:text-[11px]">
-                {uploadDate}
-              </span>
-            </div>
+    <div className="group p-4 bg-card rounded-xl border border-border hover:border-primary/30 hover:shadow-md transition-all duration-200">
+      {/* Üst Satır: Dosya tipi ve İndir */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+            <FileText className="w-4 h-4 text-primary" />
           </div>
-        </div>
-
-        {/* Stats */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-1 text-muted-foreground">
-            <Eye className="w-4 h-4" strokeWidth={2.5} />
-            <span className="font-[Manrope] font-semibold text-xs">
-              {views}
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 bg-accent rounded font-[Manrope] text-foreground font-semibold text-[11px]">
+              {fileType}
             </span>
-          </div>
-          <div className="flex items-center gap-1 text-muted-foreground">
-            <Download className="w-4 h-4" strokeWidth={2.5} />
-            <span className="font-[Manrope] font-semibold text-xs">
-              {downloads}
+            <span className="font-[Manrope] text-muted-foreground font-medium text-[11px]">
+              {fileSize}
             </span>
           </div>
         </div>
-
-        {/* Download Button */}
         <Button 
-          className="w-full h-10 sm:h-11 bg-primary hover:bg-primary/90 rounded-lg font-[Manrope] text-primary-foreground font-bold"
+          size="sm"
+          className="h-8 px-3 bg-primary hover:bg-primary/90 rounded-lg font-[Manrope] text-primary-foreground font-semibold text-xs"
         >
-          <Download className="w-4 h-4 mr-2" strokeWidth={2.5} />
+          <Download className="w-3.5 h-3.5 mr-1.5" />
           İndir
         </Button>
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Başlık */}
+      <h3 className="font-[Manrope] text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors font-bold text-[15px] leading-snug">
+        {title}
+      </h3>
+
+      {/* Alt Bilgiler */}
+      <div className="flex items-center justify-between pt-3 border-t border-border">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="font-[Manrope] text-foreground/70 truncate font-medium text-xs">
+            {uploadedBy}
+          </span>
+          <span className="text-muted-foreground">·</span>
+          <span className="font-[Manrope] text-muted-foreground font-medium text-xs whitespace-nowrap">
+            {uploadDate}
+          </span>
+        </div>
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex items-center gap-1 text-muted-foreground">
+            <Eye className="w-3.5 h-3.5" />
+            <span className="font-[Manrope] font-medium text-[11px]">{views}</span>
+          </div>
+          <div className="flex items-center gap-1 text-muted-foreground">
+            <Download className="w-3.5 h-3.5" />
+            <span className="font-[Manrope] font-medium text-[11px]">{downloads}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
