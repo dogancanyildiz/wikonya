@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn, Lock } from "lucide-react"
+import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -31,8 +31,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ROLE_DISPLAY_NAMES } from "@/lib/constants"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
-import { usePermissions } from "@/lib/utils/hooks/use-permissions"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // Simple time ago formatter (date-fns yerine)
 function formatTimeAgo(date: string): string {
@@ -53,7 +51,6 @@ export function Navbar() {
   const { state, clearUser } = useApp()
   const { user, isAuthenticated } = state
   const { notifications, unreadCount, markAsRead } = useNotifications()
-  const { canCreateTopic } = usePermissions()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -254,39 +251,6 @@ export function Navbar() {
             {/* Theme Toggle */}
             <ModeToggle />
 
-            {/* Yeni Başlık Aç Button */}
-            {isAuthenticated && (
-              canCreateTopic ? (
-                <Button
-                  asChild
-                  size="sm"
-                  className="hidden sm:flex bg-primary hover:bg-primary/90 text-primary-foreground font-[Manrope] font-bold"
-                >
-                  <Link href="/topic/new">+ Yeni Başlık</Link>
-                </Button>
-              ) : (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        size="sm"
-                        disabled
-                        className="hidden sm:flex bg-muted text-muted-foreground cursor-not-allowed opacity-50 font-[Manrope] font-bold"
-                      >
-                        <Lock className="w-4 h-4 mr-1" />
-                        Yeni Başlık
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="font-[Manrope]">
-                        Yeni başlık açmak için &quot;Gezgin&quot; veya üstü bir role sahip olmanız gerekiyor.
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )
-            )}
-
             {/* Notification Bell */}
             <Popover>
               <PopoverTrigger asChild>
@@ -399,30 +363,23 @@ export function Navbar() {
 
             {/* Profile & GençCoin or Login */}
             {isAuthenticated && user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button 
-                    className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity cursor-pointer rounded-lg p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    aria-label="Kullanıcı menüsü"
-                  >
-                    <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border-2 border-border">
-                      <AvatarFallback 
-                        className="bg-primary text-primary-foreground font-[Manrope] font-bold"
-                      >
-                        {user.initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-accent rounded-full">
-                      <span 
-                        className="font-[Manrope] text-primary font-bold text-sm"
-                      >
-                        {user.totalCoins.toLocaleString()}
-                      </span>
-                      <CoinIcon />
-                    </div>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+              <div className="flex items-center gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button 
+                      className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity cursor-pointer rounded-lg p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      aria-label="Kullanıcı menüsü"
+                    >
+                      <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border-2 border-border">
+                        <AvatarFallback 
+                          className="bg-primary text-primary-foreground font-[Manrope] font-bold"
+                        >
+                          {user.initials}
+                        </AvatarFallback>
+                      </Avatar>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
                   <div className="px-2 py-1.5">
                     <p className="font-[Manrope] font-bold text-sm text-foreground">
                       {user.name}
@@ -436,7 +393,7 @@ export function Navbar() {
                     <Link href="/dashboard" className="cursor-pointer">
                       Profil
                     </Link>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> 
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
                     <LogOut className="mr-2 h-4 w-4" />
@@ -444,6 +401,20 @@ export function Navbar() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              {/* GençCoin - Wallet sayfasına yönlendir */}
+              <Link 
+                href="/dashboard/wallet"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-accent rounded-full hover:bg-accent/80 transition-colors cursor-pointer"
+                aria-label="Cüzdan & GençCoin sayfasına git"
+              >
+                <span 
+                  className="font-[Manrope] text-primary font-bold text-sm"
+                >
+                  {user.totalCoins.toLocaleString()}
+                </span>
+                <CoinIcon />
+              </Link>
+              </div>
             ) : (
               <Button
                 asChild
