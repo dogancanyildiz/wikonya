@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -36,11 +36,19 @@ export default function MessagesPage() {
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [messageInput, setMessageInput] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const currentUserId = 1
 
-  // Mock data
-  const conversations: Conversation[] = [
+  // Mesaj gönderildiğinde en alta scroll
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  }, [selectedConversation?.messages])
+
+  // Mock data - state olarak tutulacak
+  const [conversations, setConversations] = useState<Conversation[]>([
     {
       id: 1,
       user: {
@@ -98,7 +106,7 @@ export default function MessagesPage() {
         { id: 3, content: "Tamam, yarın görüşürüz", senderId: 4, timestamp: "3 saat önce", isRead: true },
       ],
     },
-  ]
+  ])
 
   const filteredConversations = conversations.filter(conv =>
     conv.user.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -108,9 +116,47 @@ export default function MessagesPage() {
 
   const handleSendMessage = () => {
     if (!messageInput.trim() || !selectedConversation) return
-    // Mock: Gerçek uygulamada API'ye gönderilecek
-    console.log("Mesaj gönderildi:", messageInput)
+
+    const newMessage: Message = {
+      id: Date.now(), // Geçici ID
+      content: messageInput.trim(),
+      senderId: currentUserId,
+      timestamp: "Az önce",
+      isRead: false,
+    }
+
+    // Mesajı seçili konuşmaya ekle
+    setConversations(prev => 
+      prev.map(conv => {
+        if (conv.id === selectedConversation.id) {
+          const updatedMessages = [...conv.messages, newMessage]
+          return {
+            ...conv,
+            messages: updatedMessages,
+            lastMessage: newMessage.content,
+            timestamp: "Az önce",
+          }
+        }
+        return conv
+      })
+    )
+
+    // Seçili konuşmayı güncelle
+    setSelectedConversation(prev => {
+      if (!prev) return null
+      return {
+        ...prev,
+        messages: [...prev.messages, newMessage],
+        lastMessage: newMessage.content,
+        timestamp: "Az önce",
+      }
+    })
+
+    // Input'u temizle
     setMessageInput("")
+
+    // Gerçek uygulamada burada API çağrısı yapılacak
+    // await sendMessage(selectedConversation.id, messageInput.trim())
   }
 
   return (
@@ -255,6 +301,7 @@ export default function MessagesPage() {
                         </div>
                       )
                     })}
+                    <div ref={messagesEndRef} />
                   </div>
                 </ScrollArea>
 
