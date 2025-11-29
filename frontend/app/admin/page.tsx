@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import dynamic from "next/dynamic"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -11,7 +12,15 @@ import { AlertCircle, Save, Loader2 } from "lucide-react"
 import { COIN_MATRIX } from "@/lib/constants"
 import { getConversionConfig } from "@/lib/constants/conversion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AdminDashboard } from "@/components/features/admin/admin-dashboard"
+
+// Lazy load admin dashboard
+const AdminDashboard = dynamic(
+  () => import("@/components/features/admin/admin-dashboard").then((mod) => ({ default: mod.AdminDashboard })),
+  { 
+    loading: () => <div className="h-64 animate-pulse bg-muted rounded-xl" />,
+    ssr: false 
+  }
+)
 
 export default function AdminPage() {
   const { canAccessAdminPanel } = usePermissions()
