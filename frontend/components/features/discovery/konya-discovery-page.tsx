@@ -113,6 +113,7 @@ export function KonyaDiscoveryPage() {
   ]
 
   // Klasik Sorular - Tartışma Formatında
+  // Her FAQ için 3-13 arası rastgele yorum sayısı belirle
   const faqQuestions = [
     {
       id: 1,
@@ -122,7 +123,7 @@ export function KonyaDiscoveryPage() {
       answer: "Konya'nın en meşhur etli ekmek mekanları: Meram'da bulunan tarihi etli ekmek fırınları, Alaaddin Tepesi çevresindeki restoranlar ve şehir merkezindeki geleneksel fırınlar. Özellikle 'Fırın Kebabı' olarak bilinen yerlerde en lezzetli etli ekmeği bulabilirsiniz. Meram ve Karatay ilçelerindeki eski mahalle fırınları da çok popülerdir.",
       timeAgo: "2 gün önce",
       likes: 45,
-      comments: 12,
+      comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
       makesSense: 23
     },
     {
@@ -133,7 +134,7 @@ export function KonyaDiscoveryPage() {
       answer: "Konya'yı ziyaret etmek için en ideal zamanlar ilkbahar (Nisan-Mayıs) ve sonbahar (Eylül-Ekim) aylarıdır. Özellikle Aralık ayında Mevlana Şeb-i Arus törenleri için çok özel bir atmosfer olur. Yaz ayları çok sıcak olabilir, kış ayları ise soğuk ama kar manzarası güzel olabilir.",
       timeAgo: "3 gün önce",
       likes: 38,
-      comments: 8,
+      comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
       makesSense: 19
     },
     {
@@ -144,7 +145,7 @@ export function KonyaDiscoveryPage() {
       answer: "Evet, Mevlana Müzesi'ne giriş ücretlidir. Ancak Müze Kart geçerlidir. Müze Kart ile yılda iki kez ücretsiz giriş yapabilirsiniz. Pazartesi günleri kapalıdır, ziyaret saatleri 09:00-17:00 arasındadır.",
       timeAgo: "4 gün önce",
       likes: 52,
-      comments: 15,
+      comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
       makesSense: 31
     },
     {
@@ -155,7 +156,7 @@ export function KonyaDiscoveryPage() {
       answer: "Konya'da ulaşım oldukça kolaydır. Tramvay hattı şehrin ana arterlerinden geçer. Otobüs hatları geniş bir ağa sahiptir. Şehir merkezi yürüyüş mesafesinde birçok yeri kapsar. Taksi ve dolmuşlar da yaygın olarak kullanılır.",
       timeAgo: "5 gün önce",
       likes: 29,
-      comments: 6,
+      comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
       makesSense: 15
     },
     {
@@ -166,7 +167,7 @@ export function KonyaDiscoveryPage() {
       answer: "Konya mutfağının en ünlü yemekleri: Etli ekmek, fırın kebabı, bamya çorbası, Mevlana böreği, tirit, etli pide ve sac kavurma. Tatlı olarak ise höşmerim ve peynirli irmik helvası çok meşhurdur.",
       timeAgo: "1 hafta önce",
       likes: 67,
-      comments: 19,
+      comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
       makesSense: 42
     },
     {
@@ -177,7 +178,7 @@ export function KonyaDiscoveryPage() {
       answer: "Tropikal Kelebek Bahçesi (Kelebekler Vadisi), Selçuk Üniversitesi kampüsü içinde yer alır. 12 ve 31 numaralı otobüslerle ulaşabilirsiniz. Merkez'den yaklaşık 20 dakika sürer. Kampüs içinde olduğu için araba ile gitmek de mümkündür, otopark mevcuttur.",
       timeAgo: "1 hafta önce",
       likes: 41,
-      comments: 10,
+      comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
       makesSense: 28
     }
   ]

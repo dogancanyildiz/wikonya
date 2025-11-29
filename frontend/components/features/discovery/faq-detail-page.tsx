@@ -13,7 +13,74 @@ import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useApp } from "@/contexts/app-context"
 
+// Generate random comments for FAQ
+function generateComments(count: number, faqId: number) {
+  const commentTemplates = [
+    "Çok faydalı bir bilgi, teşekkürler!",
+    "Ben de bu mekanları denedim, gerçekten harika!",
+    "Çok detaylı bir açıklama olmuş, elinize sağlık.",
+    "Bu bilgiyi paylaştığınız için teşekkür ederim.",
+    "Kesinlikle katılıyorum, çok doğru bilgiler.",
+    "Ben de aynı deneyimi yaşadım, çok memnun kaldım.",
+    "Yeni bir şey öğrendim, çok teşekkürler!",
+    "Bu konuda daha fazla bilgi var mı?",
+    "Çok yardımcı oldu, sağ olun.",
+    "Harika bir rehber, herkese tavsiye ederim.",
+    "Bu bilgileri not aldım, çok işime yarayacak.",
+    "Çok açıklayıcı ve faydalı bir içerik.",
+    "Teşekkürler, çok yardımcı oldunuz.",
+    "Kesinlikle doğru, ben de aynı şeyi yaşadım.",
+    "Çok güzel bir açıklama, elinize sağlık.",
+  ]
+
+  const authors = [
+    { name: "Ahmet Yılmaz", initials: "AY" },
+    { name: "Zeynep Kaya", initials: "ZK" },
+    { name: "Mehmet Demir", initials: "MD" },
+    { name: "Ayşe Şahin", initials: "AŞ" },
+    { name: "Can Özkan", initials: "CÖ" },
+    { name: "Elif Yıldız", initials: "EY" },
+    { name: "Burak Kaya", initials: "BK" },
+    { name: "Selin Arslan", initials: "SA" },
+    { name: "Emre Çelik", initials: "EÇ" },
+    { name: "Deniz Yılmaz", initials: "DY" },
+  ]
+
+  const timestamps = [
+    "Az önce",
+    "5 dakika önce",
+    "15 dakika önce",
+    "1 saat önce",
+    "2 saat önce",
+    "5 saat önce",
+    "1 gün önce",
+    "2 gün önce",
+    "3 gün önce",
+    "1 hafta önce",
+  ]
+
+  const comments = []
+  for (let i = 0; i < count; i++) {
+    const author = authors[Math.floor(Math.random() * authors.length)]
+    const content = commentTemplates[Math.floor(Math.random() * commentTemplates.length)]
+    const timestamp = timestamps[Math.floor(Math.random() * timestamps.length)]
+    const likes = Math.floor(Math.random() * 10) // 0-9 arası rastgele beğeni
+
+    comments.push({
+      id: faqId * 1000 + i + 1, // Unique ID
+      author: author.name,
+      authorInitials: author.initials,
+      content,
+      timestamp,
+      likes,
+    })
+  }
+
+  return comments
+}
+
 // FAQ Data - konya-discovery-page.tsx'teki ile aynı
+// Her FAQ için 3-13 arası rastgele yorum sayısı belirle
 const faqData = [
   {
     id: 1,
@@ -90,7 +157,7 @@ const faqData = [
 - Yaz ayları: Çeşitli festivaller ve etkinlikler düzenlenir`,
     timeAgo: "3 gün önce",
     likes: 38,
-    comments: 8,
+    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
     makesSense: 19,
     category: "Ziyaret Planı",
     relatedQuestions: [
@@ -132,7 +199,7 @@ const faqData = [
 - İçeride yaklaşık 1-2 saat geçirebilirsiniz`,
     timeAgo: "4 gün önce",
     likes: 52,
-    comments: 15,
+    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
     makesSense: 31,
     category: "Müze & Tarihi Yerler",
     relatedQuestions: [
@@ -184,7 +251,7 @@ const faqData = [
 - Merkez'de konaklıyorsanız çoğu yere yürüyerek gidebilirsiniz`,
     timeAgo: "5 gün önce",
     likes: 29,
-    comments: 6,
+    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
     makesSense: 15,
     category: "Ulaşım",
     relatedQuestions: [
@@ -226,7 +293,7 @@ const faqData = [
 - Geleneksel tatlılar için özel tatlıcıları ziyaret edin`,
     timeAgo: "1 hafta önce",
     likes: 67,
-    comments: 19,
+    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
     makesSense: 42,
     category: "Yemek & Restoran",
     relatedQuestions: [
@@ -276,7 +343,7 @@ const faqData = [
 - Kampüs içinde yemek yeme seçenekleri mevcuttur`,
     timeAgo: "1 hafta önce",
     likes: 41,
-    comments: 10,
+    comments: Math.floor(Math.random() * 11) + 3, // 3-13 arası rastgele
     makesSense: 28,
     category: "Ulaşım",
     relatedQuestions: [
@@ -380,10 +447,11 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
   const [isMakesSense, setIsMakesSense] = useState(false)
   const [showComments, setShowComments] = useState(true)
   const [commentInput, setCommentInput] = useState("")
-  const [comments, setComments] = useState([
-    { id: 1, author: "Ahmet Yılmaz", authorInitials: "AY", content: "Çok faydalı bir bilgi, teşekkürler!", timestamp: "2 saat önce", likes: 5 },
-    { id: 2, author: "Zeynep Kaya", authorInitials: "ZK", content: "Ben de bu mekanları denedim, gerçekten harika!", timestamp: "5 saat önce", likes: 3 },
-  ])
+  // FAQ'nin gerçek yorum sayısına göre yorumlar oluştur
+  const [comments, setComments] = useState(() => {
+    if (!faq) return []
+    return generateComments(faq.comments, faq.id)
+  })
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
 
   if (!faq || !localFaq) {
