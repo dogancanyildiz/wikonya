@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, Clock, ThumbsUp, MessageCircle, Share2, BookOpen, Lightbulb, Send } from "lucide-react"
+import { ArrowLeft, Clock, ThumbsUp, MessageCircle, Share2, BookOpen, Lightbulb, Send, Flag, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { toast } from "sonner"
@@ -11,7 +11,11 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useApp } from "@/contexts/app-context"
+import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
+import { canPerformAction, performAction, getRemainingActions } from "@/lib/gamification/rate-limiter"
+import { CommentReplyDialog } from "@/components/features/topic/comment-reply-dialog"
 
 // Simple deterministic random function (seed-based)
 function seededRandom(seed: number): number {
@@ -19,8 +23,25 @@ function seededRandom(seed: number): number {
   return x - Math.floor(x)
 }
 
+interface FAQComment {
+  id: number
+  author: string
+  authorInitials: string
+  timeAgo: string
+  content: string
+  upvotes: number
+  downvotes: number
+  logicalVotes: number
+  replies: number
+  isUpvoted: boolean
+  isDownvoted: boolean
+  isLogical: boolean
+  parentId?: number
+  repliesList?: FAQComment[]
+}
+
 // Generate deterministic comments for FAQ (same comments for same FAQ ID)
-function generateComments(count: number, faqId: number) {
+function generateComments(count: number, faqId: number): FAQComment[] {
   const commentTemplates = [
     "Çok faydalı bir bilgi, teşekkürler!",
     "Ben de bu mekanları denedim, gerçekten harika!",
@@ -65,22 +86,31 @@ function generateComments(count: number, faqId: number) {
     "1 hafta önce",
   ]
 
-  const comments = []
+  const comments: FAQComment[] = []
   for (let i = 0; i < count; i++) {
     // Deterministic selection based on FAQ ID and comment index
     const seed = faqId * 1000 + i
     const authorIndex = Math.floor(seededRandom(seed) * authors.length)
     const contentIndex = Math.floor(seededRandom(seed + 1) * commentTemplates.length)
     const timestampIndex = Math.floor(seededRandom(seed + 2) * timestamps.length)
-    const likes = Math.floor(seededRandom(seed + 3) * 10) // 0-9 arası deterministik beğeni
+    const upvotes = Math.floor(seededRandom(seed + 3) * 20) + 5 // 5-24 arası
+    const downvotes = Math.floor(seededRandom(seed + 4) * 5) // 0-4 arası
+    const logicalVotes = Math.floor(seededRandom(seed + 5) * 15) + 3 // 3-17 arası
+    const replies = Math.floor(seededRandom(seed + 6) * 8) // 0-7 arası
 
     comments.push({
       id: faqId * 1000 + i + 1, // Unique ID
       author: authors[authorIndex].name,
       authorInitials: authors[authorIndex].initials,
+      timeAgo: timestamps[timestampIndex],
       content: commentTemplates[contentIndex],
-      timestamp: timestamps[timestampIndex],
-      likes,
+      upvotes,
+      downvotes,
+      logicalVotes,
+      replies,
+      isUpvoted: false,
+      isDownvoted: false,
+      isLogical: false,
     })
   }
 
@@ -455,21 +485,18 @@ function parseMarkdown(text: string) {
 
 export function FAQDetailPage({ faqId }: { faqId: number }) {
   const { state } = useApp()
+  const { rewardCoins } = useCoinReward()
   const faq = faqData.find(f => f.id === faqId)
   const [localFaq, setLocalFaq] = useState(faq ? { ...faq } : null)
   const [isLiked, setIsLiked] = useState(false)
   const [isMakesSense, setIsMakesSense] = useState(false)
   const [showComments, setShowComments] = useState(true)
-  const [commentInput, setCommentInput] = useState("")
+  const [newComment, setNewComment] = useState("")
+  const [commentError, setCommentError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [replyingTo, setReplyingTo] = useState<{ id: number; author: string } | null>(null)
   // FAQ'nin gerçek yorum sayısına göre yorumlar oluştur
-  const [comments, setComments] = useState<Array<{
-    id: number
-    author: string
-    authorInitials: string
-    content: string
-    timestamp: string
-    likes: number
-  }>>([])
+  const [comments, setComments] = useState<FAQComment[]>([])
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
 
   // FAQ değiştiğinde yorumları güncelle
@@ -479,7 +506,9 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
       setComments(generateComments(faq.comments, faq.id))
       setIsLiked(false)
       setIsMakesSense(false)
-      setCommentInput("")
+      setNewComment("")
+      setCommentError(null)
+      setReplyingTo(null)
     }
   }, [faqId, faq])
 
@@ -737,63 +766,182 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <ScrollArea className="h-[400px] pr-4">
-                  <div className="space-y-4">
-                    {comments.map((comment) => (
-                      <div key={comment.id} className="flex gap-3 pb-4 border-b border-border last:border-0">
-                        <Avatar className="w-8 h-8">
-                          <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-bold text-xs">
-                            {comment.authorInitials}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-[Manrope] font-bold text-sm text-foreground">
-                              {comment.author}
-                            </span>
-                            <span className="font-[Manrope] text-xs text-muted-foreground">
-                              {comment.timestamp}
-                            </span>
+                <div className="space-y-3 sm:space-y-4">
+                  {comments.map((comment) => (
+                    <Card
+                      key={comment.id}
+                      className="bg-card rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-shadow duration-300 border border-border"
+                    >
+                      <CardContent className="p-4 sm:p-6">
+                        <div className="flex gap-3 sm:gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                              <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-border">
+                                <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold text-[10px] sm:text-xs">
+                                  {comment.authorInitials}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <div className="font-[Manrope] text-foreground font-bold text-sm sm:text-base">
+                                  {comment.author}
+                                </div>
+                                <div className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
+                                  {comment.timeAgo}
+                                </div>
+                              </div>
+                            </div>
+
+                            <p className="font-[Manrope] text-foreground mb-3 sm:mb-4 font-medium text-sm sm:text-base leading-relaxed">
+                              {comment.content}
+                            </p>
+
+                            {/* Actions */}
+                            <div className="flex items-center gap-3 sm:gap-4 flex-wrap pt-3 border-t border-border">
+                              <button 
+                                onClick={() => handleVote(comment.id, 'up')}
+                                className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                                  comment.isUpvoted ? 'bg-primary/10 dark:bg-primary/20' : ''
+                                }`}
+                                aria-label={comment.isUpvoted ? "Beğenmeyi geri al" : "Beğen"}
+                              >
+                                <ThumbsUp className={`w-4 h-4 text-primary ${comment.isUpvoted ? 'fill-primary' : ''}`} />
+                                <span className="font-[Manrope] font-bold text-sm text-foreground">
+                                  {comment.upvotes - comment.downvotes}
+                                </span>
+                                {animations[`like-${comment.id}`] && (
+                                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                                    +1
+                                  </span>
+                                )}
+                              </button>
+                              <button 
+                                onClick={() => handleLogicalVote(comment.id)}
+                                className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                                  comment.isLogical ? 'bg-primary/10 dark:bg-primary/20' : ''
+                                }`}
+                                aria-label={comment.isLogical ? "Mantıklı yorum işaretini kaldır" : "Mantıklı yorum olarak işaretle"}
+                              >
+                                <Lightbulb className={`w-4 h-4 text-primary ${comment.isLogical ? 'fill-primary' : ''}`} />
+                                <span className="font-[Manrope] font-bold text-sm text-foreground">
+                                  {comment.logicalVotes}
+                                </span>
+                                <span className="font-[Manrope] font-medium text-xs text-foreground/60 dark:text-muted-foreground hidden sm:inline">
+                                  Mantıklı
+                                </span>
+                                {animations[`logical-${comment.id}`] && (
+                                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                                    +1
+                                  </span>
+                                )}
+                              </button>
+                              <button 
+                                onClick={() => setReplyingTo({ id: comment.id, author: comment.author })}
+                                className="relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors"
+                                aria-label={`${comment.replies} yorum`}
+                              >
+                                <MessageCircle className="w-4 h-4 text-primary" />
+                                <span className="font-[Manrope] font-bold text-sm text-foreground">
+                                  {comment.replies}
+                                </span>
+                                {animations[`comment-${comment.id}`] && (
+                                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                                    +1
+                                  </span>
+                                )}
+                              </button>
+                              <button 
+                                onClick={() => handleFlagComment(comment.id)}
+                                className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors ml-auto"
+                                aria-label="Yorumu bildir"
+                              >
+                                <Flag className="w-3 h-3 sm:w-4 sm:h-4" />
+                                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">
+                                  Bildir
+                                </span>
+                              </button>
+                            </div>
                           </div>
-                          <p className="font-[Manrope] text-sm text-foreground/80 dark:text-muted-foreground mb-2">
-                            {comment.content}
-                          </p>
-                          <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
-                            <ThumbsUp className="w-3 h-3" />
-                            <span>{comment.likes}</span>
-                          </button>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-                
-                {/* Comment Input */}
-                {state.user && (
-                  <div className="pt-4 border-t border-border">
-                    <div className="flex gap-2">
-                      <Textarea
-                        value={commentInput}
-                        onChange={(e) => setCommentInput(e.target.value)}
-                        placeholder="Yorumunuzu yazın..."
-                        className="font-[Manrope] min-h-[80px]"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault()
-                            handleSendComment()
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
+                {/* Reply Dialog */}
+                {replyingTo && (
+                  <CommentReplyDialog
+                    open={!!replyingTo}
+                    onOpenChange={(open) => !open && setReplyingTo(null)}
+                    parentCommentId={replyingTo.id}
+                    parentAuthor={replyingTo.author}
+                    onReply={handleReply}
+                  />
+                )}
+
+                {/* Add Comment Section */}
+                <Card className="mt-4 sm:mt-6 bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
+                  <CardHeader>
+                    <CardTitle className="font-[Manrope] text-foreground font-bold text-lg sm:text-xl">
+                      Görüş Bildir
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {commentError && (
+                      <Alert variant="destructive" className="mb-4">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertDescription className="font-[Manrope]">{commentError}</AlertDescription>
+                      </Alert>
+                    )}
+
+                    <Textarea
+                      value={newComment}
+                      onChange={(e) => {
+                        setNewComment(e.target.value)
+                        setCommentError(null)
+                      }}
+                      placeholder="Deneyimlerinizi ve düşüncelerinizi paylaşın..."
+                      className="w-full p-3 sm:p-4 bg-accent rounded-xl font-[Manrope] text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary font-medium min-h-[100px] sm:min-h-[120px] text-sm sm:text-base"
+                      disabled={isSubmitting}
+                      aria-label="Yorum metni"
+                    />
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mt-3 sm:mt-4">
+                      <div className="flex flex-col gap-1">
+                        <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
+                          Lütfen yapıcı ve saygılı yorumlar yazın
+                        </span>
+                        {state.user && (() => {
+                          const remaining = getRemainingActions(state.user, "comment")
+                          if (remaining.limit !== null) {
+                            const isLow = remaining.remaining <= 2
+                            return (
+                              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${
+                                isLow 
+                                  ? 'bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20' 
+                                  : 'bg-accent'
+                              }`}>
+                                <span className={`font-[Manrope] font-semibold text-xs ${
+                                  isLow ? 'text-amber-700 dark:text-amber-400' : 'text-muted-foreground'
+                                }`}>
+                                  Kalan yorum hakkı: <span className="font-bold">{remaining.remaining}</span> / {remaining.limit} ({remaining.timeWindow})
+                                </span>
+                              </div>
+                            )
                           }
-                        }}
-                      />
+                          return null
+                        })()}
+                      </div>
                       <Button
                         onClick={handleSendComment}
-                        disabled={!commentInput.trim()}
-                        className="bg-primary hover:bg-primary/90 font-[Manrope] font-bold self-end"
+                        disabled={isSubmitting || !newComment.trim() || !state.user}
+                        className="bg-primary hover:bg-primary/90 font-[Manrope] px-6 sm:px-8 font-bold text-xs sm:text-sm disabled:opacity-50"
+                        aria-label="Yorumu gönder"
                       >
-                        <Send className="w-4 h-4" />
+                        {isSubmitting ? "Gönderiliyor..." : "Gönder"}
                       </Button>
                     </div>
-                  </div>
-                )}
+                  </CardContent>
+                </Card>
               </CardContent>
             </Card>
           )}
