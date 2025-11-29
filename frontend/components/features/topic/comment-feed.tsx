@@ -411,6 +411,11 @@ export function CommentFeed() {
                 const check = canPerformAction(state.user, "comment")
                 if (!check.allowed) {
                   setCommentError(check.reason || "Yorum gönderilemedi")
+                  // Toast notification ile görsel uyarı
+                  toast.error("⚠️ Rate Limit Aşıldı", {
+                    description: check.reason || "Yorum gönderilemedi",
+                    duration: 5000,
+                  })
                   return
                 }
 
