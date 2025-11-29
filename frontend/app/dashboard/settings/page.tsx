@@ -43,8 +43,7 @@ import {
   Moon,
   Monitor,
   Check,
-  X,
-  CreditCard
+  X
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
