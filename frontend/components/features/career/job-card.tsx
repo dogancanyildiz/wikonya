@@ -1,10 +1,11 @@
 "use client"
 
-import { MapPin, Clock, Bookmark } from "lucide-react"
+import { MapPin, Clock, Bookmark, Building2, Briefcase } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 interface JobCardProps {
   id: number
@@ -31,58 +32,59 @@ export function JobCard({
 }: JobCardProps) {
   const [isBookmarked, setIsBookmarked] = useState(false)
 
-  const typeColors = {
-    "Part-Time": "bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400",
-    "Full-Time": "bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400",
-    "Remote": "bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400",
-    "Hybrid": "bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400",
-  }
-
   return (
-    <Card className="rounded-xl shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-300 group border-border">
-      <CardContent className="p-4 sm:p-6">
+    <Card className="rounded-xl border border-border bg-card hover:shadow-md transition-all duration-200 group">
+      <CardContent className="p-4 sm:p-5">
         <div className="flex items-start gap-3 sm:gap-4">
           {/* Company Logo */}
-          <div className="w-12 h-12 sm:w-14 sm:h-14 bg-accent rounded-lg flex items-center justify-center flex-shrink-0 border-2 border-border">
-            <span className="font-[Manrope] text-primary font-extrabold text-base sm:text-lg">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center flex-shrink-0">
+            <span className="font-[Manrope] text-primary font-extrabold text-sm sm:text-base">
               {companyLogo}
             </span>
           </div>
 
           {/* Job Details */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between mb-2">
-              <Link href={`/career/job/${id}`} className="flex-1">
-                <h3 className="font-[Manrope] text-foreground mb-1 group-hover:text-primary transition-colors font-bold text-base sm:text-lg leading-snug cursor-pointer">
-                  {role}
-                </h3>
-                <p className="font-[Manrope] text-muted-foreground font-semibold text-xs sm:text-sm">
-                  {company}
-                </p>
-              </Link>
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="flex-1 min-w-0">
+                <Link href={`/career/job/${id}`}>
+                  <h3 className="font-[Manrope] text-foreground mb-1.5 group-hover:text-primary transition-colors font-bold text-base sm:text-lg leading-tight cursor-pointer line-clamp-2">
+                    {role}
+                  </h3>
+                </Link>
+                <div className="flex items-center gap-2 mb-2">
+                  <Building2 className="w-3.5 h-3.5 text-foreground/50 dark:text-muted-foreground flex-shrink-0" strokeWidth={2} />
+                  <span className="font-[Manrope] text-foreground/70 dark:text-muted-foreground font-semibold text-sm truncate">
+                    {company}
+                  </span>
+                </div>
+              </div>
               
               <button
-                onClick={() => setIsBookmarked(!isBookmarked)}
-                className="w-8 h-8 sm:w-9 sm:h-9 bg-accent hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg flex items-center justify-center transition-all"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setIsBookmarked(!isBookmarked)
+                }}
+                className="w-8 h-8 rounded-lg bg-muted hover:bg-primary/10 dark:hover:bg-primary/20 flex items-center justify-center transition-all flex-shrink-0"
               >
                 <Bookmark
-                  className={`w-3 h-3 sm:w-4 sm:h-4 ${isBookmarked ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
+                  className={`w-4 h-4 ${isBookmarked ? 'fill-primary text-primary' : 'text-foreground/50 dark:text-muted-foreground'}`}
                   strokeWidth={2.5}
                 />
               </button>
             </div>
 
             {/* Meta Info */}
-            <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4 flex-wrap">
+            <div className="flex items-center gap-3 sm:gap-4 mb-3 flex-wrap">
               <div className="flex items-center gap-1.5">
-                <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" strokeWidth={2.5} />
-                <span className="font-[Manrope] text-muted-foreground font-medium text-xs sm:text-[13px]">
+                <MapPin className="w-3.5 h-3.5 text-foreground/50 dark:text-muted-foreground" strokeWidth={2} />
+                <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
                   {location}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
-                <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" strokeWidth={2.5} />
-                <span className="font-[Manrope] text-muted-foreground font-medium text-xs sm:text-[13px]">
+                <Clock className="w-3.5 h-3.5 text-foreground/50 dark:text-muted-foreground" strokeWidth={2} />
+                <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
                   {postedDays} gün önce
                 </span>
               </div>
@@ -91,20 +93,27 @@ export function JobCard({
             {/* Tags and Action */}
             <div className="flex items-center justify-between gap-2 flex-wrap">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg font-[Manrope] ${typeColors[type]} font-bold text-[10px] sm:text-[11px]`}>
+                <Badge 
+                  variant="outline" 
+                  className="px-2.5 py-1 rounded-lg font-[Manrope] border-primary/30 bg-primary/5 dark:bg-primary/10 text-primary font-semibold text-xs"
+                >
                   {type}
-                </span>
+                </Badge>
                 {salary && (
-                  <span className="px-2 sm:px-3 py-1 sm:py-1.5 bg-accent rounded-lg font-[Manrope] text-primary font-bold text-[10px] sm:text-[11px]">
+                  <Badge 
+                    variant="outline" 
+                    className="px-2.5 py-1 rounded-lg font-[Manrope] border-primary/30 bg-primary/5 dark:bg-primary/10 text-primary font-semibold text-xs"
+                  >
                     {salary}
-                  </span>
+                  </Badge>
                 )}
               </div>
 
               <Button 
                 asChild
                 variant="outline"
-                className="px-4 sm:px-5 py-1.5 sm:py-2 border-2 border-primary rounded-lg font-[Manrope] text-primary hover:bg-primary hover:text-primary-foreground transition-all font-bold text-xs sm:text-[13px]"
+                size="sm"
+                className="px-4 py-1.5 border-primary/50 rounded-lg font-[Manrope] text-primary hover:bg-primary hover:text-primary-foreground transition-all font-semibold text-xs sm:text-sm"
               >
                 <Link href={`/career/job/${id}`}>
                   Detaylar
@@ -117,4 +126,3 @@ export function JobCard({
     </Card>
   )
 }
-

@@ -647,11 +647,6 @@ export function VenueGrid() {
               </Button>
             </div>
           )}
-
-          {/* Sayfa Bilgisi */}
-          <p className="text-center mt-4 font-[Manrope] text-muted-foreground text-sm">
-            Toplam {sortedVenues.length} mekan içinden {startIndex + 1}-{Math.min(startIndex + ITEMS_PER_PAGE, sortedVenues.length)} arası gösteriliyor
-          </p>
         </>
       ) : (
         <Empty className="py-12 sm:py-16">
