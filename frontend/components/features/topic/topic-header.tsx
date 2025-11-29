@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useApp } from "@/contexts/app-context"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
-import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
 import { WikiEditDialog } from "./wiki-edit-dialog"
 import { WikiHistory } from "./wiki-history"
@@ -21,7 +20,6 @@ interface TopicHeaderProps {
 export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: TopicHeaderProps) {
   const { state } = useApp()
   const { canEditWiki, canProposeWikiEdit } = usePermissions()
-  const { rewardCoins } = useCoinReward()
   const { notifyWikiReverted } = useNotifications()
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
