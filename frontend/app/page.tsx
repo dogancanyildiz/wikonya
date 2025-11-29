@@ -2,8 +2,6 @@ import type { Metadata } from "next"
 import { Hero } from "@/components/layout/hero"
 import { DiscussionFeed } from "@/components/features/home/discussion-feed"
 import { Sidebar } from "@/components/layout/sidebar"
-import { PopularComments } from "@/components/features/home/popular-comments"
-import { KBBAnnouncements } from "@/components/features/home/kbb-announcements"
 import { StructuredData } from "@/components/seo/structured-data"
 
 export const metadata: Metadata = {
@@ -47,23 +45,17 @@ export default function Home() {
         data={{}}
       />
       <div className="min-h-screen bg-background">
-        <Hero />
+        <div className="mt-10 md:mt-20">
+          <Hero />
+        </div>
         
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-          {/* KBB Announcements */}
-          <div className="mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8">
-            <KBBAnnouncements />
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 mt-6 sm:mt-8 pb-16 md:pb-20">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 mt-20 md:mt-50">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 mt-10 sm:mt-12 lg:mt-16 pb-16 md:pb-20">
             <div className="lg:col-span-8 space-y-6 sm:space-y-8">
               {/* Discussion Feed */}
               <DiscussionFeed />
-
-              {/* Popular Comments */}
-              <PopularComments />
             </div>
-            <aside className="hidden lg:block lg:col-span-4">
+            <aside className="hidden lg:block lg:col-span-4 self-start">
               <Sidebar />
             </aside>
           </div>

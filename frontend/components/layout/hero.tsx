@@ -22,7 +22,7 @@ export function Hero() {
   }
 
   return (
-    <section className="bg-muted/50 dark:bg-muted pt-12 pb-10 md:pt-16 md:pb-12">
+    <section className="pt-12 pb-10 md:pt-16 md:pb-12">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="font-[Manrope] font-black text-foreground mb-6 text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight">

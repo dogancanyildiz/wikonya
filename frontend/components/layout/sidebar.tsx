@@ -1,38 +1,37 @@
 "use client"
 
-import { Calendar, MapPin, TrendingUp, MessageCircle, Eye } from "lucide-react"
+import { Calendar, MapPin, MessageCircle, ThumbsUp } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import Link from "next/link"
+import { KBBAnnouncements } from "@/components/features/home/kbb-announcements"
 
 interface SidebarProps {
   onNavigateToTopic?: () => void
 }
 
 export function Sidebar({}: SidebarProps = {}) {
-  const trendingData = [
+  const popularComments = [
     {
       id: 1,
-      title: "Meram Kampüsü Yemekhane Fiyatları",
-      category: "Sosyal",
-      views: "2.4k",
-      comments: 87,
-      trend: "+12%",
+      author: { name: "Ayşe Yılmaz", initials: "AY" },
+      content: "Bu notlar gerçekten çok işime yaradı! Özellikle anayasa hukuku kısmı çok detaylı.",
+      topicId: 1,
+      upvotes: 42,
     },
     {
       id: 2,
-      title: "Veri Yapıları Final Hazırlık",
-      category: "Akademik",
-      views: "1.8k",
-      comments: 124,
-      trend: "+24%",
+      author: { name: "Mehmet Demir", initials: "MD" },
+      content: "Yemekhane fiyatları artmış ama kalite aynı kalmış maalesef.",
+      topicId: 2,
+      upvotes: 35,
     },
     {
       id: 3,
-      title: "En İyi Öğrenci Yurtları 2024",
-      category: "Barınma",
-      views: "3.2k",
-      comments: 156,
-      trend: "+8%",
+      author: { name: "Zeynep Kaya", initials: "ZK" },
+      content: "Final öncesi bu notlara çalıştım ve çok yardımcı oldu.",
+      topicId: 3,
+      upvotes: 28,
     },
   ]
 
@@ -61,42 +60,43 @@ export function Sidebar({}: SidebarProps = {}) {
   ]
 
   return (
-    <aside className="space-y-4 sticky top-20 2xl:top-24" aria-label="Yan panel">
-      {/* Trending Topics */}
+    <div className="sticky top-24 self-start max-h-[calc(100vh-7rem)] overflow-y-auto scrollbar-thin" aria-label="Yan panel">
+      <div className="space-y-4 pb-4">
+      {/* KBB Announcements */}
+      <KBBAnnouncements />
+
+      {/* Popular Comments */}
       <Card className="rounded-xl shadow-md border border-border">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base">
-            <TrendingUp className="w-4 h-4 text-primary" />
-            <span className="font-[Manrope] font-bold text-foreground">Trending Topics</span>
+            <MessageCircle className="w-4 h-4 text-primary" />
+            <span className="font-[Manrope] font-bold text-foreground">Popüler Yorumlar</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 pt-0">
-          {trendingData.slice(0, 2).map((topic) => (
+          {popularComments.map((comment) => (
             <Link
-              key={topic.id}
-              href={`/topic/${topic.id}`}
+              key={comment.id}
+              href={`/topic/${comment.topicId}#comment-${comment.id}`}
               className="block bg-accent rounded-lg p-3 hover:shadow-md transition-all duration-200 cursor-pointer border border-transparent hover:border-border"
             >
-              <div className="flex items-start justify-between mb-2">
-                <span className="px-2 py-0.5 bg-card rounded-full font-[Manrope] font-semibold text-primary text-xs">
-                  {topic.category}
-                </span>
-                <div className="flex items-center gap-1 text-primary">
-                  <TrendingUp className="w-3 h-3" />
-                  <span className="font-[Manrope] font-bold text-xs">{topic.trend}</span>
-                </div>
-              </div>
-              <h4 className="font-[Manrope] font-bold text-foreground mb-2 text-sm line-clamp-2">
-                {topic.title}
-              </h4>
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Eye className="w-3 h-3" />
-                  <span className="font-[Manrope] font-semibold text-xs">{topic.views}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <MessageCircle className="w-3 h-3" />
-                  <span className="font-[Manrope] font-semibold text-xs">{topic.comments}</span>
+              <div className="flex items-start gap-2.5">
+                <Avatar className="w-7 h-7 flex-shrink-0">
+                  <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold text-[10px]">
+                    {comment.author.initials}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <span className="font-[Manrope] font-bold text-xs text-foreground">
+                    {comment.author.name}
+                  </span>
+                  <p className="font-[Manrope] text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                    {comment.content}
+                  </p>
+                  <div className="flex items-center gap-1 mt-1.5 text-primary">
+                    <ThumbsUp className="w-3 h-3" />
+                    <span className="font-[Manrope] font-semibold text-xs">{comment.upvotes}</span>
+                  </div>
                 </div>
               </div>
             </Link>
@@ -109,7 +109,7 @@ export function Sidebar({}: SidebarProps = {}) {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base">
             <Calendar className="w-4 h-4 text-primary" />
-            <span className="font-[Manrope] font-bold text-foreground">Upcoming Events</span>
+            <span className="font-[Manrope] font-bold text-foreground">Yaklaşan Etkinlikler</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 pt-0">
@@ -145,7 +145,7 @@ export function Sidebar({}: SidebarProps = {}) {
       {/* Quick Stats */}
       <Card className="bg-gradient-to-br from-primary to-primary/80 rounded-xl text-primary-foreground border-0 shadow-lg">
         <CardHeader className="pb-3">
-          <CardTitle className="font-[Manrope] font-bold text-base">Community Stats</CardTitle>
+          <CardTitle className="font-[Manrope] font-bold text-base">Topluluk İstatistikleri</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 pt-0">
           <div className="flex items-center justify-between">
@@ -162,7 +162,8 @@ export function Sidebar({}: SidebarProps = {}) {
           </div>
         </CardContent>
       </Card>
-    </aside>
+      </div>
+    </div>
   )
 }
 
