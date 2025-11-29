@@ -50,23 +50,25 @@ export function CommunityEvents() {
   ]
 
   return (
-    <div className="space-y-4">
-      {/* Başlık */}
-      <div className="flex items-center justify-between">
-        <h2 className="font-[Manrope] text-foreground font-extrabold text-lg">
-          Etkinlikler
-        </h2>
-        <Link 
-          href="/events"
-          className="font-[Manrope] text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-semibold text-xs"
-        >
-          Tümünü Gör
-          <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
-        </Link>
+    <div>
+      {/* Başlık Bölümü - Venue grid ile hizalı */}
+      <div className="min-h-[88px] sm:min-h-[96px] mb-6 flex items-end">
+        <div className="flex items-center justify-between w-full">
+          <h2 className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px]">
+            Etkinlikler
+          </h2>
+          <Link 
+            href="/events"
+            className="font-[Manrope] text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-semibold text-xs"
+          >
+            Tümünü Gör
+            <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
+          </Link>
+        </div>
       </div>
 
       {/* Etkinlik Kartları */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {events.map((event) => {
           const filledPercentage = (event.participants / event.maxParticipants) * 100
           const spotsLeft = event.maxParticipants - event.participants
@@ -77,9 +79,9 @@ export function CommunityEvents() {
               href={`/events/${event.id}`}
               className="block"
             >
-              <article className="bg-card rounded-2xl border border-border overflow-hidden">
-                {/* Görsel - Üstte */}
-                <div className="relative aspect-[16/9] w-full">
+              <article className="bg-card rounded-xl border border-border overflow-hidden flex">
+                {/* Görsel - Solda */}
+                <div className="relative w-24 h-24 flex-shrink-0">
                   <Image
                     src={event.image}
                     alt={event.title}
@@ -89,49 +91,53 @@ export function CommunityEvents() {
                   />
                 </div>
 
-                {/* İçerik */}
-                <div className="p-4">
-                  <h3 className="font-[Manrope] text-foreground font-bold text-base leading-snug mb-2">
-                    {event.title}
-                  </h3>
-                  
-                  <div className="flex items-center gap-4 text-sm mb-3">
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-primary" strokeWidth={2} />
-                      <span className="font-[Manrope] text-foreground font-medium text-xs">
-                        {event.date}, {event.time}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4 text-muted-foreground" strokeWidth={2} />
-                      <span className="font-[Manrope] text-muted-foreground text-xs">
-                        {event.location}
-                      </span>
+                {/* İçerik - Sağda */}
+                <div className="flex-1 p-3 flex flex-col justify-between min-w-0">
+                  <div>
+                    <h3 className="font-[Manrope] text-foreground font-bold text-sm leading-snug mb-1 truncate">
+                      {event.title}
+                    </h3>
+                    
+                    <div className="flex items-center gap-3 mb-1.5">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3 text-primary" strokeWidth={2.5} />
+                        <span className="font-[Manrope] text-foreground font-medium text-[11px]">
+                          {event.date}, {event.time}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-muted-foreground" strokeWidth={2.5} />
+                        <span className="font-[Manrope] text-muted-foreground text-[11px] truncate">
+                          {event.location}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
                   {/* Katılımcı & Progress */}
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1.5">
-                      <Users className="w-4 h-4 text-muted-foreground" strokeWidth={2} />
-                      <span className="font-[Manrope] text-foreground font-medium text-xs">
-                        {event.participants}/{event.maxParticipants} katılımcı
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center gap-1">
+                        <Users className="w-3 h-3 text-muted-foreground" strokeWidth={2.5} />
+                        <span className="font-[Manrope] text-muted-foreground font-medium text-[11px]">
+                          {event.participants}/{event.maxParticipants}
+                        </span>
+                      </div>
+                      <span className={`font-[Manrope] font-bold text-[11px] ${
+                        spotsLeft <= 5 ? 'text-amber-500' : 'text-primary'
+                      }`}>
+                        {spotsLeft} yer
                       </span>
                     </div>
-                    <span className={`font-[Manrope] font-bold text-xs ${
-                      spotsLeft <= 5 ? 'text-amber-500' : 'text-primary'
-                    }`}>
-                      {spotsLeft} yer kaldı
-                    </span>
-                  </div>
-                  
-                  <div className="w-full h-1.5 bg-accent rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full transition-all ${
-                        filledPercentage >= 80 ? 'bg-amber-500' : 'bg-primary'
-                      }`}
-                      style={{ width: `${filledPercentage}%` }}
-                    />
+                    
+                    <div className="w-full h-1 bg-accent rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full transition-all ${
+                          filledPercentage >= 80 ? 'bg-amber-500' : 'bg-primary'
+                        }`}
+                        style={{ width: `${filledPercentage}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
               </article>
@@ -143,7 +149,7 @@ export function CommunityEvents() {
       {/* Etkinlik Oluştur */}
       <Button 
         variant="outline"
-        className="w-full h-10 border-dashed border-border rounded-xl font-[Manrope] text-muted-foreground hover:text-primary hover:border-primary transition-all font-semibold text-xs"
+        className="w-full h-10 mt-4 border-dashed border-border rounded-xl font-[Manrope] text-muted-foreground hover:text-primary hover:border-primary transition-all font-semibold text-xs"
       >
         <Plus className="w-4 h-4 mr-1.5" />
         Etkinlik Oluştur

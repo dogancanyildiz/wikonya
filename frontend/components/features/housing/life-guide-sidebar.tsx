@@ -1,8 +1,8 @@
 "use client"
 
-import { Bus, Home, ShoppingBasket, Zap, Utensils, Heart } from "lucide-react"
+import { Bus, Home, ShoppingBasket, Zap, Utensils, ArrowRight } from "lucide-react"
 import { LifeGuideCard } from "./life-guide-card"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import Link from "next/link"
 
 export function LifeGuideSidebar() {
   const guides = [
@@ -10,7 +10,7 @@ export function LifeGuideSidebar() {
       id: 1,
       icon: Bus,
       title: "Toplu Taşıma & Elkart Rehberi",
-      description: "Konya'da ulaşım sistemleri, kart fiyatları ve güzergahlar hakkında bilgi.",
+      description: "Konya'da ulaşım sistemleri, kart fiyatları ve güzergahlar.",
       image: "https://images.unsplash.com/photo-1756723701257-46513cd36fc1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaXR5JTIwYnVzJTIwdHJhbnNwb3J0fGVufDF8fHx8MTc2NDE0ODk0NHww&ixlib=rb-4.1.0&q=80&w=1080",
       articles: 8,
     },
@@ -18,7 +18,7 @@ export function LifeGuideSidebar() {
       id: 2,
       icon: Home,
       title: "En İyi Öğrenci Mahalleleri",
-      description: "Kampüse yakın, güvenli ve uygun fiyatlı semtler rehberi.",
+      description: "Kampüse yakın, güvenli ve uygun fiyatlı semtler.",
       image: "https://images.unsplash.com/photo-1616113364365-b6013f3dad25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxuZWlnaGJvcmhvb2QlMjBzdHJlZXR8ZW58MXx8fHwxNzY0MDg0MTI3fDA&ixlib=rb-4.1.0&q=80&w=1080",
       articles: 12,
     },
@@ -26,7 +26,7 @@ export function LifeGuideSidebar() {
       id: 3,
       icon: ShoppingBasket,
       title: "Semt Pazarları Günleri",
-      description: "Taze ve ucuz alışveriş için Konya semt pazarları takvimi.",
+      description: "Taze ve ucuz alışveriş için pazar takvimi.",
       image: "https://images.unsplash.com/photo-1748342319942-223b99937d4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXJrZXQlMjB2ZWdldGFibGVzJTIwZnJlc2h8ZW58MXx8fHwxNzY0MTc2MTgxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       articles: 6,
     },
@@ -34,74 +34,36 @@ export function LifeGuideSidebar() {
       id: 4,
       icon: Zap,
       title: "Fatura & Hizmet Rehberi",
-      description: "Elektrik, su, internet başvuruları ve ödeme bilgileri.",
+      description: "Elektrik, su, internet başvuruları.",
       image: "https://images.unsplash.com/photo-1662454419736-de132ff75638?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBhcGFydG1lbnQlMjBiZWRyb29tfGVufDF8fHx8MTc2NDE0MzU1NHww&ixlib=rb-4.1.0&q=80&w=1080",
       articles: 5,
-    },
-    {
-      id: 5,
-      icon: Utensils,
-      title: "Bütçeye Uygun Yemek Rehberi",
-      description: "Öğrenci dostudur lokantalar ve ekonomik menüler.",
-      image: "https://images.unsplash.com/photo-1612419299101-6c294dc2901d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwYXBhcnRtZW50JTIwbGl2aW5nJTIwcm9vbXxlbnwxfHx8fDE3NjQxNTIxODB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      articles: 15,
     },
   ]
 
   return (
     <div>
-      <Card className="bg-gradient-to-br from-primary to-primary/80 rounded-xl text-primary-foreground shadow-lg border-0 mb-4 sm:mb-6">
-        <CardHeader>
-          <CardTitle className="font-[Manrope] mb-2 font-extrabold text-xl sm:text-2xl lg:text-[28px]">
-            Konya&apos;da Yaşam 101
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="font-[Manrope] text-primary-foreground/90 font-medium text-xs sm:text-sm leading-relaxed">
-            Şehre yeni geldin mi? Yaşamı kolaylaştıracak pratik rehberler burada.
-          </p>
-        </CardContent>
-      </Card>
-
-      <div className="space-y-4 sm:space-y-6">
-        {guides.map((guide) => (
-          <div key={guide.id} className="w-full">
-            <LifeGuideCard {...guide} />
-          </div>
-        ))}
+      {/* Başlık Bölümü - Housing list ile hizalı */}
+      <div className="min-h-[88px] sm:min-h-[96px] mb-6 flex items-end">
+        <div className="flex items-center justify-between w-full">
+          <h2 className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px]">
+            Yaşam Rehberi
+          </h2>
+          <Link 
+            href="/life-guide"
+            className="font-[Manrope] text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-semibold text-xs"
+          >
+            Tümünü Gör
+            <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
+          </Link>
+        </div>
       </div>
 
-      {/* Quick Tips Card */}
-      <Card className="mt-4 sm:mt-6 rounded-xl shadow-md border-border">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-primary" strokeWidth={2.5} />
-            <span className="font-[Manrope] text-foreground font-bold text-sm sm:text-base">
-              Hızlı İpuçları
-            </span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2 sm:space-y-3 pt-0">
-          <div className="flex items-start gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
-            <p className="font-[Manrope] text-muted-foreground font-medium text-xs sm:text-[13px] leading-relaxed">
-              Elkart&apos;ı ilk ay ücretsiz dene
-            </p>
-          </div>
-          <div className="flex items-start gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
-            <p className="font-[Manrope] text-muted-foreground font-medium text-xs sm:text-[13px] leading-relaxed">
-              Pazarlar Cuma günü en ucuz
-            </p>
-          </div>
-          <div className="flex items-start gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
-            <p className="font-[Manrope] text-muted-foreground font-medium text-xs sm:text-[13px] leading-relaxed">
-              Yurt başvurularını erken yap
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Rehber Kartları */}
+      <div className="space-y-3">
+        {guides.map((guide) => (
+          <LifeGuideCard key={guide.id} {...guide} />
+        ))}
+      </div>
     </div>
   )
 }

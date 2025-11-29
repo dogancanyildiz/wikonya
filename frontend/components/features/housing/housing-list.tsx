@@ -3,9 +3,8 @@
 import { useState } from "react"
 import { HousingCard } from "./housing-card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
-import { ChevronDown, Home, X } from "lucide-react"
+import { ChevronDown, Home, X, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,10 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+const ITEMS_PER_PAGE = 6
+
 export function HousingList() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [sortBy, setSortBy] = useState<"price" | "distance" | "newest">("price")
-  const [priceOrder, setPriceOrder] = useState<"low-high" | "high-low">("low-high")
+  const [sortBy, setSortBy] = useState<"price-low" | "price-high" | "distance" | "newest">("price-low")
+  const [currentPage, setCurrentPage] = useState(1)
 
   const categories = [
     { id: "government", label: "Devlet Yurdu" },
@@ -121,6 +122,294 @@ export function HousingList() {
       distance: 2.8,
       postedDate: new Date("2024-11-28"),
     },
+    {
+      id: 7,
+      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 4200,
+      priceText: "4.200₺",
+      title: "KYK Kız Öğrenci Yurdu - Yeni Bina",
+      location: "Selçuklu, Merkez",
+      bedrooms: 4,
+      bathrooms: 2,
+      area: 110,
+      tags: ["KYK", "Yeni"],
+      views: 745,
+      category: "government" as const,
+      distance: 1.0,
+      postedDate: new Date("2024-11-10"),
+    },
+    {
+      id: 8,
+      image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 5800,
+      priceText: "5.800₺",
+      title: "Ekonomik 2+1 - Öğrenci Dostu",
+      location: "Nalçacı, Selçuklu",
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 75,
+      tags: ["Eşyalı", "Metro Yakın"],
+      views: 412,
+      category: "student" as const,
+      distance: 1.5,
+      postedDate: new Date("2024-11-26"),
+    },
+    {
+      id: 9,
+      image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 8500,
+      priceText: "8.500₺",
+      title: "Premium Özel Yurt - Tek Kişilik Oda",
+      location: "Kampüs Yanı, Selçuklu",
+      bedrooms: 1,
+      bathrooms: 1,
+      area: 35,
+      tags: ["Özel Yurt", "Kahvaltı Dahil"],
+      views: 923,
+      category: "private" as const,
+      distance: 0.3,
+      postedDate: new Date("2024-11-12"),
+    },
+    {
+      id: 10,
+      image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 4800,
+      priceText: "4.800₺",
+      title: "Temiz 1+1 Daire - Tramvay Hattı",
+      location: "Karatay, Merkez",
+      bedrooms: 1,
+      bathrooms: 1,
+      area: 55,
+      tags: ["Eşyasız", "Kombili"],
+      views: 289,
+      category: "student" as const,
+      distance: 2.5,
+      postedDate: new Date("2024-11-27"),
+    },
+    {
+      id: 11,
+      image: "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 3800,
+      priceText: "3.800₺",
+      title: "KYK Yurdu - 4 Kişilik Oda",
+      location: "Meram Yeni Yol",
+      bedrooms: 4,
+      bathrooms: 2,
+      area: 100,
+      tags: ["KYK", "Yemekhane"],
+      views: 634,
+      category: "government" as const,
+      distance: 1.8,
+      postedDate: new Date("2024-11-08"),
+    },
+    {
+      id: 12,
+      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 11000,
+      priceText: "11.000₺",
+      title: "Villa Tipi Müstakil - 4 Öğrenci İçin",
+      location: "Beyşehir Yolu, Selçuklu",
+      bedrooms: 4,
+      bathrooms: 2,
+      area: 180,
+      tags: ["Bahçeli", "Otopark"],
+      views: 187,
+      category: "student" as const,
+      distance: 4.2,
+      postedDate: new Date("2024-11-29"),
+    },
+    {
+      id: 13,
+      image: "https://images.unsplash.com/photo-1554995207-c18c203602cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 6200,
+      priceText: "6.200₺",
+      title: "Yeni Yapı 2+1 - Asansörlü",
+      location: "Çatalhüyük, Karatay",
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 80,
+      tags: ["Eşyalı", "Asansör"],
+      views: 356,
+      category: "student" as const,
+      distance: 3.0,
+      postedDate: new Date("2024-11-24"),
+    },
+    {
+      id: 14,
+      image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 9200,
+      priceText: "9.200₺",
+      title: "Lüks Özel Yurt - Havuzlu",
+      location: "Akademi, Selçuklu",
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 50,
+      tags: ["Özel Yurt", "Havuz"],
+      views: 812,
+      category: "private" as const,
+      distance: 0.5,
+      postedDate: new Date("2024-11-16"),
+    },
+    {
+      id: 15,
+      image: "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 5500,
+      priceText: "5.500₺",
+      title: "Merkezi Konum 1+1 - Market Yakın",
+      location: "Zafer, Meram",
+      bedrooms: 1,
+      bathrooms: 1,
+      area: 60,
+      tags: ["Eşyalı", "Doğalgaz"],
+      views: 445,
+      category: "student" as const,
+      distance: 2.0,
+      postedDate: new Date("2024-11-23"),
+    },
+    {
+      id: 16,
+      image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 4000,
+      priceText: "4.000₺",
+      title: "KYK Yurdu - Yeni Dönem Kontenjan",
+      location: "Selçuklu, Üniversite",
+      bedrooms: 4,
+      bathrooms: 2,
+      area: 115,
+      tags: ["KYK", "Çamaşırhane"],
+      views: 978,
+      category: "government" as const,
+      distance: 0.6,
+      postedDate: new Date("2024-11-05"),
+    },
+    {
+      id: 17,
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 7200,
+      priceText: "7.200₺",
+      title: "Butik Özel Yurt - Çalışma Odası",
+      location: "Bosna Hersek, Selçuklu",
+      bedrooms: 1,
+      bathrooms: 1,
+      area: 40,
+      tags: ["Özel Yurt", "Çalışma Odası"],
+      views: 534,
+      category: "private" as const,
+      distance: 1.1,
+      postedDate: new Date("2024-11-19"),
+    },
+    {
+      id: 18,
+      image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 10500,
+      priceText: "10.500₺",
+      title: "Dublex Daire - 3 Öğrenci İçin İdeal",
+      location: "Sille, Selçuklu",
+      bedrooms: 3,
+      bathrooms: 2,
+      area: 150,
+      tags: ["Eşyalı", "Teras"],
+      views: 267,
+      category: "student" as const,
+      distance: 5.0,
+      postedDate: new Date("2024-11-30"),
+    },
+    {
+      id: 19,
+      image: "https://images.unsplash.com/photo-1571055107559-3e67626fa8be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 6800,
+      priceText: "6.800₺",
+      title: "Özel Yurt - Spor Salonu Mevcut",
+      location: "Kampüs Karşısı, Selçuklu",
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 45,
+      tags: ["Özel Yurt", "Spor Salonu"],
+      views: 689,
+      category: "private" as const,
+      distance: 0.4,
+      postedDate: new Date("2024-11-14"),
+    },
+    {
+      id: 20,
+      image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 4500,
+      priceText: "4.500₺",
+      title: "Uygun Fiyatlı Stüdyo - Tek Kişi",
+      location: "Küçük Aymanas, Karatay",
+      bedrooms: 1,
+      bathrooms: 1,
+      area: 38,
+      tags: ["Eşyasız", "Ekonomik"],
+      views: 523,
+      category: "student" as const,
+      distance: 3.2,
+      postedDate: new Date("2024-11-21"),
+    },
+    {
+      id: 21,
+      image: "https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 3200,
+      priceText: "3.200₺",
+      title: "KYK Yurdu - Burs İmkanı",
+      location: "Meram, Üniversite",
+      bedrooms: 4,
+      bathrooms: 2,
+      area: 105,
+      tags: ["KYK", "Burs"],
+      views: 1024,
+      category: "government" as const,
+      distance: 1.3,
+      postedDate: new Date("2024-11-01"),
+    },
+    {
+      id: 22,
+      image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 7500,
+      priceText: "7.500₺",
+      title: "Rezidans Daire - Güvenlik 24 Saat",
+      location: "Kule Site, Selçuklu",
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 90,
+      tags: ["Eşyalı", "24 Saat Güvenlik"],
+      views: 378,
+      category: "student" as const,
+      distance: 1.7,
+      postedDate: new Date("2024-11-17"),
+    },
+    {
+      id: 23,
+      image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 8800,
+      priceText: "8.800₺",
+      title: "Premium Yurt - Tekli Oda Lüks",
+      location: "Akademi Mahallesi, Selçuklu",
+      bedrooms: 1,
+      bathrooms: 1,
+      area: 32,
+      tags: ["Özel Yurt", "Klima"],
+      views: 756,
+      category: "private" as const,
+      distance: 0.7,
+      postedDate: new Date("2024-11-11"),
+    },
+    {
+      id: 24,
+      image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      price: 5000,
+      priceText: "5.000₺",
+      title: "Geniş 1+1 - Öğrenci Arkadaş Arıyor",
+      location: "Yazır, Selçuklu",
+      bedrooms: 1,
+      bathrooms: 1,
+      area: 70,
+      tags: ["Eşyalı", "Paylaşımlı"],
+      views: 612,
+      category: "student" as const,
+      distance: 2.3,
+      postedDate: new Date("2024-11-13"),
+    },
   ]
 
   // Filter by category
@@ -130,8 +419,10 @@ export function HousingList() {
 
   // Sort listings
   const sortedListings = [...filteredListings].sort((a, b) => {
-    if (sortBy === "price") {
-      return priceOrder === "low-high" ? a.price - b.price : b.price - a.price
+    if (sortBy === "price-low") {
+      return a.price - b.price
+    } else if (sortBy === "price-high") {
+      return b.price - a.price
     } else if (sortBy === "distance") {
       return a.distance - b.distance
     } else if (sortBy === "newest") {
@@ -140,44 +431,64 @@ export function HousingList() {
     return 0
   })
 
+  // Pagination
+  const totalPages = Math.ceil(sortedListings.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const paginatedListings = sortedListings.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+
   const selectedCategoryData = categories.find(c => c.id === selectedCategory)
+  const hasActiveFilters = selectedCategory !== null || sortBy !== "price-low"
+
+  const clearFilters = () => {
+    setSelectedCategory(null)
+    setSortBy("price-low")
+    setCurrentPage(1)
+  }
+
+  const handleCategoryChange = (catId: string | null) => {
+    setSelectedCategory(catId)
+    setCurrentPage(1)
+  }
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
-        <div>
-          <h2 className="font-[Manrope] text-foreground mb-1 font-extrabold text-xl sm:text-2xl lg:text-[28px]">
-            Uygun Konaklama Seçenekleri
-          </h2>
-          <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-xs sm:text-sm">
-            {sortedListings.length} ilan bulundu
-          </p>
-        </div>
+      {/* Başlık Bölümü - Sidebar ile hizalı */}
+      <div className="min-h-[88px] sm:min-h-[96px] mb-6">
+        <h2 className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px] mb-4">
+          Konaklama Seçenekleri
+        </h2>
 
-        <div className="flex items-center gap-2 flex-wrap">
-          {/* Category Dropdown */}
+        {/* Filtre Satırı */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          {/* Kategori Dropdown */}
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="outline"
-                className="px-3 sm:px-4 py-2 bg-card text-foreground rounded-xl font-[Manrope] hover:bg-accent dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border flex items-center gap-2"
+                className={`h-9 px-3 rounded-lg font-[Manrope] transition-colors font-semibold text-xs border flex items-center gap-2
+                  ${selectedCategory !== null 
+                    ? "bg-primary/10 text-primary border-primary/30 hover:bg-primary/20" 
+                    : "bg-card text-foreground border-border hover:bg-accent dark:hover:bg-accent"
+                  }`}
               >
-                {selectedCategoryData ? selectedCategoryData.label : "Kategori Seç"}
-                <ChevronDown className="w-4 h-4" />
+                <Home className="w-4 h-4" />
+                <span>{selectedCategoryData ? selectedCategoryData.label : "Kategori"}</span>
+                <ChevronDown className="w-3 h-3" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56" onCloseAutoFocus={(e) => e.preventDefault()}>
+            <DropdownMenuContent align="start" className="w-48" onCloseAutoFocus={(e) => e.preventDefault()}>
               <DropdownMenuItem
-                onClick={() => setSelectedCategory(null)}
-                className={!selectedCategory ? 'bg-primary text-white' : ''}
+                onClick={() => handleCategoryChange(null)}
+                className={`font-[Manrope] cursor-pointer ${!selectedCategory ? 'bg-primary text-white' : ''}`}
               >
                 Tümü
               </DropdownMenuItem>
               {categories.map((category) => (
                 <DropdownMenuItem
                   key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={selectedCategory === category.id ? 'bg-primary text-white' : ''}
+                  onClick={() => handleCategoryChange(category.id)}
+                  className={`font-[Manrope] cursor-pointer ${selectedCategory === category.id ? 'bg-primary text-white' : ''}`}
                 >
                   {category.label}
                 </DropdownMenuItem>
@@ -185,81 +496,134 @@ export function HousingList() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Sort Dropdown */}
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button 
-                variant="outline"
-                className="px-3 sm:px-4 py-2 bg-card text-foreground rounded-xl font-[Manrope] hover:bg-accent dark:hover:bg-accent transition-colors shadow-sm font-bold text-xs sm:text-sm border border-border flex items-center gap-2"
-              >
-                {sortBy === "price" && `Fiyat: ${priceOrder === "low-high" ? "Düşük - Yüksek" : "Yüksek - Düşük"}`}
-                {sortBy === "distance" && "Mesafe"}
-                {sortBy === "newest" && "Yeni İlanlar"}
-                <ChevronDown className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56" onCloseAutoFocus={(e) => e.preventDefault()}>
-              <DropdownMenuItem
-                onClick={() => {
-                  setSortBy("price")
-                  setPriceOrder("low-high")
-                }}
-                className={sortBy === "price" && priceOrder === "low-high" ? 'bg-primary text-white' : ''}
-              >
-                Fiyat: Düşük - Yüksek
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setSortBy("price")
-                  setPriceOrder("high-low")
-                }}
-                className={sortBy === "price" && priceOrder === "high-low" ? 'bg-primary text-white' : ''}
-              >
-                Fiyat: Yüksek - Düşük
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setSortBy("distance")}
-                className={sortBy === "distance" ? 'bg-primary text-white' : ''}
-              >
-                Mesafe
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setSortBy("newest")}
-                className={sortBy === "newest" ? 'bg-primary text-white' : ''}
-              >
-                Yeni İlanlar
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          {(selectedCategory !== null || sortBy !== "price" || priceOrder !== "low-high") && (
-            <>
-              <Button
-                onClick={() => {
-                  setSelectedCategory(null)
-                  setSortBy("price")
-                  setPriceOrder("low-high")
-                }}
-                variant="outline"
-                size="sm"
-                className="font-[Manrope] font-bold text-xs text-foreground/60 dark:text-muted-foreground hover:text-primary"
-              >
-                <X className="w-3 h-3 mr-1" />
-                Temizle
-              </Button>
-              <Badge className="font-[Manrope] font-bold text-xs bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary">
-                {[selectedCategory !== null ? 1 : 0, sortBy !== "price" || priceOrder !== "low-high" ? 1 : 0].reduce((a, b) => a + b, 0)} aktif filtre
-              </Badge>
-            </>
+          {hasActiveFilters && (
+            <Button
+              onClick={clearFilters}
+              variant="ghost"
+              size="sm"
+              className="h-8 px-2 font-[Manrope] font-medium text-xs text-foreground/50 hover:text-primary hover:bg-transparent"
+            >
+              <X className="w-3 h-3 mr-1" />
+              Temizle
+            </Button>
           )}
+        </div>
+
+        {/* Sıralama Butonları */}
+        <div className="flex items-center gap-1 bg-accent p-1 rounded-xl border border-border">
+          <Button 
+            onClick={() => setSortBy("price-low")}
+            variant="ghost"
+            size="sm"
+            className={`h-8 px-3 rounded-lg font-[Manrope] transition-colors font-bold text-xs
+              ${sortBy === "price-low"
+                ? 'bg-primary text-white shadow-sm hover:bg-primary/90' 
+                : 'text-foreground/70 hover:text-foreground hover:bg-card/50'
+              }
+            `}
+          >
+            Ucuz
+          </Button>
+          <Button 
+            onClick={() => setSortBy("price-high")}
+            variant="ghost"
+            size="sm"
+            className={`h-8 px-3 rounded-lg font-[Manrope] transition-colors font-bold text-xs
+              ${sortBy === "price-high"
+                ? 'bg-primary text-white shadow-sm hover:bg-primary/90' 
+                : 'text-foreground/70 hover:text-foreground hover:bg-card/50'
+              }
+            `}
+          >
+            Pahalı
+          </Button>
+          <Button 
+            onClick={() => setSortBy("distance")}
+            variant="ghost"
+            size="sm"
+            className={`h-8 px-3 rounded-lg font-[Manrope] transition-colors font-bold text-xs
+              ${sortBy === "distance"
+                ? 'bg-primary text-white shadow-sm hover:bg-primary/90' 
+                : 'text-foreground/70 hover:text-foreground hover:bg-card/50'
+              }
+            `}
+          >
+            Yakın
+          </Button>
+          <Button 
+            onClick={() => setSortBy("newest")}
+            variant="ghost"
+            size="sm"
+            className={`h-8 px-3 rounded-lg font-[Manrope] transition-colors font-bold text-xs
+              ${sortBy === "newest"
+                ? 'bg-primary text-white shadow-sm hover:bg-primary/90' 
+                : 'text-foreground/70 hover:text-foreground hover:bg-card/50'
+              }
+            `}
+          >
+            Yeni
+          </Button>
+        </div>
         </div>
       </div>
 
-      {sortedListings.length > 0 ? (
-        <div className="space-y-4 sm:space-y-6">
-          {sortedListings.map((listing) => (
-            <HousingCard key={listing.id} {...listing} price={listing.priceText} />
-          ))}
-        </div>
+      {paginatedListings.length > 0 ? (
+        <>
+          <div className="space-y-4 sm:space-y-5">
+            {paginatedListings.map((listing) => (
+              <HousingCard key={listing.id} {...listing} price={listing.priceText} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-10">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Button
+                    key={page}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setCurrentPage(page)}
+                    className={`h-9 w-9 rounded-lg font-[Manrope] font-bold text-sm
+                      ${currentPage === page
+                        ? 'bg-primary text-white hover:bg-primary/90'
+                        : 'text-foreground/70 hover:text-foreground hover:bg-accent'
+                      }
+                    `}
+                  >
+                    {page}
+                  </Button>
+                ))}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+          )}
+
+          {/* Sayfa Bilgisi */}
+          <p className="text-center mt-4 font-[Manrope] text-muted-foreground text-sm">
+            Toplam {sortedListings.length} ilan içinden {startIndex + 1}-{Math.min(startIndex + ITEMS_PER_PAGE, sortedListings.length)} arası gösteriliyor
+          </p>
+        </>
       ) : (
         <Empty className="py-12 sm:py-16">
           <EmptyHeader>
@@ -275,11 +639,7 @@ export function HousingList() {
           </EmptyHeader>
           <EmptyContent>
             <Button
-              onClick={() => {
-                setSelectedCategory(null)
-                setSortBy("price")
-                setPriceOrder("low-high")
-              }}
+              onClick={clearFilters}
               variant="outline"
               className="font-[Manrope] font-bold"
             >

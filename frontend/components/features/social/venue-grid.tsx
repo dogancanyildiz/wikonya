@@ -385,13 +385,14 @@ export function VenueGrid() {
 
   return (
     <div>
-      {/* Başlık */}
-      <h2 className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px] mb-6">
-        Tüm Mekanlar
-      </h2>
+      {/* Başlık Bölümü - Sidebar ile hizalı */}
+      <div className="min-h-[88px] sm:min-h-[96px] mb-6">
+        <h2 className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px] mb-4">
+          Tüm Mekanlar
+        </h2>
 
-      {/* Filtre Satırı */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
+        {/* Filtre Satırı */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           {/* Kategori Dropdown */}
           <DropdownMenu>
@@ -518,6 +519,7 @@ export function VenueGrid() {
             </Button>
           </div>
         )}
+        </div>
       </div>
 
       {viewMode === "map" ? (
