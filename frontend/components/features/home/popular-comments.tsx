@@ -1,9 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThumbsUp, MessageCircle, Lightbulb } from "lucide-react"
 import Link from "next/link"
+import { useApp } from "@/contexts/app-context"
 
 interface PopularComment {
   id: number
@@ -18,6 +20,8 @@ interface PopularComment {
   logicalVotes: number
   comments: number
   timeAgo: string
+  isLiked?: boolean
+  isMakesSense?: boolean
 }
 
 interface PopularCommentsProps {
@@ -25,8 +29,8 @@ interface PopularCommentsProps {
 }
 
 export function PopularComments({ comments }: PopularCommentsProps) {
-  // Mock data - gerçek uygulamada API'den gelecek
-  const mockComments: PopularComment[] = comments || [
+  const { state } = useApp()
+  const [localComments, setLocalComments] = useState<PopularComment[]>(comments || [
     {
       id: 1,
       author: { name: "Ayşe Yılmaz", initials: "AY" },
@@ -37,6 +41,8 @@ export function PopularComments({ comments }: PopularCommentsProps) {
       logicalVotes: 35,
       comments: 8,
       timeAgo: "2 saat önce",
+      isLiked: false,
+      isMakesSense: false,
     },
     {
       id: 2,
@@ -48,6 +54,8 @@ export function PopularComments({ comments }: PopularCommentsProps) {
       logicalVotes: 20,
       comments: 5,
       timeAgo: "5 saat önce",
+      isLiked: false,
+      isMakesSense: false,
     },
     {
       id: 3,
@@ -59,8 +67,63 @@ export function PopularComments({ comments }: PopularCommentsProps) {
       logicalVotes: 28,
       comments: 12,
       timeAgo: "1 gün önce",
+      isLiked: false,
+      isMakesSense: false,
     },
-  ]
+  ])
+  const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
+
+  const handleLike = (commentId: number, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!state.user) return
+
+    const comment = localComments.find(c => c.id === commentId)
+    if (!comment) return
+
+    const isLiked = comment.isLiked || false
+    const newIsLiked = !isLiked
+
+    if (newIsLiked) {
+      const animationKey = `like-${commentId}`
+      setAnimations({ ...animations, [animationKey]: true })
+      setTimeout(() => {
+        setAnimations({ ...animations, [animationKey]: false })
+      }, 600)
+    }
+
+    setLocalComments(localComments.map(c => 
+      c.id === commentId 
+        ? { ...c, upvotes: newIsLiked ? c.upvotes + 1 : c.upvotes - 1, isLiked: newIsLiked }
+        : c
+    ))
+  }
+
+  const handleMakesSense = (commentId: number, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!state.user) return
+
+    const comment = localComments.find(c => c.id === commentId)
+    if (!comment) return
+
+    const isMakesSense = comment.isMakesSense || false
+    const newIsMakesSense = !isMakesSense
+
+    if (newIsMakesSense) {
+      const animationKey = `logical-${commentId}`
+      setAnimations({ ...animations, [animationKey]: true })
+      setTimeout(() => {
+        setAnimations({ ...animations, [animationKey]: false })
+      }, 600)
+    }
+
+    setLocalComments(localComments.map(c => 
+      c.id === commentId 
+        ? { ...c, logicalVotes: newIsMakesSense ? c.logicalVotes + 1 : c.logicalVotes - 1, isMakesSense: newIsMakesSense }
+        : c
+    ))
+  }
 
   return (
     <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
@@ -72,7 +135,7 @@ export function PopularComments({ comments }: PopularCommentsProps) {
           </h2>
         </div>
         <div className="space-y-4">
-          {mockComments.map((comment) => (
+          {localComments.map((comment) => (
             <Link
               key={comment.id}
               href={`/topic/${comment.topicId}#comment-${comment.id}`}
@@ -99,28 +162,48 @@ export function PopularComments({ comments }: PopularCommentsProps) {
                   <p className="font-[Manrope] text-xs text-primary font-semibold mb-2">
                     → {comment.topicTitle}
                   </p>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1 text-primary">
-                      <ThumbsUp className="w-3 h-3" />
-                      <span className="font-[Manrope] font-semibold text-xs">
+                  <div className="flex items-center gap-3 pt-2 border-t border-border">
+                    <button
+                      onClick={(e) => handleLike(comment.id, e)}
+                      className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                        comment.isLiked ? 'bg-primary/10 dark:bg-primary/20' : ''
+                      }`}
+                    >
+                      <ThumbsUp className={`w-4 h-4 text-primary ${comment.isLiked ? 'fill-primary' : ''}`} />
+                      <span className="font-[Manrope] font-bold text-sm text-foreground">
                         {comment.upvotes}
                       </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-primary">
-                      <Lightbulb className="w-3 h-3" />
-                      <span className="font-[Manrope] font-semibold text-xs">
+                      {animations[`like-${comment.id}`] && (
+                        <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                          +1
+                        </span>
+                      )}
+                    </button>
+                    <button
+                      onClick={(e) => handleMakesSense(comment.id, e)}
+                      className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                        comment.isMakesSense ? 'bg-primary/10 dark:bg-primary/20' : ''
+                      }`}
+                    >
+                      <Lightbulb className={`w-4 h-4 text-primary ${comment.isMakesSense ? 'fill-primary' : ''}`} />
+                      <span className="font-[Manrope] font-bold text-sm text-foreground">
                         {comment.logicalVotes}
                       </span>
-                      <span className="font-[Manrope] font-medium text-[10px] text-foreground/60 dark:text-muted-foreground hidden sm:inline">
+                      <span className="font-[Manrope] font-medium text-xs text-foreground/60 dark:text-muted-foreground hidden sm:inline">
                         Mantıklı
                       </span>
-                    </div>
-                      <div className="flex items-center gap-1 text-primary">
-                        <MessageCircle className="w-3 h-3" />
-                        <span className="font-[Manrope] font-semibold text-xs">
-                        {comment.comments}
+                      {animations[`logical-${comment.id}`] && (
+                        <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                          +1
                         </span>
-                      </div>
+                      )}
+                    </button>
+                    <div className="flex items-center gap-2 px-3 py-2 bg-accent rounded-lg">
+                      <MessageCircle className="w-4 h-4 text-primary" />
+                      <span className="font-[Manrope] font-bold text-sm text-foreground">
+                        {comment.comments}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

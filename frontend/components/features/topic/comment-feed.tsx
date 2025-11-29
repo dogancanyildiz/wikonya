@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowUp, ArrowDown, Reply, Flag, Brain, AlertCircle } from "lucide-react"
+import { ThumbsUp, MessageCircle, Flag, Lightbulb, AlertCircle } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -30,6 +30,7 @@ export function CommentFeed() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [sortOrder] = useState<"newest" | "popular" | "logical">("newest")
   const [replyingTo, setReplyingTo] = useState<{ id: number; author: string } | null>(null)
+  const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
   const [comments, setComments] = useState<Comment[]>([
     {
       id: 1,
@@ -90,7 +91,10 @@ export function CommentFeed() {
   ])
 
   const handleVote = (commentId: number, voteType: 'up' | 'down') => {
-    if (!state.user) return
+    if (!state.user) {
+      setCommentError("Oy vermek için giriş yapmalısınız.")
+      return
+    }
     
     setComments(comments.map(comment => {
       if (comment.id === commentId) {
@@ -99,6 +103,12 @@ export function CommentFeed() {
             // Beğeniyi geri al
             return { ...comment, upvotes: comment.upvotes - 1, isUpvoted: false }
           } else {
+            // Beğeni ver - animasyon göster
+            const animationKey = `like-${commentId}`
+            setAnimations({ ...animations, [animationKey]: true })
+            setTimeout(() => {
+              setAnimations({ ...animations, [animationKey]: false })
+            }, 600)
             // Beğeni ver
             // Not: Oy veren kullanıcı coin kazanmaz (sadece beğeniyor)
             // Yorum sahibi beğeni aldığında +1 coin kazanır (backend'de yapılacak)
@@ -150,6 +160,12 @@ export function CommentFeed() {
       isLogical: false,
     }
 
+    const animationKey = `comment-${parentCommentId}`
+    setAnimations({ ...animations, [animationKey]: true })
+    setTimeout(() => {
+      setAnimations({ ...animations, [animationKey]: false })
+    }, 600)
+
     // Parent comment'in replies sayısını artır
     setComments(comments.map(c => 
       c.id === parentCommentId 
@@ -177,6 +193,11 @@ export function CommentFeed() {
   }
 
   const handleLogicalVote = (commentId: number) => {
+    if (!state.user) {
+      setCommentError("Oy vermek için giriş yapmalısınız.")
+      return
+    }
+
     setComments(comments.map(comment => {
       if (comment.id === commentId) {
         const currentVotes = comment.logicalVotes || 0
@@ -185,6 +206,12 @@ export function CommentFeed() {
         } else {
           // Coin kazanma (sadece ilk kez işaretlendiğinde)
           rewardCoins("comment_logical", { commentId })
+          // Animasyon göster
+          const animationKey = `logical-${commentId}`
+          setAnimations({ ...animations, [animationKey]: true })
+          setTimeout(() => {
+            setAnimations({ ...animations, [animationKey]: false })
+          }, 600)
           return { ...comment, logicalVotes: currentVotes + 1, isLogical: true }
         }
       }
@@ -237,41 +264,11 @@ export function CommentFeed() {
           >
             <CardContent className="p-4 sm:p-6">
               <div className="flex gap-3 sm:gap-4">
-                {/* Vote Section */}
-                <div className="flex flex-col items-center gap-2">
-                  <button
-                    onClick={() => handleVote(comment.id, 'up')}
-                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
-                      comment.isUpvoted
-                        ? 'bg-primary text-white'
-                        : 'hover:bg-accent dark:hover:bg-accent text-foreground'
-                    }`}
-                    aria-label={comment.isUpvoted ? "Beğenmeyi geri al" : "Beğen"}
-                    aria-pressed={comment.isUpvoted}
-                  >
-                    <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5" fill={comment.isUpvoted ? 'white' : 'none'} aria-hidden="true" />
-                  </button>
-                  <span className="font-[Manrope] text-foreground font-bold text-base sm:text-lg">
-                    {comment.upvotes - comment.downvotes}
-                  </span>
-                  <button
-                    onClick={() => handleVote(comment.id, 'down')}
-                    className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
-                      comment.isDownvoted
-                        ? 'bg-primary text-white'
-                        : 'hover:bg-accent dark:hover:bg-accent text-foreground'
-                    }`}
-                    aria-label={comment.isDownvoted ? "Beğenmemeyi geri al" : "Beğenme"}
-                    aria-pressed={comment.isDownvoted}
-                  >
-                    <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5" fill={comment.isDownvoted ? 'white' : 'none'} aria-hidden="true" />
-                  </button>
-                </div>
 
                 {/* Comment Content */}
                 <div className="flex-1">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-[#f2f4f3] dark:border-border">
+                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-border">
                       <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold text-[10px] sm:text-xs">
                         {comment.authorInitials}
                       </AvatarFallback>
@@ -291,36 +288,64 @@ export function CommentFeed() {
                   </p>
 
                   {/* Actions */}
-                  <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+                  <div className="flex items-center gap-3 sm:gap-4 flex-wrap pt-3 border-t border-border">
+                    <button 
+                      onClick={() => handleVote(comment.id, 'up')}
+                      className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                        comment.isUpvoted ? 'bg-primary/10 dark:bg-primary/20' : ''
+                      }`}
+                      aria-label={comment.isUpvoted ? "Beğenmeyi geri al" : "Beğen"}
+                      aria-pressed={comment.isUpvoted}
+                    >
+                      <ThumbsUp className={`w-4 h-4 text-primary ${comment.isUpvoted ? 'fill-primary' : ''}`} />
+                      <span className="font-[Manrope] font-bold text-sm text-foreground">
+                        {comment.upvotes - comment.downvotes}
+                      </span>
+                      {animations[`like-${comment.id}`] && (
+                        <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                          +1
+                        </span>
+                      )}
+                    </button>
                     <button 
                       onClick={() => handleLogicalVote(comment.id)}
-                      className={`flex items-center gap-2 transition-colors font-[Manrope] font-semibold text-xs sm:text-sm px-3 py-1.5 rounded-lg ${
-                        comment.isLogical
-                          ? 'bg-primary text-white hover:bg-primary/90'
-                          : 'text-foreground/60 dark:text-muted-foreground hover:text-primary hover:bg-accent dark:hover:bg-accent'
+                      className={`relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                        comment.isLogical ? 'bg-primary/10 dark:bg-primary/20' : ''
                       }`}
                       aria-label={comment.isLogical ? "Mantıklı yorum işaretini kaldır" : "Mantıklı yorum olarak işaretle"}
                       aria-pressed={comment.isLogical}
                     >
-                      <Brain className={`w-3 h-3 sm:w-4 sm:h-4 ${comment.isLogical ? 'fill-white' : ''}`} aria-hidden="true" />
-                      <span>Mantıklı Yorum</span>
-                      {(comment.logicalVotes || 0) > 0 && (
-                        <span className="ml-1">({comment.logicalVotes || 0})</span>
+                      <Lightbulb className={`w-4 h-4 text-primary ${comment.isLogical ? 'fill-primary' : ''}`} />
+                      <span className="font-[Manrope] font-bold text-sm text-foreground">
+                        {comment.logicalVotes || 0}
+                      </span>
+                      <span className="font-[Manrope] font-medium text-xs text-foreground/60 dark:text-muted-foreground hidden sm:inline">
+                        Mantıklı
+                      </span>
+                      {animations[`logical-${comment.id}`] && (
+                        <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                          +1
+                        </span>
                       )}
                     </button>
                     <button 
                       onClick={() => setReplyingTo({ id: comment.id, author: comment.author })}
-                      className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors"
-                      aria-label={`${comment.replies} yanıt`}
+                      className="relative flex items-center gap-2 px-3 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors"
+                      aria-label={`${comment.replies} yorum`}
                     >
-                      <Reply className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
-                      <span className="font-[Manrope] font-semibold text-xs sm:text-sm">
-                        {comment.replies} Yanıt
+                      <MessageCircle className="w-4 h-4 text-primary" />
+                      <span className="font-[Manrope] font-bold text-sm text-foreground">
+                        {comment.replies}
                       </span>
+                      {animations[`comment-${comment.id}`] && (
+                        <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                          +1
+                        </span>
+                      )}
                     </button>
                     <button 
                       onClick={() => handleFlagComment(comment.id)}
-                      className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors"
+                      className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground hover:text-primary transition-colors ml-auto"
                       aria-label="Yorumu bildir"
                     >
                       <Flag className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
