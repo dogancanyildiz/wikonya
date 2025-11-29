@@ -1,16 +1,16 @@
 "use client"
 
-import { ArrowUp, ArrowDown, Reply, Flag, Brain } from "lucide-react"
+import { ArrowUp, ArrowDown, Reply, Flag, Brain, AlertCircle } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
 import { useApp } from "@/contexts/app-context"
 import { canPerformAction, performAction, getRemainingActions } from "@/lib/gamification/rate-limiter"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
+import { toast } from "sonner"
 import { CommentReplyDialog } from "./comment-reply-dialog"
 
 import { Comment as CommentType } from "@/lib/types"
@@ -427,6 +427,10 @@ export function CommentFeed() {
                   const result = performAction(state.user, "comment")
                   if (!result.success) {
                     setCommentError(result.reason || "Yorum gönderilemedi")
+                    toast.error("⚠️ Rate Limit Aşıldı", {
+                      description: result.reason || "Yorum gönderilemedi",
+                      duration: 5000,
+                    })
                     setIsSubmitting(false)
                     return
                   }
