@@ -926,6 +926,31 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-4 sm:space-y-6">
+          {/* Related Questions */}
+          <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
+            <CardHeader>
+              <CardTitle className="font-[Manrope] text-foreground font-bold text-lg">
+                İlgili Sorular
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {faq.relatedQuestions.map((related) => (
+                <Link
+                  key={related.id}
+                  href={`/discovery/faq/${related.id}`}
+                  className="block p-3 bg-accent rounded-xl hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors group"
+                >
+                  <p className="font-[Manrope] font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
+                    {related.question}
+                  </p>
+                </Link>
+              ))}
+            </CardContent>
+          </Card>
 
           {/* Comments Section */}
           {showComments && (
