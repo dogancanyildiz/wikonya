@@ -971,6 +971,45 @@ export default function SettingsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Disconnect Account Confirmation Modal */}
+      <Dialog open={isDisconnectModalOpen} onOpenChange={setIsDisconnectModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="font-[Manrope] font-bold">Bağlantıyı Kes</DialogTitle>
+            <DialogDescription className="font-[Manrope]">
+              Bu hesabın bağlantısını kesmek istediğinizden emin misiniz?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription className="font-[Manrope]">
+                Bağlantı kesildikten sonra bu hesap ile giriş yapamayacaksınız. İsterseniz daha sonra tekrar bağlayabilirsiniz.
+              </AlertDescription>
+            </Alert>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDisconnectModalOpen(false)
+                setDisconnectAccountId(null)
+              }}
+              className="font-[Manrope]"
+            >
+              İptal
+            </Button>
+            <Button
+              onClick={confirmDisconnect}
+              variant="destructive"
+              className="font-[Manrope] font-bold"
+            >
+              Evet, Bağlantıyı Kes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
