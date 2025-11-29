@@ -147,6 +147,9 @@ export const APP_CONFIG = {
   version: "0.1.0",
 } as const
 
+// Default Avatar
+export const DEFAULT_AVATAR_URL = "https://media.licdn.com/dms/image/v2/D4D03AQEY4vuxF4orog/profile-displayphoto-scale_200_200/B4DZio9EDTHYAY-/0/1755181238136?e=1766016000&v=beta&t=jxL9zX1LRCK0VnDRBhBi1min-Hoe4bREKGmMpqy3VbA"
+
 // User Roles & Gamification
 export const USER_ROLES = {
   yeni_gelen: {

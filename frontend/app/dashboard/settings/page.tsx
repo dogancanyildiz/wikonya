@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { DEFAULT_AVATAR_URL } from "@/lib/constants"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { useApp } from "@/contexts/app-context"
@@ -148,6 +149,7 @@ export default function SettingsPage() {
           {/* Avatar */}
           <div className="flex items-center gap-4">
             <Avatar className="w-20 h-20">
+              <AvatarImage src={DEFAULT_AVATAR_URL} alt={user.name} />
               <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-bold text-2xl">
                 {user.initials}
               </AvatarFallback>

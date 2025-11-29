@@ -1,11 +1,11 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, MapPin, Award, Gift, MessageSquare, ThumbsUp, BookOpen, Trophy } from "lucide-react"
-import { ROLE_DISPLAY_NAMES } from "@/lib/constants"
+import { ROLE_DISPLAY_NAMES, DEFAULT_AVATAR_URL } from "@/lib/constants"
 
 export function PublicUserProfile() {
   const params = useParams()
@@ -57,6 +57,7 @@ export function PublicUserProfile() {
             <CardContent className="p-4 sm:p-6 lg:p-8">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
                 <Avatar className="w-24 h-24 sm:w-32 sm:h-32 border-4 border-border">
+                  <AvatarImage src={DEFAULT_AVATAR_URL} alt={user.name} />
                   <AvatarFallback className="bg-primary text-white font-[Manrope] font-extrabold text-3xl sm:text-4xl">
                     {user.initials}
                   </AvatarFallback>

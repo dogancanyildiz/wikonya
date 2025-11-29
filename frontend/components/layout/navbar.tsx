@@ -6,7 +6,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CoinIcon } from "@/components/common/icons/coin-icon"
 import { ModeToggle } from "@/components/layout/mode-toggle"
 import { useApp } from "@/contexts/app-context"
@@ -29,7 +29,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ROLE_DISPLAY_NAMES } from "@/lib/constants"
+import { ROLE_DISPLAY_NAMES, DEFAULT_AVATAR_URL } from "@/lib/constants"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
 
 // Simple time ago formatter (date-fns yerine)
@@ -371,6 +371,7 @@ export function Navbar() {
                       aria-label="Kullanıcı menüsü"
                     >
                       <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border-2 border-border">
+                        <AvatarImage src={DEFAULT_AVATAR_URL} alt={user.name} />
                         <AvatarFallback 
                           className="bg-primary text-primary-foreground font-[Manrope] font-bold"
                         >

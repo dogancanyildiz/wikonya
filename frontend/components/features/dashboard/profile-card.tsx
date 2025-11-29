@@ -1,11 +1,11 @@
 "use client"
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Calendar, MapPin, Award, Gift } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { useApp } from "@/contexts/app-context"
 import { calculateUserXP, getCoinsNeededForNextRole } from "@/lib/gamification/role-system"
-import { ROLE_DISPLAY_NAMES, USER_ROLES } from "@/lib/constants"
+import { ROLE_DISPLAY_NAMES, USER_ROLES, DEFAULT_AVATAR_URL } from "@/lib/constants"
 
 export function ProfileCard() {
   const { state } = useApp()
@@ -38,6 +38,7 @@ export function ProfileCard() {
       <CardContent className="p-6 sm:p-10 flex flex-col flex-1">
         <div className="flex items-start gap-4 sm:gap-6 flex-1">
           <Avatar className="w-20 h-20 sm:w-24 sm:h-24 border-4 border-border">
+            <AvatarImage src={DEFAULT_AVATAR_URL} alt={user.name} />
             <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-extrabold text-2xl sm:text-3xl lg:text-[32px]">
               {user.initials}
             </AvatarFallback>
