@@ -9,8 +9,7 @@ import { SocialResponsibilityCard } from "@/components/features/dashboard/social
 const ActivityFeed = dynamic(
   () => import("@/components/features/dashboard/activity-feed").then((mod) => ({ default: mod.ActivityFeed })),
   { 
-    loading: () => <div className="h-64 animate-pulse bg-muted rounded-xl" />,
-    ssr: false 
+    loading: () => <div className="h-64 animate-pulse bg-muted rounded-xl" />
   }
 )
 
