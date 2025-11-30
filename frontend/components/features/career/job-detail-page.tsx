@@ -22,6 +22,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Upload, X } from "lucide-react"
 
 export function JobDetailPage() {
   const params = useParams()
@@ -103,6 +108,10 @@ export function JobDetailPage() {
     }
   }
 
+  const [showApplicationForm, setShowApplicationForm] = useState(false)
+  const [coverLetter, setCoverLetter] = useState("")
+  const [resumeFile, setResumeFile] = useState<File | null>(null)
+
   const handleApply = async () => {
     if (typeof window === "undefined") return
     
@@ -114,9 +123,9 @@ export function JobDetailPage() {
         setIsApplied(false)
         
         // Remove from localStorage
-        const applications = JSON.parse(localStorage.getItem("job_applications") || "{}")
-        delete applications[jobId]
-        localStorage.setItem("job_applications", JSON.stringify(applications))
+        const applications = JSON.parse(localStorage.getItem("job_applications") || "[]")
+        const updated = applications.filter((app: any) => app.jobId !== jobId)
+        localStorage.setItem("job_applications", JSON.stringify(updated))
         
         toast.success("Başvuru iptal edildi", {
           description: `${job.role} pozisyonuna yaptığınız başvuru iptal edildi.`,
@@ -131,33 +140,47 @@ export function JobDetailPage() {
         setIsSubmitting(false)
       }
     } else {
-      // Başvuru yap
-      setIsSubmitting(true)
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        setIsApplied(true)
-        
-        // Save to localStorage
-        const applications = JSON.parse(localStorage.getItem("job_applications") || "{}")
-        applications[jobId] = {
-          role: job.role,
-          company: job.company,
-          appliedAt: new Date().toISOString(),
-        }
-        localStorage.setItem("job_applications", JSON.stringify(applications))
-        
-        toast.success("Başvuru başarılı", {
-          description: `${job.role} pozisyonuna başvurunuz başarıyla gönderildi.`,
-          duration: 3000,
-        })
-      } catch {
-        toast.error("Hata", {
-          description: "Başvuru gönderilirken bir hata oluştu.",
-          duration: 3000,
-        })
-      } finally {
-        setIsSubmitting(false)
+      // Show application form
+      setShowApplicationForm(true)
+    }
+  }
+
+  const handleSubmitApplication = async () => {
+    setIsSubmitting(true)
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      setIsApplied(true)
+      setShowApplicationForm(false)
+      
+      // Save to localStorage
+      const applications = JSON.parse(localStorage.getItem("job_applications") || "[]")
+      const newApplication = {
+        id: Date.now(),
+        jobId,
+        jobTitle: job.role,
+        company: job.company,
+        location: job.location,
+        appliedDate: new Date().toISOString(),
+        status: "pending" as const,
+        notes: coverLetter || undefined,
       }
+      applications.unshift(newApplication)
+      localStorage.setItem("job_applications", JSON.stringify(applications))
+      
+      toast.success("Başvuru başarılı", {
+        description: `${job.role} pozisyonuna başvurunuz başarıyla gönderildi.`,
+        duration: 3000,
+      })
+      
+      setCoverLetter("")
+      setResumeFile(null)
+    } catch {
+      toast.error("Hata", {
+        description: "Başvuru gönderilirken bir hata oluştu.",
+        duration: 3000,
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -455,6 +478,111 @@ export function JobDetailPage() {
           </Card>
         </div>
       </div>
+
+      {/* Application Form Dialog */}
+      <Dialog open={showApplicationForm} onOpenChange={setShowApplicationForm}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-[Manrope] font-bold text-xl">
+              Başvuru Formu
+            </DialogTitle>
+            <DialogDescription className="font-[Manrope]">
+              {job.role} pozisyonu için başvurunuzu tamamlayın
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            {/* Resume Upload */}
+            <div className="space-y-2">
+              <Label className="font-[Manrope] font-bold">Özgeçmiş (CV) *</Label>
+              <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                {resumeFile ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-center gap-2">
+                      <Upload className="w-5 h-5 text-primary" />
+                      <span className="font-[Manrope] font-semibold">{resumeFile.name}</span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setResumeFile(null)}
+                        className="h-6 w-6 p-0"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <p className="font-[Manrope] text-xs text-muted-foreground">
+                      {(resumeFile.size / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <Label htmlFor="resume" className="cursor-pointer">
+                      <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                      <span className="font-[Manrope] font-semibold text-primary hover:underline">
+                        CV Yükle
+                      </span>
+                      <span className="font-[Manrope] text-sm text-muted-foreground block mt-1">
+                        PDF, DOC, DOCX (Max 10MB)
+                      </span>
+                    </Label>
+                    <Input
+                      id="resume"
+                      type="file"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (file && file.size <= 10 * 1024 * 1024) {
+                          setResumeFile(file)
+                        } else {
+                          toast.error("Dosya boyutu 10MB'dan küçük olmalıdır")
+                        }
+                      }}
+                      accept=".pdf,.doc,.docx"
+                      className="hidden"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Cover Letter */}
+            <div className="space-y-2">
+              <Label htmlFor="coverLetter" className="font-[Manrope] font-bold">
+                Ön Yazı (Opsiyonel)
+              </Label>
+              <Textarea
+                id="coverLetter"
+                value={coverLetter}
+                onChange={(e) => setCoverLetter(e.target.value)}
+                placeholder="Kendiniz hakkında kısa bir ön yazı yazın..."
+                className="font-[Manrope] min-h-[150px]"
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowApplicationForm(false)
+                setCoverLetter("")
+                setResumeFile(null)
+              }}
+              disabled={isSubmitting}
+              className="font-[Manrope]"
+            >
+              İptal
+            </Button>
+            <Button
+              onClick={handleSubmitApplication}
+              disabled={isSubmitting || !resumeFile}
+              className="font-[Manrope] font-bold"
+            >
+              {isSubmitting ? "Gönderiliyor..." : "Başvuruyu Gönder"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, Save, Loader2 } from "lucide-react"
+import { AlertCircle, Save, Loader2, Users, Shield, Ban, Search, Filter } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { toast } from "sonner"
 import { COIN_MATRIX } from "@/lib/constants"
 import { getConversionConfig } from "@/lib/constants/conversion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -82,14 +86,24 @@ export default function AdminPage() {
       </div>
 
       <Tabs defaultValue="dashboard" className="w-full">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 font-[Manrope] mb-4 sm:mb-6 text-xs sm:text-sm gap-2 sm:gap-0">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 font-[Manrope] mb-4 sm:mb-6 text-xs sm:text-sm gap-2 sm:gap-0">
           <TabsTrigger value="dashboard" className="w-full sm:w-auto">Dashboard</TabsTrigger>
-          <TabsTrigger value="conversion" className="w-full sm:w-auto">Dönüşüm Oranı</TabsTrigger>
+          <TabsTrigger value="users" className="w-full sm:w-auto">Kullanıcılar</TabsTrigger>
+          <TabsTrigger value="content" className="w-full sm:w-auto">İçerik</TabsTrigger>
+          <TabsTrigger value="conversion" className="w-full sm:w-auto">Dönüşüm</TabsTrigger>
           <TabsTrigger value="coin-matrix" className="w-full sm:w-auto">Coin Matrisi</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
           <AdminDashboard />
+        </TabsContent>
+
+        <TabsContent value="users">
+          <UserManagement />
+        </TabsContent>
+
+        <TabsContent value="content">
+          <ContentManagement />
         </TabsContent>
 
         <TabsContent value="conversion">
@@ -290,6 +304,219 @@ export default function AdminPage() {
           </Card>
         </TabsContent>
       </Tabs>
+    </div>
+  )
+}
+
+// User Management Component
+function UserManagement() {
+  const [users, setUsers] = useState<any[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [roleFilter, setRoleFilter] = useState("all")
+
+  useEffect(() => {
+    // Mock users - gerçek uygulamada API'den gelecek
+    setUsers([
+      { id: 1, name: "Ahmet Yılmaz", email: "ahmet@example.com", role: "gezgin", coins: 3500, joinedAt: "2024-01-15", status: "active" },
+      { id: 2, name: "Zeynep Kaya", email: "zeynep@example.com", role: "seyyah", coins: 8500, joinedAt: "2023-12-20", status: "active" },
+      { id: 3, name: "Mehmet Demir", email: "mehmet@example.com", role: "yeni_gelen", coins: 250, joinedAt: "2024-11-10", status: "active" },
+      { id: 4, name: "Ayşe Şahin", email: "ayse@example.com", role: "kasif_meraklisi", coins: 15000, joinedAt: "2023-08-05", status: "active" },
+      { id: 5, name: "Can Özkan", email: "can@example.com", role: "konya_bilgesi", coins: 55000, joinedAt: "2023-05-12", status: "active" },
+    ])
+  }, [])
+
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = !searchQuery || 
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesRole = roleFilter === "all" || user.role === roleFilter
+    return matchesSearch && matchesRole
+  })
+
+  const handleRoleChange = (userId: number, newRole: string) => {
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u))
+    toast.success("Kullanıcı rolü güncellendi")
+  }
+
+  const handleBanUser = (userId: number) => {
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: "banned" } : u))
+    toast.success("Kullanıcı yasaklandı")
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-[Manrope] text-foreground font-bold text-xl sm:text-2xl">
+          Kullanıcı Yönetimi
+        </CardTitle>
+        <CardDescription className="font-[Manrope]">
+          Kullanıcıları görüntüleyin, rollerini değiştirin ve yönetin
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Filters */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Kullanıcı ara..."
+              className="pl-10 font-[Manrope]"
+            />
+          </div>
+          <Select value={roleFilter} onValueChange={setRoleFilter}>
+            <SelectTrigger className="w-full sm:w-[180px] font-[Manrope]">
+              <SelectValue placeholder="Rol Filtrele" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tüm Roller</SelectItem>
+              <SelectItem value="yeni_gelen">Yeni Gelen</SelectItem>
+              <SelectItem value="seyyah">Seyyah</SelectItem>
+              <SelectItem value="gezgin">Gezgin</SelectItem>
+              <SelectItem value="kasif_meraklisi">Kaşif Meraklısı</SelectItem>
+              <SelectItem value="konya_bilgesi">Konya Bilgesi</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Users List */}
+        <div className="space-y-3">
+          {filteredUsers.map((user) => (
+            <Card key={user.id} className="bg-card border border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3 flex-1">
+                    <Avatar>
+                      <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold">
+                        {user.name.split(" ").map(n => n[0]).join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-[Manrope] font-bold text-sm text-foreground truncate">
+                        {user.name}
+                      </p>
+                      <p className="font-[Manrope] text-xs text-muted-foreground truncate">
+                        {user.email}
+                      </p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="secondary" className="font-[Manrope] text-xs">
+                          {user.role}
+                        </Badge>
+                        <span className="font-[Manrope] text-xs text-muted-foreground">
+                          {user.coins.toLocaleString()} coin
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Select
+                      value={user.role}
+                      onValueChange={(newRole) => handleRoleChange(user.id, newRole)}
+                    >
+                      <SelectTrigger className="w-[150px] font-[Manrope] text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="yeni_gelen">Yeni Gelen</SelectItem>
+                        <SelectItem value="seyyah">Seyyah</SelectItem>
+                        <SelectItem value="gezgin">Gezgin</SelectItem>
+                        <SelectItem value="kasif_meraklisi">Kaşif Meraklısı</SelectItem>
+                        <SelectItem value="konya_bilgesi">Konya Bilgesi</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleBanUser(user.id)}
+                      className="font-[Manrope]"
+                    >
+                      <Ban className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+// Content Management Component
+function ContentManagement() {
+  const [stats, setStats] = useState({
+    totalTopics: 456,
+    totalComments: 3240,
+    totalResources: 128,
+    totalEvents: 45,
+    flaggedContent: 3,
+    pendingModeration: 12,
+  })
+
+  return (
+    <div className="space-y-6">
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <p className="font-[Manrope] text-xs text-muted-foreground mb-1">Toplam Başlık</p>
+            <p className="font-[Manrope] font-bold text-2xl text-foreground">{stats.totalTopics}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <p className="font-[Manrope] text-xs text-muted-foreground mb-1">Toplam Yorum</p>
+            <p className="font-[Manrope] font-bold text-2xl text-foreground">{stats.totalComments}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <p className="font-[Manrope] text-xs text-muted-foreground mb-1">Akademik Kaynak</p>
+            <p className="font-[Manrope] font-bold text-2xl text-foreground">{stats.totalResources}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <p className="font-[Manrope] text-xs text-muted-foreground mb-1">Etkinlik</p>
+            <p className="font-[Manrope] font-bold text-2xl text-foreground">{stats.totalEvents}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <p className="font-[Manrope] text-xs text-muted-foreground mb-1">Bayraklanan</p>
+            <p className="font-[Manrope] font-bold text-2xl text-foreground">{stats.flaggedContent}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <p className="font-[Manrope] text-xs text-muted-foreground mb-1">Onay Bekleyen</p>
+            <p className="font-[Manrope] font-bold text-2xl text-foreground">{stats.pendingModeration}</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-[Manrope] text-foreground font-bold text-xl">
+            Hızlı İşlemler
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-3">
+            <Button variant="outline" className="font-[Manrope]">
+              <Shield className="w-4 h-4 mr-2" />
+              Moderasyon Paneli
+            </Button>
+            <Button variant="outline" className="font-[Manrope]">
+              <Filter className="w-4 h-4 mr-2" />
+              İçerik Filtrele
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

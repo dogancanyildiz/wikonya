@@ -32,6 +32,9 @@ import { LeafletMap } from "@/components/common/leaflet-map"
 import { useApp } from "@/contexts/app-context"
 import { toast } from "sonner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Upload, X } from "lucide-react"
 
 interface Review {
   id: number
@@ -444,6 +447,22 @@ export function VenueDetailPage() {
   const [editingReviewId, setEditingReviewId] = useState<number | null>(null)
   const [editComment, setEditComment] = useState("")
   const [editRating, setEditRating] = useState("5")
+  const [uploadedImages, setUploadedImages] = useState<string[]>([])
+  const [isUploading, setIsUploading] = useState(false)
+
+  // Load uploaded images from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem(`venue_${venueId}_images`)
+      if (stored) {
+        try {
+          setUploadedImages(JSON.parse(stored))
+        } catch {
+          setUploadedImages([])
+        }
+      }
+    }
+  }, [venueId])
 
   // Find venue by ID
   const baseVenue = allVenues.find(v => v.id === venueId) || allVenues[0]
@@ -463,6 +482,7 @@ export function VenueDetailPage() {
       baseVenue.image,
       "https://images.unsplash.com/photo-1739723745132-97df9db49db2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwY2FmZSUyMGludGVyaW9yfGVufDF8fHx8MTc2NDE1ODI0MHww&ixlib=rb-4.1.0&q=80&w=1080",
       "https://images.unsplash.com/photo-1667388969250-1c7220bf3f37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZXN0YXVyYW50JTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY0MDkyODMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      ...uploadedImages,
     ],
     workingHours: {
       monday: "09:00 - 23:00",
@@ -903,21 +923,96 @@ export function VenueDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="photos" className="space-y-4">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-                    {venue.images.map((image, index) => (
-                      <div key={index} className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer">
-                        <Image
-                          src={image}
-                          alt={`${venue.name} - Fotoğraf ${index + 1}`}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-300"
-                          sizes="(max-width: 768px) 50vw, 33vw"
+                  {/* Upload Photo Section */}
+                  {state.user && (
+                    <Card className="bg-card border border-border">
+                      <CardContent className="p-4">
+                        <Label htmlFor="photo-upload" className="cursor-pointer">
+                          <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
+                            <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                            <p className="font-[Manrope] font-semibold text-sm text-foreground mb-1">
+                              Fotoğraf Yükle
+                            </p>
+                            <p className="font-[Manrope] text-xs text-muted-foreground">
+                              JPG, PNG (Max 10MB)
+                            </p>
+                          </div>
+                        </Label>
+                        <Input
+                          id="photo-upload"
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0]
+                            if (!file) return
+
+                            if (file.size > 10 * 1024 * 1024) {
+                              toast.error("Dosya boyutu 10MB'dan küçük olmalıdır")
+                              return
+                            }
+
+                            setIsUploading(true)
+                            try {
+                              // Simüle edilmiş upload - gerçek uygulamada API çağrısı yapılacak
+                              await new Promise((resolve) => setTimeout(resolve, 1000))
+                              
+                              // Create object URL for preview
+                              const imageUrl = URL.createObjectURL(file)
+                              const newImages = [...uploadedImages, imageUrl]
+                              setUploadedImages(newImages)
+                              
+                              // Save to localStorage
+                              localStorage.setItem(`venue_${venueId}_images`, JSON.stringify(newImages))
+                              
+                              toast.success("Fotoğraf başarıyla yüklendi!")
+                            } catch (error) {
+                              toast.error("Fotoğraf yüklenirken bir hata oluştu")
+                            } finally {
+                              setIsUploading(false)
+                            }
+                          }}
+                          className="hidden"
+                          disabled={isUploading}
                         />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                          <Camera className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Photo Gallery */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                    {venue.images.map((image, index) => {
+                      const isUploaded = index >= 3 // First 3 are default images
+                      return (
+                        <div key={index} className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer">
+                          <Image
+                            src={image}
+                            alt={`${venue.name} - Fotoğraf ${index + 1}`}
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-300"
+                            sizes="(max-width: 768px) 50vw, 33vw"
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                            <Camera className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                          {isUploaded && state.user && (
+                            <Button
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                const newImages = uploadedImages.filter((_, i) => i !== index - 3)
+                                setUploadedImages(newImages)
+                                localStorage.setItem(`venue_${venueId}_images`, JSON.stringify(newImages))
+                                toast.success("Fotoğraf silindi")
+                              }}
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          )}
                         </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </TabsContent>
               </Tabs>
