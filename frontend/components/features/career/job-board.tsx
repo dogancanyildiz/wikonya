@@ -181,6 +181,8 @@ export function JobBoard({ searchQuery = "" }: JobBoardProps) {
       job.location.toLowerCase().includes(searchQuery.toLowerCase())
     
     return typeMatch && locationMatch && searchMatch
+    // jobs is a constant array, no need to include in dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [selectedType, selectedLocation, searchQuery])
 
   // Pagination logic

@@ -310,7 +310,7 @@ function SimpleBarChart({ data, color, label, maxValue, dates }: { data: number[
                 }}
                 title={`${label}: ${value}`}
               />
-              {dates.length <= 7 && (
+              {dates && dates.length <= 7 && (
                 <span className="text-[10px] text-muted-foreground font-[Manrope] font-medium">
                   {dates[index]}
                 </span>
@@ -319,7 +319,7 @@ function SimpleBarChart({ data, color, label, maxValue, dates }: { data: number[
           )
         })}
       </div>
-      {dates.length > 7 && (
+      {dates && dates.length > 7 && (
         <div className="flex justify-between text-[10px] text-muted-foreground font-[Manrope] font-medium">
           <span>{dates[0]}</span>
           <span>{dates[dates.length - 1]}</span>
@@ -328,6 +328,70 @@ function SimpleBarChart({ data, color, label, maxValue, dates }: { data: number[
     </div>
   )
 }
+
+export default function AnalyticsPage() {
+  const { state } = useApp()
+  const [selectedPeriod, setSelectedPeriod] = useState<"7d" | "30d" | "90d" | "all">("30d")
+  const [activeTab, setActiveTab] = useState<"overview" | "topics" | "engagement">("overview")
+
+  const handlePeriodChange = useCallback((period: "7d" | "30d" | "90d" | "all") => {
+    setSelectedPeriod(period)
+  }, [])
+
+  // Mock analytics data - gerçek uygulamada API'den gelecek
+  // Using useMemo to ensure data is generated once and is deterministic
+  const analyticsData: Record<"7d" | "30d" | "90d" | "all", AnalyticsData> = useMemo(() => ({
+    "7d": {
+      period: "7d",
+      topics: [2, 1, 3, 2, 1, 2, 3],
+      comments: [5, 8, 12, 6, 9, 11, 15],
+      likes: [12, 18, 25, 15, 20, 22, 28],
+      views: [45, 62, 78, 52, 68, 75, 92],
+      dates: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
+    },
+    "30d": {
+      period: "30d",
+      topics: [2, 1, 3, 2, 1, 2, 3, 1, 2, 3, 2, 1, 2, 3, 2, 1, 2, 3, 2, 1, 2, 3, 2, 1, 2, 3, 2, 1, 2, 3],
+      comments: [5, 8, 12, 6, 9, 11, 15, 7, 10, 13, 8, 9, 12, 14, 10, 11, 13, 16, 9, 12, 15, 11, 13, 16, 10, 14, 12, 15, 13, 17],
+      likes: [12, 18, 25, 15, 20, 22, 28, 16, 21, 24, 18, 19, 23, 26, 20, 22, 25, 29, 19, 23, 27, 21, 24, 28, 20, 25, 23, 27, 24, 30],
+      views: [45, 62, 78, 52, 68, 75, 92, 58, 72, 85, 65, 70, 80, 95, 68, 75, 88, 102, 72, 85, 98, 78, 90, 105, 75, 92, 85, 100, 88, 115],
+      dates: Array.from({ length: 30 }, (_, i) => `${i + 1}`),
+    },
+    "90d": {
+      period: "90d",
+      topics: generateMockData(12, 12345, 1, 3),
+      comments: generateMockData(12, 23456, 5, 15),
+      likes: generateMockData(12, 34567, 10, 25),
+      views: generateMockData(12, 45678, 40, 80),
+      dates: ["Hafta 1", "Hafta 2", "Hafta 3", "Hafta 4", "Hafta 5", "Hafta 6", "Hafta 7", "Hafta 8", "Hafta 9", "Hafta 10", "Hafta 11", "Hafta 12"],
+    },
+    "all": {
+      period: "all",
+      topics: generateMockData(6, 56789, 2, 6),
+      comments: generateMockData(6, 67890, 10, 30),
+      likes: generateMockData(6, 78901, 15, 45),
+      views: generateMockData(6, 89012, 50, 110),
+      dates: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran"],
+    },
+  }), [])
+
+  const data = useMemo(() => analyticsData[selectedPeriod], [selectedPeriod, analyticsData])
+  const maxValue = useMemo(() => Math.max(...data.views, ...data.likes, ...data.comments, ...data.topics), [data])
+
+  // Calculate totals and trends - memoized
+  const totals = useMemo(() => ({
+    topics: data.topics.reduce((a, b) => a + b, 0),
+    comments: data.comments.reduce((a, b) => a + b, 0),
+    likes: data.likes.reduce((a, b) => a + b, 0),
+    views: data.views.reduce((a, b) => a + b, 0),
+  }), [data])
+
+  const trends = useMemo(() => ({
+    topics: totals.topics > 20 ? "up" : "down",
+    comments: totals.comments > 100 ? "up" : "down",
+    likes: totals.likes > 200 ? "up" : "down",
+    views: totals.views > 500 ? "up" : "down",
+  }), [totals])
 
   if (!state.user) {
     return (
