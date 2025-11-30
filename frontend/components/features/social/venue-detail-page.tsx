@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -481,7 +481,7 @@ export function VenueDetailPage() {
     coordinates: baseVenue.coordinates,
   }
 
-  const reviews: Review[] = [
+  const defaultReviews: Review[] = [
     {
       id: 1,
       user: { name: "Ahmet Yılmaz", initials: "AY", role: "Gezgin" },
@@ -507,6 +507,21 @@ export function VenueDetailPage() {
       helpful: 15,
     },
   ]
+
+  // Load reviews from localStorage
+  useEffect(() => {
+    const reviewsKey = `venue_reviews_${venueId}`
+    const stored = localStorage.getItem(reviewsKey)
+    if (stored) {
+      try {
+        setReviews(JSON.parse(stored))
+      } catch {
+        setReviews(defaultReviews)
+      }
+    } else {
+      setReviews(defaultReviews)
+    }
+  }, [venueId])
 
   const crowdColors = {
     low: { bg: "bg-primary/10 dark:bg-primary/20", text: "text-primary", label: "Sakin" },
@@ -725,6 +740,53 @@ export function VenueDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="reviews" className="space-y-4">
+                  {/* Comment Form */}
+                  {state.user ? (
+                    <Card className="bg-card border border-border">
+                      <CardContent className="p-4 sm:p-5">
+                        <h3 className="font-[Manrope] font-bold text-lg mb-4">Yorum Yap</h3>
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-3">
+                            <label className="font-[Manrope] font-semibold text-sm">Puan:</label>
+                            <Select value={newRating} onValueChange={setNewRating}>
+                              <SelectTrigger className="w-24">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {[5, 4, 3, 2, 1].map((rating) => (
+                                  <SelectItem key={rating} value={String(rating)}>
+                                    {rating} ⭐
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <Textarea
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Yorumunuzu yazın..."
+                            className="font-[Manrope] min-h-[100px]"
+                          />
+                          <Button
+                            onClick={handleCommentSubmit}
+                            className="font-[Manrope] font-bold"
+                          >
+                            Yorum Yap
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <Card className="bg-accent border border-border">
+                      <CardContent className="p-4 text-center">
+                        <p className="font-[Manrope] text-foreground/60 text-sm">
+                          Yorum yapmak için giriş yapmalısınız
+                        </p>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Reviews List */}
                   {reviews.map((review) => (
                     <Card key={review.id} className="bg-accent border border-border">
                       <CardContent className="p-4 sm:p-5">
@@ -744,21 +806,95 @@ export function VenueDetailPage() {
                                   {review.user.role} • {review.createdAt}
                                 </p>
                               </div>
-                              <div className="flex items-center gap-1">
-                                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                                <span className="font-[Manrope] font-bold text-sm text-foreground">
-                                  {review.rating}
-                                </span>
+                              <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1">
+                                  <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                                  <span className="font-[Manrope] font-bold text-sm text-foreground">
+                                    {review.rating}
+                                  </span>
+                                </div>
+                                {state.user && review.userId === state.user.id && (
+                                  <div className="flex items-center gap-1">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleEditStart(review)}
+                                      className="h-7 px-2 text-xs font-[Manrope]"
+                                    >
+                                      <Edit2 className="w-3 h-3 mr-1" />
+                                      Düzenle
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleDelete(review.id)}
+                                      className="h-7 px-2 text-xs font-[Manrope] text-destructive hover:text-destructive"
+                                    >
+                                      <Trash2 className="w-3 h-3 mr-1" />
+                                      Sil
+                                    </Button>
+                                  </div>
+                                )}
                               </div>
                             </div>
-                            <p className="font-[Manrope] text-sm text-foreground/70 dark:text-muted-foreground leading-relaxed mt-2">
-                              {review.comment}
-                            </p>
-                            <div className="flex items-center gap-2 mt-3">
-                              <Button variant="ghost" size="sm" className="h-7 text-xs font-[Manrope]">
-                                Yararlı ({review.helpful})
-                              </Button>
-                            </div>
+                            {editingReviewId === review.id ? (
+                              <div className="space-y-3 mt-2">
+                                <div className="flex items-center gap-3">
+                                  <label className="font-[Manrope] font-semibold text-sm">Puan:</label>
+                                  <Select value={editRating} onValueChange={setEditRating}>
+                                    <SelectTrigger className="w-24">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {[5, 4, 3, 2, 1].map((rating) => (
+                                        <SelectItem key={rating} value={String(rating)}>
+                                          {rating} ⭐
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <Textarea
+                                  value={editComment}
+                                  onChange={(e) => setEditComment(e.target.value)}
+                                  className="font-[Manrope] min-h-[100px]"
+                                />
+                                <div className="flex items-center gap-2">
+                                  <Button
+                                    onClick={handleEditSave}
+                                    size="sm"
+                                    className="font-[Manrope] font-bold"
+                                  >
+                                    Kaydet
+                                  </Button>
+                                  <Button
+                                    onClick={handleEditCancel}
+                                    variant="outline"
+                                    size="sm"
+                                    className="font-[Manrope]"
+                                  >
+                                    İptal
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <>
+                                <p className="font-[Manrope] text-sm text-foreground/70 dark:text-muted-foreground leading-relaxed mt-2">
+                                  {review.comment}
+                                </p>
+                                <div className="flex items-center gap-2 mt-3">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleHelpful(review.id)}
+                                    className="h-7 text-xs font-[Manrope]"
+                                  >
+                                    <ThumbsUp className="w-3 h-3 mr-1" />
+                                    Yararlı ({review.helpful})
+                                  </Button>
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
                       </CardContent>
