@@ -54,38 +54,108 @@ export default function ModerationPage() {
 
   const handleTopicApprove = (topicId: number) => {
     // Gerçek uygulamada API çağrısı yapılacak
-    setTopics(topics.map((t) => 
+    const updated = topics.map((t) => 
       t.id === topicId 
         ? { ...t, status: "approved", approvedAt: new Date().toISOString() }
         : t
-    ))
+    )
+    setTopics(updated)
+    
+    // Save to localStorage
+    if (typeof window !== "undefined") {
+      const history = JSON.parse(localStorage.getItem("moderation_history") || "[]")
+      const topic = topics.find(t => t.id === topicId)
+      if (topic) {
+        history.unshift({
+          type: "topic_approve",
+          id: topicId,
+          title: topic.title,
+          action: "approved",
+          date: new Date().toISOString(),
+        })
+        localStorage.setItem("moderation_history", JSON.stringify(history.slice(0, 100)))
+      }
+    }
   }
 
   const handleTopicReject = (topicId: number, reason: string) => {
     // Gerçek uygulamada API çağrısı yapılacak
-    setTopics(topics.map((t) => 
+    const updated = topics.map((t) => 
       t.id === topicId 
         ? { ...t, status: "rejected", rejectionReason: reason }
         : t
-    ))
+    )
+    setTopics(updated)
+    
+    // Save to localStorage
+    if (typeof window !== "undefined") {
+      const history = JSON.parse(localStorage.getItem("moderation_history") || "[]")
+      const topic = topics.find(t => t.id === topicId)
+      if (topic) {
+        history.unshift({
+          type: "topic_reject",
+          id: topicId,
+          title: topic.title,
+          action: "rejected",
+          reason,
+          date: new Date().toISOString(),
+        })
+        localStorage.setItem("moderation_history", JSON.stringify(history.slice(0, 100)))
+      }
+    }
   }
 
   const handleProposalApprove = (proposalId: number) => {
     // Gerçek uygulamada API çağrısı yapılacak
-    setProposals(proposals.map((p) => 
+    const updated = proposals.map((p) => 
       p.id === proposalId 
         ? { ...p, status: "approved", reviewedAt: new Date().toISOString() }
         : p
-    ))
+    )
+    setProposals(updated)
+    
+    // Save to localStorage
+    if (typeof window !== "undefined") {
+      const history = JSON.parse(localStorage.getItem("moderation_history") || "[]")
+      const proposal = proposals.find(p => p.id === proposalId)
+      if (proposal) {
+        history.unshift({
+          type: "proposal_approve",
+          id: proposalId,
+          topicId: proposal.topicId,
+          action: "approved",
+          date: new Date().toISOString(),
+        })
+        localStorage.setItem("moderation_history", JSON.stringify(history.slice(0, 100)))
+      }
+    }
   }
 
   const handleProposalReject = (proposalId: number, reason: string) => {
     // Gerçek uygulamada API çağrısı yapılacak
-    setProposals(proposals.map((p) => 
+    const updated = proposals.map((p) => 
       p.id === proposalId 
         ? { ...p, status: "rejected", reviewNote: reason, reviewedAt: new Date().toISOString() }
         : p
-    ))
+    )
+    setProposals(updated)
+    
+    // Save to localStorage
+    if (typeof window !== "undefined") {
+      const history = JSON.parse(localStorage.getItem("moderation_history") || "[]")
+      const proposal = proposals.find(p => p.id === proposalId)
+      if (proposal) {
+        history.unshift({
+          type: "proposal_reject",
+          id: proposalId,
+          topicId: proposal.topicId,
+          action: "rejected",
+          reason,
+          date: new Date().toISOString(),
+        })
+        localStorage.setItem("moderation_history", JSON.stringify(history.slice(0, 100)))
+      }
+    }
   }
 
   return (

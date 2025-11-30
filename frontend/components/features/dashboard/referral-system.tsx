@@ -50,6 +50,15 @@ export function ReferralSystem() {
       return
     }
 
+    // Check if code already used
+    if (typeof window !== "undefined" && user) {
+      const usedCodes = JSON.parse(localStorage.getItem(`used_referral_codes_${user.id}`) || "[]")
+      if (usedCodes.includes(referralCode.trim().toUpperCase())) {
+        setError("Bu referans kodu daha önce kullanılmış")
+        return
+      }
+    }
+
     setIsRedeeming(true)
     setError(null)
     setSuccess(false)
@@ -60,6 +69,22 @@ export function ReferralSystem() {
 
       // Coin kazanma
       addCustomCoins(100, "Referans kodu kullanımı")
+
+      // Save to localStorage
+      if (typeof window !== "undefined" && user) {
+        const usedCodes = JSON.parse(localStorage.getItem(`used_referral_codes_${user.id}`) || "[]")
+        usedCodes.push(referralCode.trim().toUpperCase())
+        localStorage.setItem(`used_referral_codes_${user.id}`, JSON.stringify(usedCodes))
+        
+        // Save to history
+        const history = JSON.parse(localStorage.getItem(`referral_history_${user.id}`) || "[]")
+        history.unshift({
+          code: referralCode.trim().toUpperCase(),
+          coinsEarned: 100,
+          date: new Date().toISOString(),
+        })
+        localStorage.setItem(`referral_history_${user.id}`, JSON.stringify(history.slice(0, 50)))
+      }
 
       setSuccess(true)
       setReferralCode("")

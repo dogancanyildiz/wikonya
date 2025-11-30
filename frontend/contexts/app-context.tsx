@@ -43,6 +43,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
           isAuthenticated: true,
         }))
       }
+      
+      // Load notifications from localStorage
+      const storedNotifications = localStorage.getItem("notifications")
+      if (storedNotifications) {
+        try {
+          const notifications = JSON.parse(storedNotifications) as Notification[]
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- Necessary for initializing notifications from localStorage
+          setState((prev) => ({
+            ...prev,
+            notifications,
+          }))
+        } catch (error) {
+          console.error("Notifications load error:", error)
+        }
+      }
     } catch (error) {
       console.error("Kullanıcı bilgisi yüklenirken hata oluştu:", error)
       localStorage.removeItem(STORAGE_KEY)
@@ -69,26 +84,65 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const addNotification = useCallback((notification: Notification) => {
-    setState((prev) => ({
-      ...prev,
-      notifications: [notification, ...prev.notifications],
-    }))
+    setState((prev) => {
+      const updated = {
+        ...prev,
+        notifications: [notification, ...prev.notifications],
+      }
+      
+      // Save to localStorage
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("notifications", JSON.stringify(updated.notifications.slice(0, 100))) // Keep last 100
+        } catch (error) {
+          console.error("Notifications save error:", error)
+        }
+      }
+      
+      return updated
+    })
   }, [])
 
   const markNotificationAsRead = useCallback((notificationId: string) => {
-    setState((prev) => ({
-      ...prev,
-      notifications: prev.notifications.map((notif) =>
-        notif.id === notificationId ? { ...notif, read: true } : notif
-      ),
-    }))
+    setState((prev) => {
+      const updated = {
+        ...prev,
+        notifications: prev.notifications.map((notif) =>
+          notif.id === notificationId ? { ...notif, read: true } : notif
+        ),
+      }
+      
+      // Save to localStorage
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("notifications", JSON.stringify(updated.notifications.slice(0, 100)))
+        } catch (error) {
+          console.error("Notifications save error:", error)
+        }
+      }
+      
+      return updated
+    })
   }, [])
 
   const markAllNotificationsAsRead = useCallback(() => {
-    setState((prev) => ({
-      ...prev,
-      notifications: prev.notifications.map((notif) => ({ ...notif, read: true })),
-    }))
+    setState((prev) => {
+      const updated = {
+        ...prev,
+        notifications: prev.notifications.map((notif) => ({ ...notif, read: true })),
+      }
+      
+      // Save to localStorage
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("notifications", JSON.stringify(updated.notifications.slice(0, 100)))
+        } catch (error) {
+          console.error("Notifications save error:", error)
+        }
+      }
+      
+      return updated
+    })
   }, [])
 
   const clearUser = useCallback(() => {
