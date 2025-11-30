@@ -1,11 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Calendar, Eye, MessageCircle, Share2, Bookmark, Edit2, ThumbsUp, ThumbsDown, History, Lightbulb } from "lucide-react"
+import { Calendar, Eye, MessageCircle, Share2, Bookmark, Edit2, ThumbsUp, ThumbsDown, History, Lightbulb, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useApp } from "@/contexts/app-context"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
 import { WikiEditDialog } from "./wiki-edit-dialog"
 import { WikiHistory } from "./wiki-history"
@@ -452,11 +455,14 @@ const mockTopics: Array<{
 
 export function TopicHeader({ topicId, wikiContent: initialWikiContent }: TopicHeaderProps) {
   const { state } = useApp()
-  const { canEditWiki, canProposeWikiEdit } = usePermissions()
+  const router = useRouter()
+  const { canEditWiki, canProposeWikiEdit, canModerate } = usePermissions()
   const { notifyWikiReverted } = useNotifications()
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isTopicEditDialogOpen, setIsTopicEditDialogOpen] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [revisions, setRevisions] = useState<WikiRevision[]>([])
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
   const [topicStats, setTopicStats] = useState<{ likes: number; makesSense: number; comments: number }>({ likes: 0, makesSense: 0, comments: 0 })
@@ -1329,17 +1335,41 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
               <h1 className="font-[Manrope] text-foreground font-extrabold text-3xl sm:text-4xl lg:text-[48px] leading-tight flex-1">
                 {topic.title}
               </h1>
-              {state.user && topic.author.id === state.user.id && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsTopicEditDialogOpen(true)}
-                  className="font-[Manrope] font-bold text-xs sm:text-sm flex-shrink-0"
-                >
-                  <Edit2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
-                  Düzenle
-                </Button>
-              )}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {state.user && topic.author.id === state.user.id && (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsTopicEditDialogOpen(true)}
+                      className="font-[Manrope] font-bold text-xs sm:text-sm"
+                    >
+                      <Edit2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
+                      Düzenle
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsDeleteDialogOpen(true)}
+                      className="font-[Manrope] font-bold text-xs sm:text-sm text-destructive hover:text-destructive hover:bg-destructive/10"
+                    >
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
+                      Sil
+                    </Button>
+                  </>
+                )}
+                {state.user && canModerate && topic.author.id !== state.user.id && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsDeleteDialogOpen(true)}
+                    className="font-[Manrope] font-bold text-xs sm:text-sm text-destructive hover:text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
+                    Sil
+                  </Button>
+                )}
+              </div>
             </div>
             
             {/* Meta Information */}
@@ -1592,14 +1622,40 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
           </div>
         </div>
 
-        {/* Wiki Edit Dialog */}
-        <WikiEditDialog
-          open={isEditDialogOpen}
-          onOpenChange={setIsEditDialogOpen}
-          wikiContent={wikiContent}
-          topicId={topicId}
-          onSave={handleWikiSave}
-        />
+      {/* Topic Edit Dialog */}
+      <TopicEditDialog
+        open={isTopicEditDialogOpen}
+        onOpenChange={setIsTopicEditDialogOpen}
+        topicId={topicId}
+        initialTitle={topic.title}
+        initialCategory={topic.category}
+        initialTags={topic.tags}
+        initialContent={wikiContent?.content || ""}
+        onSave={(data) => {
+          // Update topic data
+          const topicDataKey = `topic_data_${topicId}`
+          if (typeof window !== "undefined") {
+            localStorage.setItem(topicDataKey, JSON.stringify({
+              title: data.title,
+              category: data.category,
+              tags: data.tags,
+              content: data.content,
+              updatedAt: new Date().toISOString(),
+            }))
+          }
+          // Reload page to show updated data
+          window.location.reload()
+        }}
+      />
+      
+      {/* Wiki Edit Dialog */}
+      <WikiEditDialog
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        wikiContent={wikiContent}
+        topicId={topicId}
+        onSave={handleWikiSave}
+      />
 
         {/* Wiki History Dialog */}
         <WikiHistory
