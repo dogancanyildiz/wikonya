@@ -16,7 +16,10 @@ import {
   Share2,
   ArrowLeft,
   Camera,
-  Navigation
+  Navigation,
+  Edit2,
+  Trash2,
+  ThumbsUp
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -24,10 +27,15 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
 import { LeafletMap } from "@/components/common/leaflet-map"
+import { useApp } from "@/contexts/app-context"
+import { toast } from "sonner"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Review {
   id: number
+  userId?: number
   user: {
     name: string
     initials: string
@@ -426,9 +434,16 @@ const getFullAddress = (venue: typeof allVenues[0]): string => {
 
 export function VenueDetailPage() {
   const params = useParams()
+  const { state } = useApp()
   const venueId = params?.id ? Number(params.id) : 1
   const [isFavorite, setIsFavorite] = useState(false)
   const [activeTab, setActiveTab] = useState<"info" | "reviews" | "photos">("info")
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [newComment, setNewComment] = useState("")
+  const [newRating, setNewRating] = useState("5")
+  const [editingReviewId, setEditingReviewId] = useState<number | null>(null)
+  const [editComment, setEditComment] = useState("")
+  const [editRating, setEditRating] = useState("5")
 
   // Find venue by ID
   const baseVenue = allVenues.find(v => v.id === venueId) || allVenues[0]
