@@ -49,6 +49,8 @@ export default function SearchPage() {
   const [selectedSort, setSelectedSort] = useState<string>("relevance")
   const [showFilters, setShowFilters] = useState(false)
   const [recentSearches, setRecentSearches] = useState<string[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [searchSuggestions, setSearchSuggestions] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<{ topics: number; comments: number; users: number }>({
     topics: 1,
     comments: 1,
@@ -64,6 +66,58 @@ export default function SearchPage() {
     "Staj İlanları",
     "Burs Fırsatları",
   ])
+
+  // Load recent searches from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("recentSearches")
+      if (stored) {
+        try {
+          setRecentSearches(JSON.parse(stored))
+        } catch {
+          setRecentSearches([])
+        }
+      }
+    }
+  }, [])
+
+  // Generate search suggestions based on query
+  useEffect(() => {
+    if (query.trim().length > 0) {
+      const allTopics = getAllTopics()
+      const suggestions = new Set<string>()
+      
+      // Topic titles
+      allTopics.forEach(topic => {
+        if (topic.title.toLowerCase().includes(query.toLowerCase())) {
+          const words = topic.title.split(" ").filter(w => w.toLowerCase().startsWith(query.toLowerCase()))
+          words.forEach(w => suggestions.add(w))
+        }
+      })
+      
+      // Tags
+      allTopics.forEach(topic => {
+        topic.tags.forEach(tag => {
+          if (tag.toLowerCase().includes(query.toLowerCase())) {
+            suggestions.add(tag)
+          }
+        })
+      })
+      
+      // Popular searches
+      popularSearches.forEach(pop => {
+        if (pop.toLowerCase().includes(query.toLowerCase())) {
+          suggestions.add(pop)
+        }
+      })
+      
+      setSearchSuggestions(Array.from(suggestions).slice(0, 5))
+      setShowSuggestions(true)
+    } else {
+      setSearchSuggestions([])
+      setShowSuggestions(false)
+    }
+  }, [query])
 
   // Mock search results - gerçek uygulamada API'den gelecek
   const [results, setResults] = useState<{
@@ -391,22 +445,128 @@ export default function SearchPage() {
           </h1>
           <form onSubmit={handleSubmit} className="relative">
             <div className="relative flex items-center bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg">
-              <Search className="absolute left-4 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+              <Search className="absolute left-4 sm:left-6 w-5 h-5 sm:w-6 sm:h-6 text-primary z-10" />
               <Input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => {
+                  if (query.trim().length > 0 || recentSearches.length > 0 || popularSearches.length > 0) {
+                    setShowSuggestions(true)
+                  }
+                }}
+                onBlur={() => {
+                  // Delay to allow click on suggestions
+                  setTimeout(() => setShowSuggestions(false), 200)
+                }}
                 placeholder="Konuları, soruları, yorumları keşfet..."
                 className="w-full h-[60px] pl-12 sm:pl-16 pr-28 sm:pr-32 bg-transparent rounded-[20px] font-[Manrope] font-medium text-foreground placeholder:text-foreground/40 dark:placeholder:text-muted-foreground focus:outline-none border-0 focus-visible:ring-0"
               />
               <Button
                 type="submit"
-                className="absolute right-2 h-[48px] px-6 sm:px-8 bg-primary hover:bg-primary/90 rounded-[16px] font-[Manrope] font-semibold text-white"
+                className="absolute right-2 h-[48px] px-6 sm:px-8 bg-primary hover:bg-primary/90 rounded-[16px] font-[Manrope] font-semibold text-white z-10"
                 disabled={isLoading}
               >
                 {isLoading ? "Aranıyor..." : "Ara"}
               </Button>
             </div>
+
+            {/* Search Suggestions Dropdown */}
+            {showSuggestions && (query.trim().length > 0 || recentSearches.length > 0 || popularSearches.length > 0) && (
+              <Card className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-card border border-border shadow-lg rounded-[16px] max-h-[400px] overflow-y-auto">
+                <div className="p-2">
+                  {/* Search Suggestions */}
+                  {query.trim().length > 0 && searchSuggestions.length > 0 && (
+                    <div className="mb-2">
+                      <div className="px-3 py-2 text-xs font-[Manrope] font-bold text-muted-foreground uppercase">
+                        Öneriler
+                      </div>
+                      {searchSuggestions.map((suggestion, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => {
+                            setQuery(suggestion)
+                            setShowSuggestions(false)
+                            router.push(`/search?q=${encodeURIComponent(suggestion)}`)
+                            handleSearch()
+                          }}
+                          className="w-full px-3 py-2 text-left hover:bg-accent rounded-lg font-[Manrope] text-sm flex items-center gap-2"
+                        >
+                          <TrendingUp className="w-4 h-4 text-primary" />
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Recent Searches */}
+                  {recentSearches.length > 0 && (
+                    <div className="mb-2">
+                      <div className="flex items-center justify-between px-3 py-2">
+                        <div className="text-xs font-[Manrope] font-bold text-muted-foreground uppercase">
+                          Son Aramalar
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setRecentSearches([])
+                            localStorage.removeItem("recentSearches")
+                          }}
+                          className="h-6 px-2 text-xs font-[Manrope]"
+                        >
+                          Temizle
+                        </Button>
+                      </div>
+                      {recentSearches.map((search, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => {
+                            setQuery(search)
+                            setShowSuggestions(false)
+                            router.push(`/search?q=${encodeURIComponent(search)}`)
+                            handleSearch()
+                          }}
+                          className="w-full px-3 py-2 text-left hover:bg-accent rounded-lg font-[Manrope] text-sm flex items-center gap-2"
+                        >
+                          <Clock className="w-4 h-4 text-muted-foreground" />
+                          {search}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Popular Searches */}
+                  {query.trim().length === 0 && (
+                    <div>
+                      <div className="px-3 py-2 text-xs font-[Manrope] font-bold text-muted-foreground uppercase">
+                        Popüler Aramalar
+                      </div>
+                      <div className="flex flex-wrap gap-2 p-2">
+                        {popularSearches.map((search, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            onClick={() => {
+                              setQuery(search)
+                              setShowSuggestions(false)
+                              router.push(`/search?q=${encodeURIComponent(search)}`)
+                              handleSearch()
+                            }}
+                            className="px-3 py-1.5 bg-accent hover:bg-accent/80 rounded-lg font-[Manrope] text-sm font-semibold transition-colors"
+                          >
+                            {search}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Card>
+            )}
           </form>
         </div>
 

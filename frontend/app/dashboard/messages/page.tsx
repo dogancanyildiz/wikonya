@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Search, Send, MoreVertical, Circle, ArrowLeft } from "lucide-react"
+import { Search, Send, MoreVertical, Circle, ArrowLeft, Check, CheckCheck } from "lucide-react"
 
 interface Message {
   id: number
@@ -36,7 +36,10 @@ export default function MessagesPage() {
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [messageInput, setMessageInput] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
+  const [isTyping, setIsTyping] = useState(false)
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const currentUserId = 1
 
@@ -122,7 +125,99 @@ export default function MessagesPage() {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
     }
-  }, [selectedConversation?.messages])
+  }, [selectedConversation?.messages, isTyping])
+
+  // Simüle edilmiş gerçek zamanlı mesajlar (demo için)
+  useEffect(() => {
+    if (!selectedConversation) return
+
+    // Her 30 saniyede bir rastgele mesaj gönder (demo)
+    intervalRef.current = setInterval(() => {
+      if (Math.random() > 0.7 && selectedConversation) {
+        const mockMessages = [
+          "Merhaba, nasılsın?",
+          "Notları paylaşabilir misin?",
+          "Teşekkürler!",
+          "Yarın görüşürüz",
+          "Tamam, anladım",
+        ]
+        const randomMessage = mockMessages[Math.floor(Math.random() * mockMessages.length)]
+        
+        setConversations(prev => {
+          const updated = prev.map(conv => {
+            if (conv.id === selectedConversation.id) {
+              const newMessage: Message = {
+                id: Date.now(),
+                content: randomMessage,
+                senderId: conv.user.id,
+                timestamp: "Az önce",
+                isRead: false,
+              }
+              return {
+                ...conv,
+                messages: [...conv.messages, newMessage],
+                lastMessage: randomMessage,
+                timestamp: "Az önce",
+                unreadCount: conv.id === selectedConversation.id ? 0 : conv.unreadCount + 1,
+              }
+            }
+            return conv
+          })
+          
+          if (typeof window !== "undefined") {
+            localStorage.setItem("conversations", JSON.stringify(updated))
+          }
+          
+          return updated
+        })
+
+        setSelectedConversation(prev => {
+          if (!prev || prev.id !== selectedConversation.id) return prev
+          const newMessage: Message = {
+            id: Date.now(),
+            content: randomMessage,
+            senderId: selectedConversation.user.id,
+            timestamp: "Az önce",
+            isRead: false,
+          }
+          return {
+            ...prev,
+            messages: [...prev.messages, newMessage],
+            lastMessage: randomMessage,
+            timestamp: "Az önce",
+          }
+        })
+      }
+    }, 30000) // 30 saniye
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [selectedConversation])
+
+  // Typing indicator simülasyonu (karşı taraf için)
+  useEffect(() => {
+    if (!selectedConversation) {
+      setIsTyping(false)
+      return
+    }
+
+    // Rastgele typing indicator göster (demo)
+    const typingInterval = setInterval(() => {
+      if (Math.random() > 0.8) {
+        setIsTyping(true)
+        setTimeout(() => {
+          setIsTyping(false)
+        }, 2000)
+      }
+    }, 10000) // Her 10 saniyede bir kontrol et
+
+    return () => {
+      clearInterval(typingInterval)
+    }
+  }, [selectedConversation])
 
   const filteredConversations = conversations.filter(conv =>
     conv.user.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -172,11 +267,45 @@ export default function MessagesPage() {
         messages: [...prev.messages, newMessage],
         lastMessage: newMessage.content,
         timestamp: "Az önce",
+        unreadCount: 0,
       }
     })
 
     // Input'u temizle
     setMessageInput("")
+
+    // Mesajı okundu olarak işaretle (kendi mesajımız)
+    setTimeout(() => {
+      setConversations(prev => {
+        const updated = prev.map(conv => {
+          if (conv.id === selectedConversation.id) {
+            return {
+              ...conv,
+              messages: conv.messages.map(msg => 
+                msg.id === newMessage.id ? { ...msg, isRead: true } : msg
+              ),
+            }
+          }
+          return conv
+        })
+        
+        if (typeof window !== "undefined") {
+          localStorage.setItem("conversations", JSON.stringify(updated))
+        }
+        
+        return updated
+      })
+
+      setSelectedConversation(prev => {
+        if (!prev) return null
+        return {
+          ...prev,
+          messages: prev.messages.map(msg => 
+            msg.id === newMessage.id ? { ...msg, isRead: true } : msg
+          ),
+        }
+      })
+    }, 1000) // 1 saniye sonra okundu olarak işaretle
 
     // Gerçek uygulamada burada API çağrısı yapılacak
     // await sendMessage(selectedConversation.id, messageInput.trim())
@@ -317,13 +446,37 @@ export default function MessagesPage() {
                             >
                               <p className="font-[Manrope] text-sm">{message.content}</p>
                             </div>
-                            <p className={`font-[Manrope] text-[10px] text-foreground/50 dark:text-muted-foreground mt-1 ${isOwn ? 'text-right' : ''}`}>
-                              {message.timestamp}
-                            </p>
+                            <div className={`flex items-center gap-1 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
+                              <p className={`font-[Manrope] text-[10px] text-foreground/50 dark:text-muted-foreground`}>
+                                {message.timestamp}
+                              </p>
+                              {isOwn && (
+                                <div className="text-foreground/50 dark:text-muted-foreground">
+                                  {message.isRead ? (
+                                    <CheckCheck className="w-3 h-3 text-blue-500" />
+                                  ) : (
+                                    <Check className="w-3 h-3" />
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       )
                     })}
+                    {isTyping && (
+                      <div className="flex justify-start">
+                        <div className="max-w-[70%]">
+                          <div className="px-4 py-2 rounded-2xl bg-[#f2f4f3] dark:bg-accent text-foreground rounded-bl-sm">
+                            <div className="flex gap-1">
+                              <div className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                              <div className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                              <div className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <div ref={messagesEndRef} />
                   </div>
                 </ScrollArea>
