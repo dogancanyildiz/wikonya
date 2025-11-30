@@ -23,8 +23,13 @@ export function CoinConverter() {
     points: number
     date: string
   }>>([])
+  const [todayTotal, setTodayTotal] = useState(0)
 
-  // Load conversion history from localStorage
+  const conversionRate = getConversionRate()
+  const conversionConfig = getConversionConfig()
+  const dailyLimit = conversionConfig.maxAmountPerDay || 1000
+
+  // Load conversion history and daily limit from localStorage
   useEffect(() => {
     if (typeof window !== "undefined" && state.user) {
       const historyKey = `conversion_history_${state.user.id}`
@@ -37,6 +42,25 @@ export function CoinConverter() {
           // If parsing fails, use empty array
         }
       }
+
+      const dailyLimitKey = `daily_conversion_limit_${state.user.id}`
+      const storedDailyLimit = localStorage.getItem(dailyLimitKey)
+      if (storedDailyLimit) {
+        try {
+          const { date, total } = JSON.parse(storedDailyLimit)
+          const today = new Date().toDateString()
+          if (date === today) {
+            setTodayTotal(total)
+          } else {
+            localStorage.removeItem(dailyLimitKey) // Reset for new day
+            setTodayTotal(0)
+          }
+        } catch {
+          // Reset if parsing fails
+          localStorage.removeItem(dailyLimitKey)
+          setTodayTotal(0)
+        }
+      }
     }
   }, [state.user])
 
@@ -46,11 +70,10 @@ export function CoinConverter() {
     return null
   }
 
-  const conversionRate = getConversionRate()
-  const conversionConfig = getConversionConfig()
   const maxAmount = Math.floor(user.totalCoins / conversionRate)
   const convertedPoints = amount ? Math.floor(Number(amount) / conversionRate) : 0
   const remainingCoins = amount ? user.totalCoins - Number(amount) : user.totalCoins
+  const canConvertToday = todayTotal < dailyLimit
 
   const handleConvert = async () => {
     if (!amount || Number(amount) <= 0) {

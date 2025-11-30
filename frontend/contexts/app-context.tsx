@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react"
 import { type User } from "@/lib/types"
 import type { Notification } from "@/lib/notifications/notification-system"
+import { initializeStorage } from "@/lib/utils/local-storage-manager"
 
 const STORAGE_KEY = "wikonya_user"
 

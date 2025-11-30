@@ -26,7 +26,7 @@ export function AdminDashboard({ stats }: AdminDashboardProps) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Get all user stats
-      const allUserStats: Array<{ userId: number; stats: { commentCount: number; wikiEditCount: number; topicCount: number } }> = []
+      const allUserStats: Array<{ userId: number; stats: { commentCount: number; wikiEditCount: number; topicCount: number; lastUpdated?: string } }> = []
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i)
         if (key?.startsWith("user_stats_")) {
@@ -61,7 +61,7 @@ export function AdminDashboard({ stats }: AdminDashboardProps) {
       // Calculate stats
       const totalUsers = allUserStats.length || 1
       const activeUsers = allUserStats.filter(us => {
-        const lastUpdated = new Date(us.stats.lastUpdated || 0)
+        const lastUpdated = new Date(us.stats.lastUpdated || new Date().toISOString())
         const daysSinceUpdate = (Date.now() - lastUpdated.getTime()) / (1000 * 60 * 60 * 24)
         return daysSinceUpdate <= 30
       }).length || 1

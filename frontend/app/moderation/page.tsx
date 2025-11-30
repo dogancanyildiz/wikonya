@@ -56,7 +56,7 @@ export default function ModerationPage() {
     // Gerçek uygulamada API çağrısı yapılacak
     const updated = topics.map((t) => 
       t.id === topicId 
-        ? { ...t, status: "approved", approvedAt: new Date().toISOString() }
+        ? { ...t, status: "approved" as const, approvedAt: new Date().toISOString() }
         : t
     )
     setTopics(updated)
@@ -82,7 +82,7 @@ export default function ModerationPage() {
     // Gerçek uygulamada API çağrısı yapılacak
     const updated = topics.map((t) => 
       t.id === topicId 
-        ? { ...t, status: "rejected", rejectionReason: reason }
+        ? { ...t, status: "rejected" as const, rejectionReason: reason }
         : t
     )
     setTopics(updated)
@@ -109,7 +109,7 @@ export default function ModerationPage() {
     // Gerçek uygulamada API çağrısı yapılacak
     const updated = proposals.map((p) => 
       p.id === proposalId 
-        ? { ...p, status: "approved", reviewedAt: new Date().toISOString() }
+        ? { ...p, status: "approved" as const, reviewedAt: new Date().toISOString() }
         : p
     )
     setProposals(updated)
@@ -135,7 +135,7 @@ export default function ModerationPage() {
     // Gerçek uygulamada API çağrısı yapılacak
     const updated = proposals.map((p) => 
       p.id === proposalId 
-        ? { ...p, status: "rejected", reviewNote: reason, reviewedAt: new Date().toISOString() }
+        ? { ...p, status: "rejected" as const, reviewNote: reason, reviewedAt: new Date().toISOString() }
         : p
     )
     setProposals(updated)

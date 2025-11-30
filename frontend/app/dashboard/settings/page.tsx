@@ -114,6 +114,7 @@ export default function SettingsPage() {
 
   // Delete account form
   const [deletePassword, setDeletePassword] = useState("")
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const [isDeletingAccount, setIsDeletingAccount] = useState(false)
 
   // Load connected accounts from localStorage
@@ -364,8 +365,8 @@ export default function SettingsPage() {
   // Confirm disconnect
   const confirmDisconnect = () => {
     if (disconnectAccountId) {
-      setConnectedAccounts(prev => {
-        const updated = prev.map(account => 
+      setConnectedAccounts((prev: typeof connectedAccounts) => {
+        const updated = prev.map((account: typeof connectedAccounts[0]) => 
           account.id === disconnectAccountId 
             ? { ...account, connected: false, email: null, disconnectedAt: new Date().toISOString() }
             : account
@@ -397,8 +398,8 @@ export default function SettingsPage() {
     // Simüle edilmiş bağlantı (gerçek uygulamada OAuth callback'ten sonra yapılacak)
     // setTimeout ile simüle ediyoruz
     setTimeout(() => {
-      setConnectedAccounts(prev => {
-        const updated = prev.map(acc => 
+      setConnectedAccounts((prev: typeof connectedAccounts) => {
+        const updated = prev.map((acc: typeof connectedAccounts[0]) => 
           acc.id === account.id 
             ? { ...acc, connected: true, email: `user@${account.id}.com`, connectedAt: new Date().toISOString() }
             : acc
@@ -990,7 +991,7 @@ export default function SettingsPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-4">
-            {connectedAccounts.map((account) => (
+            {connectedAccounts.map((account: typeof connectedAccounts[0]) => (
               <div
                 key={account.id}
                 className="flex items-center justify-between p-4 border border-border rounded-xl"

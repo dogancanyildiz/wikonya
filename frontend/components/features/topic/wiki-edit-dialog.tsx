@@ -1,8 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useApp } from "@/contexts/app-context"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
+import { incrementWikiEditCount } from "@/lib/utils/user-stats"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -27,6 +29,7 @@ export function WikiEditDialog({
   topicId,
   onSave,
 }: WikiEditDialogProps) {
+  const { state } = useApp()
   const { canEditWiki, canProposeWikiEdit } = usePermissions()
   const { rewardCoins } = useCoinReward()
   const [content, setContent] = useState(wikiContent?.content || "")
