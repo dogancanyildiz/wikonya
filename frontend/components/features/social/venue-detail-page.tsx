@@ -642,6 +642,21 @@ export function VenueDetailPage() {
     setEditRating("5")
   }
 
+  const handleHelpful = (reviewId: number) => {
+    const updatedReviews = reviews.map(r => 
+      r.id === reviewId 
+        ? { ...r, helpful: r.helpful + 1 }
+        : r
+    )
+    setReviews(updatedReviews)
+    
+    // Save to localStorage
+    const reviewsKey = `venue_${venueId}_reviews`
+    localStorage.setItem(reviewsKey, JSON.stringify(updatedReviews))
+    
+    toast.success("Teşekkürler!")
+  }
+
   return (
     <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
       {/* Back Button */}
