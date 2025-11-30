@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn, Wallet, BookOpen, UserPlus, Trophy, Settings, UserRound, Shield } from "lucide-react"
+import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn, Wallet, UserPlus, Trophy, Settings, UserRound, Shield } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
