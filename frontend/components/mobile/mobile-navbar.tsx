@@ -1,6 +1,6 @@
 "use client"
 
-import { Menu, Bell, Moon, Sun, LogOut } from "lucide-react"
+import { Menu, Bell, Moon, Sun, LogOut, LogIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
@@ -33,7 +33,8 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
   const { notifications, unreadCount, markAsRead } = useNotifications()
-  const { clearUser } = useApp()
+  const { state, clearUser } = useApp()
+  const { user, isAuthenticated } = state
 
   // Icon mapping for notification types
   const getNotificationIcon = (type: string) => {
@@ -122,6 +123,11 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
     clearUser()
     setOpen(false)
     router.push("/")
+  }
+
+  const handleLogin = () => {
+    setOpen(false)
+    router.push("/auth/login")
   }
 
   const isDark = mounted && theme === "dark"
@@ -273,16 +279,27 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                   </button>
                 ))}
                 
-                {/* Logout Button - Profil altında */}
+                {/* Logout/Login Button - Profil altında */}
                 <div className="mt-2 pt-2 ">
-                  <Button
-                    onClick={handleLogout}
-                    variant="ghost"
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors font-[Manrope] justify-start text-red-500 dark:text-red-400 font-semibold"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    <span className="text-sm sm:text-base">Çıkış Yap</span>
-                  </Button>
+                  {isAuthenticated ? (
+                    <Button
+                      onClick={handleLogout}
+                      variant="ghost"
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors font-[Manrope] justify-start text-red-500 dark:text-red-400 font-semibold"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      <span className="text-sm sm:text-base">Çıkış Yap</span>
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleLogin}
+                      variant="ghost"
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors font-[Manrope] justify-start text-primary font-semibold"
+                    >
+                      <LogIn className="w-5 h-5" />
+                      <span className="text-sm sm:text-base">Oturum Aç</span>
+                    </Button>
+                  )}
                 </div>
               </nav>
               
