@@ -29,6 +29,9 @@ interface Resource {
   course: string
   type: "notes" | "exams" | "reviews" | "calendar"
   uploadTimestamp: number // For sorting by date
+  rating?: number // For reviews
+  helpful?: number // For reviews
+  eventDate?: string // For calendar
 }
 
 interface ResourceGridProps {
@@ -120,6 +123,26 @@ export function ResourceGrid({ searchQuery }: ResourceGridProps) {
     { id: 28, title: "Programlama Temelleri Vize Soruları", fileType: "PDF", fileSize: "2.1 MB", uploadedBy: "Doç. Dr. Murat Öz", uploaderInitials: "MÖ", uploadDate: "19 Eki 2024", downloads: 678, views: 3421, university: "selcuk", department: "Mühendislik Fakültesi", course: "Programlama Temelleri", type: "exams", uploadTimestamp: parseDate("19 Eki 2024") },
     { id: 29, title: "İktisat Teorisi Final Soruları 2023", fileType: "PDF", fileSize: "2.4 MB", uploadedBy: "Hakan Çetin", uploaderInitials: "HÇ", uploadDate: "11 Eki 2024", downloads: 298, views: 1456, university: "neu", department: "İktisat Fakültesi", course: "İktisat Teorisi", type: "exams", uploadTimestamp: parseDate("11 Eki 2024") },
     { id: 30, title: "Muhasebe Vize Soruları 2024", fileType: "PDF", fileSize: "1.7 MB", uploadedBy: "Deniz Aksoy", uploaderInitials: "DA", uploadDate: "9 Eki 2024", downloads: 412, views: 1987, university: "neu", department: "İşletme Fakültesi", course: "Muhasebe", type: "exams", uploadTimestamp: parseDate("9 Eki 2024") },
+    
+    // Hoca Yorumları
+    { id: 31, title: "Prof. Dr. Ahmet Yılmaz - Hukuk Başlangıcı", fileType: "Yorum", fileSize: "", uploadedBy: "Ayşe Demir", uploaderInitials: "AD", uploadDate: "20 Kas 2024", downloads: 0, views: 456, university: "selcuk", department: "Hukuk Fakültesi", course: "Hukuk Başlangıcı", type: "reviews", uploadTimestamp: parseDate("20 Kas 2024"), rating: 4.5, helpful: 23 },
+    { id: 32, title: "Doç. Dr. Murat Öz - Programlama Temelleri", fileType: "Yorum", fileSize: "", uploadedBy: "Mehmet Kaya", uploaderInitials: "MK", uploadDate: "18 Kas 2024", downloads: 0, views: 389, university: "selcuk", department: "Mühendislik Fakültesi", course: "Programlama Temelleri", type: "reviews", uploadTimestamp: parseDate("18 Kas 2024"), rating: 4.8, helpful: 31 },
+    { id: 33, title: "Prof. Dr. Fatma Korkmaz - Matematik I", fileType: "Yorum", fileSize: "", uploadedBy: "Zeynep Arslan", uploaderInitials: "ZA", uploadDate: "15 Kas 2024", downloads: 0, views: 567, university: "selcuk", department: "Mühendislik Fakültesi", course: "Matematik I", type: "reviews", uploadTimestamp: parseDate("15 Kas 2024"), rating: 4.2, helpful: 19 },
+    { id: 34, title: "Dr. Esin Kara - İşletme Yönetimi", fileType: "Yorum", fileSize: "", uploadedBy: "Can Özkan", uploaderInitials: "CÖ", uploadDate: "12 Kas 2024", downloads: 0, views: 234, university: "neu", department: "İşletme Fakültesi", course: "İşletme Yönetimi", type: "reviews", uploadTimestamp: parseDate("12 Kas 2024"), rating: 4.6, helpful: 15 },
+    { id: 35, title: "Prof. Dr. Kemal Türk - Organik Kimya", fileType: "Yorum", fileSize: "", uploadedBy: "Selin Aydın", uploaderInitials: "SA", uploadDate: "10 Kas 2024", downloads: 0, views: 312, university: "kto", department: "Fen Edebiyat Fakültesi", course: "Organik Kimya", type: "reviews", uploadTimestamp: parseDate("10 Kas 2024"), rating: 4.0, helpful: 12 },
+    { id: 36, title: "Dr. Uğur Şen - Sosyoloji", fileType: "Yorum", fileSize: "", uploadedBy: "Emre Şahin", uploaderInitials: "EŞ", uploadDate: "8 Kas 2024", downloads: 0, views: 278, university: "ktun", department: "Edebiyat Fakültesi", course: "Sosyoloji", type: "reviews", uploadTimestamp: parseDate("8 Kas 2024"), rating: 4.3, helpful: 18 },
+    { id: 37, title: "Prof. Dr. Osman Ata - Statik", fileType: "Yorum", fileSize: "", uploadedBy: "Burak Yıldız", uploaderInitials: "BY", uploadDate: "5 Kas 2024", downloads: 0, views: 423, university: "selcuk", department: "Makine Mühendisliği", course: "Statik", type: "reviews", uploadTimestamp: parseDate("5 Kas 2024"), rating: 4.7, helpful: 27 },
+    { id: 38, title: "Doç. Dr. Pınar Su - Biyoloji", fileType: "Yorum", fileSize: "", uploadedBy: "Yasemin Kaya", uploaderInitials: "YK", uploadDate: "3 Kas 2024", downloads: 0, views: 345, university: "kto", department: "Fen Edebiyat Fakültesi", course: "Biyoloji", type: "reviews", uploadTimestamp: parseDate("3 Kas 2024"), rating: 4.4, helpful: 21 },
+    
+    // Akademik Takvim
+    { id: 39, title: "2024-2025 Güz Dönemi Final Sınavları", fileType: "Etkinlik", fileSize: "", uploadedBy: "Akademik İşler", uploaderInitials: "AI", uploadDate: "15 Oca 2025", downloads: 0, views: 1234, university: "selcuk", department: "Tüm Fakülteler", course: "Akademik Takvim", type: "calendar", uploadTimestamp: parseDate("15 Oca 2025"), eventDate: "15 Oca 2025 - 26 Oca 2025" },
+    { id: 40, title: "2024-2025 Bahar Dönemi Kayıt Tarihleri", fileType: "Etkinlik", fileSize: "", uploadedBy: "Akademik İşler", uploaderInitials: "AI", uploadDate: "1 Şub 2025", downloads: 0, views: 987, university: "selcuk", department: "Tüm Fakülteler", course: "Akademik Takvim", type: "calendar", uploadTimestamp: parseDate("1 Şub 2025"), eventDate: "10 Şub 2025 - 14 Şub 2025" },
+    { id: 41, title: "2024-2025 Bahar Dönemi Ders Başlangıcı", fileType: "Etkinlik", fileSize: "", uploadedBy: "Akademik İşler", uploaderInitials: "AI", uploadDate: "17 Şub 2025", downloads: 0, views: 856, university: "selcuk", department: "Tüm Fakülteler", course: "Akademik Takvim", type: "calendar", uploadTimestamp: parseDate("17 Şub 2025"), eventDate: "17 Şub 2025" },
+    { id: 42, title: "2024-2025 Güz Dönemi Bütünleme Sınavları", fileType: "Etkinlik", fileSize: "", uploadedBy: "Akademik İşler", uploaderInitials: "AI", uploadDate: "5 Şub 2025", downloads: 0, views: 654, university: "selcuk", department: "Tüm Fakülteler", course: "Akademik Takvim", type: "calendar", uploadTimestamp: parseDate("5 Şub 2025"), eventDate: "10 Şub 2025 - 12 Şub 2025" },
+    { id: 43, title: "2024-2025 Bahar Dönemi Vize Sınavları", fileType: "Etkinlik", fileSize: "", uploadedBy: "Akademik İşler", uploaderInitials: "AI", uploadDate: "1 Nis 2025", downloads: 0, views: 789, university: "selcuk", department: "Tüm Fakülteler", course: "Akademik Takvim", type: "calendar", uploadTimestamp: parseDate("1 Nis 2025"), eventDate: "7 Nis 2025 - 18 Nis 2025" },
+    { id: 44, title: "2024-2025 Bahar Dönemi Final Sınavları", fileType: "Etkinlik", fileSize: "", uploadedBy: "Akademik İşler", uploaderInitials: "AI", uploadDate: "1 Haz 2025", downloads: 0, views: 1123, university: "selcuk", department: "Tüm Fakülteler", course: "Akademik Takvim", type: "calendar", uploadTimestamp: parseDate("1 Haz 2025"), eventDate: "9 Haz 2025 - 20 Haz 2025" },
+    { id: 45, title: "2024-2025 Yaz Okulu Kayıtları", fileType: "Etkinlik", fileSize: "", uploadedBy: "Akademik İşler", uploaderInitials: "AI", uploadDate: "15 Haz 2025", downloads: 0, views: 567, university: "selcuk", department: "Tüm Fakülteler", course: "Akademik Takvim", type: "calendar", uploadTimestamp: parseDate("15 Haz 2025"), eventDate: "1 Tem 2025 - 5 Tem 2025" },
+    { id: 46, title: "2024-2025 Güz Dönemi Ders Başlangıcı", fileType: "Etkinlik", fileSize: "", uploadedBy: "Akademik İşler", uploaderInitials: "AI", uploadDate: "23 Eyl 2024", downloads: 0, views: 1456, university: "selcuk", department: "Tüm Fakülteler", course: "Akademik Takvim", type: "calendar", uploadTimestamp: parseDate("23 Eyl 2024"), eventDate: "23 Eyl 2024" },
   ]
 
   // Filter and sort resources
@@ -317,7 +340,14 @@ export function ResourceGrid({ searchQuery }: ResourceGridProps) {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {resources.map((resource) => (
-              <ResourceCard key={resource.id} {...resource} />
+              <ResourceCard 
+                key={resource.id} 
+                {...resource}
+                type={resource.type}
+                rating={resource.rating}
+                helpful={resource.helpful}
+                eventDate={resource.eventDate}
+              />
             ))}
           </div>
 
