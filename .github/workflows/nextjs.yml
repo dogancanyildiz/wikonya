@@ -66,6 +66,17 @@ jobs:
       - name: Build with Next.js
         working-directory: ./frontend
         run: pnpm build
+        env:
+          GITHUB_PAGES: 'true'
+      - name: Check build output
+        working-directory: ./frontend
+        run: |
+          if [ ! -d "out" ]; then
+            echo "Error: out directory not found after build"
+            exit 1
+          fi
+          echo "Build output found at: $(pwd)/out"
+          ls -la out | head -20
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
