@@ -1,12 +1,20 @@
 "use client"
 
-import { memo, useState } from "react"
+import { memo, useState, useEffect } from "react"
 import Link from "next/link"
 import { useApp } from "@/contexts/app-context"
 import { MessageCircle, ThumbsUp, Lightbulb, Clock, BookOpen, ChevronLeft, ChevronRight } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import {
+  getTopicStats,
+  toggleTopicLike,
+  toggleTopicMakesSense,
+  isTopicLikedByUser,
+  isTopicMakesSenseByUser,
+  initializeTopicStats,
+} from "@/lib/utils/topic-stats"
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface DiscussionFeedProps {}
@@ -441,6 +449,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
         isMakesSense,
       }
     })
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocalDiscussions(discussionsWithStats)
   }, [state.user])
   
