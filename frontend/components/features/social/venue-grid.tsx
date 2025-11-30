@@ -648,7 +648,6 @@ export function VenueGrid() {
                       }
                       
                       return (
-                        // @ts-expect-error - react-leaflet Marker props with dynamic import
                         <Marker
                           key={venue.id}
                           position={[venue.coordinates.lat, venue.coordinates.lng]}
