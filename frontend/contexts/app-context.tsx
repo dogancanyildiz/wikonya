@@ -36,6 +36,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const storedUser = localStorage.getItem(STORAGE_KEY)
       if (storedUser) {
         const user = JSON.parse(storedUser) as User
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Necessary for initializing user from localStorage
         setState((prev) => ({
           ...prev,
           user,
