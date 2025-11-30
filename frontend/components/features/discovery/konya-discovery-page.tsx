@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, Clock, Navigation, Heart, MessageCircle, ThumbsUp, BookOpen, Lightbulb } from "lucide-react"
+import { MapPin, Clock, Navigation, Heart, MessageCircle, ThumbsUp, BookOpen, Lightbulb, Sparkles, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
@@ -201,6 +201,40 @@ export function KonyaDiscoveryPage() {
         <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-sm sm:text-base">
           Konya&apos;nın en güzel yerlerini keşfet, rotalar oluştur ve şehri deneyimle
         </p>
+      </div>
+
+      {/* İnteraktif Keşfe Başla Card */}
+      <div className="mb-6 sm:mb-8 md:mb-10">
+        <a
+          href="https://divizyon.github.io/t0-hubit/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+        >
+          <Card className="bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 dark:from-primary/10 dark:via-primary/15 dark:to-primary/10 hover:from-primary/10 hover:via-primary/15 hover:to-primary/10 dark:hover:from-primary/15 dark:hover:via-primary/20 dark:hover:to-primary/15 transition-all duration-300 border border-primary/20 shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl rounded-xl overflow-hidden cursor-pointer group">
+            <CardContent className="p-6 sm:p-8 md:p-10">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+                <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-primary/20 dark:bg-primary/30 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                  <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 text-primary" strokeWidth={2.5} />
+                </div>
+                <div className="flex-1 text-center sm:text-left">
+                  <h2 className="font-[Manrope] text-foreground mb-2 font-extrabold text-xl sm:text-2xl md:text-3xl group-hover:text-primary transition-colors">
+                    İnteraktif Keşfet !
+                  </h2>
+                  <p className="font-[Manrope] text-foreground/70 dark:text-muted-foreground font-medium text-sm sm:text-base mb-4">
+                    Konya&apos;yı 3D deneyimle keşfet! Şehrin en özel yerlerini interaktif bir şekilde gez ve keşfet.
+                  </p>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg group-hover:bg-primary/90 transition-colors">
+                    <span className="font-[Manrope] font-bold text-sm sm:text-base">
+                      Keşfe Başla
+                    </span>
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </a>
       </div>
 
       {/* Must Visit Section */}

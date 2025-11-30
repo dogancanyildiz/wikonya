@@ -202,8 +202,8 @@ export function PopularComments({ comments }: PopularCommentsProps) {
                       <MessageCircle className="w-4 h-4 text-primary" />
                       <span className="font-[Manrope] font-bold text-sm text-foreground">
                         {comment.comments}
-                      </span>
-                    </div>
+                        </span>
+                      </div>
                   </div>
                 </div>
               </div>
