@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Akademik kaynak detay sayfası",
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return []
 }
 
@@ -15,4 +15,3 @@ export default async function AcademicResourceDetailPage({ params }: { params: P
   const resourceId = parseInt(id)
   return <ResourceDetailPage resourceId={resourceId} />
 }
-
