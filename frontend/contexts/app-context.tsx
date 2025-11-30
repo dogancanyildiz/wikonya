@@ -49,7 +49,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (storedNotifications) {
         try {
           const notifications = JSON.parse(storedNotifications) as Notification[]
-          // eslint-disable-next-line react-hooks/set-state-in-effect -- Necessary for initializing notifications from localStorage
           setState((prev) => ({
             ...prev,
             notifications,
