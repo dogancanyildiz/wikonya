@@ -142,15 +142,39 @@ export default function SettingsPage() {
     setError(null)
     setSuccess(false)
 
+    // Validation
+    if (!name.trim() || name.trim().length < 2) {
+      setError("Ad soyad en az 2 karakter olmalıdır")
+      setIsLoading(false)
+      return
+    }
+
+    if (bio && bio.length > 500) {
+      setError("Hakkımda bölümü en fazla 500 karakter olabilir")
+      setIsLoading(false)
+      return
+    }
+
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000))
       
-      setUser({
+      const updatedUser = {
         ...user,
-        name,
-        bio,
-        location,
-      })
+        name: name.trim(),
+        bio: bio.trim(),
+        location: location.trim(),
+      }
+      setUser(updatedUser)
+      
+      // Save to localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user_profile", JSON.stringify({
+          name: updatedUser.name,
+          bio: updatedUser.bio,
+          location: updatedUser.location,
+          updatedAt: new Date().toISOString(),
+        }))
+      }
       
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
@@ -208,17 +232,40 @@ export default function SettingsPage() {
   // Password change handler
   const handlePasswordChange = async () => {
     if (!newPassword || !confirmPassword || !currentPassword) {
-      toast.error("Lütfen tüm alanları doldurun")
+      toast.error("Lütfen tüm alanları doldurun", {
+        description: "Tüm şifre alanları zorunludur",
+        duration: 3000,
+      })
       return
     }
 
     if (newPassword !== confirmPassword) {
-      toast.error("Yeni şifreler eşleşmiyor")
+      toast.error("Şifreler eşleşmiyor", {
+        description: "Yeni şifre ve onay şifresi aynı olmalıdır",
+        duration: 3000,
+      })
       return
     }
 
     if (newPassword.length < 8) {
-      toast.error("Şifre en az 8 karakter olmalıdır")
+      toast.error("Şifre çok kısa", {
+        description: "Şifre en az 8 karakter olmalıdır",
+        duration: 3000,
+      })
+      return
+    }
+
+    // Strong password validation
+    const hasUpperCase = /[A-Z]/.test(newPassword)
+    const hasLowerCase = /[a-z]/.test(newPassword)
+    const hasNumber = /[0-9]/.test(newPassword)
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword)
+
+    if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+      toast.error("Şifre yeterince güçlü değil", {
+        description: "Şifre en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermelidir",
+        duration: 5000,
+      })
       return
     }
 
@@ -258,6 +305,7 @@ export default function SettingsPage() {
       })
       setIsDeleteAccountModalOpen(false)
       setDeletePassword("")
+      setConfirmDelete(false)
       // Redirect to home page
       router.push("/")
     } catch {
@@ -971,6 +1019,18 @@ export default function SettingsPage() {
                 placeholder="Hesabınızı silmek için şifrenizi girin"
               />
             </div>
+            <div className="flex items-start gap-2 p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+              <input
+                type="checkbox"
+                id="confirm-delete"
+                checked={confirmDelete}
+                onChange={(e) => setConfirmDelete(e.target.checked)}
+                className="mt-1 w-4 h-4 text-destructive border-destructive rounded focus:ring-destructive"
+              />
+              <Label htmlFor="confirm-delete" className="font-[Manrope] text-sm text-foreground cursor-pointer">
+                Hesabımı silmek istediğimi onaylıyorum. Bu işlem geri alınamaz.
+              </Label>
+            </div>
           </div>
           <DialogFooter>
             <Button
@@ -978,6 +1038,7 @@ export default function SettingsPage() {
               onClick={() => {
                 setIsDeleteAccountModalOpen(false)
                 setDeletePassword("")
+                setConfirmDelete(false)
               }}
               className="font-[Manrope]"
             >
@@ -985,7 +1046,7 @@ export default function SettingsPage() {
             </Button>
             <Button
               onClick={handleDeleteAccount}
-              disabled={isDeletingAccount || !deletePassword}
+              disabled={isDeletingAccount || !deletePassword || !confirmDelete}
               variant="destructive"
               className="font-[Manrope] font-bold"
             >
