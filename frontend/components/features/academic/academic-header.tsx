@@ -3,7 +3,12 @@
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 
-export function AcademicHeader() {
+interface AcademicHeaderProps {
+  searchQuery: string
+  onSearchChange: (value: string) => void
+}
+
+export function AcademicHeader({ searchQuery, onSearchChange }: AcademicHeaderProps) {
   return (
     <div className="mb-8 sm:mb-10 md:mb-12">
       <h1 className="font-[Manrope] text-foreground mb-3 font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-[42px]">
@@ -18,6 +23,8 @@ export function AcademicHeader() {
         <Input
           type="text"
           placeholder="Ders, hoca veya konu ara..."
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
           className="w-full h-12 pl-12 pr-4 bg-card border border-border rounded-xl font-[Manrope] text-foreground placeholder:text-foreground/40 dark:placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-sm"
         />
       </div>
