@@ -3,7 +3,7 @@
 import { Star, MapPin, Heart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, memo, useCallback } from "react"
 
 interface VenueCardProps {
   id: number
@@ -16,7 +16,7 @@ interface VenueCardProps {
   category: string
 }
 
-export function VenueCard({
+function VenueCardComponent({
   id,
   image,
   name,
@@ -26,6 +26,11 @@ export function VenueCard({
   category,
 }: VenueCardProps) {
   const [isFavorite, setIsFavorite] = useState(false)
+
+  const handleFavorite = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsFavorite(prev => !prev)
+  }, [])
 
   return (
     <Link href={`/social/venue/${id}`} className="block group">
@@ -44,10 +49,8 @@ export function VenueCard({
           
           {/* Favorite Button */}
           <button
-            onClick={(e) => {
-              e.preventDefault()
-              setIsFavorite(!isFavorite)
-            }}
+            onClick={handleFavorite}
+            aria-label={isFavorite ? "Favorilerden çıkar" : "Favorilere ekle"}
             className="absolute top-3 right-3 w-8 h-8 bg-white/95 dark:bg-card/95 rounded-full flex items-center justify-center shadow-sm z-10"
           >
             <Heart
@@ -92,4 +95,12 @@ export function VenueCard({
     </Link>
   )
 }
+
+export const VenueCard = memo(VenueCardComponent, (prevProps, nextProps) => {
+  return prevProps.id === nextProps.id &&
+    prevProps.name === nextProps.name &&
+    prevProps.rating === nextProps.rating &&
+    prevProps.reviews === nextProps.reviews &&
+    prevProps.location === nextProps.location
+})
 

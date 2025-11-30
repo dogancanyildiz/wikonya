@@ -145,7 +145,7 @@ export function ResourceGrid({ searchQuery }: ResourceGridProps) {
     { id: 46, title: "2024-2025 Güz Dönemi Ders Başlangıcı", fileType: "Etkinlik", fileSize: "", uploadedBy: "Akademik İşler", uploaderInitials: "AI", uploadDate: "23 Eyl 2024", downloads: 0, views: 1456, university: "selcuk", department: "Tüm Fakülteler", course: "Akademik Takvim", type: "calendar", uploadTimestamp: parseDate("23 Eyl 2024"), eventDate: "23 Eyl 2024" },
   ]
 
-  // Filter and sort resources
+  // Filter and sort resources - already using useMemo, good!
   const filteredAndSortedResources = useMemo(() => {
     const filtered = allResources.filter(resource => {
       // Type filter

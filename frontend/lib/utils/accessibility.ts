@@ -1,43 +1,157 @@
 /**
- * Accessibility utilities and constants
+ * Accessibility utilities for ARIA labels and keyboard navigation
  */
 
-// ARIA labels for common actions
 export const ARIA_LABELS = {
-  search: "Arama kutusu",
-  searchButton: "Ara",
-  like: "Beğen",
-  unlike: "Beğenmeyi geri al",
-  comment: "Yorum yap",
-  share: "Paylaş",
-  bookmark: "Yer imlerine ekle",
-  unbookmark: "Yer imlerinden çıkar",
-  favorite: "Favorilere ekle",
-  unfavorite: "Favorilerden çıkar",
+  // Navigation
+  mainNav: "Ana navigasyon",
+  mobileNav: "Mobil navigasyon",
+  breadcrumb: "Breadcrumb navigasyonu",
+  
+  // Actions
+  search: "Ara",
+  searchInput: "Arama kutusu",
+  filter: "Filtrele",
+  sort: "Sırala",
   close: "Kapat",
   open: "Aç",
-  menu: "Menü",
-  navigation: "Navigasyon",
-  main: "Ana içerik",
-  footer: "Alt bilgi",
-  skipToContent: "İçeriğe atla",
+  save: "Kaydet",
+  delete: "Sil",
+  edit: "Düzenle",
+  share: "Paylaş",
+  bookmark: "Favorilere ekle",
+  unbookmark: "Favorilerden çıkar",
+  like: "Beğen",
+  unlike: "Beğeniyi geri al",
+  follow: "Takip et",
+  unfollow: "Takip etmeyi bırak",
+  
+  // Content
+  topic: "Başlık",
+  comment: "Yorum",
+  user: "Kullanıcı profili",
+  image: "Görsel",
+  video: "Video",
+  
+  // Forms
+  submit: "Gönder",
+  cancel: "İptal",
+  next: "Sonraki",
+  previous: "Önceki",
+  
+  // Status
+  loading: "Yükleniyor",
+  error: "Hata",
+  success: "Başarılı",
 } as const
 
-// Keyboard shortcuts
-export const KEYBOARD_SHORTCUTS = {
-  search: "Ctrl+K",
-  escape: "Escape",
-  enter: "Enter",
+/**
+ * Generate ARIA label for pagination
+ */
+export function getPaginationLabel(currentPage: number, totalPages: number): string {
+  return `Sayfa ${currentPage} / ${totalPages}`
+}
+
+/**
+ * Generate ARIA label for filter
+ */
+export function getFilterLabel(filterName: string, isActive: boolean): string {
+  return `${filterName} filtresi${isActive ? " (aktif)" : ""}`
+}
+
+/**
+ * Generate ARIA label for sort option
+ */
+export function getSortLabel(sortName: string, isActive: boolean): string {
+  return `${sortName} sıralama${isActive ? " (aktif)" : ""}`
+}
+
+/**
+ * Keyboard navigation helpers
+ */
+export const KEYBOARD_KEYS = {
+  ENTER: "Enter",
+  SPACE: " ",
+  ESCAPE: "Escape",
+  ARROW_UP: "ArrowUp",
+  ARROW_DOWN: "ArrowDown",
+  ARROW_LEFT: "ArrowLeft",
+  ARROW_RIGHT: "ArrowRight",
+  TAB: "Tab",
+  HOME: "Home",
+  END: "End",
 } as const
 
-// Focus management
-export const focusElement = (element: HTMLElement | null) => {
+/**
+ * Handle keyboard navigation for interactive elements
+ */
+export function handleKeyboardNavigation(
+  event: React.KeyboardEvent,
+  onEnter?: () => void,
+  onEscape?: () => void,
+  onArrowUp?: () => void,
+  onArrowDown?: () => void
+) {
+  switch (event.key) {
+    case KEYBOARD_KEYS.ENTER:
+    case KEYBOARD_KEYS.SPACE:
+      event.preventDefault()
+      onEnter?.()
+      break
+    case KEYBOARD_KEYS.ESCAPE:
+      event.preventDefault()
+      onEscape?.()
+      break
+    case KEYBOARD_KEYS.ARROW_UP:
+      event.preventDefault()
+      onArrowUp?.()
+      break
+    case KEYBOARD_KEYS.ARROW_DOWN:
+      event.preventDefault()
+      onArrowDown?.()
+      break
+  }
+}
+
+/**
+ * Focus management utilities
+ */
+export function focusElement(element: HTMLElement | null) {
   if (element) {
     element.focus()
     element.scrollIntoView({ behavior: "smooth", block: "nearest" })
   }
 }
 
-// Skip to content link component (use in .tsx files)
-export const skipToContentClassName = "sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+export function trapFocus(container: HTMLElement | null) {
+  if (!container) return
 
+  const focusableElements = container.querySelectorAll<HTMLElement>(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  )
+  
+  const firstElement = focusableElements[0]
+  const lastElement = focusableElements[focusableElements.length - 1]
+
+  const handleTab = (e: KeyboardEvent) => {
+    if (e.key !== KEYBOARD_KEYS.TAB) return
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        e.preventDefault()
+        lastElement?.focus()
+      }
+    } else {
+      if (document.activeElement === lastElement) {
+        e.preventDefault()
+        firstElement?.focus()
+      }
+    }
+  }
+
+  container.addEventListener("keydown", handleTab)
+  
+  return () => {
+    container.removeEventListener("keydown", handleTab)
+  }
+}

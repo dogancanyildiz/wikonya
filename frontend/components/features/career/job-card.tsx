@@ -2,7 +2,7 @@
 
 import { MapPin, Clock, Bookmark, Building2 } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, memo, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -31,6 +31,11 @@ export function JobCard({
   salary,
 }: JobCardProps) {
   const [isBookmarked, setIsBookmarked] = useState(false)
+
+  const handleBookmark = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsBookmarked(prev => !prev)
+  }, [])
 
   return (
     <Card className="rounded-xl border border-border bg-card shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 group">
@@ -61,10 +66,8 @@ export function JobCard({
               </div>
               
               <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  setIsBookmarked(!isBookmarked)
-                }}
+                onClick={handleBookmark}
+                aria-label={isBookmarked ? "Favorilerden çıkar" : "Favorilere ekle"}
                 className="w-8 h-8 rounded-lg bg-muted hover:bg-primary/10 dark:hover:bg-primary/20 flex items-center justify-center transition-all flex-shrink-0"
               >
                 <Bookmark
@@ -126,3 +129,14 @@ export function JobCard({
     </Card>
   )
 }
+
+// Memoized version for better performance in lists
+export const JobCardMemo = memo(JobCard, (prevProps, nextProps) => {
+  return prevProps.id === nextProps.id &&
+    prevProps.company === nextProps.company &&
+    prevProps.role === nextProps.role &&
+    prevProps.location === nextProps.location &&
+    prevProps.type === nextProps.type &&
+    prevProps.postedDays === nextProps.postedDays &&
+    prevProps.salary === nextProps.salary
+})

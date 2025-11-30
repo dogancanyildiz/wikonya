@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { HousingCard } from "./housing-card"
 import { Button } from "@/components/ui/button"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
@@ -439,8 +439,8 @@ export function HousingList() {
     },
   ]
 
-  // Filter listings
-  const filteredListings = listings.filter(listing => {
+  // Filter listings - memoized
+  const filteredListings = useMemo(() => listings.filter(listing => {
     // Category filter
     if (selectedCategory && listing.category !== selectedCategory) return false
     
@@ -464,10 +464,10 @@ export function HousingList() {
     if (selectedDistrict !== "all" && listing.district !== selectedDistrict) return false
     
     return true
-  })
+  }), [selectedCategory, selectedPriceRange, selectedBedrooms, selectedDistrict])
 
-  // Sort listings
-  const sortedListings = [...filteredListings].sort((a, b) => {
+  // Sort listings - memoized
+  const sortedListings = useMemo(() => [...filteredListings].sort((a, b) => {
     if (sortBy === "price-low") {
       return a.price - b.price
     } else if (sortBy === "price-high") {
@@ -478,12 +478,14 @@ export function HousingList() {
       return b.postedDate.getTime() - a.postedDate.getTime()
     }
     return 0
-  })
+  }), [filteredListings, sortBy])
 
-  // Pagination
-  const totalPages = Math.ceil(sortedListings.length / ITEMS_PER_PAGE)
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-  const paginatedListings = sortedListings.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  // Pagination - memoized
+  const totalPages = useMemo(() => Math.ceil(sortedListings.length / ITEMS_PER_PAGE), [sortedListings.length])
+  const paginatedListings = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    return sortedListings.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  }, [sortedListings, currentPage])
 
   const priceRanges = [
     { id: "all", label: "Tüm Fiyatlar" },

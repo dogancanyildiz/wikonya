@@ -281,7 +281,8 @@ export function LifeGuideDetailPage({ guideId }: { guideId: number }) {
             alt={guide.title}
             fill
             className="object-cover"
-            unoptimized
+            sizes="(max-width: 768px) 100vw, 66vw"
+            priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           

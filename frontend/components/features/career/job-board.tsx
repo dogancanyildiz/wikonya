@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo, useCallback } from "react"
 import * as React from "react"
 import { JobCard } from "./job-card"
 import { Button } from "@/components/ui/button"
@@ -168,7 +168,7 @@ export function JobBoard({ searchQuery = "" }: JobBoardProps) {
     },
   ]
 
-  const filteredJobs = jobs.filter(job => {
+  const filteredJobs = useMemo(() => jobs.filter(job => {
     // Type filter
     const typeMatch = selectedType === "all" || 
       (selectedType === "part-time" && job.type === "Part-Time") ||
@@ -191,24 +191,26 @@ export function JobBoard({ searchQuery = "" }: JobBoardProps) {
       job.location.toLowerCase().includes(searchQuery.toLowerCase())
     
     return typeMatch && locationMatch && searchMatch
-  })
+  }), [selectedType, selectedLocation, searchQuery])
 
   // Pagination logic
-  const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE)
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-  const endIndex = startIndex + ITEMS_PER_PAGE
-  const paginatedJobs = filteredJobs.slice(startIndex, endIndex)
+  const totalPages = useMemo(() => Math.ceil(filteredJobs.length / ITEMS_PER_PAGE), [filteredJobs.length])
+  const paginatedJobs = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    const endIndex = startIndex + ITEMS_PER_PAGE
+    return filteredJobs.slice(startIndex, endIndex)
+  }, [filteredJobs, currentPage])
 
   // Reset to page 1 when filter changes
-  const handleFilterChange = (type: string) => {
+  const handleFilterChange = useCallback((type: string) => {
     setSelectedType(type)
     setCurrentPage(1)
-  }
+  }, [])
 
-  const handleLocationChange = (location: string) => {
+  const handleLocationChange = useCallback((location: string) => {
     setSelectedLocation(location)
     setCurrentPage(1)
-  }
+  }, [])
 
   // Reset page when search query changes
   React.useEffect(() => {

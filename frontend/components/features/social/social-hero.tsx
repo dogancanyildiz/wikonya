@@ -91,7 +91,8 @@ export function SocialHero() {
           alt="Kitap & Kahve"
           fill
           className="object-cover"
-          unoptimized
+          sizes="100vw"
+          priority
         />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10"></div>

@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertTriangle } from "lucide-react"
+import { AlertTriangle, RefreshCw } from "lucide-react"
 
 export default function GlobalError({
   error,
@@ -14,50 +14,40 @@ export default function GlobalError({
 }) {
   useEffect(() => {
     console.error("Global error:", error)
+    
+    // Log to error tracking service in production
+    if (typeof window !== "undefined" && process.env.NODE_ENV === "production") {
+      // Sentry.captureException(error)
+    }
   }, [error])
 
   return (
-    <html lang="tr">
+    <html>
       <body>
         <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-          <Card className="max-w-md w-full">
+          <Card className="max-w-md w-full bg-card border border-border">
             <CardHeader>
-              <div className="flex items-center gap-3">
-                <AlertTriangle className="w-6 h-6 text-destructive" />
-                <CardTitle className="font-[Manrope] font-bold">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
+                  <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
+                <CardTitle className="font-[Manrope] font-bold text-xl text-foreground">
                   Kritik Hata
                 </CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="font-[Manrope] text-muted-foreground">
-                Uygulamada kritik bir hata oluştu. Lütfen sayfayı yenileyin veya ana sayfaya dönün.
+              <p className="font-[Manrope] text-sm text-muted-foreground">
+                Uygulamada kritik bir hata oluştu. Lütfen sayfayı yenileyin.
               </p>
-              <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground font-[Manrope]">
-                <li>Sayfayı yenileyin</li>
-                <li>Ana sayfaya dönün</li>
-                <li>Tarayıcı önbelleğini temizleyin</li>
-              </ul>
-              {error.digest && (
-                <div className="p-2 bg-muted rounded text-xs font-mono text-muted-foreground">
-                  Hata ID: {error.digest}
-                </div>
-              )}
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Button
-                  onClick={reset}
-                  className="font-[Manrope]"
-                >
-                  🔄 Sayfayı Yenile
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => window.location.href = "/"}
-                  className="font-[Manrope]"
-                >
-                  🏠 Ana Sayfaya Dön
-                </Button>
-              </div>
+
+              <Button
+                onClick={reset}
+                className="font-[Manrope] font-bold w-full"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Sayfayı Yenile
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -65,4 +55,3 @@ export default function GlobalError({
     </html>
   )
 }
-

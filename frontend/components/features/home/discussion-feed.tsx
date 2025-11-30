@@ -546,6 +546,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
         <div className="flex items-center gap-2 flex-wrap">
           <Button 
             onClick={() => handleFilterChange("newest")}
+            aria-label="En yeni başlıkları göster"
             variant={filter === "newest" ? "default" : "outline"}
             className={`font-[Manrope] font-semibold ${
               filter === "newest" 
@@ -557,6 +558,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
           </Button>
           <Button 
             onClick={() => handleFilterChange("popular")}
+            aria-label="En popüler başlıkları göster"
             variant={filter === "popular" ? "default" : "outline"}
             className={`font-[Manrope] font-semibold ${
               filter === "popular" 
@@ -568,6 +570,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
           </Button>
           <Button 
             onClick={() => handleFilterChange("unanswered")}
+            aria-label="Yanıtsız başlıkları göster"
             variant={filter === "unanswered" ? "default" : "outline"}
             className={`font-[Manrope] font-semibold ${
               filter === "unanswered" 

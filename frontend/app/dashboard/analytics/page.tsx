@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { useApp } from "@/contexts/app-context"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -57,23 +57,23 @@ export default function AnalyticsPage() {
     },
   }
 
-  const data = analyticsData[selectedPeriod]
-  const maxValue = Math.max(...data.views, ...data.likes, ...data.comments, ...data.topics)
+  const data = useMemo(() => analyticsData[selectedPeriod], [selectedPeriod])
+  const maxValue = useMemo(() => Math.max(...data.views, ...data.likes, ...data.comments, ...data.topics), [data])
 
-  // Calculate totals and trends
-  const totals = {
+  // Calculate totals and trends - memoized
+  const totals = useMemo(() => ({
     topics: data.topics.reduce((a, b) => a + b, 0),
     comments: data.comments.reduce((a, b) => a + b, 0),
     likes: data.likes.reduce((a, b) => a + b, 0),
     views: data.views.reduce((a, b) => a + b, 0),
-  }
+  }), [data])
 
-  const trends = {
+  const trends = useMemo(() => ({
     topics: totals.topics > 20 ? "up" : "down",
     comments: totals.comments > 100 ? "up" : "down",
     likes: totals.likes > 200 ? "up" : "down",
     views: totals.views > 500 ? "up" : "down",
-  }
+  }), [totals])
 
   const SimpleBarChart = ({ data, color, label }: { data: number[]; color: string; label: string }) => {
     return (
@@ -135,7 +135,8 @@ export default function AnalyticsPage() {
           {(["7d", "30d", "90d", "all"] as const).map((period) => (
             <button
               key={period}
-              onClick={() => setSelectedPeriod(period)}
+              onClick={() => handlePeriodChange(period)}
+              aria-label={`${period === "7d" ? "Son 7 gün" : period === "30d" ? "Son 30 gün" : period === "90d" ? "Son 90 gün" : "Tüm zamanlar"} verilerini göster`}
               className={`px-3 py-1.5 rounded-lg font-[Manrope] font-semibold text-xs transition-colors ${
                 selectedPeriod === period
                   ? "bg-primary text-white"

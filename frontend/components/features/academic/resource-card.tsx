@@ -4,6 +4,7 @@ import { FileText, Download, Eye, MessageSquare, Calendar, Star } from "lucide-r
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { memo } from "react"
 
 interface ResourceCardProps {
   id: number
@@ -21,7 +22,7 @@ interface ResourceCardProps {
   eventDate?: string
 }
 
-export function ResourceCard({
+function ResourceCardComponent({
   id,
   title,
   fileType,
@@ -155,4 +156,12 @@ export function ResourceCard({
     </div>
   )
 }
+
+export const ResourceCard = memo(ResourceCardComponent, (prevProps, nextProps) => {
+  return prevProps.id === nextProps.id &&
+    prevProps.title === nextProps.title &&
+    prevProps.downloads === nextProps.downloads &&
+    prevProps.views === nextProps.views &&
+    prevProps.type === nextProps.type
+})
 
