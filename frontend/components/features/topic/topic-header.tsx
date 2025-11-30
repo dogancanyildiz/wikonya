@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Calendar, Eye, MessageCircle, Share2, Bookmark, Edit2, ThumbsUp, ThumbsDown, History } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -24,6 +24,23 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [revisions, setRevisions] = useState<WikiRevision[]>([])
+
+  // Load wiki history from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const historyKey = `wiki_history_${topicId}`
+      const stored = localStorage.getItem(historyKey)
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored)
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setRevisions(parsed)
+        } catch {
+          // If parsing fails, use empty array
+        }
+      }
+    }
+  }, [topicId])
   const [wikiContent, setWikiContent] = useState<WikiContent | null>(
     initialWikiContent || {
       id: 1,
@@ -46,12 +63,27 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
 
   const handleWikiSave = (newContent: string) => {
     if (wikiContent) {
-      setWikiContent({
+      const updatedContent = {
         ...wikiContent,
         content: newContent,
         version: wikiContent.version + 1,
         updatedAt: new Date().toISOString(),
-      })
+      }
+      setWikiContent(updatedContent)
+      
+      // Update revisions list from localStorage
+      if (typeof window !== "undefined") {
+        const historyKey = `wiki_history_${topicId}`
+        const stored = localStorage.getItem(historyKey)
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored)
+            setRevisions(parsed)
+          } catch {
+            // If parsing fails, keep current revisions
+          }
+        }
+      }
     }
   }
 

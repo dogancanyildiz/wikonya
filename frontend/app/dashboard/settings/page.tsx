@@ -116,12 +116,35 @@ export default function SettingsPage() {
   const [deletePassword, setDeletePassword] = useState("")
   const [isDeletingAccount, setIsDeletingAccount] = useState(false)
 
+  // Load connected accounts from localStorage
+  const loadConnectedAccounts = () => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("connected_accounts")
+      if (stored) {
+        try {
+          return JSON.parse(stored)
+        } catch {
+          // If parsing fails, use default
+        }
+      }
+    }
+    return [
+      { id: "google", name: "Google", icon: "🔵", connected: true, email: "user@gmail.com", authUrl: "https://accounts.google.com/oauth/authorize" },
+      { id: "apple", name: "Apple", icon: "⚫", connected: false, email: null, authUrl: "https://appleid.apple.com/auth/authorize" },
+      { id: "genckart", name: "GençKart", icon: "💳", connected: true, email: "user@genckart.com", authUrl: "https://genckart.konya.bel.tr/auth" },
+    ]
+  }
+
   // Connected accounts state
-  const [connectedAccounts, setConnectedAccounts] = useState([
-    { id: "google", name: "Google", icon: "🔵", connected: true, email: "user@gmail.com", authUrl: "https://accounts.google.com/oauth/authorize" },
-    { id: "apple", name: "Apple", icon: "⚫", connected: false, email: null, authUrl: "https://appleid.apple.com/auth/authorize" },
-    { id: "genckart", name: "GençKart", icon: "💳", connected: true, email: "user@genckart.com", authUrl: "https://genckart.konya.bel.tr/auth" },
-  ])
+  const [connectedAccounts, setConnectedAccounts] = useState(loadConnectedAccounts())
+
+  // Load connected accounts on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const accounts = loadConnectedAccounts()
+      setConnectedAccounts(accounts)
+    }
+  }, [])
 
   // Disconnect confirmation modal state
   const [disconnectAccountId, setDisconnectAccountId] = useState<string | null>(null)
@@ -341,13 +364,20 @@ export default function SettingsPage() {
   // Confirm disconnect
   const confirmDisconnect = () => {
     if (disconnectAccountId) {
-      setConnectedAccounts(prev => 
-        prev.map(account => 
+      setConnectedAccounts(prev => {
+        const updated = prev.map(account => 
           account.id === disconnectAccountId 
-            ? { ...account, connected: false, email: null }
+            ? { ...account, connected: false, email: null, disconnectedAt: new Date().toISOString() }
             : account
         )
-      )
+        
+        // Save to localStorage
+        if (typeof window !== "undefined") {
+          localStorage.setItem("connected_accounts", JSON.stringify(updated))
+        }
+        
+        return updated
+      })
       toast.success("Bağlantı kesildi", {
         description: "Hesap bağlantısı başarıyla kaldırıldı",
         duration: 3000,
@@ -360,7 +390,32 @@ export default function SettingsPage() {
   // Handle connect account (open in new tab)
   const handleConnectAccount = (account: typeof connectedAccounts[0]) => {
     // Gerçek uygulamada bu URL backend'den gelecek ve OAuth parametreleri içerecek
+    // OAuth callback'ten sonra bu fonksiyon çağrılacak ve account connected olacak
+    // Şimdilik sadece yeni sekme açıyoruz
     window.open(account.authUrl, "_blank", "noopener,noreferrer")
+    
+    // Simüle edilmiş bağlantı (gerçek uygulamada OAuth callback'ten sonra yapılacak)
+    // setTimeout ile simüle ediyoruz
+    setTimeout(() => {
+      setConnectedAccounts(prev => {
+        const updated = prev.map(acc => 
+          acc.id === account.id 
+            ? { ...acc, connected: true, email: `user@${account.id}.com`, connectedAt: new Date().toISOString() }
+            : acc
+        )
+        
+        // Save to localStorage
+        if (typeof window !== "undefined") {
+          localStorage.setItem("connected_accounts", JSON.stringify(updated))
+        }
+        
+        return updated
+      })
+      toast.success("Bağlantı başarılı", {
+        description: `${account.name} hesabı başarıyla bağlandı`,
+        duration: 3000,
+      })
+    }, 2000)
   }
 
   const themeOptions = [

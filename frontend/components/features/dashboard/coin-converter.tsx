@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useApp } from "@/contexts/app-context"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -17,6 +17,28 @@ export function CoinConverter() {
   const [isConverting, setIsConverting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [conversionHistory, setConversionHistory] = useState<Array<{
+    id: number
+    amount: number
+    points: number
+    date: string
+  }>>([])
+
+  // Load conversion history from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined" && state.user) {
+      const historyKey = `conversion_history_${state.user.id}`
+      const stored = localStorage.getItem(historyKey)
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored)
+          setConversionHistory(parsed)
+        } catch {
+          // If parsing fails, use empty array
+        }
+      }
+    }
+  }, [state.user])
 
   const user = state.user
 
@@ -46,6 +68,17 @@ export function CoinConverter() {
       return
     }
 
+    // Check daily limit
+    if (!canConvertToday) {
+      setError(`Günlük dönüşüm limitinize ulaştınız (${dailyLimit} GençCoin)`)
+      return
+    }
+
+    if (todayTotal + Number(amount) > dailyLimit) {
+      setError(`Günlük limit aşılıyor. Bugün ${dailyLimit - todayTotal} GençCoin daha dönüştürebilirsiniz.`)
+      return
+    }
+
     setIsConverting(true)
     setError(null)
     setSuccess(false)
@@ -60,6 +93,20 @@ export function CoinConverter() {
         ...user,
         totalCoins: newTotalCoins,
       })
+
+      // Save conversion to history
+      if (typeof window !== "undefined") {
+        const historyKey = `conversion_history_${user.id}`
+        const newConversion = {
+          id: Date.now(),
+          amount: Number(amount),
+          points: convertedPoints,
+          date: new Date().toISOString(),
+        }
+        const updatedHistory = [newConversion, ...conversionHistory].slice(0, 50) // Keep last 50
+        localStorage.setItem(historyKey, JSON.stringify(updatedHistory))
+        setConversionHistory(updatedHistory)
+      }
 
       setSuccess(true)
       setAmount("")
@@ -166,7 +213,7 @@ export function CoinConverter() {
 
         <Button
           onClick={handleConvert}
-          disabled={isConverting || !amount || Number(amount) < conversionConfig.minAmount || Number(amount) > user.totalCoins}
+          disabled={isConverting || !amount || Number(amount) < conversionConfig.minAmount || Number(amount) > user.totalCoins || !canConvertToday}
           className="w-full bg-primary hover:bg-primary/90 font-[Manrope] font-bold"
         >
           {isConverting ? (

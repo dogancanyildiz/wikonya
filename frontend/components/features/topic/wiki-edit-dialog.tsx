@@ -77,6 +77,23 @@ export function WikiEditDialog({
         rewardCoins("edit_wiki", { topicId, version: wikiContent?.version || 1 })
         // User stats güncelle
         incrementWikiEditCount(state.user)
+        
+        // Save to localStorage - wiki edit history
+        if (typeof window !== "undefined" && wikiContent) {
+          const historyKey = `wiki_history_${topicId}`
+          const history = JSON.parse(localStorage.getItem(historyKey) || "[]")
+          const newRevision = {
+            id: Date.now(),
+            version: wikiContent.version + 1,
+            content: content,
+            changeSummary: changeSummary || "Düzenleme yapıldı",
+            author: state.user,
+            createdAt: new Date().toISOString(),
+          }
+          history.unshift(newRevision)
+          // Keep only last 50 revisions
+          localStorage.setItem(historyKey, JSON.stringify(history.slice(0, 50)))
+        }
       }
 
       // Callback çağır
