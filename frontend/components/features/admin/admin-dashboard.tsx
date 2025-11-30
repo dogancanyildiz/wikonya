@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, BookOpen, MessageCircle, TrendingUp, AlertTriangle } from "lucide-react"
 
@@ -19,8 +20,70 @@ interface AdminDashboardProps {
 }
 
 export function AdminDashboard({ stats }: AdminDashboardProps) {
+  const [calculatedStats, setCalculatedStats] = useState<AdminStats | null>(null)
+
+  // Calculate stats from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Get all user stats
+      const allUserStats: Array<{ userId: number; stats: { commentCount: number; wikiEditCount: number; topicCount: number } }> = []
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)
+        if (key?.startsWith("user_stats_")) {
+          const userId = parseInt(key.replace("user_stats_", ""))
+          try {
+            const userStats = JSON.parse(localStorage.getItem(key) || "{}")
+            allUserStats.push({ userId, stats: userStats })
+          } catch {
+            // Skip invalid entries
+          }
+        }
+      }
+
+      // Get moderation history
+      const moderationHistory = JSON.parse(localStorage.getItem("moderation_history") || "[]")
+      const pendingApprovals = moderationHistory.filter((m: { action: string }) => m.action === "pending").length
+
+      // Get wiki history counts
+      let totalWikiEdits = 0
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)
+        if (key?.startsWith("wiki_history_")) {
+          try {
+            const history = JSON.parse(localStorage.getItem(key) || "[]")
+            totalWikiEdits += history.length
+          } catch {
+            // Skip invalid entries
+          }
+        }
+      }
+
+      // Calculate stats
+      const totalUsers = allUserStats.length || 1
+      const activeUsers = allUserStats.filter(us => {
+        const lastUpdated = new Date(us.stats.lastUpdated || 0)
+        const daysSinceUpdate = (Date.now() - lastUpdated.getTime()) / (1000 * 60 * 60 * 24)
+        return daysSinceUpdate <= 30
+      }).length || 1
+      const totalTopics = allUserStats.reduce((sum, us) => sum + (us.stats.topicCount || 0), 0) || 0
+      const totalComments = allUserStats.reduce((sum, us) => sum + (us.stats.commentCount || 0), 0) || 0
+
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCalculatedStats({
+        totalUsers,
+        activeUsers,
+        totalTopics,
+        totalComments,
+        totalWikiEdits,
+        pendingApprovals,
+        flaggedContent: 0, // Would need separate tracking
+        platformHealth: pendingApprovals > 20 ? "warning" : "healthy",
+      })
+    }
+  }, [])
+
   // Mock data - gerçek uygulamada API'den gelecek
-  const mockStats: AdminStats = stats || {
+  const mockStats: AdminStats = stats || calculatedStats || {
     totalUsers: 1250,
     activeUsers: 342,
     totalTopics: 456,
