@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
-import { Wallet, BookOpen, UserPlus, Trophy, Settings } from "lucide-react"
+import { Wallet, BookOpen, UserPlus, Trophy, Settings, BarChart3 } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Select,
@@ -14,6 +14,7 @@ import {
 const tabs = [
   { id: "contributions", label: "Katkılarım", icon: BookOpen, href: "/dashboard" },
   { id: "wallet", label: "Cüzdan & GençCoin", icon: Wallet, href: "/dashboard/wallet" },
+  { id: "analytics", label: "Analytics", icon: BarChart3, href: "/dashboard/analytics" },
   { id: "invite", label: "Arkadaşını Davet Et", icon: UserPlus, href: "/dashboard/invite" },
   { id: "achievements", label: "Başarılar", icon: Trophy, href: "/dashboard/achievements" },
   { id: "settings", label: "Ayarlar", icon: Settings, href: "/dashboard/settings" },
@@ -27,6 +28,7 @@ export function DashboardTabbar() {
   const getActiveTab = () => {
     if (pathname === "/dashboard") return "contributions"
     if (pathname?.startsWith("/dashboard/wallet")) return "wallet"
+    if (pathname?.startsWith("/dashboard/analytics")) return "analytics"
     if (pathname?.startsWith("/dashboard/invite")) return "invite"
     if (pathname?.startsWith("/dashboard/achievements")) return "achievements"
     if (pathname?.startsWith("/dashboard/settings")) return "settings"
@@ -48,7 +50,7 @@ export function DashboardTabbar() {
       {/* Desktop: Tabs */}
       <div className="hidden md:block">
         <Tabs value={activeTab} onValueChange={handleTabChange}>
-          <TabsList className="grid w-full grid-cols-5 h-auto p-1 bg-accent dark:bg-accent/50 rounded-lg border border-border">
+          <TabsList className="grid w-full grid-cols-6 h-auto p-1 bg-accent dark:bg-accent/50 rounded-lg border border-border">
             {tabs.map((tab) => {
               const Icon = tab.icon
               const isActive = activeTab === tab.id
