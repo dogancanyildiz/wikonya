@@ -13,6 +13,7 @@ import { canPerformAction, performAction, getRemainingActions } from "@/lib/gami
 import { toast } from "sonner"
 import { CommentReplyDialog } from "./comment-reply-dialog"
 import { incrementCommentCount } from "@/lib/utils/user-stats"
+import { incrementTopicComments, getTopicStats } from "@/lib/utils/topic-stats"
 
 import { Comment as CommentType } from "@/lib/types"
 
@@ -1604,6 +1605,9 @@ export function CommentFeed({ topicId }: CommentFeedProps) {
 
                   // User stats güncelle
                   incrementCommentCount(state.user)
+
+                  // Topic comment count güncelle
+                  incrementTopicComments(topicId, comments.length)
 
                   // Yeni yorum ekle
                   const newCommentObj: Comment = {

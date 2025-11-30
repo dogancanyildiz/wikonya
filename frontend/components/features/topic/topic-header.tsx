@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Calendar, Eye, MessageCircle, Share2, Bookmark, Edit2, ThumbsUp, ThumbsDown, History } from "lucide-react"
+import { Calendar, Eye, MessageCircle, Share2, Bookmark, Edit2, ThumbsUp, ThumbsDown, History, Lightbulb } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useApp } from "@/contexts/app-context"
@@ -11,6 +11,15 @@ import { WikiEditDialog } from "./wiki-edit-dialog"
 import { WikiHistory } from "./wiki-history"
 import { WikiContent, WikiRevision } from "@/lib/types"
 import { renderMarkdown } from "@/lib/utils/markdown"
+import {
+  getTopicStats,
+  toggleTopicLike,
+  toggleTopicMakesSense,
+  isTopicLikedByUser,
+  isTopicMakesSenseByUser,
+  initializeTopicStats,
+  incrementTopicComments,
+} from "@/lib/utils/topic-stats"
 
 interface TopicHeaderProps {
   topicId: number
@@ -448,9 +457,13 @@ export function TopicHeader({ topicId, wikiContent: initialWikiContent }: TopicH
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [revisions, setRevisions] = useState<WikiRevision[]>([])
+  const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
+  const [topicStats, setTopicStats] = useState<{ likes: number; makesSense: number; comments: number }>({ likes: 0, makesSense: 0, comments: 0 })
+  const [isLiked, setIsLiked] = useState(false)
+  const [isMakesSense, setIsMakesSense] = useState(false)
 
   // Get topic data by id - eğer bulunamazsa varsayılan bir topic oluştur
-  const topic = mockTopics.find(t => t.id === topicId) || {
+  const baseTopic = mockTopics.find(t => t.id === topicId) || {
     id: topicId,
     title: "Başlık Bulunamadı",
     category: "Genel",
@@ -464,6 +477,44 @@ export function TopicHeader({ topicId, wikiContent: initialWikiContent }: TopicH
     excerpt: "Bu başlık hakkında bilgi bulunamadı.",
     likes: 0,
     makesSense: 0,
+  }
+
+  // Load stats from localStorage
+  useEffect(() => {
+    const stats = getTopicStats(topicId)
+    const liked = state.user ? isTopicLikedByUser(topicId, state.user) : false
+    const makesSense = state.user ? isTopicMakesSenseByUser(topicId, state.user) : false
+
+    // Initialize stats if not exists
+    if (stats.likes === 0 && stats.makesSense === 0 && stats.comments === 0) {
+      initializeTopicStats(topicId, {
+        likes: baseTopic.likes,
+        makesSense: baseTopic.makesSense,
+        comments: baseTopic.comments,
+      })
+      setTopicStats({
+        likes: baseTopic.likes,
+        makesSense: baseTopic.makesSense,
+        comments: baseTopic.comments,
+      })
+    } else {
+      setTopicStats({
+        likes: stats.likes || baseTopic.likes,
+        makesSense: stats.makesSense || baseTopic.makesSense,
+        comments: stats.comments || baseTopic.comments,
+      })
+    }
+
+    setIsLiked(liked)
+    setIsMakesSense(makesSense)
+  }, [topicId, state.user, baseTopic.likes, baseTopic.makesSense, baseTopic.comments])
+
+  // Topic with stats from localStorage
+  const topic = {
+    ...baseTopic,
+    likes: topicStats.likes,
+    makesSense: topicStats.makesSense,
+    comments: topicStats.comments,
   }
   
   // Format date helper
@@ -1296,6 +1347,67 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
                   {topic.comments} yorum
                 </span>
               </div>
+            </div>
+
+            {/* Like and Makes Sense Buttons */}
+            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <button
+                onClick={() => {
+                  if (!state.user) return
+                  const newIsLiked = !isLiked
+                  if (newIsLiked) {
+                    const animationKey = `like-${topicId}`
+                    setAnimations({ ...animations, [animationKey]: true })
+                    setTimeout(() => {
+                      setAnimations({ ...animations, [animationKey]: false })
+                    }, 600)
+                  }
+                  const newLikes = toggleTopicLike(topicId, state.user, topic.likes)
+                  setIsLiked(newIsLiked)
+                  setTopicStats({ ...topicStats, likes: newLikes })
+                }}
+                className={`relative flex items-center gap-2 px-3 sm:px-4 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                  isLiked ? 'bg-primary/10 dark:bg-primary/20' : ''
+                }`}
+                aria-label={`${topic.likes} beğeni`}
+              >
+                <ThumbsUp className={`w-4 h-4 text-primary ${isLiked ? 'fill-primary' : ''}`} />
+                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{topic.likes}</span>
+                {animations[`like-${topicId}`] && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                    +1
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  if (!state.user) return
+                  const newIsMakesSense = !isMakesSense
+                  if (newIsMakesSense) {
+                    const animationKey = `logical-${topicId}`
+                    setAnimations({ ...animations, [animationKey]: true })
+                    setTimeout(() => {
+                      setAnimations({ ...animations, [animationKey]: false })
+                    }, 600)
+                  }
+                  const newMakesSense = toggleTopicMakesSense(topicId, state.user, topic.makesSense)
+                  setIsMakesSense(newIsMakesSense)
+                  setTopicStats({ ...topicStats, makesSense: newMakesSense })
+                }}
+                className={`relative flex items-center gap-2 px-3 sm:px-4 py-2 bg-accent rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors ${
+                  isMakesSense ? 'bg-primary/10 dark:bg-primary/20' : ''
+                }`}
+                aria-label={`${topic.makesSense} mantıklı`}
+              >
+                <Lightbulb className={`w-4 h-4 text-primary ${isMakesSense ? 'fill-primary' : ''}`} />
+                <span className="font-[Manrope] font-semibold text-xs sm:text-sm">{topic.makesSense}</span>
+                <span className="font-[Manrope] font-medium text-[10px] sm:text-xs text-foreground/60 dark:text-muted-foreground hidden sm:inline">Mantıklı</span>
+                {animations[`logical-${topicId}`] && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                    +1
+                  </span>
+                )}
+              </button>
             </div>
 
             {/* Tags */}

@@ -412,9 +412,37 @@ const ITEMS_PER_PAGE = 8
 export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedProps) {
   const { state } = useApp()
   const [currentPage, setCurrentPage] = useState(1)
-  const [localDiscussions, setLocalDiscussions] = useState<Discussion[]>(allDiscussions)
+  const [localDiscussions, setLocalDiscussions] = useState<Discussion[]>([])
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
   const [filter, setFilter] = useState<"newest" | "popular" | "unanswered">("newest")
+
+  // Initialize discussions with stats from localStorage
+  useEffect(() => {
+    const discussionsWithStats = allDiscussions.map(discussion => {
+      const stats = getTopicStats(discussion.id)
+      const isLiked = state.user ? isTopicLikedByUser(discussion.id, state.user) : false
+      const isMakesSense = state.user ? isTopicMakesSenseByUser(discussion.id, state.user) : false
+      
+      // Initialize stats if not exists
+      if (stats.likes === 0 && stats.makesSense === 0 && stats.comments === 0) {
+        initializeTopicStats(discussion.id, {
+          likes: discussion.likes,
+          makesSense: discussion.makesSense,
+          comments: discussion.comments,
+        })
+      }
+
+      return {
+        ...discussion,
+        likes: stats.likes || discussion.likes,
+        makesSense: stats.makesSense || discussion.makesSense,
+        comments: stats.comments || discussion.comments,
+        isLiked,
+        isMakesSense,
+      }
+    })
+    setLocalDiscussions(discussionsWithStats)
+  }, [state.user])
   
   // Filtreleme ve sıralama
   const filteredAndSortedDiscussions = [...localDiscussions].filter(discussion => {
@@ -463,9 +491,12 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
       }, 600)
     }
 
+    // Update in localStorage
+    const newLikes = toggleTopicLike(discussionId, state.user, discussion.likes)
+
     setLocalDiscussions(localDiscussions.map(d => 
       d.id === discussionId 
-        ? { ...d, likes: newIsLiked ? d.likes + 1 : d.likes - 1, isLiked: newIsLiked }
+        ? { ...d, likes: newLikes, isLiked: newIsLiked }
         : d
     ))
   }
@@ -489,9 +520,12 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
       }, 600)
     }
 
+    // Update in localStorage
+    const newMakesSense = toggleTopicMakesSense(discussionId, state.user, discussion.makesSense)
+
     setLocalDiscussions(localDiscussions.map(d => 
       d.id === discussionId 
-        ? { ...d, makesSense: newIsMakesSense ? d.makesSense + 1 : d.makesSense - 1, isMakesSense: newIsMakesSense }
+        ? { ...d, makesSense: newMakesSense, isMakesSense: newIsMakesSense }
         : d
     ))
   }
