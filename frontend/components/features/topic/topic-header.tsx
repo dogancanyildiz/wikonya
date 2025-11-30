@@ -13,17 +13,101 @@ import { WikiContent, WikiRevision } from "@/lib/types"
 import { renderMarkdown } from "@/lib/utils/markdown"
 
 interface TopicHeaderProps {
-  topicId?: number
+  topicId: number
   wikiContent?: WikiContent | null
 }
 
-export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: TopicHeaderProps) {
+// Mock topics data - gerçek uygulamada API'den gelecek
+const mockTopics: Array<{
+  id: number
+  title: string
+  category: string
+  views: number
+  comments: number
+  tags: string[]
+  reliabilityScore: number
+  createdAt: string
+  updatedAt: string
+  author: { id: number; name: string; initials: string; role: string }
+}> = [
+  {
+    id: 1,
+    title: "Selçuk Hukuk Final Notları",
+    category: "Akademik",
+    views: 3200,
+    comments: 48,
+    tags: ["Ders Notu", "Hukuk Fakültesi", "Final Hazırlık"],
+    reliabilityScore: 98,
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    author: { id: 1, name: "Admin", initials: "AD", role: "konya_bilgesi" },
+  },
+  {
+    id: 2,
+    title: "Konya'da Öğrenci Dostu Restoranlar",
+    category: "Sosyal",
+    views: 2800,
+    comments: 35,
+    tags: ["Restoran", "Yemek", "Bütçe Dostu"],
+    reliabilityScore: 92,
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    author: { id: 2, name: "User", initials: "US", role: "gezgin" },
+  },
+  {
+    id: 3,
+    title: "Bosna Hersek Mahallesi Ev Kiralama Rehberi",
+    category: "Barınma",
+    views: 2100,
+    comments: 42,
+    tags: ["Ev", "Kiralama", "Mahalle"],
+    reliabilityScore: 88,
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    author: { id: 3, name: "User2", initials: "U2", role: "seyyah" },
+  },
+  {
+    id: 4,
+    title: "Lineer Cebir Dersi İçin Kaynak Önerisi",
+    category: "Akademik",
+    views: 1500,
+    comments: 28,
+    tags: ["Matematik", "Ders", "Kaynak"],
+    reliabilityScore: 85,
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    author: { id: 4, name: "Ahmet Yılmaz", initials: "AY", role: "yeni_gelen" },
+  },
+  {
+    id: 5,
+    title: "Kampüse Yakın Uygun Fiyatlı Yurt",
+    category: "Barınma",
+    views: 1800,
+    comments: 32,
+    tags: ["Yurt", "Barınma", "Kampüs"],
+    reliabilityScore: 90,
+    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
+    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    author: { id: 5, name: "Zeynep Kaya", initials: "ZK", role: "gezgin" },
+  },
+]
+
+export function TopicHeader({ topicId, wikiContent: initialWikiContent }: TopicHeaderProps) {
   const { state } = useApp()
   const { canEditWiki, canProposeWikiEdit } = usePermissions()
   const { notifyWikiReverted } = useNotifications()
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [revisions, setRevisions] = useState<WikiRevision[]>([])
+
+  // Get topic data by id
+  const topic = mockTopics.find(t => t.id === topicId) || mockTopics[0]
+  
+  // Format date helper
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })
+  }
 
   // Load wiki history from localStorage
   useEffect(() => {
@@ -41,15 +125,22 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
       }
     }
   }, [topicId])
+  
   const [wikiContent, setWikiContent] = useState<WikiContent | null>(
     initialWikiContent || {
       id: 1,
       topicId,
-      content: "Selçuk Üniversitesi Hukuk Fakültesi final sınavlarına hazırlık için derlenmiş kapsamlı ders notları. İçerik; anayasa hukuku, medeni hukuk, ceza hukuku ve ticaret hukuku gibi temel dersleri kapsamaktadır. Notlar, son 3 yılın sınav sorularına göre düzenlenmiş ve akademisyenlerin tavsiyeleri doğrultusunda hazırlanmıştır.",
+      content: topicId === 1 
+        ? "Selçuk Üniversitesi Hukuk Fakültesi final sınavlarına hazırlık için derlenmiş kapsamlı ders notları. İçerik; anayasa hukuku, medeni hukuk, ceza hukuku ve ticaret hukuku gibi temel dersleri kapsamaktadır. Notlar, son 3 yılın sınav sorularına göre düzenlenmiş ve akademisyenlerin tavsiyeleri doğrultusunda hazırlanmıştır."
+        : topicId === 2
+        ? "Konya'da öğrenci bütçesine uygun, lezzetli ve kaliteli restoranlar listesi. Kampüse yakın lokasyonlar ve öğrenci indirimleri hakkında detaylı bilgiler."
+        : topicId === 3
+        ? "Bosna Hersek Mahallesi hakkında kapsamlı rehber. Ev kiralama süreçleri, mahalle özellikleri, ulaşım ve çevre hakkında detaylı bilgiler."
+        : "Bu başlık hakkında detaylı bilgiler burada yer alacak.",
       version: 1,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      author: state.user || { id: 1, name: "Admin", initials: "AD", role: "konya_bilgesi", totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() },
+      author: state.user || topic.author || { id: 1, name: "Admin", initials: "AD", role: "konya_bilgesi", totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() },
       usefulVotes: 45,
       notUsefulVotes: 2,
       isCurrent: true,
@@ -57,8 +148,6 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
   )
   const [userVote, setUserVote] = useState<"useful" | "not_useful" | null>(null)
 
-  const tags = ["Ders Notu", "Hukuk Fakültesi", "Final Hazırlık"]
-  
   const canEdit = canEditWiki || canProposeWikiEdit
 
   const handleWikiSave = (newContent: string) => {
@@ -147,7 +236,7 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
           <div className="flex-1">
             {/* Title */}
             <h1 className="font-[Manrope] text-foreground mb-4 sm:mb-6 font-extrabold text-3xl sm:text-4xl lg:text-[48px] leading-tight">
-              Selçuk Hukuk Final Notları
+              {topic.title}
             </h1>
             
             {/* Meta Information */}
@@ -155,26 +244,26 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
               <div className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground">
                 <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="font-[Manrope] font-medium text-xs sm:text-sm">
-                  Son güncelleme: 25 Kasım 2024
+                  Son güncelleme: {formatDate(topic.updatedAt)}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground">
                 <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="font-[Manrope] font-medium text-xs sm:text-sm">
-                  3.2k görüntülenme
+                  {topic.views >= 1000 ? `${(topic.views / 1000).toFixed(1)}k` : topic.views} görüntülenme
                 </span>
               </div>
               <div className="flex items-center gap-2 text-foreground/60 dark:text-muted-foreground">
                 <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="font-[Manrope] font-medium text-xs sm:text-sm">
-                  48 yorum
+                  {topic.comments} yorum
                 </span>
               </div>
             </div>
 
             {/* Tags */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              {tags.map((tag) => (
+              {topic.tags.map((tag) => (
                 <div
                   key={tag}
                   className="px-3 sm:px-4 py-1.5 sm:py-2 bg-card border-2 border-primary rounded-full"
@@ -196,7 +285,7 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
               {/* Score */}
               <div className="relative z-10 text-center">
                 <div className="font-[Manrope] text-primary leading-none font-extrabold text-4xl sm:text-5xl lg:text-[60px]">
-                  98%
+                  {topic.reliabilityScore}%
                 </div>
                 <div className="font-[Manrope] text-primary mt-1 font-bold text-xs sm:text-sm">
                   GÜVENİLİRLİK
@@ -359,7 +448,7 @@ export function TopicHeader({ topicId = 1, wikiContent: initialWikiContent }: To
             const revision = revisions.find((r) => r.id === revisionId)
             if (revision && wikiContent) {
               const revertedBy = state.user?.name || "Bir moderatör"
-              const topicTitle = "Selçuk Hukuk Final Notları" // Gerçek uygulamada topic title'dan gelecek
+              const topicTitle = topic.title
               
               setWikiContent({
                 ...wikiContent,

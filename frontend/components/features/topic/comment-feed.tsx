@@ -23,7 +23,11 @@ interface Comment extends CommentType {
   repliesList?: Comment[]
 }
 
-export function CommentFeed() {
+interface CommentFeedProps {
+  topicId: number
+}
+
+export function CommentFeed({ topicId }: CommentFeedProps) {
   const { state } = useApp()
   const { rewardCoins } = useCoinReward()
   const [newComment, setNewComment] = useState("")

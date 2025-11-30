@@ -4,7 +4,11 @@ import { Users, TrendingUp, BookOpen, ExternalLink } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-export function TopicSidebar() {
+interface TopicSidebarProps {
+  topicId: number
+}
+
+export function TopicSidebar({ topicId }: TopicSidebarProps) {
   const contributors = [
     { id: 1, name: "Prof. Dr. Ahmet Yılmaz", initials: "AY", role: "Ana Editör" },
     { id: 2, name: "Elif Demir", initials: "ED", role: "Katkıda Bulunan" },

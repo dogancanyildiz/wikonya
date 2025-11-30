@@ -1,22 +1,26 @@
 import type { Metadata } from "next"
 import { TopicDetailPage as TopicDetailPageContent } from "@/components/features/topic/topic-detail-page"
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
   return {
-    title: "Başlık Detayı | Konya Genç",
+    title: `Başlık Detayı #${id} | Konya Genç`,
     description: "Konya Genç platformunda başlık detayı, wiki içeriği ve yorumlar.",
     openGraph: {
-      title: "Başlık Detayı | Konya Genç",
+      title: `Başlık Detayı #${id} | Konya Genç`,
       description: "Konya Genç platformunda başlık detayı",
       type: "article",
     },
   }
 }
 
-export default function TopicDetailPage() {
+export default async function TopicDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const topicId = parseInt(id, 10)
+  
   return (
     <div className="min-h-screen bg-background">
-      <TopicDetailPageContent />
+      <TopicDetailPageContent topicId={topicId} />
     </div>
   )
 }
