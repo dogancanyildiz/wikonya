@@ -10,8 +10,9 @@ import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, BookOpen, MessageCircle, User, Clock, TrendingUp, Filter, X } from "lucide-react"
 import Link from "next/link"
-import { Topic, Comment } from "@/lib/types"
+import { Topic, Comment, User as UserType } from "@/lib/types"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 const CATEGORIES = [
   { value: "all", label: "Tüm Kategoriler" },
@@ -61,12 +62,113 @@ export default function SearchPage() {
   const [results, setResults] = useState<{
     topics: Topic[]
     comments: Comment[]
-    users: Array<{ id: number; name: string; initials: string; role: string }>
+    users: UserType[]
   }>({
     topics: [],
     comments: [],
     users: [],
   })
+
+  // Mock users data - gerçek uygulamada API'den gelecek
+  const getAllUsers = (): UserType[] => {
+    return [
+      {
+        id: 1,
+        name: "Yeni Kullanıcı",
+        initials: "YK",
+        email: "yeni_gelen@example.com",
+        role: "yeni_gelen",
+        totalCoins: 250,
+        badges: [],
+        xp: { current: 250, nextLevel: 500, progress: 50 },
+        joinedAt: new Date().toISOString(),
+        location: "Konya",
+        bio: "Platformu yeni keşfediyorum!",
+      },
+      {
+        id: 2,
+        name: "Seyyah Kullanıcı",
+        initials: "SK",
+        email: "seyyah@example.com",
+        role: "seyyah",
+        totalCoins: 1200,
+        badges: [{ id: "first_comment", name: "İlk Yorum", icon: "💬", description: "İlk yorumunu yaptın!", earnedAt: new Date().toISOString() }],
+        xp: { current: 1200, nextLevel: 2500, progress: 48 },
+        joinedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        location: "Meram, Konya",
+        bio: "Platforma katkıda bulunmayı seviyorum!",
+      },
+      {
+        id: 3,
+        name: "Gezgin Kullanıcı",
+        initials: "GK",
+        email: "gezgin@example.com",
+        role: "gezgin",
+        totalCoins: 5000,
+        badges: [
+          { id: "first_comment", name: "İlk Yorum", icon: "💬", description: "İlk yorumunu yaptın!", earnedAt: new Date().toISOString() },
+          { id: "first_topic", name: "İlk Başlık", icon: "📝", description: "İlk başlığını açtın!", earnedAt: new Date().toISOString() },
+        ],
+        xp: { current: 5000, nextLevel: 10000, progress: 50 },
+        joinedAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
+        location: "Selçuklu, Konya",
+        bio: "Güvenilir içerik üreticisi",
+      },
+      {
+        id: 4,
+        name: "Kaşif Meraklısı",
+        initials: "KM",
+        email: "kasif@example.com",
+        role: "kasif_meraklisi",
+        totalCoins: 25000,
+        badges: [{ id: "moderator", name: "Moderatör", icon: "🛡️", description: "Topluluk lideri", earnedAt: new Date().toISOString() }],
+        xp: { current: 25000, nextLevel: 50000, progress: 50 },
+        joinedAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString(),
+        location: "Karatay, Konya",
+        bio: "Topluluk sağlığını koruyorum",
+      },
+      {
+        id: 5,
+        name: "Konya Bilgesi",
+        initials: "KB",
+        email: "bilge@example.com",
+        role: "konya_bilgesi",
+        totalCoins: 75000,
+        badges: [{ id: "elite", name: "Elit", icon: "👑", description: "Platformun zirvesi", earnedAt: new Date().toISOString() }],
+        xp: { current: 75000, nextLevel: 75000, progress: 100 },
+        joinedAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString(),
+        location: "Meram, Konya",
+        bio: "Usta rehber ve elit katılımcı",
+      },
+      {
+        id: 6,
+        name: "Ahmet Yılmaz",
+        initials: "AY",
+        email: "ahmet@example.com",
+        role: "gezgin",
+        totalCoins: 3500,
+        badges: [],
+        xp: { current: 3500, nextLevel: 5000, progress: 70 },
+        joinedAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+        location: "Selçuklu, Konya",
+        bio: "Akademik konularda yardımcı oluyorum",
+        university: "Selçuk Üniversitesi",
+      },
+      {
+        id: 7,
+        name: "Zeynep Kaya",
+        initials: "ZK",
+        email: "zeynep@example.com",
+        role: "seyyah",
+        totalCoins: 1800,
+        badges: [],
+        xp: { current: 1800, nextLevel: 2500, progress: 72 },
+        joinedAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
+        location: "Meram, Konya",
+        bio: "Sosyal etkinlikler ve mekanlar hakkında bilgi paylaşıyorum",
+      },
+    ]
+  }
 
   // localStorage'dan son aramaları yükle
   useEffect(() => {
@@ -214,10 +316,23 @@ export default function SearchPage() {
         comment.content.toLowerCase().includes(query.toLowerCase())
       )
 
+      // User search
+      let filteredUsers: UserType[] = []
+      if (trimmedQuery) {
+        const allUsers = getAllUsers()
+        filteredUsers = allUsers.filter((user) =>
+          user.name.toLowerCase().includes(trimmedQuery.toLowerCase()) ||
+          user.email?.toLowerCase().includes(trimmedQuery.toLowerCase()) ||
+          user.location?.toLowerCase().includes(trimmedQuery.toLowerCase()) ||
+          user.bio?.toLowerCase().includes(trimmedQuery.toLowerCase()) ||
+          user.university?.toLowerCase().includes(trimmedQuery.toLowerCase())
+        )
+      }
+
       setResults({
         topics: filteredTopics,
         comments: mockComments,
-        users: [],
+        users: filteredUsers,
       })
     } catch (error) {
       console.error("Search error:", error)
@@ -522,13 +637,82 @@ export default function SearchPage() {
             )}
 
                 {activeTab === "users" && (
-                  <Card>
-                    <CardContent className="p-8 text-center">
-                      <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground">
-                        Kullanıcı arama özelliği yakında eklenecek
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <>
+                    {isLoading ? (
+                      <div className="space-y-4">
+                        {[1, 2, 3].map((i) => (
+                          <Card key={i} className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border">
+                            <CardContent className="p-4 sm:p-6">
+                              <div className="flex items-center gap-4">
+                                <Skeleton className="h-12 w-12 rounded-full" />
+                                <div className="flex-1 space-y-2">
+                                  <Skeleton className="h-5 w-32" />
+                                  <Skeleton className="h-4 w-48" />
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : results.users.length > 0 ? (
+                      results.users.map((user) => (
+                        <Card
+                          key={user.id}
+                          className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border hover:shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:hover:shadow-xl transition-shadow"
+                        >
+                          <CardContent className="p-4 sm:p-6">
+                            <Link href={`/user/${user.id}`}>
+                              <div className="flex items-center gap-4">
+                                <Avatar className="h-12 w-12">
+                                  <AvatarFallback className="bg-primary/10 text-primary font-[Manrope] font-bold">
+                                    {user.initials}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <h3 className="font-[Manrope] font-bold text-lg text-foreground hover:text-primary transition-colors">
+                                      {user.name}
+                                    </h3>
+                                    <Badge variant="outline" className="font-[Manrope] text-xs">
+                                      {user.role === "yeni_gelen" ? "Yeni Gelen" :
+                                       user.role === "seyyah" ? "Seyyah" :
+                                       user.role === "gezgin" ? "Gezgin" :
+                                       user.role === "kasif_meraklisi" ? "Kaşif Meraklısı" :
+                                       user.role === "konya_bilgesi" ? "Konya Bilgesi" : user.role}
+                                    </Badge>
+                                  </div>
+                                  {user.bio && (
+                                    <p className="font-[Manrope] text-sm text-foreground/70 dark:text-muted-foreground mb-2 line-clamp-1">
+                                      {user.bio}
+                                    </p>
+                                  )}
+                                  <div className="flex items-center gap-4 text-xs text-foreground/60 dark:text-muted-foreground">
+                                    {user.location && <span>{user.location}</span>}
+                                    {user.university && <span>{user.university}</span>}
+                                    <span>{user.totalCoins.toLocaleString()} GençCoin</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </Link>
+                          </CardContent>
+                        </Card>
+                      ))
+                    ) : (
+                      <Empty className="py-12 sm:py-16">
+                        <EmptyHeader>
+                          <EmptyMedia variant="icon">
+                            <User className="w-12 h-12 text-muted-foreground" />
+                          </EmptyMedia>
+                          <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+                            Kullanıcı Bulunamadı
+                          </EmptyTitle>
+                          <EmptyDescription className="font-[Manrope] text-base">
+                            &quot;{query}&quot; için kullanıcı bulunamadı. Farklı anahtar kelimeler deneyin.
+                          </EmptyDescription>
+                        </EmptyHeader>
+                      </Empty>
+                    )}
+                  </>
                 )}
               </>
             )}
