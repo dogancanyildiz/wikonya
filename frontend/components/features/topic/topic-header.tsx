@@ -1648,6 +1648,71 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
         }}
       />
       
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-[Manrope] font-bold">
+              Başlığı Sil
+            </AlertDialogTitle>
+            <AlertDialogDescription className="font-[Manrope]">
+              Bu başlığı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm yorumlar ve wiki içeriği de silinecektir.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={isDeleting}
+              className="font-[Manrope]"
+            >
+              İptal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                setIsDeleting(true)
+                try {
+                  // Simüle edilmiş API çağrısı
+                  await new Promise((resolve) => setTimeout(resolve, 500))
+
+                  // Save to localStorage - deleted topics
+                  if (typeof window !== "undefined") {
+                    const deletedKey = "deleted_topics"
+                    const deleted = JSON.parse(localStorage.getItem(deletedKey) || "[]")
+                    deleted.push({
+                      id: topicId,
+                      title: topic.title,
+                      deletedBy: state.user,
+                      deletedAt: new Date().toISOString(),
+                    })
+                    localStorage.setItem(deletedKey, JSON.stringify(deleted))
+
+                    // Remove topic data
+                    const topicDataKey = `topic_data_${topicId}`
+                    localStorage.removeItem(topicDataKey)
+                    
+                    // Remove topic stats
+                    const statsKey = `topic_stats_${topicId}`
+                    localStorage.removeItem(statsKey)
+                  }
+
+                  toast.success("Başlık başarıyla silindi")
+                  router.push("/discussion")
+                } catch (err) {
+                  toast.error("Başlık silinirken bir hata oluştu")
+                } finally {
+                  setIsDeleting(false)
+                  setIsDeleteDialogOpen(false)
+                }
+              }}
+              disabled={isDeleting}
+              className="font-[Manrope] bg-destructive hover:bg-destructive/90"
+            >
+              {isDeleting ? "Siliniyor..." : "Sil"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
       {/* Wiki Edit Dialog */}
       <WikiEditDialog
         open={isEditDialogOpen}
