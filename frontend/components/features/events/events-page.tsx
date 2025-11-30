@@ -25,6 +25,7 @@ interface Event {
   participants: number
   maxParticipants: number
   category: "student" | "kbb" | "municipality"
+  eventCategory?: "Spor" | "Kültür" | "Eğitim" | "Sosyal" | "Müzik"
   description?: string
   organizer?: string
 }
@@ -47,6 +48,7 @@ export function EventsPage() {
       participants: 24,
       maxParticipants: 30,
       category: "student",
+      eventCategory: "Spor",
       description: "Doğa yürüyüşü ve piknik etkinliği",
       organizer: "Trekking Topluluğu",
     },
@@ -60,6 +62,7 @@ export function EventsPage() {
       participants: 12,
       maxParticipants: 15,
       category: "student",
+      eventCategory: "Kültür",
       description: "Orhan Pamuk'un eserlerini tartışıyoruz",
       organizer: "Kitap Kulübü",
     },
@@ -73,6 +76,7 @@ export function EventsPage() {
       participants: 8,
       maxParticipants: 20,
       category: "student",
+      eventCategory: "Sosyal",
       description: "Strateji ve kutu oyunları gecesi",
       organizer: "Oyun Topluluğu",
     },
@@ -89,6 +93,7 @@ export function EventsPage() {
       participants: 150,
       maxParticipants: 200,
       category: "kbb",
+      eventCategory: "Sosyal",
       description: "Yeni gençlik merkezinin açılış töreni ve tanıtım etkinliği",
       organizer: "Konya Büyükşehir Belediyesi",
     },
@@ -102,6 +107,7 @@ export function EventsPage() {
       participants: 80,
       maxParticipants: 100,
       category: "kbb",
+      eventCategory: "Eğitim",
       description: "Genç Kültür Kart'ın özellikleri ve avantajları hakkında bilgilendirme",
       organizer: "Konya Büyükşehir Belediyesi",
     },
@@ -115,6 +121,7 @@ export function EventsPage() {
       participants: 200,
       maxParticipants: 300,
       category: "kbb",
+      eventCategory: "Müzik",
       description: "Konyalı genç sanatçıların performansları",
       organizer: "Konya Büyükşehir Belediyesi",
     },
@@ -123,9 +130,13 @@ export function EventsPage() {
   const allEvents = [...studentEvents, ...kbbEvents]
 
   const filteredEvents = allEvents.filter(event => {
-    if (activeTab === "all") return true
-    if (activeTab === "student") return event.category === "student"
-    if (activeTab === "kbb") return event.category === "kbb"
+    // Tab filtresi
+    if (activeTab === "student" && event.category !== "student") return false
+    if (activeTab === "kbb" && event.category !== "kbb") return false
+    
+    // Kategori filtresi
+    if (selectedCategory !== null && event.eventCategory !== selectedCategory) return false
+    
     return true
   })
 
