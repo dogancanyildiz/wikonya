@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import dynamic from "next/dynamic"
 import "leaflet/dist/leaflet.css"
 
@@ -31,6 +32,22 @@ interface LeafletMapProps {
   popupContent?: React.ReactNode
 }
 
+// Component to update map center when coordinates change
+function MapCenterUpdater({ lat, lng, zoom }: { lat: number; lng: number; zoom: number }) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { useMap } = require("react-leaflet")
+  const map = useMap()
+
+  useEffect(() => {
+    map.setView([lat, lng], zoom, {
+      animate: true,
+      duration: 0.5,
+    })
+  }, [lat, lng, zoom, map])
+
+  return null
+}
+
 export function LeafletMap({
   lat,
   lng,
@@ -53,6 +70,7 @@ export function LeafletMap({
 
   return (
     <MapContainer
+      key={`${lat}-${lng}`}
       center={[lat, lng]}
       zoom={zoom}
       className="w-full rounded-xl"
@@ -63,6 +81,7 @@ export function LeafletMap({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <MapCenterUpdater lat={lat} lng={lng} zoom={zoom} />
       <Marker position={[lat, lng]}>
         {showPopup && popupContent && <Popup>{popupContent}</Popup>}
       </Marker>
