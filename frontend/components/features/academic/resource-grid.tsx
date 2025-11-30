@@ -342,7 +342,6 @@ export function ResourceGrid({ searchQuery }: ResourceGridProps) {
             {resources.map((resource) => (
               <ResourceCard 
                 key={resource.id} 
-                id={resource.id}
                 {...resource}
                 type={resource.type}
                 rating={resource.rating}
