@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { Calendar, MapPin, Users, Clock, ArrowRight, Filter, CalendarX, X, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Image from "next/image"
@@ -36,6 +38,8 @@ interface Event {
 const ITEMS_PER_PAGE = 12
 
 export function EventsPage() {
+  const router = useRouter()
+  const { canModerate } = usePermissions()
   const [activeTab, setActiveTab] = useState<"all" | "student" | "kbb">("all")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [selectedDateFilter, setSelectedDateFilter] = useState<string>("all")
@@ -252,12 +256,15 @@ export function EventsPage() {
               Öğrenci etkinlikleri ve KBB merkezi etkinlikleri
             </p>
           </div>
-          <Button 
-            variant="outline"
-            className="px-4 sm:px-6 py-2 sm:py-3 border-2 border-dashed border-primary rounded-xl font-[Manrope] text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all font-bold text-xs sm:text-sm whitespace-nowrap"
-          >
-            + Etkinlik Oluştur
-          </Button>
+          {canModerate && (
+            <Button 
+              onClick={() => router.push("/events/new")}
+              variant="outline"
+              className="px-4 sm:px-6 py-2 sm:py-3 border-2 border-dashed border-primary rounded-xl font-[Manrope] text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all font-bold text-xs sm:text-sm whitespace-nowrap"
+            >
+              + Etkinlik Oluştur
+            </Button>
+          )}
         </div>
       </div>
 
