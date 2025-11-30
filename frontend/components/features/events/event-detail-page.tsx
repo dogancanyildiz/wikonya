@@ -109,6 +109,7 @@ export function EventDetailPage() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const joinedEvents = JSON.parse(localStorage.getItem("joined_events") || "[]")
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsJoined(joinedEvents.includes(eventId))
     }
   }, [eventId])

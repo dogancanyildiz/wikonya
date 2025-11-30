@@ -24,6 +24,7 @@ export function SocialHero() {
     if (typeof window !== "undefined") {
       const votes = JSON.parse(localStorage.getItem("venue_votes") || "[]")
       if (votes.length > 0) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setVotedVenueId(votes[0]) // Get the last vote
       }
     }

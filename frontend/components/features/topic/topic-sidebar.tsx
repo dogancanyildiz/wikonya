@@ -8,7 +8,9 @@ interface TopicSidebarProps {
   topicId: number
 }
 
-export function TopicSidebar({ topicId }: TopicSidebarProps) {
+export function TopicSidebar({ topicId: _topicId }: TopicSidebarProps) {
+  // topicId is reserved for future use
+  void _topicId
   const contributors = [
     { id: 1, name: "Prof. Dr. Ahmet Yılmaz", initials: "AY", role: "Ana Editör" },
     { id: 2, name: "Elif Demir", initials: "ED", role: "Katkıda Bulunan" },

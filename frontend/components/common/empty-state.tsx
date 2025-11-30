@@ -1,6 +1,5 @@
 "use client"
 
-import { ReactNode } from "react"
 import { Button } from "@/components/ui/button"
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty"
 import { LucideIcon } from "lucide-react"

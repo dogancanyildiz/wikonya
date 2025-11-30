@@ -9,7 +9,7 @@ import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
 import { WikiEditDialog } from "./wiki-edit-dialog"
 import { WikiHistory } from "./wiki-history"
-import { WikiContent, WikiRevision } from "@/lib/types"
+import { WikiContent, WikiRevision, UserRole } from "@/lib/types"
 import { renderMarkdown } from "@/lib/utils/markdown"
 import {
   getTopicStats,
@@ -18,7 +18,6 @@ import {
   isTopicLikedByUser,
   isTopicMakesSenseByUser,
   initializeTopicStats,
-  incrementTopicComments,
 } from "@/lib/utils/topic-stats"
 
 interface TopicHeaderProps {
@@ -492,6 +491,7 @@ export function TopicHeader({ topicId, wikiContent: initialWikiContent }: TopicH
         makesSense: baseTopic.makesSense,
         comments: baseTopic.comments,
       })
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTopicStats({
         likes: baseTopic.likes,
         makesSense: baseTopic.makesSense,
@@ -1223,7 +1223,7 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
         id: topic.author.id, 
         name: topic.author.name, 
         initials: topic.author.initials, 
-        role: topic.author.role, 
+        role: topic.author.role as UserRole, 
         totalCoins: 0, 
         badges: [], 
         xp: { current: 0, nextLevel: 500, progress: 0 }, 

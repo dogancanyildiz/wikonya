@@ -72,7 +72,8 @@ export function ResourceGrid({ searchQuery }: ResourceGridProps) {
       const year = parseInt(parts[2])
       return new Date(year, month, day).getTime()
     }
-    return Date.now()
+    // Return a default timestamp if date parsing fails
+    return 0
   }
 
   const allResources: Resource[] = [
@@ -123,7 +124,7 @@ export function ResourceGrid({ searchQuery }: ResourceGridProps) {
 
   // Filter and sort resources
   const filteredAndSortedResources = useMemo(() => {
-    let filtered = allResources.filter(resource => {
+    const filtered = allResources.filter(resource => {
       // Type filter
       if (resource.type !== selectedType) return false
       
@@ -158,6 +159,7 @@ export function ResourceGrid({ searchQuery }: ResourceGridProps) {
     })
 
     return sorted
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedUniversity, selectedSort, selectedType, searchQuery])
 
   // Reset page when filters change

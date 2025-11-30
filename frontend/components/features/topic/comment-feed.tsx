@@ -13,7 +13,7 @@ import { canPerformAction, performAction, getRemainingActions } from "@/lib/gami
 import { toast } from "sonner"
 import { CommentReplyDialog } from "./comment-reply-dialog"
 import { incrementCommentCount } from "@/lib/utils/user-stats"
-import { incrementTopicComments, getTopicStats } from "@/lib/utils/topic-stats"
+import { incrementTopicComments } from "@/lib/utils/topic-stats"
 
 import { Comment as CommentType } from "@/lib/types"
 
