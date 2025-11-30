@@ -17,8 +17,26 @@ export function Hero() {
     }
   }
 
+  // Tag'lere göre ilgili topic ID'lerini belirle
+  const getTopicIdForTag = (tag: string): number | null => {
+    const tagMap: Record<string, number> = {
+      "Yurt Önerileri": 2, // "Kampüse Yakın Uygun Fiyatlı Yurt"
+      "Ders Notları": 1, // "Lineer Cebir Dersi İçin Kaynak Önerisi"
+      "Etkinlikler": 3, // "Hafta Sonu Kampüste Aktiviteler"
+      "Sosyal Kulüpler": 5, // "Öğrenci Kulüpleri ve Katılım"
+    }
+    return tagMap[tag] || null
+  }
+
   const handleTagClick = (tag: string) => {
-    router.push(`/search?q=${encodeURIComponent(tag)}`)
+    const topicId = getTopicIdForTag(tag)
+    if (topicId) {
+      // Direkt ilgili topic sayfasına git
+      router.push(`/topic/${topicId}`)
+    } else {
+      // Eğer ilgili topic yoksa arama sayfasına git
+      router.push(`/search?q=${encodeURIComponent(tag)}`)
+    }
   }
 
   return (
