@@ -605,9 +605,6 @@ export function VenueGrid() {
                     className="h-full w-full z-0"
                     scrollWheelZoom={true}
                   >
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore - react-leaflet TileLayer props with dynamic import */}
                     <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
