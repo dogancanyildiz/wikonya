@@ -30,6 +30,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     notifications: [],
   })
 
+  // Initialize storage on mount
+  useEffect(() => {
+    initializeStorage()
+  }, [])
+
   // Sayfa yüklendiğinde localStorage'dan user bilgisini yükle
   useEffect(() => {
     try {
