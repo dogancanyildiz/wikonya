@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, BookOpen, MessageCircle, User, Clock, TrendingUp, Filter, X } from "lucide-react"
+import { Search, BookOpen, MessageCircle, User, Clock, TrendingUp, Filter, X, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { Topic, Comment, User as UserType } from "@/lib/types"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -49,6 +49,13 @@ export default function SearchPage() {
   const [selectedSort, setSelectedSort] = useState<string>("relevance")
   const [showFilters, setShowFilters] = useState(false)
   const [recentSearches, setRecentSearches] = useState<string[]>([])
+  const [currentPage, setCurrentPage] = useState<{ topics: number; comments: number; users: number }>({
+    topics: 1,
+    comments: 1,
+    users: 1,
+  })
+  
+  const ITEMS_PER_PAGE = 10
   const [popularSearches] = useState([
     "Selçuk Üniversitesi",
     "KYK Yurt",
@@ -334,12 +341,39 @@ export default function SearchPage() {
         comments: mockComments,
         users: filteredUsers,
       })
+      
+      // Reset pagination when search changes
+      setCurrentPage({ topics: 1, comments: 1, users: 1 })
     } catch (error) {
       console.error("Search error:", error)
     } finally {
       setIsLoading(false)
     }
   }
+
+  // Pagination logic
+  const getPaginatedResults = <T,>(items: T[], tab: "topics" | "comments" | "users"): T[] => {
+    const startIndex = (currentPage[tab] - 1) * ITEMS_PER_PAGE
+    const endIndex = startIndex + ITEMS_PER_PAGE
+    return items.slice(startIndex, endIndex)
+  }
+
+  const getTotalPages = (items: number): number => {
+    return Math.ceil(items / ITEMS_PER_PAGE)
+  }
+
+  const paginatedTopics = getPaginatedResults(results.topics, "topics")
+  const paginatedComments = getPaginatedResults(results.comments, "comments")
+  const paginatedUsers = getPaginatedResults(results.users, "users")
+
+  const topicsTotalPages = getTotalPages(results.topics.length)
+  const commentsTotalPages = getTotalPages(results.comments.length)
+  const usersTotalPages = getTotalPages(results.users.length)
+
+  // Reset page when tab changes
+  useEffect(() => {
+    setCurrentPage({ topics: 1, comments: 1, users: 1 })
+  }, [activeTab])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -531,7 +565,8 @@ export default function SearchPage() {
                 {activeTab === "topics" && (
                   <>
                     {results.topics.length > 0 ? (
-                  results.topics.map((topic) => (
+                      <>
+                        {paginatedTopics.map((topic) => (
                     <Card
                       key={topic.id}
                       className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border hover:shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:hover:shadow-xl transition-shadow"
@@ -566,29 +601,75 @@ export default function SearchPage() {
                         </Link>
                       </CardContent>
                     </Card>
-                  ))
-                ) : (
-                  <Empty className="py-12 sm:py-16">
-                    <EmptyHeader>
-                      <EmptyMedia variant="icon">
-                        <BookOpen className="w-12 h-12 text-muted-foreground" />
-                      </EmptyMedia>
-                      <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
-                        Başlık Bulunamadı
-                      </EmptyTitle>
-                      <EmptyDescription className="font-[Manrope] text-base">
-                        &quot;{query}&quot; için başlık bulunamadı. Farklı anahtar kelimeler deneyin.
-                      </EmptyDescription>
-                    </EmptyHeader>
-                  </Empty>
-                )}
+                        ))}
+                        
+                        {/* Pagination */}
+                        {topicsTotalPages > 1 && (
+                          <div className="flex items-center justify-center gap-2 mt-8">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setCurrentPage(prev => ({ ...prev, topics: Math.max(1, prev.topics - 1) }))}
+                              disabled={currentPage.topics === 1}
+                              className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+                            >
+                              <ChevronLeft className="w-4 h-4" />
+                            </Button>
+                            
+                            <div className="flex items-center gap-1">
+                              {Array.from({ length: topicsTotalPages }, (_, i) => i + 1).map((page) => (
+                                <Button
+                                  key={page}
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setCurrentPage(prev => ({ ...prev, topics: page }))}
+                                  className={`h-9 w-9 rounded-lg font-[Manrope] font-bold text-sm
+                                    ${currentPage.topics === page
+                                      ? 'bg-primary text-white hover:bg-primary/90'
+                                      : 'text-foreground/70 hover:text-foreground hover:bg-accent'
+                                    }
+                                  `}
+                                >
+                                  {page}
+                                </Button>
+                              ))}
+                            </div>
+
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setCurrentPage(prev => ({ ...prev, topics: Math.min(topicsTotalPages, prev.topics + 1) }))}
+                              disabled={currentPage.topics === topicsTotalPages}
+                              className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+                            >
+                              <ChevronRight className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <Empty className="py-12 sm:py-16">
+                        <EmptyHeader>
+                          <EmptyMedia variant="icon">
+                            <BookOpen className="w-12 h-12 text-muted-foreground" />
+                          </EmptyMedia>
+                          <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+                            Başlık Bulunamadı
+                          </EmptyTitle>
+                          <EmptyDescription className="font-[Manrope] text-base">
+                            &quot;{query}&quot; için başlık bulunamadı. Farklı anahtar kelimeler deneyin.
+                          </EmptyDescription>
+                        </EmptyHeader>
+                      </Empty>
+                    )}
                   </>
                 )}
 
                 {activeTab === "comments" && (
-              <>
-                {results.comments.length > 0 ? (
-                  results.comments.map((comment) => (
+                  <>
+                    {results.comments.length > 0 ? (
+                      <>
+                        {paginatedComments.map((comment) => (
                     <Card
                       key={comment.id}
                       className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border"
@@ -617,24 +698,69 @@ export default function SearchPage() {
                         </div>
                       </CardContent>
                     </Card>
-                  ))
-                ) : (
-                  <Empty className="py-12 sm:py-16">
-                    <EmptyHeader>
-                      <EmptyMedia variant="icon">
-                        <MessageCircle className="w-12 h-12 text-muted-foreground" />
-                      </EmptyMedia>
-                      <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
-                        Yorum Bulunamadı
-                      </EmptyTitle>
-                      <EmptyDescription className="font-[Manrope] text-base">
-                        &quot;{query}&quot; için yorum bulunamadı. Farklı anahtar kelimeler deneyin.
-                      </EmptyDescription>
-                    </EmptyHeader>
-                  </Empty>
+                        ))}
+                        
+                        {/* Pagination */}
+                        {commentsTotalPages > 1 && (
+                          <div className="flex items-center justify-center gap-2 mt-8">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setCurrentPage(prev => ({ ...prev, comments: Math.max(1, prev.comments - 1) }))}
+                              disabled={currentPage.comments === 1}
+                              className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+                            >
+                              <ChevronLeft className="w-4 h-4" />
+                            </Button>
+                            
+                            <div className="flex items-center gap-1">
+                              {Array.from({ length: commentsTotalPages }, (_, i) => i + 1).map((page) => (
+                                <Button
+                                  key={page}
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setCurrentPage(prev => ({ ...prev, comments: page }))}
+                                  className={`h-9 w-9 rounded-lg font-[Manrope] font-bold text-sm
+                                    ${currentPage.comments === page
+                                      ? 'bg-primary text-white hover:bg-primary/90'
+                                      : 'text-foreground/70 hover:text-foreground hover:bg-accent'
+                                    }
+                                  `}
+                                >
+                                  {page}
+                                </Button>
+                              ))}
+                            </div>
+
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setCurrentPage(prev => ({ ...prev, comments: Math.min(commentsTotalPages, prev.comments + 1) }))}
+                              disabled={currentPage.comments === commentsTotalPages}
+                              className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+                            >
+                              <ChevronRight className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <Empty className="py-12 sm:py-16">
+                        <EmptyHeader>
+                          <EmptyMedia variant="icon">
+                            <MessageCircle className="w-12 h-12 text-muted-foreground" />
+                          </EmptyMedia>
+                          <EmptyTitle className="font-[Manrope] font-bold text-xl sm:text-2xl">
+                            Yorum Bulunamadı
+                          </EmptyTitle>
+                          <EmptyDescription className="font-[Manrope] text-base">
+                            &quot;{query}&quot; için yorum bulunamadı. Farklı anahtar kelimeler deneyin.
+                          </EmptyDescription>
+                        </EmptyHeader>
+                      </Empty>
+                    )}
+                  </>
                 )}
-              </>
-            )}
 
                 {activeTab === "users" && (
                   <>
@@ -655,7 +781,8 @@ export default function SearchPage() {
                         ))}
                       </div>
                     ) : results.users.length > 0 ? (
-                      results.users.map((user) => (
+                      <>
+                        {paginatedUsers.map((user) => (
                         <Card
                           key={user.id}
                           className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border hover:shadow-[0_6px_30px_rgba(0,0,0,0.1)] dark:hover:shadow-xl transition-shadow"
@@ -696,7 +823,52 @@ export default function SearchPage() {
                             </Link>
                           </CardContent>
                         </Card>
-                      ))
+                        ))}
+                        
+                        {/* Pagination */}
+                        {usersTotalPages > 1 && (
+                          <div className="flex items-center justify-center gap-2 mt-8">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setCurrentPage(prev => ({ ...prev, users: Math.max(1, prev.users - 1) }))}
+                              disabled={currentPage.users === 1}
+                              className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+                            >
+                              <ChevronLeft className="w-4 h-4" />
+                            </Button>
+                            
+                            <div className="flex items-center gap-1">
+                              {Array.from({ length: usersTotalPages }, (_, i) => i + 1).map((page) => (
+                                <Button
+                                  key={page}
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setCurrentPage(prev => ({ ...prev, users: page }))}
+                                  className={`h-9 w-9 rounded-lg font-[Manrope] font-bold text-sm
+                                    ${currentPage.users === page
+                                      ? 'bg-primary text-white hover:bg-primary/90'
+                                      : 'text-foreground/70 hover:text-foreground hover:bg-accent'
+                                    }
+                                  `}
+                                >
+                                  {page}
+                                </Button>
+                              ))}
+                            </div>
+
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setCurrentPage(prev => ({ ...prev, users: Math.min(usersTotalPages, prev.users + 1) }))}
+                              disabled={currentPage.users === usersTotalPages}
+                              className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+                            >
+                              <ChevronRight className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </>
                     ) : (
                       <Empty className="py-12 sm:py-16">
                         <EmptyHeader>
