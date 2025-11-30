@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -86,9 +86,32 @@ export function EventDetailPage() {
   const handleJoin = () => {
     if (!isFull && !isJoined) {
       setIsJoined(true)
-      // Gerçek uygulamada API çağrısı yapılacak
+      // Save to localStorage
+      if (typeof window !== "undefined") {
+        const joinedEvents = JSON.parse(localStorage.getItem("joined_events") || "[]")
+        if (!joinedEvents.includes(eventId)) {
+          joinedEvents.push(eventId)
+          localStorage.setItem("joined_events", JSON.stringify(joinedEvents))
+        }
+      }
+    } else if (isJoined) {
+      // Remove from localStorage
+      if (typeof window !== "undefined") {
+        const joinedEvents = JSON.parse(localStorage.getItem("joined_events") || "[]")
+        const updatedEvents = joinedEvents.filter((id: number) => id !== eventId)
+        localStorage.setItem("joined_events", JSON.stringify(updatedEvents))
+      }
+      setIsJoined(false)
     }
   }
+
+  // Load joined status from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const joinedEvents = JSON.parse(localStorage.getItem("joined_events") || "[]")
+      setIsJoined(joinedEvents.includes(eventId))
+    }
+  }, [eventId])
 
   const openMap = () => {
     const url = `https://www.openstreetmap.org/?mlat=${event.coordinates.lat}&mlon=${event.coordinates.lng}&zoom=15`
@@ -288,14 +311,23 @@ export function EventDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4 pt-0">
               {isJoined ? (
-                <div className="text-center py-4">
-                  <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-3" />
-                  <p className="font-[Manrope] font-bold text-primary mb-2">
-                    Etkinliğe katıldınız!
-                  </p>
-                  <p className="font-[Manrope] text-sm text-foreground/60 dark:text-muted-foreground">
-                    Etkinlik günü görüşmek üzere!
-                  </p>
+                <div className="space-y-4">
+                  <div className="text-center py-4">
+                    <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                    <p className="font-[Manrope] font-bold text-primary mb-2">
+                      Etkinliğe katıldınız!
+                    </p>
+                    <p className="font-[Manrope] text-sm text-foreground/60 dark:text-muted-foreground">
+                      Etkinlik günü görüşmek üzere!
+                    </p>
+                  </div>
+                  <Button
+                    onClick={handleJoin}
+                    variant="outline"
+                    className="w-full py-3 border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-[Manrope] font-bold"
+                  >
+                    Kaydı Sil
+                  </Button>
                 </div>
               ) : (
                 <>
