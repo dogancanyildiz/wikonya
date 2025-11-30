@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { 
@@ -29,6 +29,16 @@ export function JobDetailPage() {
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [isApplied, setIsApplied] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Load application status from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const applications = JSON.parse(localStorage.getItem("job_applications") || "{}")
+      if (applications[jobId]) {
+        setIsApplied(true)
+      }
+    }
+  }, [jobId])
 
   // Mock data - gerçek uygulamada API'den gelecek
   const job = {
@@ -94,12 +104,20 @@ export function JobDetailPage() {
   }
 
   const handleApply = async () => {
+    if (typeof window === "undefined") return
+    
     if (isApplied) {
       // Başvuru iptal et
       setIsSubmitting(true)
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         setIsApplied(false)
+        
+        // Remove from localStorage
+        const applications = JSON.parse(localStorage.getItem("job_applications") || "{}")
+        delete applications[jobId]
+        localStorage.setItem("job_applications", JSON.stringify(applications))
+        
         toast.success("Başvuru iptal edildi", {
           description: `${job.role} pozisyonuna yaptığınız başvuru iptal edildi.`,
           duration: 3000,
@@ -118,6 +136,16 @@ export function JobDetailPage() {
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         setIsApplied(true)
+        
+        // Save to localStorage
+        const applications = JSON.parse(localStorage.getItem("job_applications") || "{}")
+        applications[jobId] = {
+          role: job.role,
+          company: job.company,
+          appliedAt: new Date().toISOString(),
+        }
+        localStorage.setItem("job_applications", JSON.stringify(applications))
+        
         toast.success("Başvuru başarılı", {
           description: `${job.role} pozisyonuna başvurunuz başarıyla gönderildi.`,
           duration: 3000,

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { 
@@ -31,6 +31,16 @@ export function ScholarshipDetailPage() {
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [isApplied, setIsApplied] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Load application status from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const applications = JSON.parse(localStorage.getItem("scholarship_applications") || "{}")
+      if (applications[scholarshipId]) {
+        setIsApplied(true)
+      }
+    }
+  }, [scholarshipId])
 
   // Mock data - gerçek uygulamada API'den gelecek
   const scholarship = {
@@ -105,12 +115,20 @@ export function ScholarshipDetailPage() {
   }
 
   const handleApply = async () => {
+    if (typeof window === "undefined") return
+    
     if (isApplied) {
       // Başvuru iptal et
       setIsSubmitting(true)
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         setIsApplied(false)
+        
+        // Remove from localStorage
+        const applications = JSON.parse(localStorage.getItem("scholarship_applications") || "{}")
+        delete applications[scholarshipId]
+        localStorage.setItem("scholarship_applications", JSON.stringify(applications))
+        
         toast.success("Başvuru iptal edildi", {
           description: `${scholarship.title} burs programına yaptığınız başvuru iptal edildi.`,
           duration: 3000,
@@ -129,6 +147,16 @@ export function ScholarshipDetailPage() {
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         setIsApplied(true)
+        
+        // Save to localStorage
+        const applications = JSON.parse(localStorage.getItem("scholarship_applications") || "{}")
+        applications[scholarshipId] = {
+          title: scholarship.title,
+          organization: scholarship.organization,
+          appliedAt: new Date().toISOString(),
+        }
+        localStorage.setItem("scholarship_applications", JSON.stringify(applications))
+        
         toast.success("Başvuru başarılı", {
           description: `${scholarship.title} burs programına başvurunuz başarıyla gönderildi.`,
           duration: 3000,

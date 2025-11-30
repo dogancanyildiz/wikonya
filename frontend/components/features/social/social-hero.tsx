@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Star, MapPin, TrendingUp, Users, Vote, Check } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -36,11 +37,24 @@ export function SocialHero() {
 
   const handleVote = () => {
     if (selectedVenueId) {
-      // TODO: API call to submit vote
-      console.log("Voted for venue:", selectedVenueId)
-      setIsVoteModalOpen(false)
-      setSelectedVenueId(null)
-      // Show success message or toast
+      const selectedVenue = allVenues.find(v => v.id === selectedVenueId)
+      if (selectedVenue) {
+        // Save vote to localStorage
+        const votes = JSON.parse(localStorage.getItem("venue_votes") || "[]")
+        if (!votes.includes(selectedVenueId)) {
+          votes.push(selectedVenueId)
+          localStorage.setItem("venue_votes", JSON.stringify(votes))
+        }
+        
+        setIsVoteModalOpen(false)
+        setSelectedVenueId(null)
+        
+        // Show success toast
+        toast.success("Oyunuz kaydedildi!", {
+          description: `${selectedVenue.name} için oy verdiniz.`,
+          duration: 3000,
+        })
+      }
     }
   }
 

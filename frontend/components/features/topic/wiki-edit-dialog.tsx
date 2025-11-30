@@ -75,6 +75,8 @@ export function WikiEditDialog({
       // Coin kazanma (eğer doğrudan düzenleme yapabiliyorsa)
       if (canEditWiki) {
         rewardCoins("edit_wiki", { topicId, version: wikiContent?.version || 1 })
+        // User stats güncelle
+        incrementWikiEditCount(state.user)
       }
 
       // Callback çağır

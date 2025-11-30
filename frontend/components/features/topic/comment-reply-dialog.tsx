@@ -66,6 +66,9 @@ export function CommentReplyDialog({
       // Coin kazanma
       rewardCoins("comment", { commentId: parentCommentId, type: "reply" })
 
+      // User stats güncelle
+      incrementCommentCount(state.user)
+
       // Callback çağır
       if (onReply) {
         onReply(replyContent, parentCommentId)

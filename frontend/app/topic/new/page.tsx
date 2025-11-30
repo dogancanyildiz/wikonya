@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useApp } from "@/contexts/app-context"
 import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { canPerformAction, performAction } from "@/lib/gamification/rate-limiter"
+import { incrementTopicCount } from "@/lib/utils/user-stats"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -104,6 +105,9 @@ export default function NewTopicPage() {
       // Yeni topic oluştur (pending status ile - onay bekliyor)
       // Coin kazanma sadece onaylandığında olacak
       // const _coinResult = rewardCoins("create_topic", { title, category })
+
+      // User stats güncelle
+      incrementTopicCount(state.user)
 
       // Başarılı mesajı göster
       alert("Başlığınız moderatörler tarafından incelenecek. Onaylandığında yayınlanacak ve +20 GençCoin kazanacaksınız!")

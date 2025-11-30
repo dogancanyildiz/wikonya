@@ -40,13 +40,6 @@ export default function MessagesPage() {
 
   const currentUserId = 1
 
-  // Mesaj gönderildiğinde en alta scroll
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
-    }
-  }, [selectedConversation?.messages])
-
   // Mock data - state olarak tutulacak
   const [conversations, setConversations] = useState<Conversation[]>([
     {
@@ -108,6 +101,29 @@ export default function MessagesPage() {
     },
   ])
 
+  // Load conversations from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("conversations")
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored)
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setConversations(parsed)
+        } catch {
+          // If parsing fails, use default
+        }
+      }
+    }
+  }, [])
+
+  // Mesaj gönderildiğinde en alta scroll
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  }, [selectedConversation?.messages])
+
   const filteredConversations = conversations.filter(conv =>
     conv.user.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -126,8 +142,8 @@ export default function MessagesPage() {
     }
 
     // Mesajı seçili konuşmaya ekle
-    setConversations(prev => 
-      prev.map(conv => {
+    setConversations(prev => {
+      const updated = prev.map(conv => {
         if (conv.id === selectedConversation.id) {
           const updatedMessages = [...conv.messages, newMessage]
           return {
@@ -139,7 +155,14 @@ export default function MessagesPage() {
         }
         return conv
       })
-    )
+      
+      // Save to localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("conversations", JSON.stringify(updated))
+      }
+      
+      return updated
+    })
 
     // Seçili konuşmayı güncelle
     setSelectedConversation(prev => {

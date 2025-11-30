@@ -13,10 +13,10 @@ export const BADGE_DEFINITIONS = {
     name: "İlk Yorum",
     icon: "💬",
     description: "İlk yorumunu yaptın!",
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    condition: (_user: User) => {
-      // Gerçek uygulamada user'ın yorum sayısını kontrol eder
-      return false // Mock için
+    condition: (user: User) => {
+      if (typeof window === "undefined") return false
+      const userStats = JSON.parse(localStorage.getItem(`user_stats_${user.id}`) || "{}")
+      return (userStats.commentCount || 0) >= 1
     },
   },
   first_wiki_edit: {
@@ -24,9 +24,10 @@ export const BADGE_DEFINITIONS = {
     name: "İlk Düzenleme",
     icon: "✏️",
     description: "İlk wiki düzenlemeni yaptın!",
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    condition: (_user: User) => {
-      return false // Mock için
+    condition: (user: User) => {
+      if (typeof window === "undefined") return false
+      const userStats = JSON.parse(localStorage.getItem(`user_stats_${user.id}`) || "{}")
+      return (userStats.wikiEditCount || 0) >= 1
     },
   },
   first_topic: {
@@ -34,9 +35,10 @@ export const BADGE_DEFINITIONS = {
     name: "İlk Başlık",
     icon: "📝",
     description: "İlk başlığını açtın!",
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    condition: (_user: User) => {
-      return false // Mock için
+    condition: (user: User) => {
+      if (typeof window === "undefined") return false
+      const userStats = JSON.parse(localStorage.getItem(`user_stats_${user.id}`) || "{}")
+      return (userStats.topicCount || 0) >= 1
     },
   },
   seyyah: {

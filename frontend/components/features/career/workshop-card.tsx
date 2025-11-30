@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Users, Clock, MapPin } from "lucide-react"
 import Image from "next/image"
 import { toast } from "sonner"
@@ -35,13 +35,34 @@ export function WorkshopCard({
   maxParticipants,
   isFree,
 }: WorkshopCardProps) {
+  const workshopId = `${title}-${dateDay}-${dateMonth}`
+  
   const [isRegistered, setIsRegistered] = useState(false)
   const [participants, setParticipants] = useState(initialParticipants)
 
+  // Load registration status from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const registrations = JSON.parse(localStorage.getItem("workshop_registrations") || "{}")
+      if (registrations[workshopId]) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsRegistered(true)
+      }
+    }
+  }, [workshopId])
+
   const handleRegister = () => {
+    if (typeof window === "undefined") return
+    
     if (isRegistered) {
       setParticipants(prev => prev - 1)
       setIsRegistered(false)
+      
+      // Remove from localStorage
+      const registrations = JSON.parse(localStorage.getItem("workshop_registrations") || "{}")
+      delete registrations[workshopId]
+      localStorage.setItem("workshop_registrations", JSON.stringify(registrations))
+      
       toast.success("Kayıt silindi", {
         description: `${title} etkinliğinden kaydınız kaldırıldı.`,
         duration: 3000,
@@ -50,6 +71,16 @@ export function WorkshopCard({
       if (participants < maxParticipants) {
         setParticipants(prev => prev + 1)
         setIsRegistered(true)
+        
+        // Save to localStorage
+        const registrations = JSON.parse(localStorage.getItem("workshop_registrations") || "{}")
+        registrations[workshopId] = {
+          title,
+          date: `${dateDay} ${dateMonth}`,
+          registeredAt: new Date().toISOString(),
+        }
+        localStorage.setItem("workshop_registrations", JSON.stringify(registrations))
+        
         toast.success("Kayıt başarılı", {
           description: `${title} etkinliğine başarıyla kayıt oldunuz.`,
           duration: 3000,

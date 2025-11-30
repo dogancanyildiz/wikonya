@@ -15,6 +15,7 @@ import { useApp } from "@/contexts/app-context"
 import { useCoinReward } from "@/lib/utils/hooks/use-coin-reward"
 import { canPerformAction, performAction, getRemainingActions } from "@/lib/gamification/rate-limiter"
 import { CommentReplyDialog } from "@/components/features/topic/comment-reply-dialog"
+import { incrementCommentCount } from "@/lib/utils/user-stats"
 
 // Simple deterministic random function (seed-based)
 function seededRandom(seed: number): number {
@@ -770,6 +771,9 @@ export function FAQDetailPage({ faqId }: { faqId: number }) {
       await new Promise((resolve) => setTimeout(resolve, 500))
 
       rewardCoins("comment", { content: newComment })
+
+      // User stats güncelle
+      incrementCommentCount(state.user)
 
       const newCommentObj: FAQComment = {
         id: Date.now(),

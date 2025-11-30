@@ -12,6 +12,7 @@ import { useApp } from "@/contexts/app-context"
 import { canPerformAction, performAction, getRemainingActions } from "@/lib/gamification/rate-limiter"
 import { toast } from "sonner"
 import { CommentReplyDialog } from "./comment-reply-dialog"
+import { incrementCommentCount } from "@/lib/utils/user-stats"
 
 import { Comment as CommentType } from "@/lib/types"
 
@@ -465,6 +466,9 @@ export function CommentFeed() {
 
                   // Coin kazanma
                   rewardCoins("comment", { content: newComment })
+
+                  // User stats güncelle
+                  incrementCommentCount(state.user)
 
                   // Yeni yorum ekle
                   const newCommentObj: Comment = {

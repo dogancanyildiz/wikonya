@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -76,6 +76,30 @@ export default function SettingsPage() {
   const [showActivity, setShowActivity] = useState(true)
   const [showCoins, setShowCoins] = useState(true)
 
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedNotificationSettings = localStorage.getItem("notification_settings")
+      const savedPrivacySettings = localStorage.getItem("privacy_settings")
+      
+      if (savedNotificationSettings) {
+        const settings = JSON.parse(savedNotificationSettings)
+        setEmailNotifications(settings.emailNotifications ?? true)
+        setPushNotifications(settings.pushNotifications ?? true)
+        setCommentNotifications(settings.commentNotifications ?? true)
+        setLikeNotifications(settings.likeNotifications ?? false)
+        setMessageNotifications(settings.messageNotifications ?? true)
+      }
+      
+      if (savedPrivacySettings) {
+        const settings = JSON.parse(savedPrivacySettings)
+        setProfilePublic(settings.profilePublic ?? true)
+        setShowActivity(settings.showActivity ?? true)
+        setShowCoins(settings.showCoins ?? true)
+      }
+    }
+  }, [])
+
   // Modal states
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
   const [isConnectedAccountsModalOpen, setIsConnectedAccountsModalOpen] = useState(false)
@@ -137,8 +161,35 @@ export default function SettingsPage() {
     }
   }
 
+  // Save notification settings to localStorage
+  const saveNotificationSettings = () => {
+    if (typeof window !== "undefined") {
+      const settings = {
+        emailNotifications,
+        pushNotifications,
+        commentNotifications,
+        likeNotifications,
+        messageNotifications,
+      }
+      localStorage.setItem("notification_settings", JSON.stringify(settings))
+    }
+  }
+
+  // Save privacy settings to localStorage
+  const savePrivacySettings = () => {
+    if (typeof window !== "undefined") {
+      const settings = {
+        profilePublic,
+        showActivity,
+        showCoins,
+      }
+      localStorage.setItem("privacy_settings", JSON.stringify(settings))
+    }
+  }
+
   // Notification settings change handler
   const handleNotificationChange = () => {
+    saveNotificationSettings()
     toast.success("Ayarlarınız değişti", {
       description: "Bildirim ayarlarınız güncellendi",
       duration: 3000,
@@ -147,6 +198,7 @@ export default function SettingsPage() {
 
   // Privacy settings change handler
   const handlePrivacyChange = () => {
+    savePrivacySettings()
     toast.success("Ayarlarınız değişti", {
       description: "Gizlilik ayarlarınız güncellendi",
       duration: 3000,
@@ -547,6 +599,7 @@ export default function SettingsPage() {
               checked={pushNotifications}
               onCheckedChange={(checked) => {
                 setPushNotifications(checked)
+                saveNotificationSettings()
                 handleNotificationChange()
               }}
             />
@@ -567,6 +620,7 @@ export default function SettingsPage() {
               checked={commentNotifications}
               onCheckedChange={(checked) => {
                 setCommentNotifications(checked)
+                saveNotificationSettings()
                 handleNotificationChange()
               }}
             />
@@ -585,6 +639,7 @@ export default function SettingsPage() {
               checked={likeNotifications}
               onCheckedChange={(checked) => {
                 setLikeNotifications(checked)
+                saveNotificationSettings()
                 handleNotificationChange()
               }}
             />
@@ -603,6 +658,7 @@ export default function SettingsPage() {
               checked={messageNotifications}
               onCheckedChange={(checked) => {
                 setMessageNotifications(checked)
+                saveNotificationSettings()
                 handleNotificationChange()
               }}
             />
@@ -640,6 +696,7 @@ export default function SettingsPage() {
               checked={profilePublic}
               onCheckedChange={(checked) => {
                 setProfilePublic(checked)
+                savePrivacySettings()
                 handlePrivacyChange()
               }}
             />
@@ -660,6 +717,7 @@ export default function SettingsPage() {
               checked={showActivity}
               onCheckedChange={(checked) => {
                 setShowActivity(checked)
+                savePrivacySettings()
                 handlePrivacyChange()
               }}
             />
@@ -678,6 +736,7 @@ export default function SettingsPage() {
               checked={showCoins}
               onCheckedChange={(checked) => {
                 setShowCoins(checked)
+                savePrivacySettings()
                 handlePrivacyChange()
               }}
             />
