@@ -79,21 +79,92 @@ export default function SearchPage() {
     }
   }, [])
 
-  // Auto search on mount if query exists
+  // URL'den kategori parametresini al
   useEffect(() => {
-    if (query && searchParams.get("q")) {
+    const categoryParam = searchParams.get("category")
+    if (categoryParam) {
+      // Kategori mapping: hero tag'lerinden gelen kategorileri search kategorilerine çevir
+      const categoryMap: Record<string, string> = {
+        "yurt": "housing",
+        "ders-notlari": "academic",
+        "etkinlikler": "social",
+        "sosyal-kulupler": "social",
+      }
+      const mappedCategory = categoryMap[categoryParam.toLowerCase()]
+      if (mappedCategory) {
+        setSelectedCategory(mappedCategory)
+        // Kategori varsa otomatik arama yap
+        handleSearch()
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
+
+  // Auto search on mount if query exists (kategori için ayrı useEffect var)
+  useEffect(() => {
+    const urlQuery = searchParams.get("q")
+    if (urlQuery) {
+      setQuery(urlQuery)
       handleSearch()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Tüm topic'leri discussion-feed'den al (mock data)
+  const getAllTopics = (): Topic[] => {
+    // topic-header.tsx'teki mockTopics ile aynı veriler
+    return [
+      { id: 1, title: "Lineer Cebir Dersi İçin Kaynak Önerisi", content: "Merhaba arkadaşlar, lineer cebir dersine çalışırken hangi kaynakları kullandınız?", category: "Akademik", createdAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(), views: 850, likes: 12, comments: 8, tags: ["Lineer Cebir", "Matematik", "Ders Kaynağı"], author: { id: 1, name: "Ahmet Yılmaz", initials: "AY", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 88 },
+      { id: 2, title: "Kampüse Yakın Uygun Fiyatlı Yurt", content: "Selam, önümüzdeki dönem için kampüse yakın ve uygun fiyatlı yurt arıyorum.", category: "Barınma", createdAt: new Date(Date.now() - 22 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 22 * 60 * 1000).toISOString(), views: 1200, likes: 24, comments: 15, tags: ["Yurt", "Barınma", "Kampüs"], author: { id: 2, name: "Zeynep Kaya", initials: "ZK", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 85 },
+      { id: 3, title: "Hafta Sonu Kampüste Aktiviteler", content: "Bu hafta sonu kampüste kalmayı düşünüyorum. Hafta sonu açık olan yerler veya düzenlenen etkinlikler var mı?", category: "Sosyal", createdAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(), views: 950, likes: 18, comments: 12, tags: ["Aktivite", "Hafta Sonu", "Kampüs"], author: { id: 3, name: "Mehmet Demir", initials: "MD", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 82 },
+      { id: 4, title: "Staj Başvuru Süreçleri", content: "2. sınıf öğrencisiyim ve yaz stajı için başvuru yapmayı planlıyorum.", category: "Akademik", createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), views: 1450, likes: 31, comments: 19, tags: ["Staj", "Kariyer", "Başvuru"], author: { id: 4, name: "Ayşe Şahin", initials: "AŞ", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 90 },
+      { id: 5, title: "Öğrenci Kulüpleri ve Katılım", content: "Hangi öğrenci kulüplerine üyesiniz? Deneyimleriniz nasıl?", category: "Sosyal", createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), views: 1100, likes: 27, comments: 22, tags: ["Kulüp", "Etkinlik", "Sosyal"], author: { id: 5, name: "Can Özkan", initials: "CÖ", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 87 },
+      { id: 6, title: "Yazılım Mühendisliği Ders Notları", content: "Yazılım mühendisliği dersine ait notlarımı paylaşmak istiyorum.", category: "Akademik", createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), views: 2100, likes: 45, comments: 28, tags: ["Yazılım", "Ders Notu", "Mühendislik"], author: { id: 6, name: "Elif Arslan", initials: "EA", role: "seyyah" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 92 },
+      { id: 7, title: "Ev Arkadaşı Arıyorum - Selçuklu", content: "Selçuklu bölgesinde 2+1 dairede ev arkadaşı arıyorum.", category: "Barınma", createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(), views: 680, likes: 8, comments: 14, tags: ["Ev Arkadaşı", "Selçuklu", "Kiralama"], author: { id: 7, name: "Burak Çelik", initials: "BÇ", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 80 },
+      { id: 8, title: "Konya'da Öğrenci Dostu Kafeler", content: "Çalışmak için uygun, sessiz ve wifi olan kafe önerileri arıyorum.", category: "Sosyal", createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), views: 1850, likes: 52, comments: 35, tags: ["Kafe", "Çalışma", "Wifi"], author: { id: 8, name: "Selin Yıldız", initials: "SY", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 89 },
+      { id: 9, title: "Vize Haftası Çalışma Grubu", content: "Vize haftası için çalışma grubu oluşturmak istiyorum.", category: "Akademik", createdAt: new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString(), views: 720, likes: 19, comments: 11, tags: ["Vize", "Çalışma Grubu", "Akademik"], author: { id: 9, name: "Murat Koç", initials: "MK", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 83 },
+      { id: 10, title: "Part-time İş Fırsatları", content: "Öğrencilere uygun part-time iş fırsatları hakkında bilgi paylaşımı yapalım.", category: "Kariyer", createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(), views: 1650, likes: 38, comments: 42, tags: ["Part-time", "İş", "Kariyer"], author: { id: 10, name: "Deniz Aydın", initials: "DA", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 86 },
+      { id: 11, title: "Erasmus Başvuru Deneyimleri", content: "Erasmus programına başvuru yapmayı düşünüyorum.", category: "Akademik", createdAt: new Date(Date.now() - 9 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 9 * 60 * 60 * 1000).toISOString(), views: 2450, likes: 67, comments: 54, tags: ["Erasmus", "Yurtdışı", "Başvuru"], author: { id: 11, name: "Gizem Aksoy", initials: "GA", role: "seyyah" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 93 },
+      { id: 12, title: "Meram'da Kiralık Daire Önerileri", content: "Meram bölgesinde öğrenciye uygun fiyatlı kiralık daire arıyorum.", category: "Barınma", createdAt: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString(), views: 980, likes: 15, comments: 23, tags: ["Meram", "Daire", "Kiralama"], author: { id: 12, name: "Emre Yılmaz", initials: "EY", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 84 },
+      { id: 13, title: "Fotoğrafçılık Kulübü Etkinlikleri", content: "Fotoğrafçılık kulübüne katılmak isteyenler için bu hafta sonu doğa yürüyüşü düzenliyoruz!", category: "Sosyal", createdAt: new Date(Date.now() - 11 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 11 * 60 * 60 * 1000).toISOString(), views: 1250, likes: 42, comments: 18, tags: ["Fotoğrafçılık", "Kulüp", "Etkinlik"], author: { id: 13, name: "Fatma Öztürk", initials: "FÖ", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 88 },
+      { id: 14, title: "Fizik 2 Çıkmış Sorular", content: "Son 5 yılın fizik 2 çıkmış sorularını derledim.", category: "Akademik", createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(), views: 3200, likes: 89, comments: 67, tags: ["Fizik", "Çıkmış Soru", "Sınav"], author: { id: 14, name: "Oğuzhan Kara", initials: "OK", role: "seyyah" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 95 },
+      { id: 15, title: "CV Hazırlama İpuçları", content: "Staj başvuruları için etkili CV hazırlama konusunda deneyimlerimi paylaşmak istiyorum.", category: "Kariyer", createdAt: new Date(Date.now() - 13 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 13 * 60 * 60 * 1000).toISOString(), views: 1950, likes: 56, comments: 31, tags: ["CV", "Kariyer", "İş Başvurusu"], author: { id: 15, name: "Seda Demir", initials: "SD", role: "seyyah" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 91 },
+      { id: 16, title: "Basketbol Takımına Oyuncu Aranıyor", content: "Fakülte basketbol takımımıza yeni oyuncular arıyoruz.", category: "Sosyal", createdAt: new Date(Date.now() - 14 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 14 * 60 * 60 * 1000).toISOString(), views: 750, likes: 23, comments: 16, tags: ["Basketbol", "Spor", "Takım"], author: { id: 16, name: "Kerem Aydın", initials: "KA", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 81 },
+      { id: 17, title: "Yurt Değişikliği Yapmak İstiyorum", content: "KYK yurdunda kalıyorum ama oda değiştirmek istiyorum.", category: "Barınma", createdAt: new Date(Date.now() - 15 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 15 * 60 * 60 * 1000).toISOString(), views: 580, likes: 11, comments: 19, tags: ["Yurt", "Değişiklik", "KYK"], author: { id: 17, name: "Merve Çelik", initials: "MÇ", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 79 },
+      { id: 18, title: "Programlama Dersleri - Ücretsiz", content: "Python ve JavaScript dersleri vermek istiyorum.", category: "Akademik", createdAt: new Date(Date.now() - 16 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 16 * 60 * 60 * 1000).toISOString(), views: 3800, likes: 124, comments: 89, tags: ["Programlama", "Python", "JavaScript"], author: { id: 18, name: "Ali Rıza Güneş", initials: "AG", role: "konya_bilgesi" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 96 },
+      { id: 19, title: "Kitap Kulübü Oluşturalım", content: "Her ay bir kitap okuyup tartışacağımız bir kitap kulübü oluşturmak istiyorum.", category: "Sosyal", createdAt: new Date(Date.now() - 17 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 17 * 60 * 60 * 1000).toISOString(), views: 1350, likes: 47, comments: 38, tags: ["Kitap", "Kulüp", "Okuma"], author: { id: 19, name: "Büşra Yıldırım", initials: "BY", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 87 },
+      { id: 20, title: "Yazılım Stajı Deneyimlerim", content: "Bu yaz yaptığım yazılım stajı hakkında deneyimlerimi paylaşmak istiyorum.", category: "Kariyer", createdAt: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString(), views: 2200, likes: 73, comments: 52, tags: ["Staj", "Yazılım", "Deneyim"], author: { id: 20, name: "Hakan Özdemir", initials: "HÖ", role: "seyyah" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 92 },
+      { id: 21, title: "Eşya Satışı - Taşınıyorum", content: "Mezun oluyorum ve eşyalarımı satmak istiyorum.", category: "Barınma", createdAt: new Date(Date.now() - 19 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 19 * 60 * 60 * 1000).toISOString(), views: 520, likes: 14, comments: 27, tags: ["Eşya", "Satış", "Taşınma"], author: { id: 21, name: "Ceren Aktaş", initials: "CA", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 78 },
+      { id: 22, title: "Matematik Olimpiyatları Hazırlık", content: "Üniversite matematik olimpiyatlarına hazırlananlar için çalışma grubu kuruyorum.", category: "Akademik", createdAt: new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString(), views: 1050, likes: 35, comments: 21, tags: ["Matematik", "Olimpiyat", "Hazırlık"], author: { id: 22, name: "Tolga Şahin", initials: "TŞ", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 86 },
+      { id: 23, title: "Gönüllü Çalışma Fırsatları", content: "Konya'da öğrencilerin katılabileceği gönüllü çalışma ve sosyal sorumluluk projeleri hakkında bilgi paylaşalım.", category: "Sosyal", createdAt: new Date(Date.now() - 21 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 21 * 60 * 60 * 1000).toISOString(), views: 1550, likes: 58, comments: 44, tags: ["Gönüllü", "Sosyal Sorumluluk", "Proje"], author: { id: 23, name: "İrem Karaca", initials: "İK", role: "gezgin" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 89 },
+      { id: 24, title: "LinkedIn Profil Optimizasyonu", content: "İş başvurularında öne çıkmak için LinkedIn profilini nasıl optimize edebilirsin?", category: "Kariyer", createdAt: new Date(Date.now() - 22 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 22 * 60 * 60 * 1000).toISOString(), views: 2750, likes: 82, comments: 47, tags: ["LinkedIn", "Kariyer", "Profil"], author: { id: 24, name: "Ufuk Korkmaz", initials: "UK", role: "seyyah" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 94 },
+      { id: 25, title: "Diferansiyel Denklemler Ders Notları", content: "Diferansiyel denklemler dersine ait notlarımı paylaşmak istiyorum.", category: "Akademik", createdAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(), views: 420, likes: 5, comments: 0, tags: ["Diferansiyel Denklemler", "Matematik", "Ders Notu"], author: { id: 25, name: "Serkan Yıldız", initials: "SY", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 77 },
+      { id: 26, title: "Kampüs İçi Spor Salonu", content: "Kampüs içinde spor salonu var mı? Ücretli mi ücretsiz mi?", category: "Sosyal", createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), views: 380, likes: 8, comments: 0, tags: ["Spor", "Spor Salonu", "Kampüs"], author: { id: 26, name: "Gamze Kaya", initials: "GK", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 76 },
+      { id: 27, title: "KYK Yurdu Başvuru Süreci", content: "KYK yurdu için başvuru nasıl yapılıyor? Gerekli belgeler neler?", category: "Barınma", createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), views: 650, likes: 12, comments: 0, tags: ["KYK", "Yurt", "Başvuru"], author: { id: 27, name: "Onur Demir", initials: "OD", role: "yeni_gelen" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() }, reliabilityScore: 83 },
+    ]
+  }
+
+  // Kategori mapping: search kategorilerini topic kategorilerine çevir
+  const mapCategoryToTopicCategory = (searchCategory: string): string | null => {
+    const categoryMap: Record<string, string> = {
+      "academic": "Akademik",
+      "social": "Sosyal",
+      "housing": "Barınma",
+      "career": "Kariyer",
+    }
+    return categoryMap[searchCategory] || null
+  }
+
   const handleSearch = async () => {
-    if (!query.trim()) return
+    // Eğer query yoksa ve kategori de "all" ise, arama yapma
+    const trimmedQuery = query.trim()
+    if (!trimmedQuery && selectedCategory === "all") {
+      return
+    }
 
     setIsLoading(true)
     try {
-      // Son aramalara kaydet
-      const trimmedQuery = query.trim()
+      // Son aramalara kaydet (sadece query varsa)
       if (trimmedQuery) {
         const updated = [trimmedQuery, ...recentSearches.filter(s => s !== trimmedQuery)].slice(0, 5)
         setRecentSearches(updated)
@@ -103,27 +174,25 @@ export default function SearchPage() {
       // Simüle edilmiş API çağrısı
       await new Promise((resolve) => setTimeout(resolve, 500))
 
-      // Mock results
-      const mockTopics: Topic[] = [
-        {
-          id: 1,
-          title: "Selçuk Hukuk Final Notları",
-          content: "Final sınavlarına hazırlık için kapsamlı ders notları...",
-          category: "Akademik",
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          views: 3200,
-          likes: 145,
-          comments: 48,
-          tags: ["Ders Notu", "Hukuk Fakültesi"],
-          author: { id: 1, name: "Admin", initials: "AD", role: "konya_bilgesi" as const, totalCoins: 0, badges: [], xp: { current: 0, nextLevel: 500, progress: 0 }, joinedAt: new Date().toISOString() },
-          reliabilityScore: 98,
-        },
-      ].filter((topic) =>
-        topic.title.toLowerCase().includes(query.toLowerCase()) ||
-        topic.content.toLowerCase().includes(query.toLowerCase()) ||
-        topic.tags.some((tag) => tag.toLowerCase().includes(query.toLowerCase()))
-      )
+      // Tüm topic'leri al
+      let filteredTopics = getAllTopics()
+
+      // Kategori filtresi
+      if (selectedCategory !== "all") {
+        const topicCategory = mapCategoryToTopicCategory(selectedCategory)
+        if (topicCategory) {
+          filteredTopics = filteredTopics.filter(topic => topic.category === topicCategory)
+        }
+      }
+
+      // Query filtresi (eğer varsa)
+      if (trimmedQuery) {
+        filteredTopics = filteredTopics.filter((topic) =>
+          topic.title.toLowerCase().includes(trimmedQuery.toLowerCase()) ||
+          topic.content.toLowerCase().includes(trimmedQuery.toLowerCase()) ||
+          topic.tags.some((tag) => tag.toLowerCase().includes(trimmedQuery.toLowerCase()))
+        )
+      }
 
       const mockComments: Comment[] = [
         {
@@ -145,7 +214,7 @@ export default function SearchPage() {
       )
 
       setResults({
-        topics: mockTopics,
+        topics: filteredTopics,
         comments: mockComments,
         users: [],
       })
