@@ -4,7 +4,8 @@ import { useState } from "react"
 import { HousingCard } from "./housing-card"
 import { Button } from "@/components/ui/button"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
-import { ChevronDown, Home, X, ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronDown, Home, X, ChevronLeft, ChevronRight, Filter } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +17,9 @@ const ITEMS_PER_PAGE = 6
 
 export function HousingList() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedPriceRange, setSelectedPriceRange] = useState<string>("all")
+  const [selectedBedrooms, setSelectedBedrooms] = useState<string>("all")
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("all")
   const [sortBy, setSortBy] = useState<"price-low" | "price-high" | "distance" | "newest">("price-low")
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -57,6 +61,7 @@ export function HousingList() {
       category: "government" as const,
       distance: 0.8,
       postedDate: new Date("2024-11-15"),
+      district: "Meram",
     },
     {
       id: 3,
@@ -73,6 +78,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 2.1,
       postedDate: new Date("2024-11-25"),
+      district: "Selçuklu",
     },
     {
       id: 4,
@@ -89,6 +95,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 3.5,
       postedDate: new Date("2024-11-22"),
+      district: "Karatay",
     },
     {
       id: 5,
@@ -105,6 +112,7 @@ export function HousingList() {
       category: "private" as const,
       distance: 1.8,
       postedDate: new Date("2024-11-18"),
+      district: "Selçuklu",
     },
     {
       id: 6,
@@ -121,6 +129,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 2.8,
       postedDate: new Date("2024-11-28"),
+      district: "Meram",
     },
     {
       id: 7,
@@ -137,6 +146,7 @@ export function HousingList() {
       category: "government" as const,
       distance: 1.0,
       postedDate: new Date("2024-11-10"),
+      district: "Selçuklu",
     },
     {
       id: 8,
@@ -153,6 +163,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 1.5,
       postedDate: new Date("2024-11-26"),
+      district: "Selçuklu",
     },
     {
       id: 9,
@@ -169,6 +180,7 @@ export function HousingList() {
       category: "private" as const,
       distance: 0.3,
       postedDate: new Date("2024-11-12"),
+      district: "Selçuklu",
     },
     {
       id: 10,
@@ -185,6 +197,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 2.5,
       postedDate: new Date("2024-11-27"),
+      district: "Karatay",
     },
     {
       id: 11,
@@ -201,6 +214,7 @@ export function HousingList() {
       category: "government" as const,
       distance: 1.8,
       postedDate: new Date("2024-11-08"),
+      district: "Meram",
     },
     {
       id: 12,
@@ -217,6 +231,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 4.2,
       postedDate: new Date("2024-11-29"),
+      district: "Selçuklu",
     },
     {
       id: 13,
@@ -233,6 +248,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 3.0,
       postedDate: new Date("2024-11-24"),
+      district: "Karatay",
     },
     {
       id: 14,
@@ -249,6 +265,7 @@ export function HousingList() {
       category: "private" as const,
       distance: 0.5,
       postedDate: new Date("2024-11-16"),
+      district: "Selçuklu",
     },
     {
       id: 15,
@@ -265,6 +282,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 2.0,
       postedDate: new Date("2024-11-23"),
+      district: "Meram",
     },
     {
       id: 16,
@@ -281,6 +299,7 @@ export function HousingList() {
       category: "government" as const,
       distance: 0.6,
       postedDate: new Date("2024-11-05"),
+      district: "Selçuklu",
     },
     {
       id: 17,
@@ -297,6 +316,7 @@ export function HousingList() {
       category: "private" as const,
       distance: 1.1,
       postedDate: new Date("2024-11-19"),
+      district: "Selçuklu",
     },
     {
       id: 18,
@@ -313,6 +333,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 5.0,
       postedDate: new Date("2024-11-30"),
+      district: "Selçuklu",
     },
     {
       id: 19,
@@ -329,6 +350,7 @@ export function HousingList() {
       category: "private" as const,
       distance: 0.4,
       postedDate: new Date("2024-11-14"),
+      district: "Selçuklu",
     },
     {
       id: 20,
@@ -345,6 +367,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 3.2,
       postedDate: new Date("2024-11-21"),
+      district: "Karatay",
     },
     {
       id: 21,
@@ -361,6 +384,7 @@ export function HousingList() {
       category: "government" as const,
       distance: 1.3,
       postedDate: new Date("2024-11-01"),
+      district: "Meram",
     },
     {
       id: 22,
@@ -377,6 +401,7 @@ export function HousingList() {
       category: "student" as const,
       distance: 1.7,
       postedDate: new Date("2024-11-17"),
+      district: "Selçuklu",
     },
     {
       id: 23,
@@ -393,6 +418,7 @@ export function HousingList() {
       category: "private" as const,
       distance: 0.7,
       postedDate: new Date("2024-11-11"),
+      district: "Selçuklu",
     },
     {
       id: 24,
@@ -409,13 +435,36 @@ export function HousingList() {
       category: "student" as const,
       distance: 2.3,
       postedDate: new Date("2024-11-13"),
+      district: "Selçuklu",
     },
   ]
 
-  // Filter by category
-  const filteredListings = selectedCategory
-    ? listings.filter(listing => listing.category === selectedCategory)
-    : listings
+  // Filter listings
+  const filteredListings = listings.filter(listing => {
+    // Category filter
+    if (selectedCategory && listing.category !== selectedCategory) return false
+    
+    // Price range filter
+    if (selectedPriceRange !== "all") {
+      const [min, max] = selectedPriceRange.split("-").map(Number)
+      if (max) {
+        if (listing.price < min || listing.price > max) return false
+      } else {
+        if (listing.price < min) return false
+      }
+    }
+    
+    // Bedrooms filter
+    if (selectedBedrooms !== "all") {
+      const bedrooms = Number(selectedBedrooms)
+      if (listing.bedrooms !== bedrooms) return false
+    }
+    
+    // District filter
+    if (selectedDistrict !== "all" && listing.district !== selectedDistrict) return false
+    
+    return true
+  })
 
   // Sort listings
   const sortedListings = [...filteredListings].sort((a, b) => {
@@ -436,11 +485,42 @@ export function HousingList() {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
   const paginatedListings = sortedListings.slice(startIndex, startIndex + ITEMS_PER_PAGE)
 
+  const priceRanges = [
+    { id: "all", label: "Tüm Fiyatlar" },
+    { id: "0-4000", label: "0₺ - 4.000₺" },
+    { id: "4000-6000", label: "4.000₺ - 6.000₺" },
+    { id: "6000-8000", label: "6.000₺ - 8.000₺" },
+    { id: "8000-10000", label: "8.000₺ - 10.000₺" },
+    { id: "10000-999999", label: "10.000₺+" },
+  ]
+
+  const bedroomOptions = [
+    { id: "all", label: "Tüm Oda Sayıları" },
+    { id: "1", label: "1 Oda" },
+    { id: "2", label: "2 Oda" },
+    { id: "3", label: "3 Oda" },
+    { id: "4", label: "4+ Oda" },
+  ]
+
+  const districts = [
+    { id: "all", label: "Tüm Bölgeler" },
+    { id: "Selçuklu", label: "Selçuklu" },
+    { id: "Meram", label: "Meram" },
+    { id: "Karatay", label: "Karatay" },
+  ]
+
   const selectedCategoryData = categories.find(c => c.id === selectedCategory)
-  const hasActiveFilters = selectedCategory !== null || sortBy !== "price-low"
+  const selectedPriceRangeData = priceRanges.find(p => p.id === selectedPriceRange)
+  const selectedBedroomsData = bedroomOptions.find(b => b.id === selectedBedrooms)
+  const selectedDistrictData = districts.find(d => d.id === selectedDistrict)
+  
+  const hasActiveFilters = selectedCategory !== null || selectedPriceRange !== "all" || selectedBedrooms !== "all" || selectedDistrict !== "all" || sortBy !== "price-low"
 
   const clearFilters = () => {
     setSelectedCategory(null)
+    setSelectedPriceRange("all")
+    setSelectedBedrooms("all")
+    setSelectedDistrict("all")
     setSortBy("price-low")
     setCurrentPage(1)
   }
@@ -490,6 +570,60 @@ export function HousingList() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Price Range Select */}
+          <Select value={selectedPriceRange} onValueChange={(value) => { setSelectedPriceRange(value); setCurrentPage(1); }}>
+            <SelectTrigger className={`h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border w-[140px] ${
+              selectedPriceRange !== "all" 
+                ? "bg-primary/10 text-primary border-primary/30" 
+                : "bg-card text-foreground border-border"
+            }`}>
+              <SelectValue placeholder="Fiyat Aralığı" />
+            </SelectTrigger>
+            <SelectContent>
+              {priceRanges.map((range) => (
+                <SelectItem key={range.id} value={range.id}>
+                  {range.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Bedrooms Select */}
+          <Select value={selectedBedrooms} onValueChange={(value) => { setSelectedBedrooms(value); setCurrentPage(1); }}>
+            <SelectTrigger className={`h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border w-[130px] ${
+              selectedBedrooms !== "all" 
+                ? "bg-primary/10 text-primary border-primary/30" 
+                : "bg-card text-foreground border-border"
+            }`}>
+              <SelectValue placeholder="Oda Sayısı" />
+            </SelectTrigger>
+            <SelectContent>
+              {bedroomOptions.map((option) => (
+                <SelectItem key={option.id} value={option.id}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* District Select */}
+          <Select value={selectedDistrict} onValueChange={(value) => { setSelectedDistrict(value); setCurrentPage(1); }}>
+            <SelectTrigger className={`h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border w-[120px] ${
+              selectedDistrict !== "all" 
+                ? "bg-primary/10 text-primary border-primary/30" 
+                : "bg-card text-foreground border-border"
+            }`}>
+              <SelectValue placeholder="Bölge" />
+            </SelectTrigger>
+            <SelectContent>
+              {districts.map((district) => (
+                <SelectItem key={district.id} value={district.id}>
+                  {district.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           {hasActiveFilters && (
             <Button

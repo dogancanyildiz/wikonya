@@ -9,6 +9,7 @@ import { usePermissions } from "@/lib/utils/hooks/use-permissions"
 import { useNotifications } from "@/lib/utils/hooks/use-notifications"
 import { WikiEditDialog } from "./wiki-edit-dialog"
 import { WikiHistory } from "./wiki-history"
+import { TopicEditDialog } from "./topic-edit-dialog"
 import { WikiContent, WikiRevision, UserRole } from "@/lib/types"
 import { renderMarkdown } from "@/lib/utils/markdown"
 import {
@@ -454,6 +455,7 @@ export function TopicHeader({ topicId, wikiContent: initialWikiContent }: TopicH
   const { canEditWiki, canProposeWikiEdit } = usePermissions()
   const { notifyWikiReverted } = useNotifications()
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isTopicEditDialogOpen, setIsTopicEditDialogOpen] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [revisions, setRevisions] = useState<WikiRevision[]>([])
   const [animations, setAnimations] = useState<{ [key: string]: boolean }>({})
@@ -1322,10 +1324,23 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
       <CardContent className="p-6 sm:p-8">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
           <div className="flex-1">
-            {/* Title */}
-            <h1 className="font-[Manrope] text-foreground mb-4 sm:mb-6 font-extrabold text-3xl sm:text-4xl lg:text-[48px] leading-tight">
-              {topic.title}
-            </h1>
+            {/* Title with Edit Button */}
+            <div className="flex items-start justify-between gap-4 mb-4 sm:mb-6">
+              <h1 className="font-[Manrope] text-foreground font-extrabold text-3xl sm:text-4xl lg:text-[48px] leading-tight flex-1">
+                {topic.title}
+              </h1>
+              {state.user && topic.author.id === state.user.id && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsTopicEditDialogOpen(true)}
+                  className="font-[Manrope] font-bold text-xs sm:text-sm flex-shrink-0"
+                >
+                  <Edit2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5" />
+                  Düzenle
+                </Button>
+              )}
+            </div>
             
             {/* Meta Information */}
             <div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
