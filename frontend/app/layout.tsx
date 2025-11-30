@@ -72,6 +72,9 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
   },
+  appleWebApp: {
+    title: "Konya Genç",
+  },
 };
 
 export default function RootLayout({
