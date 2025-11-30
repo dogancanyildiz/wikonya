@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface DiscussionFeedProps {}
 
 interface Discussion {

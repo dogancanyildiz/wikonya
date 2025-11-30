@@ -5,7 +5,9 @@ import "leaflet/dist/leaflet.css"
 
 // Leaflet icon sorununu düzelt (SSR için)
 if (typeof window !== "undefined") {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const L = require("leaflet")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   delete (L.Icon.Default.prototype as any)._getIconUrl
   L.Icon.Default.mergeOptions({
     iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -27,7 +29,6 @@ interface LeafletMapProps {
   height?: string
   showPopup?: boolean
   popupContent?: React.ReactNode
-  markerLabel?: string
 }
 
 export function LeafletMap({
@@ -37,7 +38,6 @@ export function LeafletMap({
   height = "100%",
   showPopup = false,
   popupContent,
-  markerLabel,
 }: LeafletMapProps) {
   if (typeof window === "undefined") {
     return (

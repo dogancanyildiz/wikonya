@@ -16,18 +16,22 @@ export function PageTransition({ children }: PageTransitionProps) {
   // Track first render to skip animation on initial load
   // This pattern is necessary for page transition behavior
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Necessary for page transition behavior
     setIsFirstRender(false)
   }, [])
 
   // Dashboard sayfaları arasında geçiş yapıldığında animasyonu devre dışı bırak
+  const [isDashboardTransition, setIsDashboardTransition] = useState(false)
   const isDashboardRoute = pathname?.startsWith("/dashboard")
-  const isPrevDashboardRoute = prevPathnameRef.current?.startsWith("/dashboard")
-  const isDashboardTransition = isDashboardRoute && isPrevDashboardRoute && pathname !== prevPathnameRef.current
 
   useEffect(() => {
+    const prevPathname = prevPathnameRef.current
+    const isPrevDashboardRoute = prevPathname?.startsWith("/dashboard")
+    const shouldDisableTransition = Boolean(isDashboardRoute && isPrevDashboardRoute && pathname !== prevPathname)
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Necessary for dashboard transition detection
+    setIsDashboardTransition(shouldDisableTransition)
     prevPathnameRef.current = pathname
-  }, [pathname])
+  }, [pathname, isDashboardRoute])
 
   if (isFirstRender) {
     return <>{children}</>

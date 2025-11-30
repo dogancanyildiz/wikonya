@@ -1,9 +1,7 @@
 "use client"
 
-import { useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { Wallet, BookOpen, UserPlus, Trophy, Settings } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Select,

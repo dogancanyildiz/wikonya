@@ -1,9 +1,9 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Heart, Sparkles, ArrowRight, Users, Calendar } from "lucide-react"
+import { Heart, ArrowRight, Users, Calendar } from "lucide-react"
 import Link from "next/link"
 
 export function SocialResponsibilityCard() {

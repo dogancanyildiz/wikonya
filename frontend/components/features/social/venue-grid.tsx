@@ -20,7 +20,9 @@ import "leaflet/dist/leaflet.css"
 
 // Leaflet icon sorununu düzelt (SSR için)
 if (typeof window !== "undefined") {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const L = require("leaflet")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   delete (L.Icon.Default.prototype as any)._getIconUrl
   L.Icon.Default.mergeOptions({
     iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -422,14 +424,14 @@ export function VenueGrid() {
   const mapBounds = getMapBounds()
 
   // Seçilen mekana zoom yapmak için component
-  const MapZoomToMarker = ({ selectedVenueId, venues }: { selectedVenueId: number | null, venues: typeof sortedVenues }) => {
-    if (typeof window === "undefined") return null
-    
+  // Bu component react-leaflet'in MapContainer içinde kullanılmalı
+  function MapZoomToMarker({ selectedVenueId, venues }: { selectedVenueId: number | null, venues: typeof sortedVenues }) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useMap } = require("react-leaflet")
     const map = useMap()
     
     useEffect(() => {
-      if (selectedVenueId) {
+      if (selectedVenueId && typeof window !== "undefined") {
         const venue = venues.find(v => v.id === selectedVenueId)
         if (venue) {
           map.setView([venue.coordinates.lat, venue.coordinates.lng], 16, {
@@ -608,13 +610,14 @@ export function VenueGrid() {
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     <MapZoomToMarker selectedVenueId={selectedVenue} venues={sortedVenues} />
-                    {sortedVenues.map((venue, index) => {
-                      const markerLabel = String.fromCharCode(65 + (index % 26)) // A, B, C, ...
+                    {sortedVenues.map((venue) => {
                       const isSelected = selectedVenue === venue.id
                       
                       // Marker icon'ları - tüm marker'lar için icon tanımlanmalı
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       let icon: any = undefined
                       if (typeof window !== "undefined") {
+                        // eslint-disable-next-line @typescript-eslint/no-require-imports
                         const L = require("leaflet")
                         if (isSelected) {
                           // Seçili marker için kırmızı icon
