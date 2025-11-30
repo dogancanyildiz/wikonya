@@ -70,7 +70,7 @@ export default function AnalyticsPage() {
     },
   }), [])
 
-  const data = useMemo(() => analyticsData[selectedPeriod], [selectedPeriod])
+  const data = useMemo(() => analyticsData[selectedPeriod], [selectedPeriod, analyticsData])
   const maxValue = useMemo(() => Math.max(...data.views, ...data.likes, ...data.comments, ...data.topics), [data])
 
   // Calculate totals and trends - memoized
