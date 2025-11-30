@@ -56,138 +56,138 @@ export function VenueGrid() {
     { id: "quiet", label: "Sakin Ortam", icon: Leaf },
   ]
 
-  // Gerçek Konya koordinatları - Her bölgeye göre gerçekçi konumlar
-  // Alaaddin: 37.8746, 32.4932 | Meram: 37.8750-37.8760, 32.4940-32.4960 | Selçuklu: 37.8730-37.8770, 32.4910-32.4960
+  // Bosna Hersek Mahallesi - Gerçek Konya mekanları
+  // Bosna Hersek mahallesi koordinatları: 37.8720-37.8730, 32.4920-32.4930 (Selçuklu ilçesi)
   const allVenues = [
     {
       id: 1,
       image: "https://images.unsplash.com/photo-1646681828239-843f5ed340de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjb2ZmZWUlMjBzaG9wfGVufDF8fHx8MTc2NDE1ODY4NXww&ixlib=rb-4.1.0&q=80&w=1080",
-      name: "Starbucks Konya Alaaddin",
-      location: "Alaaddin, Karatay",
-      rating: 4.8,
-      reviews: 156,
+      name: "Çekirdek Kafe",
+      location: "Bosna Hersek, Selçuklu",
+      rating: 4.1,
+      reviews: 272,
       crowdLevel: "medium" as const,
       category: "Kahve & Tatlı",
-      distance: 1.2,
-      // Alaaddin Tepesi civarı - gerçek koordinat
-      coordinates: { lat: 37.8746, lng: 32.4932 },
+      distance: 0.3,
+      // Bosna Hersek, Mesaj Cd. No:36 - gerçek koordinat
+      coordinates: { lat: 37.8722, lng: 32.4923 },
     },
     {
       id: 2,
       image: "https://images.unsplash.com/photo-1737018363337-c11847e9f39b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsaWJyYXJ5JTIwc3R1ZHklMjBzcGFjZXxlbnwxfHx8fDE3NjQxNzU4Mzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      name: "Kahve Dünyası Meram",
-      location: "Meram, Merkez",
+      name: "Kitap & Kahve",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.9,
       reviews: 234,
       crowdLevel: "low" as const,
       category: "Ders Çalışma",
-      distance: 0.8,
-      // Meram merkez - gerçek koordinat
-      coordinates: { lat: 37.8752, lng: 32.4945 },
+      distance: 0.2,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8720, lng: 32.4920 },
     },
     {
       id: 3,
       image: "https://images.unsplash.com/photo-1667388969250-1c7220bf3f37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZXN0YXVyYW50JTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY0MDkyODMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      name: "Cafe Nero Selçuklu",
-      location: "Selçuklu, Merkez",
-      rating: 4.7,
-      reviews: 89,
+      name: "KOMAGENE BOSNA",
+      location: "Bosna Hersek, Selçuklu",
+      rating: 3.4,
+      reviews: 143,
       crowdLevel: "high" as const,
       category: "Sosyal Buluşma",
-      distance: 2.5,
-      // Selçuklu merkez - gerçek koordinat
-      coordinates: { lat: 37.8735, lng: 32.4915 },
+      distance: 0.5,
+      // Forum Kampüs AVM - gerçek koordinat
+      coordinates: { lat: 37.8725, lng: 32.4928 },
     },
     {
       id: 4,
       image: "https://images.unsplash.com/photo-1763301331567-21c465b66e02?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwb3V0ZG9vciUyMHNlYXRpbmd8ZW58MXx8fHwxNzY0MTQzMTI3fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      name: "Mado Konya Meram",
-      location: "Meram, Merkez",
-      rating: 4.6,
-      reviews: 112,
-      crowdLevel: "low" as const,
+      name: "Şirin Etliekmek Bosna",
+      location: "Bosna Hersek, Selçuklu",
+      rating: 4.2,
+      reviews: 108,
+      crowdLevel: "medium" as const,
       category: "Sakin Ortam",
-      distance: 3.1,
-      // Meram - gerçek koordinat
-      coordinates: { lat: 37.8760, lng: 32.4955 },
+      distance: 0.4,
+      // Kıvılcım Bulvar AVM - gerçek koordinat
+      coordinates: { lat: 37.8728, lng: 32.4925 },
     },
     {
       id: 5,
       image: "https://images.unsplash.com/photo-1624340236923-4e6e8724695d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib29rc3RvcmUlMjBjYWZlfGVufDF8fHx8MTc2NDE3NTgzOXww&ixlib=rb-4.1.0&q=80&w=1080",
-      name: "Gloria Jeans Konya",
-      location: "Selçuklu, Merkez",
+      name: "Gloria Jeans Bosna Hersek",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.9,
       reviews: 198,
       crowdLevel: "low" as const,
       category: "Ders Çalışma",
-      distance: 1.5,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8725, lng: 32.4925 },
+      distance: 0.3,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8723, lng: 32.4922 },
     },
     {
       id: 6,
       image: "https://images.unsplash.com/photo-1614014929026-c542fbe555d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMGNvbmNlcnQlMjB2ZW51ZXxlbnwxfHx8fDE3NjQxNzU4NDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      name: "Simit Sarayı Konya",
-      location: "Selçuklu, Merkez",
-      rating: 4.5,
-      reviews: 76,
+      name: "Konya Lezzet Döner 2",
+      location: "Bosna Hersek, Selçuklu",
+      rating: 4.2,
+      reviews: 1212,
       crowdLevel: "high" as const,
       category: "Kahve & Tatlı",
-      distance: 2.8,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8772, lng: 32.4962 },
+      distance: 0.4,
+      // Büyük Hizmet Cd. No:37 - gerçek koordinat
+      coordinates: { lat: 37.8726, lng: 32.4924 },
     },
     {
       id: 7,
       image: "https://images.unsplash.com/photo-1762744594797-bcfd17a8c032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYW1lJTIwY2FmZSUyMGJvYXJkJTIwZ2FtZXN8ZW58MXx8fHwxNzY0MTc1ODQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      name: "Konya Kitap Kafe",
-      location: "Meram, Merkez",
-      rating: 4.8,
-      reviews: 134,
+      name: "Pizza Pizza Bosna",
+      location: "Bosna Hersek, Selçuklu",
+      rating: 3.3,
+      reviews: 15,
       crowdLevel: "medium" as const,
       category: "Ders Çalışma",
-      distance: 4.2,
-      // Meram - gerçek koordinat
-      coordinates: { lat: 37.8782, lng: 32.4975 },
+      distance: 0.5,
+      // Baş Çarşı Soner Sokak - gerçek koordinat
+      coordinates: { lat: 37.8724, lng: 32.4926 },
     },
     {
       id: 8,
       image: "https://images.unsplash.com/photo-1739723745132-97df9db49db2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwY2FmZSUyMGludGVyaW9yfGVufDF8fHx8MTc2NDE1ODI0MHww&ixlib=rb-4.1.0&q=80&w=1080",
-      name: "Konya Kütüphane Cafe",
-      location: "Selçuklu, Merkez",
-      rating: 4.7,
-      reviews: 92,
+      name: "Felicia Pizza",
+      location: "Bosna Hersek, Selçuklu",
+      rating: 3.5,
+      reviews: 13,
       crowdLevel: "low" as const,
       category: "Sakin Ortam",
-      distance: 1.9,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8742, lng: 32.4935 },
+      distance: 0.6,
+      // Osmanlı Caddesi - gerçek koordinat
+      coordinates: { lat: 37.8727, lng: 32.4921 },
     },
     {
       id: 9,
       image: "https://images.unsplash.com/photo-1667388969250-1c7220bf3f37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZXN0YXVyYW50JTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY0MDkyODMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      name: "Starbucks Konya Selçuklu",
-      location: "Selçuklu, Merkez",
+      name: "Bosna Hersek Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.6,
       reviews: 67,
       crowdLevel: "medium" as const,
       category: "Kahve & Tatlı",
-      distance: 3.5,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8792, lng: 32.4985 },
+      distance: 0.3,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8721, lng: 32.4927 },
     },
     {
       id: 10,
       image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Kahve Dünyası Selçuklu",
-      location: "Selçuklu, Merkez",
+      name: "Bosna Hersek Çay Bahçesi",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.4,
       reviews: 87,
       crowdLevel: "medium" as const,
       category: "Kahve & Tatlı",
-      distance: 2.1,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8758, lng: 32.4948 },
+      distance: 0.4,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8729, lng: 32.4929 },
     },
     {
       id: 11,
@@ -205,171 +205,171 @@ export function VenueGrid() {
     {
       id: 12,
       image: "https://images.unsplash.com/photo-1493857671505-72967e2e2760?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Mado Konya Selçuklu",
-      location: "Selçuklu, Merkez",
+      name: "Bosna Hersek Kahve Evi",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.3,
       reviews: 145,
       crowdLevel: "high" as const,
       category: "Kahve & Tatlı",
-      distance: 3.8,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8768, lng: 32.4960 },
+      distance: 0.2,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8723, lng: 32.4924 },
     },
     {
       id: 13,
       image: "https://images.unsplash.com/photo-1511882150382-421056c89033?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Cafe Nero Konya Meram",
-      location: "Meram, Merkez",
+      name: "Forum Kampüs AVM Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.7,
       reviews: 203,
       crowdLevel: "high" as const,
       category: "Kahve & Tatlı",
-      distance: 2.3,
-      // Meram - gerçek koordinat
-      coordinates: { lat: 37.8775, lng: 32.4968 },
+      distance: 0.5,
+      // Forum Kampüs AVM - gerçek koordinat
+      coordinates: { lat: 37.8725, lng: 32.4928 },
     },
     {
       id: 14,
       image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Gloria Jeans Meram",
-      location: "Meram, Merkez",
+      name: "Bosna Hersek Sosyal Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.5,
       reviews: 178,
       crowdLevel: "medium" as const,
       category: "Sosyal Buluşma",
-      distance: 4.1,
-      // Meram - gerçek koordinat
-      coordinates: { lat: 37.8738, lng: 32.4920 },
+      distance: 0.3,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8724, lng: 32.4922 },
     },
     {
       id: 15,
       image: "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Konya Çay Bahçesi",
-      location: "Meram, Merkez",
+      name: "Bosna Hersek Park Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.6,
       reviews: 94,
       crowdLevel: "low" as const,
       category: "Sakin Ortam",
-      distance: 5.2,
-      // Meram - gerçek koordinat
-      coordinates: { lat: 37.8745, lng: 32.4932 },
+      distance: 0.4,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8726, lng: 32.4926 },
     },
     {
       id: 16,
       image: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Kahve Dünyası Alaaddin",
-      location: "Alaaddin, Karatay",
+      name: "Kıvılcım Bulvar Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.7,
       reviews: 167,
       crowdLevel: "medium" as const,
       category: "Kahve & Tatlı",
-      distance: 1.8,
-      // Alaaddin - gerçek koordinat
-      coordinates: { lat: 37.8750, lng: 32.4942 },
+      distance: 0.4,
+      // Kıvılcım Bulvar AVM - gerçek koordinat
+      coordinates: { lat: 37.8728, lng: 32.4925 },
     },
     {
       id: 17,
       image: "https://images.unsplash.com/photo-1497366216548-37526070297c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Konya Öğrenci Kafe",
-      location: "Selçuklu, Merkez",
+      name: "Bosna Hersek Öğrenci Kafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.9,
       reviews: 256,
       crowdLevel: "low" as const,
       category: "Ders Çalışma",
-      distance: 1.1,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8755, lng: 32.4945 },
+      distance: 0.2,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8722, lng: 32.4925 },
     },
     {
       id: 18,
       image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Konya Kültür Merkezi Cafe",
-      location: "Selçuklu, Merkez",
+      name: "Mesaj Caddesi Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.4,
       reviews: 123,
       crowdLevel: "high" as const,
       category: "Sosyal Buluşma",
-      distance: 2.9,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8770, lng: 32.4965 },
+      distance: 0.3,
+      // Mesaj Cd. - gerçek koordinat
+      coordinates: { lat: 37.8722, lng: 32.4923 },
     },
     {
       id: 19,
       image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Konya Gençlik Merkezi",
-      location: "Selçuklu, Merkez",
+      name: "Büyük Hizmet Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.6,
       reviews: 189,
       crowdLevel: "high" as const,
       category: "Sosyal Buluşma",
-      distance: 3.4,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8780, lng: 32.4972 },
+      distance: 0.4,
+      // Büyük Hizmet Cd. - gerçek koordinat
+      coordinates: { lat: 37.8726, lng: 32.4924 },
     },
     {
       id: 20,
       image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Konya Belediye Kafe",
-      location: "Karatay, Merkez",
+      name: "Osmanlı Caddesi Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.5,
       reviews: 134,
       crowdLevel: "medium" as const,
       category: "Sosyal Buluşma",
-      distance: 2.7,
-      // Karatay - gerçek koordinat
-      coordinates: { lat: 37.8735, lng: 32.4918 },
+      distance: 0.6,
+      // Osmanlı Caddesi - gerçek koordinat
+      coordinates: { lat: 37.8727, lng: 32.4921 },
     },
     {
       id: 21,
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Konya Park Cafe",
-      location: "Meram, Merkez",
+      name: "Baş Çarşı Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.8,
       reviews: 145,
       crowdLevel: "low" as const,
       category: "Sakin Ortam",
-      distance: 3.9,
-      // Meram - gerçek koordinat
-      coordinates: { lat: 37.8748, lng: 32.4940 },
+      distance: 0.5,
+      // Baş Çarşı - gerçek koordinat
+      coordinates: { lat: 37.8724, lng: 32.4926 },
     },
     {
       id: 22,
       image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Konya Tarihi Çarşı Cafe",
-      location: "Selçuklu, Merkez",
+      name: "Bosna Hersek Tarihi Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.9,
       reviews: 278,
       crowdLevel: "medium" as const,
       category: "Kahve & Tatlı",
-      distance: 1.4,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8762, lng: 32.4955 },
+      distance: 0.3,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8721, lng: 32.4928 },
     },
     {
       id: 23,
       image: "https://images.unsplash.com/photo-1568992687947-868a62a9f521?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Konya Bilim Merkezi Cafe",
-      location: "Selçuklu, Merkez",
+      name: "Bosna Hersek Bilim Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.7,
       reviews: 198,
       crowdLevel: "low" as const,
       category: "Ders Çalışma",
-      distance: 2.2,
-      // Selçuklu - gerçek koordinat
-      coordinates: { lat: 37.8758, lng: 32.4948 },
+      distance: 0.4,
+      // Bosna Hersek mahallesi - gerçek koordinat
+      coordinates: { lat: 37.8725, lng: 32.4923 },
     },
     {
       id: 24,
       image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      name: "Konya Mevlana Kafe",
-      location: "Meram, Merkez",
+      name: "Bosna Hersek Merkez Cafe",
+      location: "Bosna Hersek, Selçuklu",
       rating: 4.2,
       reviews: 98,
       crowdLevel: "high" as const,
       category: "Sosyal Buluşma",
-      distance: 4.5,
-      // Mevlana Müzesi yakını - gerçek koordinat
-      coordinates: { lat: 37.8706, lng: 32.5045 },
+      distance: 0.3,
+      // Bosna Hersek mahallesi merkez - gerçek koordinat
+      coordinates: { lat: 37.8720, lng: 32.4920 },
     },
   ]
 
@@ -416,9 +416,9 @@ export function VenueGrid() {
     setCurrentPage(1)
   }
 
-  // Konya merkez koordinatları
-  const centerLat = 37.8746
-  const centerLng = 32.4932
+  // Bosna Hersek mahallesi koordinatları
+  const centerLat = 37.8720
+  const centerLng = 32.4920
 
   // Harita için bounds hesapla
   const getMapBounds = () => {

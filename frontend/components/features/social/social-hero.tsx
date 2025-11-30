@@ -29,21 +29,21 @@ export function SocialHero() {
     }
   }, [])
 
-  // Trend olan mekanlar ve venue-grid'deki gerçek ID'leri
+  // Trend olan mekanlar ve venue-grid'deki gerçek ID'leri - Bosna Hersek mahallesi
   const trendingVenues = [
-    { id: 5, name: "Gloria Jeans Konya", category: "Ders Çalışma", visitors: "245" },
-    { id: 1, name: "Starbucks Konya Alaaddin", category: "Kahve & Tatlı", visitors: "189" },
-    { id: 2, name: "Kahve Dünyası Meram", category: "Ders Çalışma", visitors: "167" },
+    { id: 2, name: "Kitap & Kahve", category: "Ders Çalışma", visitors: "245" },
+    { id: 5, name: "Gloria Jeans Bosna Hersek", category: "Ders Çalışma", visitors: "189" },
+    { id: 1, name: "Çekirdek Kafe", category: "Kahve & Tatlı", visitors: "167" },
   ]
 
-  // All venues for voting (from venue-grid)
+  // All venues for voting (from venue-grid) - Bosna Hersek mahallesi
   const allVenues = [
-    { id: 1, name: "Starbucks Konya Alaaddin", category: "Kahve & Tatlı", location: "Alaaddin, Karatay", rating: 4.8 },
-    { id: 2, name: "Kahve Dünyası Meram", category: "Ders Çalışma", location: "Meram, Merkez", rating: 4.9 },
-    { id: 3, name: "Cafe Nero Selçuklu", category: "Sosyal Buluşma", location: "Selçuklu, Merkez", rating: 4.7 },
-    { id: 4, name: "Mado Konya Meram", category: "Sakin Ortam", location: "Meram, Merkez", rating: 4.6 },
-    { id: 5, name: "Gloria Jeans Konya", category: "Ders Çalışma", location: "Selçuklu, Merkez", rating: 4.9 },
-    { id: 6, name: "Simit Sarayı Konya", category: "Kahve & Tatlı", location: "Selçuklu, Merkez", rating: 4.5 },
+    { id: 1, name: "Çekirdek Kafe", category: "Kahve & Tatlı", location: "Bosna Hersek, Selçuklu", rating: 4.1 },
+    { id: 2, name: "Kitap & Kahve", category: "Ders Çalışma", location: "Bosna Hersek, Selçuklu", rating: 4.9 },
+    { id: 3, name: "KOMAGENE BOSNA", category: "Sosyal Buluşma", location: "Bosna Hersek, Selçuklu", rating: 3.4 },
+    { id: 4, name: "Şirin Etliekmek Bosna", category: "Sakin Ortam", location: "Bosna Hersek, Selçuklu", rating: 4.2 },
+    { id: 5, name: "Gloria Jeans Bosna Hersek", category: "Ders Çalışma", location: "Bosna Hersek, Selçuklu", rating: 4.9 },
+    { id: 6, name: "Konya Lezzet Döner 2", category: "Kahve & Tatlı", location: "Bosna Hersek, Selçuklu", rating: 4.2 },
   ]
 
   const handleVote = () => {
@@ -118,13 +118,13 @@ export function SocialHero() {
           <div className="flex items-center gap-1.5 mb-4">
             <MapPin className="w-4 h-4 text-white/70" strokeWidth={2} />
             <span className="font-[Manrope] text-white/80 font-medium text-sm sm:text-base">
-              Bosna Hersek, Meram
+              Bosna Hersek, Selçuklu
             </span>
           </div>
           <p className="font-[Manrope] text-white/70 mb-6 font-normal text-sm sm:text-base leading-relaxed max-w-md">
             Sakin ortam, sınırsız kahve ve kitap seçenekleriyle ders çalışmak için ideal.
           </p>
-          <Link href="/social/venue/5">
+          <Link href="/social/venue/2">
             <Button 
               className="px-6 py-3 bg-white dark:bg-card rounded-lg font-[Manrope] text-foreground dark:text-foreground hover:bg-white/90 dark:hover:bg-card/90 border border-white/20 dark:border-border transition-colors font-bold text-sm cursor-pointer"
             >
