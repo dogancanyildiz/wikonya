@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { Star, MapPin, TrendingUp, Users, Vote, Check } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Star, MapPin, TrendingUp, Users, Vote, Check, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -17,22 +17,33 @@ import {
 export function SocialHero() {
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false)
   const [selectedVenueId, setSelectedVenueId] = useState<number | null>(null)
+  const [votedVenueId, setVotedVenueId] = useState<number | null>(null)
+
+  // Load voted venue from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const votes = JSON.parse(localStorage.getItem("venue_votes") || "[]")
+      if (votes.length > 0) {
+        setVotedVenueId(votes[0]) // Get the last vote
+      }
+    }
+  }, [])
 
   // Trend olan mekanlar ve venue-grid'deki gerçek ID'leri
   const trendingVenues = [
-    { id: 5, name: "Okuma Odası Kitap Cafe", category: "Ders Çalışma", visitors: "245" },
-    { id: 1, name: "Meram Kıraathanesi", category: "Kahve & Tatlı", visitors: "189" },
-    { id: 2, name: "Study Hub Cafe", category: "Ders Çalışma", visitors: "167" },
+    { id: 5, name: "Gloria Jeans Konya", category: "Ders Çalışma", visitors: "245" },
+    { id: 1, name: "Starbucks Konya Alaaddin", category: "Kahve & Tatlı", visitors: "189" },
+    { id: 2, name: "Kahve Dünyası Meram", category: "Ders Çalışma", visitors: "167" },
   ]
 
   // All venues for voting (from venue-grid)
   const allVenues = [
-    { id: 1, name: "Meram Kıraathanesi", category: "Kahve & Tatlı", location: "Meram, Merkez", rating: 4.8 },
-    { id: 2, name: "Study Hub Cafe", category: "Ders Çalışma", location: "Bosna Hersek, Selçuklu", rating: 4.9 },
-    { id: 3, name: "Şems-i Bistro", category: "Sosyal Buluşma", location: "Alaaddin, Karatay", rating: 4.7 },
-    { id: 4, name: "Bahçe Cafe & Baharat", category: "Sakin Ortam", location: "Yazır, Selçuklu", rating: 4.6 },
-    { id: 5, name: "Okuma Odası Kitap Cafe", category: "Ders Çalışma", location: "Fevziçakmak, Karatay", rating: 4.9 },
-    { id: 6, name: "Müzik & Konser Mekanı", category: "Eğlence", location: "Meram, Merkez", rating: 4.5 },
+    { id: 1, name: "Starbucks Konya Alaaddin", category: "Kahve & Tatlı", location: "Alaaddin, Karatay", rating: 4.8 },
+    { id: 2, name: "Kahve Dünyası Meram", category: "Ders Çalışma", location: "Meram, Merkez", rating: 4.9 },
+    { id: 3, name: "Cafe Nero Selçuklu", category: "Sosyal Buluşma", location: "Selçuklu, Merkez", rating: 4.7 },
+    { id: 4, name: "Mado Konya Meram", category: "Sakin Ortam", location: "Meram, Merkez", rating: 4.6 },
+    { id: 5, name: "Gloria Jeans Konya", category: "Ders Çalışma", location: "Selçuklu, Merkez", rating: 4.9 },
+    { id: 6, name: "Simit Sarayı Konya", category: "Kahve & Tatlı", location: "Selçuklu, Merkez", rating: 4.5 },
   ]
 
   const handleVote = () => {
@@ -40,14 +51,12 @@ export function SocialHero() {
       const selectedVenue = allVenues.find(v => v.id === selectedVenueId)
       if (selectedVenue) {
         // Save vote to localStorage
-        const votes = JSON.parse(localStorage.getItem("venue_votes") || "[]")
-        if (!votes.includes(selectedVenueId)) {
-          votes.push(selectedVenueId)
-          localStorage.setItem("venue_votes", JSON.stringify(votes))
-        }
+        localStorage.setItem("venue_votes", JSON.stringify([selectedVenueId]))
+        setVotedVenueId(selectedVenueId)
         
-        setIsVoteModalOpen(false)
-        setSelectedVenueId(null)
+        // Don't close modal, keep it open
+        // setIsVoteModalOpen(false)
+        // setSelectedVenueId(null)
         
         // Show success toast
         toast.success("Oyunuz kaydedildi!", {
@@ -55,6 +64,20 @@ export function SocialHero() {
           duration: 3000,
         })
       }
+    }
+  }
+
+  const handleRemoveVote = () => {
+    if (votedVenueId) {
+      const votedVenue = allVenues.find(v => v.id === votedVenueId)
+      localStorage.removeItem("venue_votes")
+      setVotedVenueId(null)
+      setSelectedVenueId(null)
+      
+      toast.success("Oyunuz geri çekildi!", {
+        description: `${votedVenue?.name} için oyunuz kaldırıldı.`,
+        duration: 3000,
+      })
     }
   }
 
@@ -113,20 +136,20 @@ export function SocialHero() {
 
       {/* Sağ Taraf - En Çok Trend Olan 3 Mekan */}
       <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border h-[400px] sm:h-[500px] flex flex-col">
-        <CardContent className="p-6 sm:p-8 flex flex-col flex-1">
-          <div className="flex items-center gap-2 mb-4 sm:mb-6">
+        <CardContent className="p-6 sm:p-8 flex flex-col h-full">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4 flex-shrink-0">
             <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-primary" strokeWidth={2.5} />
             <h3 className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl">
               Bu Hafta Trend
             </h3>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1 sm:space-y-2 flex-shrink-0">
             {trendingVenues.map((venue, index) => (
               <Link
                 key={venue.id}
                 href={`/social/venue/${venue.id}`}
-                className="flex items-center gap-4 sm:gap-5 py-4 sm:py-5 border-b border-border last:border-b-0 cursor-pointer group"
+                className="flex items-center gap-3 sm:gap-4 py-3 sm:py-4 border-b border-border last:border-b-0 cursor-pointer group"
               >
                 {/* Rank Number */}
                 <span className="font-[Manrope] text-primary font-black text-3xl sm:text-4xl w-8 sm:w-10 flex-shrink-0">
@@ -155,15 +178,51 @@ export function SocialHero() {
           </div>
 
           {/* Vote Button */}
-          <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-border">
-            <Button 
-              variant="outline"
-              onClick={() => setIsVoteModalOpen(true)}
-              className="w-full py-4 sm:py-5 border-2 border-primary rounded-xl font-[Manrope] text-primary hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-all font-bold text-sm sm:text-base cursor-pointer"
-            >
-              <Vote className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
-              Bu Haftanın Mekanını Oyla
-            </Button>
+          <div className="mt-auto pt-3 sm:pt-4 border-t border-border flex-shrink-0">
+            {votedVenueId ? (
+              <div className="space-y-2">
+                <div className="p-2.5 sm:p-3 bg-primary/10 dark:bg-primary/20 rounded-xl border border-primary/30">
+                  <div className="flex flex-col gap-1">
+                    <span className="font-[Manrope] text-primary font-bold text-xs">
+                      Oyunuz:
+                    </span>
+                    <span className="font-[Manrope] text-foreground font-semibold text-xs sm:text-sm break-words line-clamp-2">
+                      {allVenues.find(v => v.id === votedVenueId)?.name}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Button 
+                    variant="outline"
+                    onClick={() => setIsVoteModalOpen(true)}
+                    className="flex-1 py-2 sm:py-2.5 border-2 border-primary rounded-xl font-[Manrope] text-primary hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-all font-bold text-xs"
+                  >
+                    <Vote className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Oyu Değiştir</span>
+                    <span className="sm:hidden">Değiştir</span>
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={handleRemoveVote}
+                    className="flex-1 py-2 sm:py-2.5 border-2 border-red-500 rounded-xl font-[Manrope] text-red-500 hover:bg-red-500 hover:text-white transition-all font-bold text-xs"
+                  >
+                    <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" />
+                    <span className="hidden sm:inline">Oyu Geri Çek</span>
+                    <span className="sm:hidden">Geri Çek</span>
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Button 
+                variant="outline"
+                onClick={() => setIsVoteModalOpen(true)}
+                className="w-full py-3 sm:py-4 border-2 border-primary rounded-xl font-[Manrope] text-primary hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-all font-bold text-xs sm:text-sm cursor-pointer"
+              >
+                <Vote className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
+                <span className="hidden sm:inline">Bu Haftanın Mekanını Oyla</span>
+                <span className="sm:hidden">Oyla</span>
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -182,12 +241,15 @@ export function SocialHero() {
           
           <div className="flex-1 overflow-y-auto px-6 py-4">
             <div className="space-y-3">
-              {allVenues.map((venue) => (
+              {allVenues.map((venue) => {
+                const isVoted = votedVenueId === venue.id
+                const isSelected = selectedVenueId === venue.id
+                return (
                 <button
                   key={venue.id}
                   onClick={() => setSelectedVenueId(venue.id)}
                   className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
-                    selectedVenueId === venue.id
+                    isSelected || isVoted
                       ? "border-primary bg-primary/10 dark:bg-primary/20"
                       : "border-border hover:border-primary/50 hover:bg-accent dark:hover:bg-accent"
                   }`}
@@ -198,8 +260,13 @@ export function SocialHero() {
                         <h4 className="font-[Manrope] text-foreground font-bold text-base sm:text-lg">
                           {venue.name}
                         </h4>
-                        {selectedVenueId === venue.id && (
+                        {(isSelected || isVoted) && (
                           <Check className="w-5 h-5 text-primary" />
+                        )}
+                        {isVoted && (
+                          <span className="px-2 py-0.5 bg-primary text-white text-xs font-bold rounded">
+                            Oyunuz
+                          </span>
                         )}
                       </div>
                       <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground font-medium text-sm mb-1">
@@ -222,7 +289,8 @@ export function SocialHero() {
                     </div>
                   </div>
                 </button>
-              ))}
+              )
+              })}
             </div>
           </div>
 
@@ -232,19 +300,33 @@ export function SocialHero() {
                 variant="outline"
                 onClick={() => {
                   setIsVoteModalOpen(false)
-                  setSelectedVenueId(null)
+                  if (!votedVenueId) {
+                    setSelectedVenueId(null)
+                  } else {
+                    setSelectedVenueId(votedVenueId)
+                  }
                 }}
                 className="flex-1 font-[Manrope] font-bold"
               >
-                İptal
+                Kapat
               </Button>
+              {votedVenueId && selectedVenueId !== votedVenueId && (
+                <Button
+                  variant="outline"
+                  onClick={handleRemoveVote}
+                  className="flex-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-[Manrope] font-bold"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Oyu Geri Çek
+                </Button>
+              )}
               <Button
                 onClick={handleVote}
-                disabled={!selectedVenueId}
+                disabled={!selectedVenueId || selectedVenueId === votedVenueId}
                 className="flex-1 bg-primary hover:bg-primary/90 text-white font-[Manrope] font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Vote className="w-4 h-4 mr-2" />
-                Oyla
+                {votedVenueId && selectedVenueId !== votedVenueId ? "Oyu Değiştir" : "Oyla"}
               </Button>
             </div>
           </div>
