@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Calendar, MapPin, Users, Clock, ArrowRight, Filter, CalendarX, X, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -22,12 +23,14 @@ interface Event {
   date: string
   time: string
   location: string
+  locationDistrict?: string
   participants: number
   maxParticipants: number
   category: "student" | "kbb" | "municipality"
-  eventCategory?: "Spor" | "Kültür" | "Eğitim" | "Sosyal" | "Müzik"
+  eventCategory?: "Spor" | "Kültür" | "Eğitim" | "Sosyal" | "Müzik" | "Diğer"
   description?: string
   organizer?: string
+  eventDate?: Date
 }
 
 const ITEMS_PER_PAGE = 12
@@ -35,6 +38,8 @@ const ITEMS_PER_PAGE = 12
 export function EventsPage() {
   const [activeTab, setActiveTab] = useState<"all" | "student" | "kbb">("all")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedDateFilter, setSelectedDateFilter] = useState<string>("all")
+  const [selectedLocation, setSelectedLocation] = useState<string>("all")
   const [currentPage, setCurrentPage] = useState(1)
 
   const studentEvents: Event[] = [
@@ -45,12 +50,14 @@ export function EventsPage() {
       date: "30 Kasım 2024",
       time: "09:00",
       location: "Alaaldin Tepesi",
+      locationDistrict: "Meram",
       participants: 24,
       maxParticipants: 30,
       category: "student",
       eventCategory: "Spor",
       description: "Doğa yürüyüşü ve piknik etkinliği",
       organizer: "Trekking Topluluğu",
+      eventDate: new Date(2024, 10, 30), // 30 Kasım 2024
     },
     {
       id: 2,
@@ -59,12 +66,14 @@ export function EventsPage() {
       date: "2 Aralık 2024",
       time: "18:30",
       location: "Kitap & Kahve",
+      locationDistrict: "Selçuklu",
       participants: 12,
       maxParticipants: 15,
       category: "student",
       eventCategory: "Kültür",
       description: "Orhan Pamuk'un eserlerini tartışıyoruz",
       organizer: "Kitap Kulübü",
+      eventDate: new Date(2024, 11, 2), // 2 Aralık 2024
     },
     {
       id: 3,
@@ -73,12 +82,14 @@ export function EventsPage() {
       date: "5 Aralık 2024",
       time: "20:00",
       location: "Game Zone Cafe",
+      locationDistrict: "Karatay",
       participants: 8,
       maxParticipants: 20,
       category: "student",
       eventCategory: "Sosyal",
       description: "Strateji ve kutu oyunları gecesi",
       organizer: "Oyun Topluluğu",
+      eventDate: new Date(2024, 11, 5), // 5 Aralık 2024
     },
   ]
 
@@ -90,12 +101,14 @@ export function EventsPage() {
       date: "10 Aralık 2024",
       time: "14:00",
       location: "Konya Gençlik Merkezi",
+      locationDistrict: "Meram",
       participants: 150,
       maxParticipants: 200,
       category: "kbb",
       eventCategory: "Sosyal",
       description: "Yeni gençlik merkezinin açılış töreni ve tanıtım etkinliği",
       organizer: "Konya Büyükşehir Belediyesi",
+      eventDate: new Date(2024, 11, 10), // 10 Aralık 2024
     },
     {
       id: 5,
@@ -104,12 +117,14 @@ export function EventsPage() {
       date: "15 Aralık 2024",
       time: "11:00",
       location: "Konya Büyükşehir Belediyesi",
+      locationDistrict: "Selçuklu",
       participants: 80,
       maxParticipants: 100,
       category: "kbb",
       eventCategory: "Eğitim",
       description: "Genç Kültür Kart'ın özellikleri ve avantajları hakkında bilgilendirme",
       organizer: "Konya Büyükşehir Belediyesi",
+      eventDate: new Date(2024, 11, 15), // 15 Aralık 2024
     },
     {
       id: 6,
@@ -118,12 +133,14 @@ export function EventsPage() {
       date: "20 Aralık 2024",
       time: "19:00",
       location: "Konya Kültür Merkezi",
+      locationDistrict: "Meram",
       participants: 200,
       maxParticipants: 300,
       category: "kbb",
       eventCategory: "Müzik",
       description: "Konyalı genç sanatçıların performansları",
       organizer: "Konya Büyükşehir Belediyesi",
+      eventDate: new Date(2024, 11, 20), // 20 Aralık 2024
     },
   ]
 
@@ -136,6 +153,40 @@ export function EventsPage() {
     
     // Kategori filtresi
     if (selectedCategory !== null && event.eventCategory !== selectedCategory) return false
+    
+    // Konum filtresi
+    if (selectedLocation !== "all" && event.locationDistrict !== selectedLocation) return false
+    
+    // Tarih filtresi
+    if (selectedDateFilter !== "all" && event.eventDate) {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const eventDate = new Date(event.eventDate)
+      eventDate.setHours(0, 0, 0, 0)
+      
+      switch (selectedDateFilter) {
+        case "today":
+          if (eventDate.getTime() !== today.getTime()) return false
+          break
+        case "thisWeek": {
+          const weekStart = new Date(today)
+          weekStart.setDate(today.getDate() - today.getDay())
+          const weekEnd = new Date(weekStart)
+          weekEnd.setDate(weekStart.getDate() + 6)
+          if (eventDate < weekStart || eventDate > weekEnd) return false
+          break
+        }
+        case "thisMonth":
+          if (eventDate.getMonth() !== today.getMonth() || eventDate.getFullYear() !== today.getFullYear()) return false
+          break
+        case "upcoming":
+          if (eventDate < today) return false
+          break
+        case "past":
+          if (eventDate >= today) return false
+          break
+      }
+    }
     
     return true
   })
@@ -156,7 +207,31 @@ export function EventsPage() {
     setCurrentPage(1)
   }
 
+  const handleDateFilterChange = (filter: string) => {
+    setSelectedDateFilter(filter)
+    setCurrentPage(1)
+  }
+
+  const handleLocationChange = (location: string) => {
+    setSelectedLocation(location)
+    setCurrentPage(1)
+  }
+
   const categories = ["Tümü", "Spor", "Kültür", "Eğitim", "Sosyal", "Müzik"]
+  const dateFilters = [
+    { value: "all", label: "Tüm Tarihler" },
+    { value: "today", label: "Bugün" },
+    { value: "thisWeek", label: "Bu Hafta" },
+    { value: "thisMonth", label: "Bu Ay" },
+    { value: "upcoming", label: "Gelecek" },
+    { value: "past", label: "Geçmiş" },
+  ]
+  const locations = [
+    { value: "all", label: "Tüm Konumlar" },
+    { value: "Meram", label: "Meram" },
+    { value: "Selçuklu", label: "Selçuklu" },
+    { value: "Karatay", label: "Karatay" },
+  ]
 
   const getTabLabel = () => {
     if (activeTab === "all") return `Tümü (${allEvents.length})`
@@ -244,11 +319,13 @@ export function EventsPage() {
             {category}
           </Button>
         ))}
-        {(selectedCategory !== null || activeTab !== "all") && (
+        {(selectedCategory !== null || activeTab !== "all" || selectedDateFilter !== "all" || selectedLocation !== "all") && (
           <Button
             onClick={() => {
               setSelectedCategory(null)
               setActiveTab("all")
+              setSelectedDateFilter("all")
+              setSelectedLocation("all")
               setCurrentPage(1)
             }}
             variant="outline"
@@ -259,11 +336,46 @@ export function EventsPage() {
             Temizle
           </Button>
         )}
-        {(selectedCategory !== null || activeTab !== "all") && (
+        {(selectedCategory !== null || activeTab !== "all" || selectedDateFilter !== "all" || selectedLocation !== "all") && (
           <Badge className="font-[Manrope] font-bold text-xs bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary">
-            {[selectedCategory, activeTab !== "all" ? activeTab : null].filter(Boolean).length} aktif filtre
+            {[selectedCategory, activeTab !== "all" ? activeTab : null, selectedDateFilter !== "all" ? "tarih" : null, selectedLocation !== "all" ? "konum" : null].filter(Boolean).length} aktif filtre
           </Badge>
         )}
+      </div>
+
+      {/* Date and Location Filters */}
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2">
+          <Calendar className="w-4 h-4 text-foreground/60 dark:text-muted-foreground" />
+          <Select value={selectedDateFilter} onValueChange={handleDateFilterChange}>
+            <SelectTrigger className="w-[160px] sm:w-[180px] font-[Manrope] text-xs sm:text-sm">
+              <SelectValue placeholder="Tarih Filtresi" />
+            </SelectTrigger>
+            <SelectContent>
+              {dateFilters.map((filter) => (
+                <SelectItem key={filter.value} value={filter.value}>
+                  {filter.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <MapPin className="w-4 h-4 text-foreground/60 dark:text-muted-foreground" />
+          <Select value={selectedLocation} onValueChange={handleLocationChange}>
+            <SelectTrigger className="w-[140px] sm:w-[160px] font-[Manrope] text-xs sm:text-sm">
+              <SelectValue placeholder="Konum Filtresi" />
+            </SelectTrigger>
+            <SelectContent>
+              {locations.map((location) => (
+                <SelectItem key={location.value} value={location.value}>
+                  {location.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Events Grid */}
