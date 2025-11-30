@@ -6,14 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { 
   Bell, 
   Mail, 
   MessageSquare, 
   ThumbsUp, 
-  Heart, 
   Users, 
   Award, 
   BookOpen,
@@ -107,7 +105,7 @@ export default function NotificationsPage() {
       
       setHasChanges(false)
       toast.success("Bildirim ayarlarınız kaydedildi")
-    } catch (err) {
+    } catch {
       toast.error("Ayarlar kaydedilirken bir hata oluştu")
     } finally {
       setIsSaving(false)

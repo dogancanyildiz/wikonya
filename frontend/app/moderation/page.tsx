@@ -50,15 +50,20 @@ export default function ModerationPage() {
   const [proposals, setProposals] = useState<WikiEditProposal[]>([])
   const [history, setHistory] = useState<ModerationHistoryItem[]>([])
 
-  // Load history from localStorage
+  // Load history from localStorage - use lazy initialization
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("moderation_history")
       if (stored) {
         try {
-          setHistory(JSON.parse(stored))
+          const parsed = JSON.parse(stored)
+          setTimeout(() => {
+            setHistory(parsed)
+          }, 0)
         } catch {
-          setHistory([])
+          setTimeout(() => {
+            setHistory([])
+          }, 0)
         }
       }
     }

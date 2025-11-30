@@ -123,8 +123,8 @@ export function JobDetailPage() {
         setIsApplied(false)
         
         // Remove from localStorage
-        const applications = JSON.parse(localStorage.getItem("job_applications") || "[]")
-        const updated = applications.filter((app: any) => app.jobId !== jobId)
+        const applications = JSON.parse(localStorage.getItem("job_applications") || "[]") as Array<{ jobId: number }>
+        const updated = applications.filter((app) => app.jobId !== jobId)
         localStorage.setItem("job_applications", JSON.stringify(updated))
         
         toast.success("Başvuru iptal edildi", {

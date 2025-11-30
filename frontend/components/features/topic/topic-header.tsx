@@ -499,7 +499,6 @@ export function TopicHeader({ topicId, wikiContent: initialWikiContent }: TopicH
         makesSense: baseTopic.makesSense,
         comments: baseTopic.comments,
       })
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTopicStats({
         likes: baseTopic.likes,
         makesSense: baseTopic.makesSense,
@@ -539,7 +538,6 @@ export function TopicHeader({ topicId, wikiContent: initialWikiContent }: TopicH
       if (stored) {
         try {
           const parsed = JSON.parse(stored)
-          // eslint-disable-next-line react-hooks/set-state-in-effect
           setRevisions(parsed)
         } catch {
           // If parsing fails, use empty array
@@ -1697,7 +1695,7 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
 
                   toast.success("Başlık başarıyla silindi")
                   router.push("/discussion")
-                } catch (err) {
+                } catch {
                   toast.error("Başlık silinirken bir hata oluştu")
                 } finally {
                   setIsDeleting(false)

@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useApp } from "@/contexts/app-context"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty"
@@ -24,22 +24,24 @@ interface Application {
 
 export default function ApplicationsPage() {
   const { state } = useApp()
-  const [applications, setApplications] = useState<Application[]>([])
-  const [filter, setFilter] = useState<"all" | "pending" | "reviewing" | "interview" | "accepted" | "rejected">("all")
-
-  useEffect(() => {
+  
+  // Load applications from localStorage on mount
+  const [applications] = useState<Application[]>(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("job_applications")
       if (stored) {
         try {
           const apps = JSON.parse(stored)
-          setApplications(Array.isArray(apps) ? apps : [])
+          return Array.isArray(apps) ? apps : []
         } catch {
-          setApplications([])
+          return []
         }
       }
     }
-  }, [])
+    return []
+  })
+  
+  const [filter, setFilter] = useState<"all" | "pending" | "reviewing" | "interview" | "accepted" | "rejected">("all")
 
   const filteredApplications = applications.filter(app => 
     filter === "all" || app.status === filter

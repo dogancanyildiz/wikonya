@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Upload, FileText, ClipboardList, MessageSquare, Calendar, X, CheckCircle2, AlertCircle } from "lucide-react"
+import { Upload, FileText, ClipboardList, MessageSquare, Calendar, X, AlertCircle } from "lucide-react"
 import { toast } from "sonner"
 import { useApp } from "@/contexts/app-context"
 

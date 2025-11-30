@@ -1,9 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Download, Eye, MessageCircle, Star, Calendar, FileText, ClipboardList, MessageSquare, ThumbsUp, Share2, Bookmark } from "lucide-react"
+import { ArrowLeft, Download, Eye, MessageCircle, Calendar, FileText, MessageSquare, ThumbsUp, Share2, Bookmark } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -89,7 +88,6 @@ interface ResourceDetailPageProps {
 }
 
 export function ResourceDetailPage({ resourceId }: ResourceDetailPageProps) {
-  const router = useRouter()
   const { state } = useApp()
   const [resource, setResource] = useState<Resource | null>(null)
   const [comments, setComments] = useState<Comment[]>(mockComments)
@@ -101,7 +99,10 @@ export function ResourceDetailPage({ resourceId }: ResourceDetailPageProps) {
     // Load resource data
     const foundResource = allResources.find(r => r.id === resourceId)
     if (foundResource) {
-      setResource(foundResource)
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setResource(foundResource)
+      }, 0)
       // Increment views
       const viewsKey = `resource_views_${resourceId}`
       const currentViews = parseInt(localStorage.getItem(viewsKey) || "0")
@@ -113,7 +114,10 @@ export function ResourceDetailPage({ resourceId }: ResourceDetailPageProps) {
     const storedComments = localStorage.getItem(commentsKey)
     if (storedComments) {
       try {
-        setComments(JSON.parse(storedComments))
+        const parsed = JSON.parse(storedComments)
+        setTimeout(() => {
+          setComments(parsed)
+        }, 0)
       } catch {
         // Keep default comments
       }
@@ -123,10 +127,14 @@ export function ResourceDetailPage({ resourceId }: ResourceDetailPageProps) {
     if (state.user) {
       const bookmarksKey = `user_bookmarks_${state.user.id}`
       const bookmarks = JSON.parse(localStorage.getItem(bookmarksKey) || "[]")
-      setIsBookmarked(bookmarks.includes(resourceId))
+      setTimeout(() => {
+        setIsBookmarked(bookmarks.includes(resourceId))
+      }, 0)
     }
     
-    setIsLoading(false)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 0)
   }, [resourceId, state.user])
 
   const handleDownload = () => {

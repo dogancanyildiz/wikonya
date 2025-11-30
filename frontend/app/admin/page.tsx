@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, Save, Loader2, Users, Shield, Ban, Search, Filter } from "lucide-react"
+import { AlertCircle, Save, Loader2, Shield, Ban, Search, Filter } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -308,22 +308,28 @@ export default function AdminPage() {
   )
 }
 
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+  coins: number
+  joinedAt: string
+  status: "active" | "banned"
+}
+
 // User Management Component
 function UserManagement() {
-  const [users, setUsers] = useState<any[]>([])
+  // Mock users - gerçek uygulamada API'den gelecek
+  const [users, setUsers] = useState<User[]>([
+    { id: 1, name: "Ahmet Yılmaz", email: "ahmet@example.com", role: "gezgin", coins: 3500, joinedAt: "2024-01-15", status: "active" },
+    { id: 2, name: "Zeynep Kaya", email: "zeynep@example.com", role: "seyyah", coins: 8500, joinedAt: "2023-12-20", status: "active" },
+    { id: 3, name: "Mehmet Demir", email: "mehmet@example.com", role: "yeni_gelen", coins: 250, joinedAt: "2024-11-10", status: "active" },
+    { id: 4, name: "Ayşe Şahin", email: "ayse@example.com", role: "kasif_meraklisi", coins: 15000, joinedAt: "2023-08-05", status: "active" },
+    { id: 5, name: "Can Özkan", email: "can@example.com", role: "konya_bilgesi", coins: 55000, joinedAt: "2023-05-12", status: "active" },
+  ])
   const [searchQuery, setSearchQuery] = useState("")
   const [roleFilter, setRoleFilter] = useState("all")
-
-  useEffect(() => {
-    // Mock users - gerçek uygulamada API'den gelecek
-    setUsers([
-      { id: 1, name: "Ahmet Yılmaz", email: "ahmet@example.com", role: "gezgin", coins: 3500, joinedAt: "2024-01-15", status: "active" },
-      { id: 2, name: "Zeynep Kaya", email: "zeynep@example.com", role: "seyyah", coins: 8500, joinedAt: "2023-12-20", status: "active" },
-      { id: 3, name: "Mehmet Demir", email: "mehmet@example.com", role: "yeni_gelen", coins: 250, joinedAt: "2024-11-10", status: "active" },
-      { id: 4, name: "Ayşe Şahin", email: "ayse@example.com", role: "kasif_meraklisi", coins: 15000, joinedAt: "2023-08-05", status: "active" },
-      { id: 5, name: "Can Özkan", email: "can@example.com", role: "konya_bilgesi", coins: 55000, joinedAt: "2023-05-12", status: "active" },
-    ])
-  }, [])
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = !searchQuery || 
@@ -446,7 +452,7 @@ function UserManagement() {
 
 // Content Management Component
 function ContentManagement() {
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalTopics: 456,
     totalComments: 3240,
     totalResources: 128,

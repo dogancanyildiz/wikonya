@@ -117,6 +117,8 @@ export default function SearchPage() {
       setSearchSuggestions([])
       setShowSuggestions(false)
     }
+    // popularSearches is a constant array, no need to include in dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
   // Mock search results - gerçek uygulamada API'den gelecek

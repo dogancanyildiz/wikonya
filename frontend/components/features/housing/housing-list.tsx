@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import { useState, useMemo } from "react"
 import { HousingCard } from "./housing-card"
 import { Button } from "@/components/ui/button"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
-import { ChevronDown, Home, X, ChevronLeft, ChevronRight, Filter } from "lucide-react"
+import { ChevronDown, Home, X, ChevronLeft, ChevronRight } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   DropdownMenu,
@@ -29,7 +29,7 @@ export function HousingList() {
     { id: "student", label: "Öğrenciye Özel Daire" },
   ]
 
-  const listings = [
+  const listings = useMemo(() => [
     {
       id: 1,
       image: "https://images.unsplash.com/photo-1662454419736-de132ff75638?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBhcGFydG1lbnQlMjBiZWRyb29tfGVufDF8fHx8MTc2NDE0MzU1NHww&ixlib=rb-4.1.0&q=80&w=1080",
@@ -437,7 +437,7 @@ export function HousingList() {
       postedDate: new Date("2024-11-13"),
       district: "Selçuklu",
     },
-  ]
+  ], [])
 
   // Filter listings - memoized
   const filteredListings = useMemo(() => listings.filter(listing => {
@@ -464,7 +464,7 @@ export function HousingList() {
     if (selectedDistrict !== "all" && listing.district !== selectedDistrict) return false
     
     return true
-  }), [selectedCategory, selectedPriceRange, selectedBedrooms, selectedDistrict])
+  }), [selectedCategory, selectedPriceRange, selectedBedrooms, selectedDistrict, listings])
 
   // Sort listings - memoized
   const sortedListings = useMemo(() => [...filteredListings].sort((a, b) => {
@@ -512,9 +512,6 @@ export function HousingList() {
   ]
 
   const selectedCategoryData = categories.find(c => c.id === selectedCategory)
-  const selectedPriceRangeData = priceRanges.find(p => p.id === selectedPriceRange)
-  const selectedBedroomsData = bedroomOptions.find(b => b.id === selectedBedrooms)
-  const selectedDistrictData = districts.find(d => d.id === selectedDistrict)
   
   const hasActiveFilters = selectedCategory !== null || selectedPriceRange !== "all" || selectedBedrooms !== "all" || selectedDistrict !== "all" || sortBy !== "price-low"
 

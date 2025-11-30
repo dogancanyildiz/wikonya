@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, Loader2, ArrowLeft, X, Plus } from "lucide-react"
 import { MarkdownEditor } from "@/components/features/topic/markdown-editor"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 

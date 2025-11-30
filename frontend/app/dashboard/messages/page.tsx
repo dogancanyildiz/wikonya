@@ -37,7 +37,6 @@ export default function MessagesPage() {
   const [messageInput, setMessageInput] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [isTyping, setIsTyping] = useState(false)
-  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -200,7 +199,6 @@ export default function MessagesPage() {
   // Typing indicator simülasyonu (karşı taraf için)
   useEffect(() => {
     if (!selectedConversation) {
-      setIsTyping(false)
       return
     }
 
@@ -208,15 +206,11 @@ export default function MessagesPage() {
     const typingInterval = setInterval(() => {
       if (Math.random() > 0.8) {
         setIsTyping(true)
-        setTimeout(() => {
-          setIsTyping(false)
-        }, 2000)
+        setTimeout(() => setIsTyping(false), 2000)
       }
-    }, 10000) // Her 10 saniyede bir kontrol et
+    }, 5000)
 
-    return () => {
-      clearInterval(typingInterval)
-    }
+    return () => clearInterval(typingInterval)
   }, [selectedConversation])
 
   const filteredConversations = conversations.filter(conv =>

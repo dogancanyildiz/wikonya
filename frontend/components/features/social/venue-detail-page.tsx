@@ -444,7 +444,7 @@ export function VenueDetailPage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [newComment, setNewComment] = useState("")
   const [newRating, setNewRating] = useState("5")
-  const [editingReviewId, setEditingReviewId] = useState<number | null>(null)
+  const [editingReviewId] = useState<number | null>(null)
   const [editComment, setEditComment] = useState("")
   const [editRating, setEditRating] = useState("5")
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
@@ -541,6 +541,7 @@ export function VenueDetailPage() {
     } else {
       setReviews(defaultReviews)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [venueId])
 
   const crowdColors = {
@@ -965,7 +966,7 @@ export function VenueDetailPage() {
                               localStorage.setItem(`venue_${venueId}_images`, JSON.stringify(newImages))
                               
                               toast.success("Fotoğraf başarıyla yüklendi!")
-                            } catch (error) {
+                            } catch {
                               toast.error("Fotoğraf yüklenirken bir hata oluştu")
                             } finally {
                               setIsUploading(false)

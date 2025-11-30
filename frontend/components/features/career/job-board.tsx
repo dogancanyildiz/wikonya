@@ -22,7 +22,7 @@ interface JobBoardProps {
 
 export function JobBoard({ searchQuery = "" }: JobBoardProps) {
   const [selectedType, setSelectedType] = useState("all")
-  const [selectedLocation, setSelectedLocation] = useState("all")
+  const [selectedLocation] = useState("all")
   const [currentPage, setCurrentPage] = useState(1)
 
   const jobTypes = [
@@ -33,17 +33,7 @@ export function JobBoard({ searchQuery = "" }: JobBoardProps) {
     { id: "hybrid", name: "Hybrid" },
   ]
 
-  const locations = [
-    { id: "all", name: "Tüm Konumlar" },
-    { id: "selcuklu", name: "Selçuklu" },
-    { id: "meram", name: "Meram" },
-    { id: "karatay", name: "Karatay" },
-    { id: "remote", name: "Remote" },
-    { id: "hybrid", name: "Hybrid" },
-  ]
-
   const selectedTypeData = jobTypes.find(t => t.id === selectedType)
-  const selectedLocationData = locations.find(l => l.id === selectedLocation)
 
   const jobs = [
     {
@@ -207,10 +197,6 @@ export function JobBoard({ searchQuery = "" }: JobBoardProps) {
     setCurrentPage(1)
   }, [])
 
-  const handleLocationChange = useCallback((location: string) => {
-    setSelectedLocation(location)
-    setCurrentPage(1)
-  }, [])
 
   // Reset page when search query changes
   React.useEffect(() => {
