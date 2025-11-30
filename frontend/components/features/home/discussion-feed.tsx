@@ -1,15 +1,14 @@
 "use client"
 
 import { memo, useState } from "react"
+import Link from "next/link"
 import { useApp } from "@/contexts/app-context"
 import { MessageCircle, ThumbsUp, Lightbulb, Clock, BookOpen, ChevronLeft, ChevronRight } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-interface DiscussionFeedProps {
-  onNavigateToTopic?: () => void
-}
+interface DiscussionFeedProps {}
 
 interface Discussion {
   id: number
@@ -409,7 +408,7 @@ const allDiscussions: Discussion[] = [
 
 const ITEMS_PER_PAGE = 8
 
-export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }: DiscussionFeedProps) {
+export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedProps) {
   const { state } = useApp()
   const [currentPage, setCurrentPage] = useState(1)
   const [localDiscussions, setLocalDiscussions] = useState<Discussion[]>(allDiscussions)
@@ -507,7 +506,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
             className={`font-[Manrope] font-semibold ${
               filter === "newest" 
                 ? "bg-primary text-primary-foreground hover:bg-primary/90" 
-                : "hover:bg-primary hover:text-primary-foreground"
+                : "hover:bg-primary/10 dark:hover:bg-primary/20"
             }`}
           >
             Yeni
@@ -518,7 +517,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
             className={`font-[Manrope] font-semibold ${
               filter === "popular" 
                 ? "bg-primary text-primary-foreground hover:bg-primary/90" 
-                : "hover:bg-primary hover:text-primary-foreground"
+                : "hover:bg-primary/10 dark:hover:bg-primary/20"
             }`}
           >
             Popüler
@@ -529,7 +528,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
             className={`font-[Manrope] font-semibold ${
               filter === "unanswered" 
                 ? "bg-primary text-primary-foreground hover:bg-primary/90" 
-                : "hover:bg-primary hover:text-primary-foreground"
+                : "hover:bg-primary/10 dark:hover:bg-primary/20"
             }`}
           >
             Cevaplanmamış
@@ -539,12 +538,11 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
 
       <div className="space-y-4">
         {discussions.map((discussion) => (
-          <Card
-            key={discussion.id}
-            onClick={onNavigateToTopic}
-            className="hover:shadow-lg transition-all duration-200 cursor-pointer group border-border"
-          >
-            <CardContent className="p-4 sm:p-6">
+          <Link key={discussion.id} href={`/topic/${discussion.id}`} className="block">
+            <Card
+              className="hover:shadow-lg transition-all duration-200 cursor-pointer group border-border"
+            >
+              <CardContent className="p-4 sm:p-6">
               <div className="flex items-start gap-4">
                 <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-border">
                   <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-bold">
@@ -625,6 +623,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({ onNavigateToTopic }
               </div>
             </CardContent>
           </Card>
+          </Link>
         ))}
       </div>
 

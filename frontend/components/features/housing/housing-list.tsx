@@ -452,13 +452,8 @@ export function HousingList() {
 
   return (
     <div>
-      {/* Başlık Bölümü - Sidebar ile hizalı */}
-      <div className="min-h-[88px] sm:min-h-[96px] mb-6">
-        <h2 className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px] mb-4">
-          Konaklama Seçenekleri
-        </h2>
-
-        {/* Filtre Satırı */}
+      {/* Filtre Satırı */}
+      <div className="mb-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           {/* Kategori Dropdown */}

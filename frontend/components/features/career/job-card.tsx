@@ -33,7 +33,7 @@ export function JobCard({
   const [isBookmarked, setIsBookmarked] = useState(false)
 
   return (
-    <Card className="rounded-xl border border-border bg-card hover:shadow-md transition-all duration-200 group">
+    <Card className="rounded-xl border border-border bg-card shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 group">
       <CardContent className="p-4 sm:p-5">
         <div className="flex items-start gap-3 sm:gap-4">
           {/* Company Logo */}

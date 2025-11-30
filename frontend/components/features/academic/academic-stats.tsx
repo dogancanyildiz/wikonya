@@ -42,7 +42,7 @@ export function AcademicStats() {
         return (
           <Card
             key={stat.id}
-            className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border"
+            className="bg-card rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 border border-border"
           >
             <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-3">

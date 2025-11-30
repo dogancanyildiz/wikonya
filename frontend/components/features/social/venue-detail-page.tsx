@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
+import { LeafletMap } from "@/components/common/leaflet-map"
 
 interface Review {
   id: number
@@ -130,7 +131,7 @@ export function VenueDetailPage() {
   }
 
   const openMap = () => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${venue.coordinates.lat},${venue.coordinates.lng}`
+    const url = `https://www.openstreetmap.org/?mlat=${venue.coordinates.lat}&mlon=${venue.coordinates.lng}&zoom=15`
     window.open(url, "_blank")
   }
 
@@ -226,10 +227,10 @@ export function VenueDetailPage() {
           <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
             <CardContent className="p-4 sm:p-6">
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
-                <TabsList className="grid w-full grid-cols-3 font-[Manrope] mb-6">
-                  <TabsTrigger value="info">Bilgiler</TabsTrigger>
-                  <TabsTrigger value="reviews">Değerlendirmeler ({venue.reviews})</TabsTrigger>
-                  <TabsTrigger value="photos">Fotoğraflar ({venue.images.length})</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3 font-[Manrope] mb-6 bg-muted dark:bg-muted/50 border border-border">
+                  <TabsTrigger value="info" className="dark:data-[state=active]:bg-card dark:data-[state=active]:text-foreground dark:text-muted-foreground">Bilgiler</TabsTrigger>
+                  <TabsTrigger value="reviews" className="dark:data-[state=active]:bg-card dark:data-[state=active]:text-foreground dark:text-muted-foreground">Değerlendirmeler ({venue.reviews})</TabsTrigger>
+                  <TabsTrigger value="photos" className="dark:data-[state=active]:bg-card dark:data-[state=active]:text-foreground dark:text-muted-foreground">Fotoğraflar ({venue.images.length})</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="info" className="space-y-6">
@@ -399,15 +400,19 @@ export function VenueDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4 pt-0">
               <div className="relative h-48 bg-accent rounded-xl overflow-hidden">
-                {/* Placeholder for map - gerçek uygulamada harita entegrasyonu olacak */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-12 h-12 text-primary mx-auto mb-2" />
-                    <p className="font-[Manrope] text-sm text-foreground/60 dark:text-muted-foreground">
-                      Harita görünümü
-                    </p>
-                  </div>
-                </div>
+                <LeafletMap
+                  lat={venue.coordinates.lat}
+                  lng={venue.coordinates.lng}
+                  zoom={15}
+                  height="100%"
+                  showPopup={true}
+                  popupContent={
+                    <div className="font-[Manrope]">
+                      <h3 className="font-bold text-sm mb-1">{venue.name}</h3>
+                      <p className="text-xs text-foreground/60">{venue.fullAddress}</p>
+                    </div>
+                  }
+                />
               </div>
               <Button
                 onClick={openMap}

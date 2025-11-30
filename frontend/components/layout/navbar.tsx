@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn } from "lucide-react"
+import { Bell, Search, CheckCircle, Gift, MessageSquare, Award, Clock, LogOut, LogIn, Wallet, BookOpen, UserPlus, Trophy, Settings, UserRound, Shield } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
@@ -401,9 +401,45 @@ export function Navbar() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard" className="cursor-pointer">
+                      <UserRound className="mr-2 h-4 w-4" />
                       Profil
                     </Link>
-                  </DropdownMenuItem> 
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/wallet" className="cursor-pointer">
+                      <Wallet className="mr-2 h-4 w-4" />
+                      Cüzdan & GençCoin
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/invite" className="cursor-pointer">
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Arkadaşını Davet Et
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/achievements" className="cursor-pointer">
+                      <Trophy className="mr-2 h-4 w-4" />
+                      Başarılar
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/settings" className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Ayarlar
+                    </Link>
+                  </DropdownMenuItem>
+                  {user.role === "konya_bilgesi" && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin" className="cursor-pointer">
+                          <Shield className="mr-2 h-4 w-4" />
+                          Admin Paneli
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive focus:text-destructive">
                     <LogOut className="mr-2 h-4 w-4" />

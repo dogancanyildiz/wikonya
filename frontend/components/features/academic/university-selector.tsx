@@ -61,7 +61,7 @@ export function UniversitySelector() {
         {universities.map((university) => (
           <Card
             key={university.id}
-            className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border"
+            className="bg-card rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 border border-border"
           >
             <CardContent className="p-5 sm:p-6">
               <div className="flex items-start justify-between mb-4">

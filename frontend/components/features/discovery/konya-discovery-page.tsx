@@ -273,7 +273,7 @@ function PlaceCard({ id, image, title, description, category }: {
   const [isFavorite, setIsFavorite] = useState(false)
 
   return (
-    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border overflow-hidden">
+    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 border border-border overflow-hidden">
       {/* Image */}
       <div className="relative h-40 sm:h-52 overflow-hidden">
         <Image
@@ -348,7 +348,7 @@ function RouteCard({ route }: {
   }
 }) {
   return (
-    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
+    <Card className="bg-card rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300 border border-border">
       <CardContent className="p-4 sm:p-6">
         {/* Route Header */}
         <div className="mb-4 sm:mb-6">
@@ -652,7 +652,7 @@ function FAQCard({ faq }: {
   }
 
   return (
-    <Card className="bg-card border border-border rounded-xl shadow-md dark:shadow-lg">
+    <Card className="bg-card border border-border rounded-xl shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300">
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-start gap-4">
           <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-border">

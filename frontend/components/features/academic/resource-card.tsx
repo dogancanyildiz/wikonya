@@ -24,7 +24,7 @@ export function ResourceCard({
   views,
 }: ResourceCardProps) {
   return (
-    <div className="group p-4 bg-card rounded-xl border border-border hover:border-primary/30 hover:shadow-md transition-all duration-200">
+    <div className="group p-4 bg-card rounded-xl border border-border shadow-md dark:shadow-lg hover:border-primary/30 hover:shadow-lg dark:hover:shadow-xl transition-all duration-300">
       {/* Üst Satır: Dosya tipi ve İndir */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">

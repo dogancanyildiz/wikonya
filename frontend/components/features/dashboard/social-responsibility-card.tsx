@@ -37,92 +37,91 @@ export function SocialResponsibilityCard() {
     },
   ]
 
-  const activeProject = projects.find((p) => p.status === "active")
-
   return (
-    <Card className="bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl border-0 shadow-lg text-white overflow-hidden">
- 
-      <CardHeader className="relative z-10 pt-5">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-            <Heart className="w-6 h-6 text-white" />
-          </div>
-          <CardTitle className="font-[Manrope] text-white font-bold text-xl sm:text-2xl">
-            Sosyal Sorumluluk Projeleri
-          </CardTitle>
+    <div className="space-y-3">
+      <div>
+        <div className="flex items-center gap-2 mb-1">
+          <Heart className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+          <h2 className="font-[Manrope] text-foreground font-bold text-sm">
+            Sosyal Sorumluluk
+          </h2>
         </div>
-        <CardDescription className="font-[Manrope] text-white/90 text-sm sm:text-base">
-          Topluma katkıda bulunun, +100 GençCoin kazanın!
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="relative z-10 space-y-4">
-        {activeProject ? (
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex-1">
-                <h3 className="font-[Manrope] text-white font-bold text-base sm:text-lg mb-1">
-                  {activeProject.title}
-                </h3>
-                <p className="font-[Manrope] text-white/80 text-xs sm:text-sm mb-3">
-                  {activeProject.description}
-                </p>
-                <div className="flex items-center gap-4 text-white/90 text-xs sm:text-sm">
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="font-[Manrope] font-medium">{activeProject.date}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Users className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="font-[Manrope] font-medium">{activeProject.participants} katılımcı</span>
-                  </div>
+        <p className="font-[Manrope] text-muted-foreground text-xs ml-6">
+          Topluma katkıda bulunun, GençCoin kazanın
+        </p>
+      </div>
+
+      <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 -mx-4 sm:-mx-6 md:-mx-8 lg:-mx-16 px-4 sm:px-6 md:px-8 lg:px-16 scrollbar-hide">
+        {projects.map((project) => (
+          <Card
+            key={project.id}
+            className="rounded-lg shadow-sm border-rose-200/30 dark:border-rose-900/20 bg-gradient-to-br from-rose-50/30 to-pink-50/30 dark:from-rose-950/10 dark:to-pink-950/10 flex-shrink-0 w-[200px] sm:w-[220px]"
+          >
+            <CardContent className="p-3 flex flex-col h-full">
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-[Manrope] text-foreground font-bold text-xs mb-1 line-clamp-2">
+                    {project.title}
+                  </h3>
+                  <p className="font-[Manrope] text-muted-foreground text-[10px] line-clamp-2 mb-2">
+                    {project.description}
+                  </p>
+                </div>
+                <Badge className="bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-800 font-[Manrope] font-bold text-[10px] px-1.5 py-0 flex-shrink-0">
+                  +{project.coins}
+                </Badge>
+              </div>
+
+              <div className="flex items-center gap-2 text-muted-foreground text-[10px] mb-2">
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  <span className="font-[Manrope]">{project.date}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-3 h-3" />
+                  <span className="font-[Manrope]">{project.participants}</span>
                 </div>
               </div>
-              <Badge className="bg-white/20 text-white border-white/30 font-[Manrope] font-bold text-xs sm:text-sm px-2 sm:px-3 py-1">
-                <Sparkles className="w-3 h-3 mr-1" />
-                +{activeProject.coins} Coin
-              </Badge>
+
+              <Button
+                asChild
+                className="w-full h-6 bg-rose-600 hover:bg-rose-700 dark:bg-rose-500 dark:hover:bg-rose-600 text-white font-[Manrope] font-semibold text-[10px] mt-auto"
+              >
+                <Link href="/dashboard/contributions">
+                  Katıl
+                  <ArrowRight className="w-3 h-3 ml-1" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+
+        {/* Tüm Projeler Kartı */}
+        <Card className="rounded-lg shadow-sm border-rose-200/30 dark:border-rose-900/20 bg-gradient-to-br from-rose-50/30 to-pink-50/30 dark:from-rose-950/10 dark:to-pink-950/10 flex-shrink-0 w-[200px] sm:w-[220px]">
+          <CardContent className="p-3 flex flex-col h-full items-center justify-center">
+            <div className="text-center mb-3">
+              <Heart className="w-6 h-6 text-rose-600 dark:text-rose-400 mx-auto mb-2" />
+              <p className="font-[Manrope] text-foreground font-bold text-xs mb-1">
+                Tüm Projeler
+              </p>
+              <p className="font-[Manrope] text-muted-foreground text-[10px]">
+                {projects.length} proje
+              </p>
             </div>
             <Button
               asChild
-              className="w-full bg-white text-rose-600 hover:bg-white/90 font-[Manrope] font-bold"
+              variant="outline"
+              className="w-full h-6 border-rose-200 dark:border-rose-900/30 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-700 dark:text-rose-300 font-[Manrope] font-semibold text-[10px]"
             >
               <Link href="/dashboard/contributions">
-                Projeye Katıl
-                <ArrowRight className="w-4 h-4 ml-2" />
+                Görüntüle
+                <ArrowRight className="w-3 h-3 ml-1" />
               </Link>
             </Button>
-          </div>
-        ) : (
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center border border-white/20">
-            <Heart className="w-12 h-12 text-white/50 mx-auto mb-3" />
-            <p className="font-[Manrope] text-white/80 text-sm sm:text-base mb-4">
-              Şu anda aktif proje bulunmuyor. Yeni projeler yakında!
-            </p>
-          </div>
-        )}
-
-        <div className="pt-4 border-t border-white/20">
-          <div className="flex items-center justify-between mb-2">
-            <p className="font-[Manrope] text-white/90 font-semibold text-xs sm:text-sm">
-              Toplam Proje
-            </p>
-            <p className="font-[Manrope] text-white font-bold text-lg sm:text-xl">
-              {projects.length}
-            </p>
-          </div>
-          <Button
-            asChild
-            variant="outline"
-            className="w-full border-white/30 text-white hover:bg-white/10 font-[Manrope] font-bold"
-          >
-            <Link href="/dashboard/contributions">
-              Tüm Projeleri Görüntüle
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Link>
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   )
 }
 

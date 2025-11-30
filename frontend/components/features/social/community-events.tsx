@@ -79,7 +79,7 @@ export function CommunityEvents() {
               href={`/events/${event.id}`}
               className="block"
             >
-              <article className="bg-card rounded-xl border border-border overflow-hidden flex">
+              <article className="bg-card rounded-xl border border-border overflow-hidden flex shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300">
                 {/* Görsel - Solda */}
                 <div className="relative w-24 h-24 flex-shrink-0">
                   <Image

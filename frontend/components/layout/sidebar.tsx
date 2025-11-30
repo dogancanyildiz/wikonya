@@ -1,16 +1,33 @@
 "use client"
 
-import { Calendar, MapPin, MessageCircle, ThumbsUp } from "lucide-react"
+import { Calendar, MapPin, MessageCircle, ThumbsUp, Plus, Lock, Info } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import Link from "next/link"
 import { KBBAnnouncements } from "@/components/features/home/kbb-announcements"
+import { usePermissions } from "@/lib/utils/hooks/use-permissions"
+import { useApp } from "@/contexts/app-context"
+import { getCoinsNeededForNextRole } from "@/lib/gamification/role-system"
+import { USER_ROLES, ROLE_DISPLAY_NAMES } from "@/lib/constants"
 
 interface SidebarProps {
   onNavigateToTopic?: () => void
 }
 
 export function Sidebar({}: SidebarProps = {}) {
+  const { canCreateTopic } = usePermissions()
+  const { state } = useApp()
+  const user = state.user
+  
+  // Kullanıcı bilgileri için hesaplamalar
+  const coinsNeeded = user ? getCoinsNeededForNextRole(user.totalCoins) : null
+  const currentRole = user ? USER_ROLES[user.role] : null
+  const nextRole = user && coinsNeeded !== null 
+    ? Object.values(USER_ROLES).find(role => role.minCoins > user.totalCoins)
+    : null
+  
   const popularComments = [
     {
       id: 1,
@@ -62,6 +79,95 @@ export function Sidebar({}: SidebarProps = {}) {
   return (
     <div className="sticky top-24" aria-label="Yan panel">
       <div className="space-y-4">
+      {/* Yeni Tartışma Oluştur */}
+      <div className="mb-6">
+        {canCreateTopic ? (
+          <Button
+            asChild
+            className="w-full font-[Manrope] font-bold bg-primary text-primary-foreground hover:bg-primary/90 h-11 text-base"
+          >
+            <Link href="/topic/new">
+              <Plus className="w-4 h-4 mr-2" />
+              Yeni Tartışma Oluştur
+            </Link>
+          </Button>
+        ) : (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full font-[Manrope] font-bold bg-muted/50 text-muted-foreground cursor-pointer h-11 text-base hover:bg-muted hover:text-foreground transition-colors border-border"
+              >
+                <Lock className="w-4 h-4 mr-2" />
+                Yeni Tartışma Oluştur
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 font-[Manrope]" side="left" align="start">
+              <div className="space-y-3">
+                <div className="flex items-start gap-2">
+                  <Info className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <h4 className="font-bold text-foreground text-sm mb-1">
+                      Yeni Tartışma Oluşturmak İçin
+                    </h4>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      &quot;Gezgin&quot; veya üstü bir role sahip olmanız gerekiyor.
+                    </p>
+                  </div>
+                </div>
+                
+                {user && currentRole && (
+                  <div className="space-y-2 pt-2 border-t border-border">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Mevcut Rolünüz:</span>
+                      <span className="text-xs font-bold text-foreground">
+                        {ROLE_DISPLAY_NAMES[user.role]}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Mevcut Coin:</span>
+                      <span className="text-xs font-bold text-primary">
+                        {user.totalCoins.toLocaleString()}
+                      </span>
+                    </div>
+                    
+                    {nextRole && coinsNeeded !== null && (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">Hedef Rol:</span>
+                          <span className="text-xs font-bold text-foreground">
+                            {nextRole.name}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">Gereken Coin:</span>
+                          <span className="text-xs font-bold text-primary">
+                            {coinsNeeded.toLocaleString()} coin
+                          </span>
+                        </div>
+                        <div className="pt-2 border-t border-border">
+                          <p className="text-xs text-muted-foreground">
+                            Coin kazanmak için yorum yapın, wiki düzenleyin ve topluluğa katkıda bulunun!
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+                
+                {!user && (
+                  <div className="pt-2 border-t border-border">
+                    <p className="text-xs text-muted-foreground">
+                      Lütfen giriş yapın.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
+        )}
+      </div>
+
       {/* KBB Announcements */}
       <KBBAnnouncements />
 

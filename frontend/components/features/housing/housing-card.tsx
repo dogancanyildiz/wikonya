@@ -34,7 +34,7 @@ export function HousingCard({
 
   return (
     <Link href={`/housing/${id}`} className="block">
-      <article className="bg-card rounded-2xl border border-border overflow-hidden">
+      <article className="bg-card rounded-2xl border border-border overflow-hidden shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300">
         <div className="flex flex-col sm:flex-row">
           {/* Görsel */}
           <div className="relative w-full sm:w-[240px] aspect-[16/10] sm:aspect-auto sm:h-auto flex-shrink-0">

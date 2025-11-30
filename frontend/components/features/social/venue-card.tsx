@@ -29,7 +29,7 @@ export function VenueCard({
 
   return (
     <Link href={`/social/venue/${id}`} className="block group">
-      <article className="bg-card rounded-2xl overflow-hidden border border-border">
+      <article className="bg-card rounded-2xl overflow-hidden border border-border shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300">
         {/* Image */}
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image

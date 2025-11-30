@@ -15,7 +15,7 @@ interface LifeGuideCardProps {
 export function LifeGuideCard({ id, icon: Icon, title, description, articles }: LifeGuideCardProps) {
   return (
     <Link href={`/life-guide/${id}`} className="block">
-      <article className="bg-card rounded-xl border border-border overflow-hidden">
+      <article className="bg-card rounded-xl border border-border overflow-hidden shadow-md dark:shadow-lg hover:shadow-lg dark:hover:shadow-xl transition-all duration-300">
         <div className="flex items-center gap-4 p-4">
           {/* Icon */}
           <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">

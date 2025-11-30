@@ -1,6 +1,10 @@
 "use client"
 
-import { DashboardSidebar } from "@/components/features/dashboard/dashboard-sidebar"
+import { ProfileCard } from "@/components/features/dashboard/profile-card"
+import { StatsCard } from "@/components/features/dashboard/stats-card"
+import { WalletCard } from "@/components/features/dashboard/wallet-card"
+import { SocialResponsibilityCard } from "@/components/features/dashboard/social-responsibility-card"
+import { DashboardTabbar } from "@/components/features/dashboard/dashboard-tabbar"
 
 export default function DashboardLayout({
   children,
@@ -10,16 +14,31 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-3">
-            <DashboardSidebar />
+        <div className="space-y-4 sm:space-y-6">
+          {/* Top Section: Profile (50%) + Wallet & Stats (50%) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-4 items-stretch">
+            {/* Left: Profile Card (50%) */}
+            <div className="lg:col-span-1 w-full">
+              <ProfileCard />
+            </div>
+
+            {/* Right: Wallet & Stats stacked (50%) */}
+            <div className="lg:col-span-1 space-y-2 sm:space-y-4 flex flex-col">
+              <div className="flex-1">
+                <WalletCard />
+              </div>
+              <StatsCard />
+            </div>
           </div>
 
-          {/* Main Content */}
-          <div className="lg:col-span-9">
-            {children}
-          </div>
+          {/* Social Responsibility Card */}
+          <SocialResponsibilityCard />
+
+          {/* Tabbar */}
+          <DashboardTabbar />
+
+          {/* Tab Content - Changes based on route */}
+          {children}
         </div>
       </div>
     </div>

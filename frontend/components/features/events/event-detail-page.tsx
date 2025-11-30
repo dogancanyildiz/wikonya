@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { LeafletMap } from "@/components/common/leaflet-map"
 
 export function EventDetailPage() {
   const params = useParams()
@@ -90,7 +91,7 @@ export function EventDetailPage() {
   }
 
   const openMap = () => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${event.coordinates.lat},${event.coordinates.lng}`
+    const url = `https://www.openstreetmap.org/?mlat=${event.coordinates.lat}&mlon=${event.coordinates.lng}&zoom=15`
     window.open(url, "_blank")
   }
 
@@ -375,15 +376,19 @@ export function EventDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4 pt-0">
               <div className="relative h-48 bg-accent rounded-xl overflow-hidden">
-                {/* Placeholder for map */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-12 h-12 text-primary mx-auto mb-2" />
-                    <p className="font-[Manrope] text-sm text-foreground/60 dark:text-muted-foreground">
-                      Harita görünümü
-                    </p>
-                  </div>
-                </div>
+                <LeafletMap
+                  lat={event.coordinates.lat}
+                  lng={event.coordinates.lng}
+                  zoom={15}
+                  height="100%"
+                  showPopup={true}
+                  popupContent={
+                    <div className="font-[Manrope]">
+                      <h3 className="font-bold text-sm mb-1">{event.title}</h3>
+                      <p className="text-xs text-foreground/60">{event.fullAddress}</p>
+                    </div>
+                  }
+                />
               </div>
               <Button
                 onClick={openMap}

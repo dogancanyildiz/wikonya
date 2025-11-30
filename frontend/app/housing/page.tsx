@@ -2,11 +2,11 @@ import type { Metadata } from "next"
 import { HousingPage as HousingPageContent } from "@/components/features/housing/housing-page"
 
 export const metadata: Metadata = {
-  title: "Barınma & Yaşam | Konya Genç",
-  description: "Konya'da konaklama seçenekleri, yurt rehberleri, mahalle analizleri ve yaşam rehberleri. Öğrenciler için barınma ve yaşam bilgileri.",
+  title: "Barınma | Konya Genç",
+  description: "Konya'da konaklama seçenekleri, yurt rehberleri ve mahalle analizleri. Öğrenciler için barınma bilgileri.",
   openGraph: {
-    title: "Barınma & Yaşam | Konya Genç",
-    description: "Konya'da konaklama seçenekleri ve yaşam rehberleri",
+    title: "Barınma | Konya Genç",
+    description: "Konya'da konaklama seçenekleri",
     type: "website",
     url: "/housing",
     images: [
@@ -14,14 +14,14 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Barınma & Yaşam | Konya Genç",
+        alt: "Barınma | Konya Genç",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Barınma & Yaşam | Konya Genç",
-    description: "Konya'da konaklama seçenekleri ve yaşam rehberleri",
+    title: "Barınma | Konya Genç",
+    description: "Konya'da konaklama seçenekleri",
     images: ["/og-image.jpg"],
   },
 }

@@ -1,16 +1,15 @@
 "use client"
 
-import { Home, Book } from "lucide-react"
+import { Home } from "lucide-react"
 
 interface HousingTabsProps {
-  activeTab: "housing" | "life-guide"
-  onTabChange: (tab: "housing" | "life-guide") => void
+  activeTab: "housing"
+  onTabChange: (tab: "housing") => void
 }
 
 export function HousingTabs({ activeTab, onTabChange }: HousingTabsProps) {
   const tabs = [
     { id: "housing" as const, label: "Konaklama", icon: Home },
-    { id: "life-guide" as const, label: "Yaşam Rehberi", icon: Book },
   ]
 
   return (

@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import dynamic from "next/dynamic"
 import { VenueCard } from "./venue-card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -13,6 +14,26 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MapPin, List, Navigation, MapPinX, X, BookOpen, Coffee, Music, Gamepad2, Users, Leaf, Star, ChevronDown, Store, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
+
+// Leaflet CSS
+import "leaflet/dist/leaflet.css"
+
+// Leaflet icon sorununu düzelt (SSR için)
+if (typeof window !== "undefined") {
+  const L = require("leaflet")
+  delete (L.Icon.Default.prototype as any)._getIconUrl
+  L.Icon.Default.mergeOptions({
+    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+    iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  })
+}
+
+// Dynamic import for Leaflet map (SSR sorunlarını önlemek için)
+const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false })
+const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), { ssr: false })
+const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false })
+const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false })
 
 const ITEMS_PER_PAGE = 12
 
@@ -371,13 +392,59 @@ export function VenueGrid() {
   const centerLat = 37.8746
   const centerLng = 32.4932
 
-  // Google Maps URL oluştur
-  const getMapUrl = () => {
-    return `https://www.google.com/maps/embed/v1/view?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d-s6U4ZbZ2p9M&center=${centerLat},${centerLng}&zoom=13`
+  // Harita için bounds hesapla
+  const getMapBounds = () => {
+    if (sortedVenues.length === 0) {
+      return { center: [centerLat, centerLng], zoom: 13 }
+    }
+
+    const lats = sortedVenues.map(v => v.coordinates.lat)
+    const lngs = sortedVenues.map(v => v.coordinates.lng)
+    const minLat = Math.min(...lats)
+    const maxLat = Math.max(...lats)
+    const minLng = Math.min(...lngs)
+    const maxLng = Math.max(...lngs)
+    const avgLat = (minLat + maxLat) / 2
+    const avgLng = (minLng + maxLng) / 2
+
+    // Zoom seviyesini hesapla
+    const latDiff = maxLat - minLat
+    const lngDiff = maxLng - minLng
+    const maxDiff = Math.max(latDiff, lngDiff)
+    let zoom = 13
+    if (maxDiff > 0.1) zoom = 11
+    else if (maxDiff > 0.05) zoom = 12
+    else if (maxDiff < 0.01) zoom = 15
+
+    return { center: [avgLat, avgLng], zoom }
+  }
+
+  const mapBounds = getMapBounds()
+
+  // Seçilen mekana zoom yapmak için component
+  const MapZoomToMarker = ({ selectedVenueId, venues }: { selectedVenueId: number | null, venues: typeof sortedVenues }) => {
+    if (typeof window === "undefined") return null
+    
+    const { useMap } = require("react-leaflet")
+    const map = useMap()
+    
+    useEffect(() => {
+      if (selectedVenueId) {
+        const venue = venues.find(v => v.id === selectedVenueId)
+        if (venue) {
+          map.setView([venue.coordinates.lat, venue.coordinates.lng], 16, {
+            animate: true,
+            duration: 0.5
+          })
+        }
+      }
+    }, [selectedVenueId, venues, map])
+    
+    return null
   }
 
   const openDirections = (venue: typeof allVenues[0]) => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${venue.coordinates.lat},${venue.coordinates.lng}`
+    const url = `https://www.openstreetmap.org/directions?to=${venue.coordinates.lat},${venue.coordinates.lng}`
     window.open(url, "_blank")
   }
 
@@ -526,18 +593,95 @@ export function VenueGrid() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Map */}
           <div className="lg:col-span-2">
-            <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border overflow-hidden">
+            <Card className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border overflow-hidden hover:shadow-lg dark:hover:shadow-xl transition-all duration-300">
               <div className="relative h-[500px] sm:h-[600px] lg:h-[700px]">
-                <iframe
-                  src={getMapUrl()}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="absolute inset-0"
-                />
+                {typeof window !== "undefined" && (
+                  <MapContainer
+                    key={`map-${selectedCategory}-${sortedVenues.length}`}
+                    center={mapBounds.center as [number, number]}
+                    zoom={mapBounds.zoom}
+                    className="h-full w-full z-0"
+                    scrollWheelZoom={true}
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <MapZoomToMarker selectedVenueId={selectedVenue} venues={sortedVenues} />
+                    {sortedVenues.map((venue, index) => {
+                      const markerLabel = String.fromCharCode(65 + (index % 26)) // A, B, C, ...
+                      const isSelected = selectedVenue === venue.id
+                      
+                      // Marker icon'ları - tüm marker'lar için icon tanımlanmalı
+                      let icon: any = undefined
+                      if (typeof window !== "undefined") {
+                        const L = require("leaflet")
+                        if (isSelected) {
+                          // Seçili marker için kırmızı icon
+                          icon = L.icon({
+                            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+                            shadowSize: [41, 41],
+                          })
+                        } else {
+                          // Seçili olmayan marker için mavi icon
+                          icon = L.icon({
+                            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+                            shadowSize: [41, 41],
+                          })
+                        }
+                      }
+                      
+                      return (
+                        <Marker
+                          key={venue.id}
+                          position={[venue.coordinates.lat, venue.coordinates.lng]}
+                          icon={icon}
+                          eventHandlers={{
+                            click: () => setSelectedVenue(venue.id),
+                          }}
+                        >
+                          <Popup>
+                            <div className="font-[Manrope]">
+                              <h3 className="font-bold text-sm mb-1">{venue.name}</h3>
+                              <p className="text-xs text-foreground/60 mb-2">{venue.location}</p>
+                              <div className="flex items-center gap-2 text-xs">
+                                <span className="flex items-center gap-1 text-primary font-semibold">
+                                  <Star className="w-3 h-3 fill-primary" />
+                                  {venue.rating}
+                                </span>
+                                <span className="text-foreground/60">{venue.distance} km</span>
+                              </div>
+                              <Link
+                                href={`/social/venue/${venue.id}`}
+                                className="text-primary text-xs font-semibold hover:underline mt-2 inline-block"
+                              >
+                                Detayları Gör →
+                              </Link>
+                            </div>
+                          </Popup>
+                        </Marker>
+                      )
+                    })}
+                  </MapContainer>
+                )}
+                {typeof window === "undefined" && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-accent">
+                    <div className="text-center">
+                      <MapPin className="w-12 h-12 text-primary mx-auto mb-2" />
+                      <p className="font-[Manrope] text-sm text-foreground/60 dark:text-muted-foreground">
+                        Harita yükleniyor...
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </Card>
           </div>
@@ -548,51 +692,76 @@ export function VenueGrid() {
               Mekanlar ({sortedVenues.length})
             </h3>
             <div className="space-y-3 max-h-[700px] overflow-y-auto pr-2">
-              {sortedVenues.map((venue) => (
-                <Card
-                  key={venue.id}
-                  className={`bg-card rounded-xl border transition-all cursor-pointer ${
-                    selectedVenue === venue.id
-                      ? 'border-primary shadow-lg'
-                      : 'border-border hover:border-primary/50'
-                  }`}
-                  onClick={() => setSelectedVenue(venue.id)}
-                >
-                  <CardContent className="p-3 sm:p-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <Link href={`/social/venue/${venue.id}`} className="flex-1 min-w-0">
-                        <h4 className="font-[Manrope] font-bold text-sm sm:text-base text-foreground mb-1 truncate hover:text-primary transition-colors">
-                          {venue.name}
-                        </h4>
-                        <p className="font-[Manrope] text-xs text-foreground/60 dark:text-muted-foreground mb-2 flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
-                          {venue.location}
-                        </p>
-                        <div className="flex items-center gap-3 text-xs">
-                          <span className="font-[Manrope] font-semibold text-primary flex items-center gap-1">
-                            <Star className="w-3 h-3 fill-primary" />
-                            {venue.rating}
-                          </span>
-                          <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground">
-                            {venue.distance} km
-                          </span>
+              {sortedVenues.map((venue, index) => {
+                const markerLabel = String.fromCharCode(65 + (index % 26)) // A, B, C, ...
+                const isSelected = selectedVenue === venue.id
+                return (
+                  <Card
+                    key={venue.id}
+                    className={`bg-card rounded-xl border transition-all cursor-pointer shadow-md dark:shadow-lg ${
+                      isSelected
+                        ? 'border-primary shadow-lg dark:shadow-xl'
+                        : 'border-border hover:border-primary/50 hover:shadow-lg dark:hover:shadow-xl'
+                    }`}
+                    onClick={() => setSelectedVenue(venue.id)}
+                  >
+                    <CardContent className="p-3 sm:p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`flex items-center justify-center w-6 h-6 rounded-full text-white text-xs font-[Manrope] font-bold flex-shrink-0 transition-colors ${
+                              isSelected ? 'bg-red-500' : 'bg-primary'
+                            }`}>
+                              {markerLabel}
+                            </span>
+                            <h4 className="font-[Manrope] font-bold text-sm sm:text-base text-foreground truncate">
+                              {venue.name}
+                            </h4>
+                          </div>
+                          <p className="font-[Manrope] text-xs text-foreground/60 dark:text-muted-foreground mb-2 flex items-center gap-1">
+                            <MapPin className="w-3 h-3" />
+                            {venue.location}
+                          </p>
+                          <div className="flex items-center gap-3 text-xs">
+                            <span className="font-[Manrope] font-semibold text-primary flex items-center gap-1">
+                              <Star className="w-3 h-3 fill-primary" />
+                              {venue.rating}
+                            </span>
+                            <span className="font-[Manrope] text-foreground/60 dark:text-muted-foreground">
+                              {venue.distance} km
+                            </span>
+                          </div>
                         </div>
-                      </Link>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          openDirections(venue)
-                        }}
-                        className="flex-shrink-0"
-                      >
-                        <Navigation className="w-4 h-4 text-primary" />
-                      </Button>
-                    </div>
-                  </CardContent>
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              openDirections(venue)
+                            }}
+                            className="flex-shrink-0"
+                            title="Yol Tarifi"
+                          >
+                            <Navigation className="w-4 h-4 text-primary" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="mt-3 pt-3 border-t border-border">
+                        <Link href={`/social/venue/${venue.id}`}>
+                          <Button
+                            size="sm"
+                            className="w-full bg-primary hover:bg-primary/90 font-[Manrope] font-bold text-xs"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Detayları Gör
+                          </Button>
+                        </Link>
+                      </div>
+                    </CardContent>
                 </Card>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>

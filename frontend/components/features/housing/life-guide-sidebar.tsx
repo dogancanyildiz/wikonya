@@ -42,20 +42,18 @@ export function LifeGuideSidebar() {
 
   return (
     <div>
-      {/* Başlık Bölümü - Housing list ile hizalı */}
-      <div className="min-h-[88px] sm:min-h-[96px] mb-6 flex items-end">
-        <div className="flex items-center justify-between w-full">
-          <h2 className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px]">
-            Yaşam Rehberi
-          </h2>
-          <Link 
-            href="/life-guide"
-            className="font-[Manrope] text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-semibold text-xs"
-          >
-            Tümünü Gör
-            <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
-          </Link>
-        </div>
+      {/* Başlık - Filtre satırı ile hizalı */}
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="font-[Manrope] text-foreground font-extrabold text-xl sm:text-2xl lg:text-[28px]">
+          Yaşam Rehberi
+        </h2>
+        <Link 
+          href="/life-guide"
+          className="font-[Manrope] text-primary hover:text-primary/80 transition-colors flex items-center gap-1 font-semibold text-xs"
+        >
+          Tümünü Gör
+          <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
+        </Link>
       </div>
 
       {/* Rehber Kartları */}

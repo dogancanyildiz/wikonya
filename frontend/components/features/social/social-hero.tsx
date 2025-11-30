@@ -47,7 +47,7 @@ export function SocialHero() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-10 sm:mb-12 md:mb-14">
       {/* Left Side - Venue of the Week */}
-      <div className="relative rounded-2xl overflow-hidden h-[400px] sm:h-[500px]">
+      <div className="relative rounded-2xl overflow-hidden h-[400px] sm:h-[500px] shadow-md dark:shadow-lg">
         <Image
           src="https://images.unsplash.com/photo-1739723745132-97df9db49db2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwY2FmZSUyMGludGVyaW9yfGVufDF8fHx8MTc2NDE1ODI0MHww&ixlib=rb-4.1.0&q=80&w=1080"
           alt="Kitap & Kahve"
@@ -60,8 +60,8 @@ export function SocialHero() {
         
         {/* Badge */}
         <div className="absolute top-5 sm:top-6 left-5 sm:left-6">
-          <div className="px-4 py-2 bg-white/95 dark:bg-white rounded-lg">
-            <span className="font-[Manrope] text-primary font-bold text-xs sm:text-sm tracking-wide uppercase">
+          <div className="px-4 py-2 bg-white/95 dark:bg-card/95 backdrop-blur-sm rounded-lg border border-white/20 dark:border-border/50">
+            <span className="font-[Manrope] text-primary dark:text-primary font-bold text-xs sm:text-sm tracking-wide uppercase">
               Haftanın Mekanı
             </span>
           </div>
@@ -89,7 +89,7 @@ export function SocialHero() {
           </p>
           <Link href="/social/venue/5">
             <Button 
-              className="px-6 py-3 bg-white rounded-lg font-[Manrope] text-foreground hover:bg-white/90 transition-colors font-bold text-sm cursor-pointer"
+              className="px-6 py-3 bg-white dark:bg-card rounded-lg font-[Manrope] text-foreground dark:text-foreground hover:bg-white/90 dark:hover:bg-card/90 border border-white/20 dark:border-border transition-colors font-bold text-sm cursor-pointer"
             >
               Detayları Gör
             </Button>

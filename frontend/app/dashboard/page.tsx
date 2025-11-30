@@ -1,17 +1,5 @@
 import type { Metadata } from "next"
-import dynamic from "next/dynamic"
-import { ProfileCard } from "@/components/features/dashboard/profile-card"
-import { StatsCard } from "@/components/features/dashboard/stats-card"
-import { WalletCard } from "@/components/features/dashboard/wallet-card"
-import { SocialResponsibilityCard } from "@/components/features/dashboard/social-responsibility-card"
-
-// Lazy load heavy components
-const ActivityFeed = dynamic(
-  () => import("@/components/features/dashboard/activity-feed").then((mod) => ({ default: mod.ActivityFeed })),
-  { 
-    loading: () => <div className="h-64 animate-pulse bg-muted rounded-xl" />
-  }
-)
+import { ContributionsTab } from "@/components/features/dashboard/contributions-tab"
 
 export const metadata: Metadata = {
   title: "Dashboard | Konya Genç",
@@ -43,32 +31,5 @@ export const metadata: Metadata = {
 }
 
 export default function DashboardPage() {
-  return (
-    <div className="space-y-6 sm:space-y-8">
-      {/* Top Section: Profile (50%) + Wallet & Stats (50%) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch">
-        {/* Left: Profile Card (50%) */}
-        <div className="lg:col-span-1 flex">
-          <ProfileCard />
-        </div>
-
-        {/* Right: Wallet & Stats stacked (50%) */}
-        <div className="lg:col-span-1 space-y-4 flex flex-col">
-          <div className="flex-1">
-            <WalletCard />
-          </div>
-          <StatsCard />
-        </div>
-      </div>
-
-
-      {/* Social Responsibility Card */}
-      <div className="mt-6 sm:mt-8">
-        <SocialResponsibilityCard />
-      </div>
-
-      {/* Activity Feed - Yorumlar ve gönderiler */}
-      <ActivityFeed />
-    </div>
-  )
+  return <ContributionsTab />
 }

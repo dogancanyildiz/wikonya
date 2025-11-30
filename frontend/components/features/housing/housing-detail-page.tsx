@@ -29,6 +29,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
+import { LeafletMap } from "@/components/common/leaflet-map"
 
 interface Review {
   id: number
@@ -127,7 +128,7 @@ export function HousingDetailPage() {
   }
 
   const openMap = () => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${housing.coordinates.lat},${housing.coordinates.lng}`
+    const url = `https://www.openstreetmap.org/?mlat=${housing.coordinates.lat}&mlon=${housing.coordinates.lng}&zoom=15`
     window.open(url, "_blank")
   }
 
@@ -487,15 +488,19 @@ export function HousingDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4 pt-0">
               <div className="relative h-48 bg-accent rounded-xl overflow-hidden">
-                {/* Placeholder for map */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-12 h-12 text-primary mx-auto mb-2" />
-                    <p className="font-[Manrope] text-sm text-foreground/60 dark:text-muted-foreground">
-                      Harita görünümü
-                    </p>
-                  </div>
-                </div>
+                <LeafletMap
+                  lat={housing.coordinates.lat}
+                  lng={housing.coordinates.lng}
+                  zoom={15}
+                  height="100%"
+                  showPopup={true}
+                  popupContent={
+                    <div className="font-[Manrope]">
+                      <h3 className="font-bold text-sm mb-1">{housing.title}</h3>
+                      <p className="text-xs text-foreground/60">{housing.fullAddress}</p>
+                    </div>
+                  }
+                />
               </div>
               <Button
                 onClick={openMap}

@@ -1,8 +1,10 @@
 "use client"
 
-import { createContext, useContext, useState, useCallback, ReactNode } from "react"
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react"
 import { type User } from "@/lib/types"
 import type { Notification } from "@/lib/notifications/notification-system"
+
+const STORAGE_KEY = "wikonya_user"
 
 interface AppState {
   user: User | null
@@ -28,12 +30,41 @@ export function AppProvider({ children }: { children: ReactNode }) {
     notifications: [],
   })
 
+  // Sayfa yüklendiğinde localStorage'dan user bilgisini yükle
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem(STORAGE_KEY)
+      if (storedUser) {
+        const user = JSON.parse(storedUser) as User
+        setState((prev) => ({
+          ...prev,
+          user,
+          isAuthenticated: true,
+        }))
+      }
+    } catch (error) {
+      console.error("Kullanıcı bilgisi yüklenirken hata oluştu:", error)
+      localStorage.removeItem(STORAGE_KEY)
+    }
+  }, [])
+
   const setUser = useCallback((user: User | null) => {
     setState((prev) => ({
       ...prev,
       user,
       isAuthenticated: !!user,
     }))
+
+    // localStorage'a kaydet veya temizle
+    try {
+      if (user) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(user))
+      } else {
+        localStorage.removeItem(STORAGE_KEY)
+      }
+    } catch (error) {
+      console.error("Kullanıcı bilgisi kaydedilirken hata oluştu:", error)
+    }
   }, [])
 
   const addNotification = useCallback((notification: Notification) => {
@@ -66,6 +97,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isAuthenticated: false,
       notifications: [],
     }))
+
+    // localStorage'dan da temizle
+    try {
+      localStorage.removeItem(STORAGE_KEY)
+    } catch (error) {
+      console.error("Kullanıcı bilgisi temizlenirken hata oluştu:", error)
+    }
   }, [])
 
   return (
