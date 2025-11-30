@@ -444,7 +444,7 @@ export function VenueDetailPage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [newComment, setNewComment] = useState("")
   const [newRating, setNewRating] = useState("5")
-  const [editingReviewId] = useState<number | null>(null)
+  const [editingReviewId, setEditingReviewId] = useState<number | null>(null)
   const [editComment, setEditComment] = useState("")
   const [editRating, setEditRating] = useState("5")
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
@@ -569,6 +569,77 @@ export function VenueDetailPage() {
   const openMap = () => {
     const url = `https://www.openstreetmap.org/?mlat=${venue.coordinates.lat}&mlon=${venue.coordinates.lng}&zoom=15`
     window.open(url, "_blank")
+  }
+
+  const handleCommentSubmit = () => {
+    if (!newComment.trim() || !state.user) return
+
+    const newReview: Review = {
+      id: reviews.length + 1,
+      user: {
+        name: state.user.name,
+        initials: state.user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2),
+        role: state.user.role,
+      },
+      rating: Number(newRating),
+      comment: newComment,
+      createdAt: new Date().toISOString(),
+      helpful: 0,
+    }
+
+    const updatedReviews = [...reviews, newReview]
+    setReviews(updatedReviews)
+    
+    // Save to localStorage
+    const reviewsKey = `venue_${venueId}_reviews`
+    localStorage.setItem(reviewsKey, JSON.stringify(updatedReviews))
+    
+    setNewComment("")
+    setNewRating("5")
+    toast.success("Yorumunuz eklendi!")
+  }
+
+  const handleEditStart = (review: Review) => {
+    setEditingReviewId(review.id)
+    setEditComment(review.comment)
+    setEditRating(String(review.rating))
+  }
+
+  const handleDelete = (reviewId: number) => {
+    const updatedReviews = reviews.filter(r => r.id !== reviewId)
+    setReviews(updatedReviews)
+    
+    // Save to localStorage
+    const reviewsKey = `venue_${venueId}_reviews`
+    localStorage.setItem(reviewsKey, JSON.stringify(updatedReviews))
+    
+    toast.success("Yorum silindi")
+  }
+
+  const handleEditSave = () => {
+    if (!editingReviewId || !editComment.trim()) return
+
+    const updatedReviews = reviews.map(r => 
+      r.id === editingReviewId 
+        ? { ...r, comment: editComment, rating: Number(editRating) }
+        : r
+    )
+    setReviews(updatedReviews)
+    
+    // Save to localStorage
+    const reviewsKey = `venue_${venueId}_reviews`
+    localStorage.setItem(reviewsKey, JSON.stringify(updatedReviews))
+    
+    setEditingReviewId(null)
+    setEditComment("")
+    setEditRating("5")
+    toast.success("Yorum güncellendi!")
+  }
+
+  const handleEditCancel = () => {
+    setEditingReviewId(null)
+    setEditComment("")
+    setEditRating("5")
   }
 
   return (
