@@ -23,6 +23,7 @@ import {
   isTopicMakesSenseByUser,
   initializeTopicStats,
 } from "@/lib/utils/topic-stats"
+import { getTopicComments } from "./comment-feed"
 
 interface TopicHeaderProps {
   topicId: number
@@ -492,29 +493,32 @@ export function TopicHeader({ topicId, wikiContent: initialWikiContent }: TopicH
     const liked = state.user ? isTopicLikedByUser(topicId, state.user) : false
     const makesSense = state.user ? isTopicMakesSenseByUser(topicId, state.user) : false
 
+    // Gerçek yorum sayısını hesapla
+    const realCommentCount = getTopicComments(topicId).length
+
     // Initialize stats if not exists
     if (stats.likes === 0 && stats.makesSense === 0 && stats.comments === 0) {
       initializeTopicStats(topicId, {
         likes: baseTopic.likes,
         makesSense: baseTopic.makesSense,
-        comments: baseTopic.comments,
+        comments: realCommentCount,
       })
       setTopicStats({
         likes: baseTopic.likes,
         makesSense: baseTopic.makesSense,
-        comments: baseTopic.comments,
+        comments: realCommentCount,
       })
     } else {
       setTopicStats({
         likes: stats.likes || baseTopic.likes,
         makesSense: stats.makesSense || baseTopic.makesSense,
-        comments: stats.comments || baseTopic.comments,
+        comments: realCommentCount, // Gerçek yorum sayısını kullan
       })
     }
 
     setIsLiked(liked)
     setIsMakesSense(makesSense)
-  }, [topicId, state.user, baseTopic.likes, baseTopic.makesSense, baseTopic.comments])
+  }, [topicId, state.user, baseTopic.likes, baseTopic.makesSense])
 
   // Topic with stats from localStorage
   const topic = {

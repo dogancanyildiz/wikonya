@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia, EmptyContent } from "@/components/ui/empty"
 import { Clock, MessageSquare, ThumbsUp, Search, Filter, HelpCircle, X, Lock } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { getTopicComments } from "@/components/features/topic/comment-feed"
 
 export function DiscussionPage() {
   const { canCreateTopic } = usePermissions()
@@ -105,7 +106,13 @@ export function DiscussionPage() {
     return matchesSearch && matchesCategory
   })
 
-  const sortedDiscussions = [...filteredDiscussions].sort((a, b) => {
+  // Gerçek yorum sayılarını hesapla
+  const discussionsWithRealComments = filteredDiscussions.map(discussion => ({
+    ...discussion,
+    comments: getTopicComments(discussion.id).length
+  }))
+
+  const sortedDiscussions = [...discussionsWithRealComments].sort((a, b) => {
     if (sortBy === "newest") {
       return 0 // Zaten sıralı
     } else if (sortBy === "popular") {

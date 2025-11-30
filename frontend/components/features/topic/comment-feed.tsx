@@ -29,7 +29,7 @@ interface CommentFeedProps {
 }
 
 // Topic'lere özel yorumlar - gerçek uygulamada API'den gelecek
-const getTopicComments = (topicId: number): Comment[] => {
+export const getTopicComments = (topicId: number): Comment[] => {
   const commentsMap: Record<number, Comment[]> = {
     1: [
       {

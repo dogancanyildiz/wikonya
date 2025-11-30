@@ -15,6 +15,7 @@ import {
   isTopicMakesSenseByUser,
   initializeTopicStats,
 } from "@/lib/utils/topic-stats"
+import { getTopicComments } from "@/components/features/topic/comment-feed"
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface DiscussionFeedProps {}
@@ -431,12 +432,15 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
       const isLiked = state.user ? isTopicLikedByUser(discussion.id, state.user) : false
       const isMakesSense = state.user ? isTopicMakesSenseByUser(discussion.id, state.user) : false
       
+      // Gerçek yorum sayısını hesapla
+      const realCommentCount = getTopicComments(discussion.id).length
+      
       // Initialize stats if not exists
       if (stats.likes === 0 && stats.makesSense === 0 && stats.comments === 0) {
         initializeTopicStats(discussion.id, {
           likes: discussion.likes,
           makesSense: discussion.makesSense,
-          comments: discussion.comments,
+          comments: realCommentCount,
         })
       }
 
@@ -444,7 +448,7 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
         ...discussion,
         likes: stats.likes || discussion.likes,
         makesSense: stats.makesSense || discussion.makesSense,
-        comments: stats.comments || discussion.comments,
+        comments: realCommentCount, // Gerçek yorum sayısını kullan
         isLiked,
         isMakesSense,
       }
