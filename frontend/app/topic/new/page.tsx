@@ -11,18 +11,27 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, Loader2, ArrowLeft } from "lucide-react"
+import { AlertCircle, Loader2, ArrowLeft, X, Plus } from "lucide-react"
 import { MarkdownEditor } from "@/components/features/topic/markdown-editor"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 
 const CATEGORIES = [
-  { value: "academic", label: "Akademik" },
-  { value: "social", label: "Sosyal Yaşam & Mekan" },
-  { value: "housing", label: "Barınma & Yaşam" },
-  { value: "career", label: "Kariyer & Gelişim" },
-  { value: "discovery", label: "Konya Keşif" },
+  { value: "academic", label: "Akademik", icon: "📚", description: "Ders notları, sınav soruları, akademik kaynaklar" },
+  { value: "social", label: "Sosyal Yaşam & Mekan", icon: "☕", description: "Kafeler, mekanlar, sosyal etkinlikler" },
+  { value: "housing", label: "Barınma & Yaşam", icon: "🏠", description: "Yurt, ev, barınma önerileri" },
+  { value: "career", label: "Kariyer & Gelişim", icon: "💼", description: "Staj, iş ilanları, kariyer tavsiyeleri" },
+  { value: "discovery", label: "Konya Keşif", icon: "🗺️", description: "Konya'yı keşfet, yerel bilgiler" },
 ] as const
+
+const SUGGESTED_TAGS: Record<string, string[]> = {
+  academic: ["Ders Notu", "Sınav Soruları", "Final Hazırlık", "Vize Hazırlık", "Ödev", "Proje", "Laboratuvar", "Matematik", "Fizik", "Kimya", "Biyoloji", "Hukuk", "İktisat", "İşletme"],
+  social: ["Kafe", "Restoran", "Etkinlik", "Konser", "Sosyal Kulüp", "Topluluk", "Arkadaş", "Eğlence", "Spor", "Müzik"],
+  housing: ["Yurt", "Ev", "Kira", "Oda Arkadaşı", "Barınma", "Kampüs", "Ulaşım", "Güvenlik", "Fiyat"],
+  career: ["Staj", "İş İlanı", "CV", "Mülakat", "Kariyer", "Networking", "Workshop", "Seminer"],
+  discovery: ["Tarihi Yer", "Müze", "Park", "Alışveriş", "Ulaşım", "Yemek", "Kültür", "Festival"],
+}
 
 export default function NewTopicPage() {
   const router = useRouter()
@@ -30,10 +39,53 @@ export default function NewTopicPage() {
   const { canCreateTopic } = usePermissions()
   const [title, setTitle] = useState("")
   const [category, setCategory] = useState<string>("")
-  const [tags, setTags] = useState("")
+  const [tags, setTags] = useState<string[]>([])
+  const [tagInput, setTagInput] = useState("")
   const [content, setContent] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const MAX_TAGS = 5
+  const suggestedTags = category ? SUGGESTED_TAGS[category as keyof typeof SUGGESTED_TAGS] || [] : []
+
+  const handleAddTag = (tag: string) => {
+    const trimmedTag = tag.trim()
+    if (!trimmedTag) return
+    
+    // Duplicate kontrolü
+    if (tags.includes(trimmedTag)) {
+      setError("Bu etiket zaten eklenmiş")
+      setTimeout(() => setError(null), 2000)
+      return
+    }
+    
+    // Maksimum tag kontrolü
+    if (tags.length >= MAX_TAGS) {
+      setError(`Maksimum ${MAX_TAGS} etiket ekleyebilirsiniz`)
+      setTimeout(() => setError(null), 2000)
+      return
+    }
+    
+    setTags([...tags, trimmedTag])
+    setTagInput("")
+  }
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setTags(tags.filter(tag => tag !== tagToRemove))
+  }
+
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault()
+      if (tagInput.trim()) {
+        handleAddTag(tagInput)
+      }
+    }
+  }
+
+  const handleSuggestedTagClick = (tag: string) => {
+    handleAddTag(tag)
+  }
 
   // Yetki kontrolü
   if (!state.user || !canCreateTopic) {
@@ -104,7 +156,7 @@ export default function NewTopicPage() {
 
       // Yeni topic oluştur (pending status ile - onay bekliyor)
       // Coin kazanma sadece onaylandığında olacak
-      // const _coinResult = rewardCoins("create_topic", { title, category })
+      // const _coinResult = rewardCoins("create_topic", { title, category, tags })
 
       // User stats güncelle
       incrementTopicCount(state.user)
@@ -174,38 +226,132 @@ export default function NewTopicPage() {
               </p>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="category" className="font-[Manrope] font-bold">
                 Kategori *
               </Label>
-              <Select value={category} onValueChange={setCategory} disabled={isLoading}>
-                <SelectTrigger className="font-[Manrope]">
-                  <SelectValue placeholder="Kategori seçin" />
-                </SelectTrigger>
-                <SelectContent>
-                  {CATEGORIES.map((cat) => (
-                    <SelectItem key={cat.value} value={cat.value}>
-                      {cat.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {CATEGORIES.map((cat) => {
+                  const isSelected = category === cat.value
+                  return (
+                    <button
+                      key={cat.value}
+                      type="button"
+                      onClick={() => setCategory(cat.value)}
+                      disabled={isLoading}
+                      className={`
+                        p-4 rounded-xl border-2 transition-all text-left
+                        ${isSelected
+                          ? 'border-primary bg-primary/5 dark:bg-primary/10'
+                          : 'border-border hover:border-primary/50 hover:bg-accent/50'
+                        }
+                        ${isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                      `}
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl">{cat.icon}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-[Manrope] font-bold text-sm text-foreground mb-1">
+                            {cat.label}
+                          </div>
+                          <div className="font-[Manrope] text-xs text-muted-foreground">
+                            {cat.description}
+                          </div>
+                        </div>
+                        {isSelected && (
+                          <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                            <div className="w-2 h-2 rounded-full bg-white" />
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="tags" className="font-[Manrope] font-bold">
-                Etiketler (virgülle ayırın)
+                Etiketler {tags.length > 0 && `(${tags.length}/${MAX_TAGS})`}
               </Label>
-              <Input
-                id="tags"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                placeholder="Örn: Ders Notu, Hukuk Fakültesi, Final Hazırlık"
-                className="font-[Manrope]"
-                disabled={isLoading}
-              />
+              
+              {/* Selected Tags */}
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 p-3 bg-accent rounded-lg border border-border">
+                  {tags.map((tag) => (
+                    <Badge
+                      key={tag}
+                      variant="secondary"
+                      className="font-[Manrope] font-semibold text-sm px-3 py-1.5 flex items-center gap-2"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveTag(tag)}
+                        disabled={isLoading}
+                        className="hover:bg-destructive/20 rounded-full p-0.5 transition-colors"
+                        aria-label={`${tag} etiketini kaldır`}
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
+
+              {/* Tag Input */}
+              <div className="flex gap-2">
+                <Input
+                  id="tags"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagInputKeyDown}
+                  placeholder={tags.length >= MAX_TAGS ? "Maksimum etiket sayısına ulaştınız" : "Etiket ekle (Enter veya virgül)"}
+                  className="font-[Manrope]"
+                  disabled={isLoading || tags.length >= MAX_TAGS}
+                />
+                <Button
+                  type="button"
+                  onClick={() => handleAddTag(tagInput)}
+                  disabled={isLoading || tags.length >= MAX_TAGS || !tagInput.trim()}
+                  variant="outline"
+                  size="icon"
+                  className="flex-shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+
+              {/* Suggested Tags */}
+              {category && suggestedTags.length > 0 && tags.length < MAX_TAGS && (
+                <div className="space-y-2">
+                  <p className="text-xs text-muted-foreground font-[Manrope] font-semibold">
+                    Önerilen Etiketler:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {suggestedTags
+                      .filter(tag => !tags.includes(tag))
+                      .slice(0, 10)
+                      .map((tag) => (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => handleSuggestedTagClick(tag)}
+                          disabled={isLoading || tags.length >= MAX_TAGS}
+                          className="px-3 py-1.5 text-xs font-[Manrope] font-semibold bg-card hover:bg-primary hover:text-primary-foreground text-foreground rounded-full border border-border hover:border-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          + {tag}
+                        </button>
+                      ))}
+                  </div>
+                </div>
+              )}
+
               <p className="text-xs text-muted-foreground font-[Manrope]">
-                Etiketleri virgülle ayırın. Maksimum 5 etiket.
+                {tags.length < MAX_TAGS
+                  ? `Etiket eklemek için yazın ve Enter'a basın veya önerilen etiketlerden seçin. Maksimum ${MAX_TAGS} etiket.`
+                  : `Maksimum ${MAX_TAGS} etiket ekleyebilirsiniz.`
+                }
               </p>
             </div>
 
