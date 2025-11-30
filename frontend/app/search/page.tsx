@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, BookOpen, MessageCircle, User, Clock, TrendingUp, Filter, X } from "lucide-react"
 import Link from "next/link"
 import { Topic, Comment } from "@/lib/types"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const CATEGORIES = [
   { value: "all", label: "Tüm Kategoriler" },
@@ -380,9 +381,41 @@ export default function SearchPage() {
         {/* Results */}
         {query ? (
           <div className="space-y-4">
-            {activeTab === "topics" && (
+            {isLoading ? (
+              // Loading Skeleton
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <Card
+                    key={i}
+                    className="bg-white dark:bg-card rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-lg border border-border"
+                  >
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 space-y-3">
+                          <div className="flex items-center gap-2">
+                            <Skeleton className="h-5 w-20" />
+                            <Skeleton className="h-5 w-16" />
+                            <Skeleton className="h-5 w-16" />
+                          </div>
+                          <Skeleton className="h-6 w-3/4" />
+                          <Skeleton className="h-4 w-full" />
+                          <Skeleton className="h-4 w-5/6" />
+                          <div className="flex items-center gap-4">
+                            <Skeleton className="h-4 w-24" />
+                            <Skeleton className="h-4 w-20" />
+                            <Skeleton className="h-4 w-20" />
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
               <>
-                {results.topics.length > 0 ? (
+                {activeTab === "topics" && (
+                  <>
+                    {results.topics.length > 0 ? (
                   results.topics.map((topic) => (
                     <Card
                       key={topic.id}
@@ -434,10 +467,10 @@ export default function SearchPage() {
                     </EmptyHeader>
                   </Empty>
                 )}
-              </>
-            )}
+                  </>
+                )}
 
-            {activeTab === "comments" && (
+                {activeTab === "comments" && (
               <>
                 {results.comments.length > 0 ? (
                   results.comments.map((comment) => (
@@ -488,14 +521,16 @@ export default function SearchPage() {
               </>
             )}
 
-            {activeTab === "users" && (
-              <Card>
-                <CardContent className="p-8 text-center">
-                  <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground">
-                    Kullanıcı arama özelliği yakında eklenecek
-                  </p>
-                </CardContent>
-              </Card>
+                {activeTab === "users" && (
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <p className="font-[Manrope] text-foreground/60 dark:text-muted-foreground">
+                        Kullanıcı arama özelliği yakında eklenecek
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </>
             )}
           </div>
         ) : (
