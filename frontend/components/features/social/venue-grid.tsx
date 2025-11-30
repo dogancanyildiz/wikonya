@@ -617,7 +617,7 @@ export function VenueGrid() {
                       // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       let icon: any = undefined
                       if (typeof window !== "undefined") {
-                        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+                        // eslint-disable-next-line @typescript-eslint/no-require-imports
                         const L = require("leaflet")
                         if (isSelected) {
                           // Seçili marker için kırmızı icon
