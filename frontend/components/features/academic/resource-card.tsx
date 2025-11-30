@@ -3,8 +3,10 @@
 import { FileText, Download, Eye, MessageSquare, Calendar, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
 interface ResourceCardProps {
+  id: number
   title: string
   fileType: string
   fileSize: string
@@ -20,6 +22,7 @@ interface ResourceCardProps {
 }
 
 export function ResourceCard({
+  id,
   title,
   fileType,
   fileSize,
@@ -61,28 +64,34 @@ export function ResourceCard({
           </div>
         </div>
         {!isReview && !isCalendar ? (
-          <Button 
-            size="sm"
-            className="h-8 px-3 bg-primary hover:bg-primary/90 rounded-lg font-[Manrope] text-primary-foreground font-semibold text-xs"
-          >
-            <Download className="w-3.5 h-3.5 mr-1.5" />
-            İndir
-          </Button>
+          <Link href={`/academic/${id}`}>
+            <Button 
+              size="sm"
+              className="h-8 px-3 bg-primary hover:bg-primary/90 rounded-lg font-[Manrope] text-primary-foreground font-semibold text-xs"
+            >
+              <Download className="w-3.5 h-3.5 mr-1.5" />
+              İndir
+            </Button>
+          </Link>
         ) : (
-          <Button 
-            size="sm"
-            variant="outline"
-            className="h-8 px-3 rounded-lg font-[Manrope] font-semibold text-xs"
-          >
-            {isReview ? "Detay" : "Görüntüle"}
-          </Button>
+          <Link href={`/academic/${id}`}>
+            <Button 
+              size="sm"
+              variant="outline"
+              className="h-8 px-3 rounded-lg font-[Manrope] font-semibold text-xs"
+            >
+              {isReview ? "Detay" : "Görüntüle"}
+            </Button>
+          </Link>
         )}
       </div>
 
       {/* Başlık */}
-      <h3 className="font-[Manrope] text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors font-bold text-[15px] leading-snug">
-        {title}
-      </h3>
+      <Link href={`/academic/${id}`}>
+        <h3 className="font-[Manrope] text-foreground mb-3 line-clamp-2 group-hover:text-primary transition-colors font-bold text-[15px] leading-snug cursor-pointer">
+          {title}
+        </h3>
+      </Link>
 
       {/* Review Rating */}
       {isReview && rating !== undefined && (
