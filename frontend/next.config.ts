@@ -25,19 +25,22 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
-  async headers() {
-    return [
-      {
-        source: '/manifest.json',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/manifest+json',
-          },
-        ],
-      },
-    ];
-  },
+  // Headers only work with server-side rendering, skip for static export
+  ...(process.env.GITHUB_PAGES !== 'true' && {
+    async headers() {
+      return [
+        {
+          source: '/manifest.json',
+          headers: [
+            {
+              key: 'Content-Type',
+              value: 'application/manifest+json',
+            },
+          ],
+        },
+      ];
+    },
+  }),
 };
 
 export default nextConfig;
