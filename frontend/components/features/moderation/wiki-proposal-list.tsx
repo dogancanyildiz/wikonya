@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, CheckCircle2, XCircle, Clock } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 import { WikiEditProposal } from "@/lib/types"
 import { format } from "date-fns"
 import { tr } from "date-fns/locale"
@@ -26,6 +27,7 @@ export function WikiProposalList({
   const { canApproveProposals } = usePermissions()
   const [rejectingId, setRejectingId] = useState<number | null>(null)
   const [rejectReason, setRejectReason] = useState("")
+  const [selectedProposals, setSelectedProposals] = useState<number[]>([])
 
   if (!canApproveProposals) {
     return (
@@ -39,6 +41,41 @@ export function WikiProposalList({
   }
 
   const pendingProposals = proposals.filter((p) => p.status === "pending")
+
+  const handleSelectAll = () => {
+    if (selectedProposals.length === pendingProposals.length) {
+      setSelectedProposals([])
+    } else {
+      setSelectedProposals(pendingProposals.map(p => p.id))
+    }
+  }
+
+  const handleSelectProposal = (proposalId: number) => {
+    if (selectedProposals.includes(proposalId)) {
+      setSelectedProposals(selectedProposals.filter(id => id !== proposalId))
+    } else {
+      setSelectedProposals([...selectedProposals, proposalId])
+    }
+  }
+
+  const handleBulkApprove = async () => {
+    for (const proposalId of selectedProposals) {
+      onApprove?.(proposalId)
+    }
+    setSelectedProposals([])
+  }
+
+  const handleBulkReject = async () => {
+    if (!rejectReason.trim()) {
+      alert("Red nedeni girmelisiniz")
+      return
+    }
+    for (const proposalId of selectedProposals) {
+      onReject?.(proposalId, rejectReason)
+    }
+    setSelectedProposals([])
+    setRejectReason("")
+  }
 
   if (pendingProposals.length === 0) {
     return (
@@ -55,10 +92,65 @@ export function WikiProposalList({
 
   return (
     <div className="space-y-4">
+      {/* Bulk Actions */}
+      {pendingProposals.length > 0 && (
+        <Card className="bg-card border border-border">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  checked={selectedProposals.length === pendingProposals.length}
+                  onCheckedChange={handleSelectAll}
+                  className="font-[Manrope]"
+                />
+                <span className="font-[Manrope] font-semibold text-sm text-foreground">
+                  {selectedProposals.length > 0 
+                    ? `${selectedProposals.length} öğe seçildi`
+                    : "Tümünü seç"
+                  }
+                </span>
+              </div>
+              {selectedProposals.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={handleBulkApprove}
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90 font-[Manrope] font-bold"
+                  >
+                    <CheckCircle2 className="w-4 h-4 mr-2" />
+                    Toplu Onayla ({selectedProposals.length})
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      const reason = prompt("Red nedeni:")
+                      if (reason) {
+                        setRejectReason(reason)
+                        handleBulkReject()
+                      }
+                    }}
+                    variant="destructive"
+                    size="sm"
+                    className="font-[Manrope] font-bold"
+                  >
+                    <XCircle className="w-4 h-4 mr-2" />
+                    Toplu Reddet ({selectedProposals.length})
+                  </Button>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {pendingProposals.map((proposal) => (
         <Card key={proposal.id} className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
           <CardHeader>
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
+              <Checkbox
+                checked={selectedProposals.includes(proposal.id)}
+                onCheckedChange={() => handleSelectProposal(proposal.id)}
+                className="mt-1"
+              />
               <div className="flex items-center gap-3">
                 <Avatar className="w-10 h-10">
                   <AvatarFallback className="bg-primary text-white font-[Manrope] font-bold">

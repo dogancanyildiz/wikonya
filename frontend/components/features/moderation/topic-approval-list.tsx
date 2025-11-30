@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, CheckCircle2, XCircle, Clock } from "lucide-react"
+import { AlertCircle, CheckCircle2, XCircle, Clock, CheckSquare, Square } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Topic } from "@/lib/types"
 import { format } from "date-fns"
 import { tr } from "date-fns/locale"
@@ -28,6 +29,7 @@ export function TopicApprovalList({
   const { notifyTopicApproved, notifyTopicRejected } = useNotifications()
   const [rejectingId, setRejectingId] = useState<number | null>(null)
   const [rejectReason, setRejectReason] = useState("")
+  const [selectedTopics, setSelectedTopics] = useState<number[]>([])
 
   const handleApprove = async (topicId: number) => {
     const topic = topics.find((t) => t.id === topicId)
@@ -86,6 +88,41 @@ export function TopicApprovalList({
 
   const pendingTopics = topics.filter((t) => t.status === "pending")
 
+  const handleSelectAll = () => {
+    if (selectedTopics.length === pendingTopics.length) {
+      setSelectedTopics([])
+    } else {
+      setSelectedTopics(pendingTopics.map(t => t.id))
+    }
+  }
+
+  const handleSelectTopic = (topicId: number) => {
+    if (selectedTopics.includes(topicId)) {
+      setSelectedTopics(selectedTopics.filter(id => id !== topicId))
+    } else {
+      setSelectedTopics([...selectedTopics, topicId])
+    }
+  }
+
+  const handleBulkApprove = async () => {
+    for (const topicId of selectedTopics) {
+      await handleApprove(topicId)
+    }
+    setSelectedTopics([])
+  }
+
+  const handleBulkReject = async () => {
+    if (!rejectReason.trim()) {
+      alert("Red nedeni girmelisiniz")
+      return
+    }
+    for (const topicId of selectedTopics) {
+      await handleReject(topicId, rejectReason)
+    }
+    setSelectedTopics([])
+    setRejectReason("")
+  }
+
   if (pendingTopics.length === 0) {
     return (
       <Card>
@@ -101,10 +138,65 @@ export function TopicApprovalList({
 
   return (
     <div className="space-y-4">
+      {/* Bulk Actions */}
+      {pendingTopics.length > 0 && (
+        <Card className="bg-card border border-border">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  checked={selectedTopics.length === pendingTopics.length}
+                  onCheckedChange={handleSelectAll}
+                  className="font-[Manrope]"
+                />
+                <span className="font-[Manrope] font-semibold text-sm text-foreground">
+                  {selectedTopics.length > 0 
+                    ? `${selectedTopics.length} öğe seçildi`
+                    : "Tümünü seç"
+                  }
+                </span>
+              </div>
+              {selectedTopics.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={handleBulkApprove}
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90 font-[Manrope] font-bold"
+                  >
+                    <CheckCircle2 className="w-4 h-4 mr-2" />
+                    Toplu Onayla ({selectedTopics.length})
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      const reason = prompt("Red nedeni:")
+                      if (reason) {
+                        setRejectReason(reason)
+                        handleBulkReject()
+                      }
+                    }}
+                    variant="destructive"
+                    size="sm"
+                    className="font-[Manrope] font-bold"
+                  >
+                    <XCircle className="w-4 h-4 mr-2" />
+                    Toplu Reddet ({selectedTopics.length})
+                  </Button>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {pendingTopics.map((topic) => (
         <Card key={topic.id} className="bg-card rounded-xl shadow-md dark:shadow-lg border border-border">
           <CardHeader>
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
+              <Checkbox
+                checked={selectedTopics.includes(topic.id)}
+                onCheckedChange={() => handleSelectTopic(topic.id)}
+                className="mt-1"
+              />
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <Avatar className="w-10 h-10">
