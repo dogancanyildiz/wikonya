@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { ProfileCard } from "@/components/features/dashboard/profile-card"
 import { StatsCard } from "@/components/features/dashboard/stats-card"
 import { WalletCard } from "@/components/features/dashboard/wallet-card"
@@ -11,6 +13,13 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+
+  // Dashboard sayfasına gidildiğinde scroll pozisyonunu en üste al
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8">
