@@ -38,7 +38,7 @@ export function SocialResponsibilityCard() {
   ]
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-5">
       <div>
         <div className="flex items-center gap-2 mb-1">
           <Heart className="w-4 h-4 text-rose-600 dark:text-rose-400" />

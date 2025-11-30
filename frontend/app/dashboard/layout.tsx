@@ -31,8 +31,8 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          {/* Social Responsibility Card */}
-          <SocialResponsibilityCard />
+            {/* Social Responsibility Card */}
+            <SocialResponsibilityCard />
 
           {/* Tabbar */}
           <DashboardTabbar />

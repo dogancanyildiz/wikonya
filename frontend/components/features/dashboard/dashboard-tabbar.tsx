@@ -82,25 +82,36 @@ export function DashboardTabbar() {
       </div>
 
       {/* Mobile: Dropdown */}
-      <div className="md:hidden">
+      <div className="md:hidden mt-4">
         <Select value={activeTab} onValueChange={handleTabChange}>
-          <SelectTrigger className="w-full h-10 font-[Manrope] font-semibold">
-            <div className="flex items-center gap-2">
-              {(() => {
-                const Icon = activeTabData.icon
-                return <Icon className="w-4 h-4" />
-              })()}
-              <SelectValue>{activeTabData.label}</SelectValue>
+          <SelectTrigger className="w-full h-14 font-[Manrope] font-bold bg-card dark:bg-card border-2 border-primary/30 dark:border-primary/40 rounded-xl shadow-lg hover:shadow-xl hover:border-primary/50 active:scale-[0.98] transition-all duration-200 [&>svg]:text-primary [&>svg]:opacity-80 [&>svg]:w-5 [&>svg]:h-5 [&_[data-slot=select-value]]:text-foreground [&_[data-slot=select-value]]:font-bold [&_[data-slot=select-value]]:text-base">
+            <div className="flex items-center justify-between w-full gap-3 px-1">
+              <div className="flex items-center gap-3">
+                {(() => {
+                  const Icon = activeTabData.icon
+                  return <Icon className="w-5 h-5 text-primary" strokeWidth={2.5} />
+                })()}
+                <SelectValue>{activeTabData.label}</SelectValue>
+              </div>
             </div>
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-popover border-2 border-border shadow-2xl rounded-xl p-2 min-w-[var(--radix-select-trigger-width)]">
             {tabs.map((tab) => {
               const Icon = tab.icon
+              const isActive = activeTab === tab.id
               return (
-                <SelectItem key={tab.id} value={tab.id}>
-                  <div className="flex items-center gap-2">
-                    <Icon className="w-4 h-4" />
-                    <span>{tab.label}</span>
+                <SelectItem 
+                  key={tab.id} 
+                  value={tab.id}
+                  className={`font-[Manrope] font-semibold rounded-lg h-12 px-3 transition-colors ${
+                    isActive 
+                      ? 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary border-l-4 border-l-primary' 
+                      : 'text-foreground hover:bg-accent/50 dark:hover:bg-accent/30'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 w-full">
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} strokeWidth={2.5} />
+                    <span className={isActive ? 'text-primary font-bold' : 'font-medium'}>{tab.label}</span>
                   </div>
                 </SelectItem>
               )

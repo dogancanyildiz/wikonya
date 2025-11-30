@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, TrendingUp, PlusCircle, Search, User } from "lucide-react"
+import { Home, PlusCircle, Search, User } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -14,7 +14,6 @@ export function MobileBottomNav({ activeTab, onNavigate }: MobileBottomNavProps)
 
   const navItems = [
     { id: "home", label: "Ana Sayfa", icon: Home, href: "/" },
-    { id: "trending", label: "Trendler", icon: TrendingUp, href: "/" },
     { id: "create", label: "Oluştur", icon: PlusCircle, href: "/topic/new" },
     { id: "search", label: "Ara", icon: Search, href: "/search" },
     { id: "profile", label: "Profil", icon: User, href: "/dashboard" },
@@ -23,7 +22,6 @@ export function MobileBottomNav({ activeTab, onNavigate }: MobileBottomNavProps)
   const isActive = (itemId: string, href: string) => {
     if (activeTab) return activeTab === itemId
     if (itemId === "home") return pathname === "/"
-    if (itemId === "trending") return pathname === "/" // Trend ana sayfada
     if (itemId === "create") return pathname?.startsWith("/topic/new")
     if (itemId === "search") return pathname?.startsWith("/search")
     if (itemId === "profile") return pathname?.startsWith("/dashboard")
@@ -48,7 +46,7 @@ export function MobileBottomNav({ activeTab, onNavigate }: MobileBottomNavProps)
                 className={active ? "text-primary" : "text-foreground/60 dark:text-muted-foreground"}
                 size={22}
                 strokeWidth={2.5}
-                fill={active ? "#03624c" : "none"}
+                fill={active ? "currentColor" : "none"}
               />
               <span
                 className={`font-[Manrope] ${active ? "text-primary font-bold" : "text-foreground/60 dark:text-muted-foreground font-semibold"}`}
