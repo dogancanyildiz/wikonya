@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import * as React from "react"
 import { JobCard } from "./job-card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -15,8 +16,13 @@ import {
 
 const ITEMS_PER_PAGE = 5
 
-export function JobBoard() {
+interface JobBoardProps {
+  searchQuery?: string
+}
+
+export function JobBoard({ searchQuery = "" }: JobBoardProps) {
   const [selectedType, setSelectedType] = useState("all")
+  const [selectedLocation, setSelectedLocation] = useState("all")
   const [currentPage, setCurrentPage] = useState(1)
 
   const jobTypes = [
@@ -27,7 +33,17 @@ export function JobBoard() {
     { id: "hybrid", name: "Hybrid" },
   ]
 
+  const locations = [
+    { id: "all", name: "Tüm Konumlar" },
+    { id: "selcuklu", name: "Selçuklu" },
+    { id: "meram", name: "Meram" },
+    { id: "karatay", name: "Karatay" },
+    { id: "remote", name: "Remote" },
+    { id: "hybrid", name: "Hybrid" },
+  ]
+
   const selectedTypeData = jobTypes.find(t => t.id === selectedType)
+  const selectedLocationData = locations.find(l => l.id === selectedLocation)
 
   const jobs = [
     {
@@ -153,13 +169,28 @@ export function JobBoard() {
   ]
 
   const filteredJobs = jobs.filter(job => {
+    // Type filter
     const typeMatch = selectedType === "all" || 
       (selectedType === "part-time" && job.type === "Part-Time") ||
       (selectedType === "full-time" && job.type === "Full-Time") ||
       (selectedType === "remote" && job.type === "Remote") ||
       (selectedType === "hybrid" && job.type === "Hybrid")
     
-    return typeMatch
+    // Location filter
+    const locationMatch = selectedLocation === "all" ||
+      (selectedLocation === "selcuklu" && job.location.toLowerCase().includes("selçuklu")) ||
+      (selectedLocation === "meram" && job.location.toLowerCase().includes("meram")) ||
+      (selectedLocation === "karatay" && job.location.toLowerCase().includes("karatay")) ||
+      (selectedLocation === "remote" && job.location.toLowerCase().includes("remote")) ||
+      (selectedLocation === "hybrid" && job.location.toLowerCase().includes("hybrid"))
+    
+    // Search query filter
+    const searchMatch = !searchQuery.trim() ||
+      job.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      job.location.toLowerCase().includes(searchQuery.toLowerCase())
+    
+    return typeMatch && locationMatch && searchMatch
   })
 
   // Pagination logic
@@ -173,6 +204,16 @@ export function JobBoard() {
     setSelectedType(type)
     setCurrentPage(1)
   }
+
+  const handleLocationChange = (location: string) => {
+    setSelectedLocation(location)
+    setCurrentPage(1)
+  }
+
+  // Reset page when search query changes
+  React.useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery])
 
   return (
     <div>

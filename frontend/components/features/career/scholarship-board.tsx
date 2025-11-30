@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import * as React from "react"
 import { ScholarshipCard } from "./scholarship-card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -19,7 +20,11 @@ import {
 
 const ITEMS_PER_PAGE = 5
 
-export function ScholarshipBoard() {
+interface ScholarshipBoardProps {
+  searchQuery?: string
+}
+
+export function ScholarshipBoard({ searchQuery = "" }: ScholarshipBoardProps) {
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [selectedSubCategory, setSelectedSubCategory] = useState("all")
   const [currentPage, setCurrentPage] = useState(1)
@@ -199,7 +204,12 @@ export function ScholarshipBoard() {
     const categoryMatch = selectedCategory === "all" || scholarship.category === selectedCategory
     const subCategoryMatch = selectedSubCategory === "all" || scholarship.subCategory === selectedSubCategory
     
-    return categoryMatch && subCategoryMatch
+    // Search query filter
+    const searchMatch = !searchQuery.trim() ||
+      scholarship.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      scholarship.organization.toLowerCase().includes(searchQuery.toLowerCase())
+    
+    return categoryMatch && subCategoryMatch && searchMatch
   })
 
   // Pagination logic
@@ -214,6 +224,11 @@ export function ScholarshipBoard() {
     setSelectedSubCategory(subCategory)
     setCurrentPage(1)
   }
+
+  // Reset page when search query changes
+  React.useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery])
 
   return (
     <div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import * as React from "react"
 import { WorkshopCard } from "./workshop-card"
 import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,7 +16,11 @@ import {
   DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export function DevelopmentHub() {
+interface DevelopmentHubProps {
+  searchQuery?: string
+}
+
+export function DevelopmentHub({ searchQuery = "" }: DevelopmentHubProps) {
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [selectedSubCategory, setSelectedSubCategory] = useState("all")
 
@@ -194,8 +199,20 @@ export function DevelopmentHub() {
   const filteredWorkshops = workshops.filter(workshop => {
     const categoryMatch = selectedCategory === "all" || workshop.category === selectedCategory
     const subCategoryMatch = selectedSubCategory === "all" || workshop.subCategory === selectedSubCategory
-    return categoryMatch && subCategoryMatch
+    
+    // Search query filter
+    const searchMatch = !searchQuery.trim() ||
+      workshop.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      workshop.organizer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      workshop.location.toLowerCase().includes(searchQuery.toLowerCase())
+    
+    return categoryMatch && subCategoryMatch && searchMatch
   })
+
+  // Reset page when search query changes
+  React.useEffect(() => {
+    // DevelopmentHub doesn't have pagination, but we can add it if needed
+  }, [searchQuery])
 
   return (
     <div>

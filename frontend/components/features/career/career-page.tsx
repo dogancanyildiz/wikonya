@@ -96,18 +96,18 @@ export function CareerPage() {
       {/* Content based on selected category */}
       {selectedMainCategory === "jobs" && (
         <div className="mb-4 sm:mb-6 md:mb-8">
-          <JobBoard />
+          <JobBoard searchQuery={searchQuery} />
         </div>
       )}
 
       {selectedMainCategory === "scholarships" && (
         <div className="mb-4 sm:mb-6 md:mb-8">
-          <ScholarshipBoard />
+          <ScholarshipBoard searchQuery={searchQuery} />
         </div>
       )}
 
       {selectedMainCategory === "events" && (
-        <DevelopmentHub />
+        <DevelopmentHub searchQuery={searchQuery} />
       )}
     </div>
   )
