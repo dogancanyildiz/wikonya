@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { ContributionsTab } from "@/components/features/dashboard/contributions-tab"
 
 export const metadata: Metadata = {
   title: "Dashboard | Konya Genç",
@@ -31,5 +30,5 @@ export const metadata: Metadata = {
 }
 
 export default function DashboardPage() {
-  return <ContributionsTab />
+  return null
 }

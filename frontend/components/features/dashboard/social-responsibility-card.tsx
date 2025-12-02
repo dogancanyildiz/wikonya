@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Heart, ArrowRight, Users, Calendar } from "lucide-react"
@@ -38,90 +38,97 @@ export function SocialResponsibilityCard() {
   ]
 
   return (
-    <div className="space-y-5">
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Heart className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-          <h2 className="font-[Manrope] text-foreground font-bold text-sm">
-            Sosyal Sorumluluk
-          </h2>
+    <Card className="bg-gradient-to-br from-pink-50 via-rose-50 to-pink-50 dark:from-pink-950/20 dark:via-rose-950/20 dark:to-pink-950/20 border-pink-200/50 dark:border-pink-900/30 rounded-xl shadow-md">
+      <CardHeader>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-pink-100 dark:bg-pink-900/40 rounded-lg">
+            <Heart className="w-5 h-5 text-pink-600 dark:text-pink-400" />
+          </div>
+          <div>
+            <CardTitle className="font-[Manrope] text-foreground font-bold text-xl sm:text-2xl">
+              Sosyal Sorumluluk
+            </CardTitle>
+            <p className="font-[Manrope] text-muted-foreground text-sm mt-1">
+              Topluma katkıda bulunun, GençCoin kazanın
+            </p>
+          </div>
         </div>
-        <p className="font-[Manrope] text-muted-foreground text-xs ml-6">
-          Topluma katkıda bulunun, GençCoin kazanın
-        </p>
-      </div>
-
-      <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 -mx-4 sm:-mx-6 md:-mx-8 lg:-mx-16 px-4 sm:px-6 md:px-8 lg:px-16 scrollbar-hide">
-        {projects.map((project) => (
-          <Card
-            key={project.id}
-            className="rounded-lg shadow-sm border-rose-200/30 dark:border-rose-900/20 bg-gradient-to-br from-rose-50/30 to-pink-50/30 dark:from-rose-950/10 dark:to-pink-950/10 flex-shrink-0 w-[200px] sm:w-[220px]"
-          >
-            <CardContent className="p-3 flex flex-col h-full">
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-[Manrope] text-foreground font-bold text-xs mb-1 line-clamp-2">
-                    {project.title}
-                  </h3>
-                  <p className="font-[Manrope] text-muted-foreground text-[10px] line-clamp-2 mb-2">
-                    {project.description}
-                  </p>
+      </CardHeader>
+      <CardContent>
+        <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+          {projects.map((project) => (
+            <Card
+              key={project.id}
+              className="rounded-lg shadow-sm border-pink-200/50 dark:border-pink-900/30 bg-white/60 dark:bg-background/60 backdrop-blur-sm flex-shrink-0 w-full min-w-[280px] max-w-[280px]"
+            >
+              <CardContent className="p-4 flex flex-col h-full">
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-[Manrope] text-foreground font-bold text-sm mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="font-[Manrope] text-muted-foreground text-xs mb-3">
+                      {project.description}
+                    </p>
+                  </div>
+                  <Badge className="bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 border-pink-300 dark:border-pink-800 font-[Manrope] font-bold text-xs px-2 py-0.5 flex-shrink-0">
+                    +{project.coins}
+                  </Badge>
                 </div>
-                <Badge className="bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-800 font-[Manrope] font-bold text-[10px] px-1.5 py-0 flex-shrink-0">
-                  +{project.coins}
-                </Badge>
+
+                <div className="flex items-center gap-4 text-muted-foreground text-xs mb-4">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4" />
+                    <span className="font-[Manrope]">{project.date}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Users className="w-4 h-4" />
+                    <span className="font-[Manrope]">{project.participants}</span>
+                  </div>
+                </div>
+
+                <Button
+                  asChild
+                  className="w-full bg-pink-600 hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-600 text-white font-[Manrope] font-semibold text-sm mt-auto"
+                >
+                  <Link href="/dashboard/contributions">
+                    Katıl
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+
+          {/* Tüm Projeler Kartı */}
+          <Card className="rounded-lg shadow-sm border-pink-200/50 dark:border-pink-900/30 bg-white/60 dark:bg-background/60 backdrop-blur-sm flex-shrink-0 w-full min-w-[280px] max-w-[280px]">
+            <CardContent className="p-4 flex flex-col h-full items-center justify-center">
+              <div className="text-center mb-4">
+                <div className="p-3 bg-pink-100 dark:bg-pink-900/40 rounded-full w-fit mx-auto mb-3">
+                  <Heart className="w-6 h-6 text-pink-600 dark:text-pink-400" />
+                </div>
+                <p className="font-[Manrope] text-foreground font-bold text-base mb-1">
+                  Tüm Projeler
+                </p>
+                <p className="font-[Manrope] text-muted-foreground text-sm">
+                  {projects.length} proje
+                </p>
               </div>
-
-              <div className="flex items-center gap-2 text-muted-foreground text-[10px] mb-2">
-                <div className="flex items-center gap-1">
-                  <Calendar className="w-3 h-3" />
-                  <span className="font-[Manrope]">{project.date}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Users className="w-3 h-3" />
-                  <span className="font-[Manrope]">{project.participants}</span>
-                </div>
-              </div>
-
               <Button
                 asChild
-                className="w-full h-6 bg-rose-600 hover:bg-rose-700 dark:bg-rose-500 dark:hover:bg-rose-600 text-white font-[Manrope] font-semibold text-[10px] mt-auto"
+                variant="outline"
+                className="w-full border-pink-300 dark:border-pink-800 hover:bg-pink-50 dark:hover:bg-pink-950/30 text-pink-700 dark:text-pink-300 font-[Manrope] font-semibold text-sm"
               >
                 <Link href="/dashboard/contributions">
-                  Katıl
-                  <ArrowRight className="w-3 h-3 ml-1" />
+                  Görüntüle
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
             </CardContent>
           </Card>
-        ))}
-
-        {/* Tüm Projeler Kartı */}
-        <Card className="rounded-lg shadow-sm border-rose-200/30 dark:border-rose-900/20 bg-gradient-to-br from-rose-50/30 to-pink-50/30 dark:from-rose-950/10 dark:to-pink-950/10 flex-shrink-0 w-[200px] sm:w-[220px]">
-          <CardContent className="p-3 flex flex-col h-full items-center justify-center">
-            <div className="text-center mb-3">
-              <Heart className="w-6 h-6 text-rose-600 dark:text-rose-400 mx-auto mb-2" />
-              <p className="font-[Manrope] text-foreground font-bold text-xs mb-1">
-                Tüm Projeler
-              </p>
-              <p className="font-[Manrope] text-muted-foreground text-[10px]">
-                {projects.length} proje
-              </p>
-            </div>
-            <Button
-              asChild
-              variant="outline"
-              className="w-full h-6 border-rose-200 dark:border-rose-900/30 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-700 dark:text-rose-300 font-[Manrope] font-semibold text-[10px]"
-            >
-              <Link href="/dashboard/contributions">
-                Görüntüle
-                <ArrowRight className="w-3 h-3 ml-1" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 

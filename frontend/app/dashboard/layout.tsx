@@ -6,7 +6,6 @@ import { ProfileCard } from "@/components/features/dashboard/profile-card"
 import { StatsCard } from "@/components/features/dashboard/stats-card"
 import { WalletCard } from "@/components/features/dashboard/wallet-card"
 import { SocialResponsibilityCard } from "@/components/features/dashboard/social-responsibility-card"
-import { DashboardTabbar } from "@/components/features/dashboard/dashboard-tabbar"
 
 export default function DashboardLayout({
   children,
@@ -42,9 +41,6 @@ export default function DashboardLayout({
 
             {/* Social Responsibility Card */}
             <SocialResponsibilityCard />
-
-          {/* Tabbar */}
-          <DashboardTabbar />
 
           {/* Tab Content - Changes based on route */}
           {children}
