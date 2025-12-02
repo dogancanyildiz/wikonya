@@ -47,7 +47,7 @@ export function SocialResponsibilityCard() {
           <div>
             <CardTitle className="font-[Manrope] text-foreground font-bold text-xl sm:text-2xl">
               Sosyal Sorumluluk
-            </CardTitle>
+          </CardTitle>
             <p className="font-[Manrope] text-muted-foreground text-sm mt-1">
               Topluma katkıda bulunun, GençCoin kazanın
             </p>
@@ -66,10 +66,10 @@ export function SocialResponsibilityCard() {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-[Manrope] text-foreground font-bold text-sm mb-2">
                       {project.title}
-                    </h3>
+                </h3>
                     <p className="font-[Manrope] text-muted-foreground text-xs mb-3">
                       {project.description}
-                    </p>
+                </p>
                   </div>
                   <Badge className="bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 border-pink-300 dark:border-pink-800 font-[Manrope] font-bold text-xs px-2 py-0.5 flex-shrink-0">
                     +{project.coins}
@@ -87,15 +87,15 @@ export function SocialResponsibilityCard() {
                   </div>
                 </div>
 
-                <Button
-                  asChild
+            <Button
+              asChild
                   className="w-full bg-pink-600 hover:bg-pink-700 dark:bg-pink-500 dark:hover:bg-pink-600 text-white font-[Manrope] font-semibold text-sm mt-auto"
-                >
-                  <Link href="/dashboard/contributions">
+            >
+              <Link href="/dashboard/contributions">
                     Katıl
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </Button>
               </CardContent>
             </Card>
           ))}
@@ -106,24 +106,24 @@ export function SocialResponsibilityCard() {
               <div className="text-center mb-4">
                 <div className="p-3 bg-pink-100 dark:bg-pink-900/40 rounded-full w-fit mx-auto mb-3">
                   <Heart className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                </div>
+          </div>
                 <p className="font-[Manrope] text-foreground font-bold text-base mb-1">
                   Tüm Projeler
-                </p>
+            </p>
                 <p className="font-[Manrope] text-muted-foreground text-sm">
                   {projects.length} proje
-                </p>
-              </div>
-              <Button
-                asChild
-                variant="outline"
+            </p>
+          </div>
+          <Button
+            asChild
+            variant="outline"
                 className="w-full border-pink-300 dark:border-pink-800 hover:bg-pink-50 dark:hover:bg-pink-950/30 text-pink-700 dark:text-pink-300 font-[Manrope] font-semibold text-sm"
-              >
-                <Link href="/dashboard/contributions">
+          >
+            <Link href="/dashboard/contributions">
                   Görüntüle
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Link>
+          </Button>
             </CardContent>
           </Card>
         </div>

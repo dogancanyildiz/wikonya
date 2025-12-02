@@ -6,10 +6,6 @@ export const metadata: Metadata = {
   description: "Akademik kaynak detay sayfası",
 }
 
-export async function generateStaticParams() {
-  return []
-}
-
 export default async function AcademicResourceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const resourceId = parseInt(id)

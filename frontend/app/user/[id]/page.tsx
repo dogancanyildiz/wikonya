@@ -1,9 +1,5 @@
 import { PublicUserProfile as PublicUserProfileContent } from "@/components/features/user/public-user-profile"
 
-export function generateStaticParams() {
-  return []
-}
-
 export default function PublicUserProfilePage() {
   return (
     <div className="min-h-screen bg-background">

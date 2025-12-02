@@ -282,14 +282,14 @@ export function MobileNavbar({ onMenuClick }: MobileNavbarProps) {
                 {/* Logout/Login Button - Profil altında */}
                 <div className="mt-2 pt-2 ">
                   {isAuthenticated ? (
-                    <Button
-                      onClick={handleLogout}
-                      variant="ghost"
-                      className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors font-[Manrope] justify-start text-red-500 dark:text-red-400 font-semibold"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      <span className="text-sm sm:text-base">Çıkış Yap</span>
-                    </Button>
+                  <Button
+                    onClick={handleLogout}
+                    variant="ghost"
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors font-[Manrope] justify-start text-red-500 dark:text-red-400 font-semibold"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span className="text-sm sm:text-base">Çıkış Yap</span>
+                  </Button>
                   ) : (
                     <Button
                       onClick={handleLogin}

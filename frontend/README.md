@@ -122,10 +122,6 @@ Detaylı bilgi için [CONTRIBUTING.md](../CONTRIBUTING.md) dosyasına bakın.
 
 ## 🚢 Deployment
 
-### GitHub Pages
-
-Proje GitHub Actions ile otomatik olarak GitHub Pages'e deploy edilir. `main` branch'ine push yapıldığında otomatik build ve deploy işlemi başlar.
-
 ### Environment Variables
 
 Production için gerekli environment variable'lar:

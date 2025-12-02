@@ -590,10 +590,10 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
       <div className="space-y-4">
         {discussions.map((discussion) => (
           <Link key={discussion.id} href={`/topic/${discussion.id}`} className="block">
-            <Card
-              className="hover:shadow-lg transition-all duration-200 cursor-pointer group border-border"
-            >
-              <CardContent className="p-4 sm:p-6">
+          <Card
+            className="hover:shadow-lg transition-all duration-200 cursor-pointer group border-border"
+          >
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-start gap-4">
                 <Avatar className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-border">
                   <AvatarFallback className="bg-primary text-primary-foreground font-[Manrope] font-bold">
@@ -681,45 +681,45 @@ export const DiscussionFeed = memo(function DiscussionFeed({}: DiscussionFeedPro
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 mt-6 sm:mt-8">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+          disabled={currentPage === 1}
             className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
-          >
+        >
             <ChevronLeft className="w-4 h-4" />
-          </Button>
-          
-          <div className="flex items-center gap-1">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <Button
-                key={page}
+        </Button>
+        
+        <div className="flex items-center gap-1">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <Button
+              key={page}
                 variant="ghost"
-                size="sm"
-                onClick={() => setCurrentPage(page)}
+              size="sm"
+              onClick={() => setCurrentPage(page)}
                 className={`h-9 w-9 rounded-lg font-[Manrope] font-bold text-sm
                   ${currentPage === page
                     ? 'bg-primary text-white hover:bg-primary/90'
                     : 'text-foreground/70 hover:text-foreground hover:bg-accent'
                   }
                 `}
-              >
-                {page}
-              </Button>
-            ))}
-          </div>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </Button>
+            >
+              {page}
+            </Button>
+          ))}
         </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+          disabled={currentPage === totalPages}
+            className="h-9 px-3 rounded-lg font-[Manrope] font-semibold text-xs border border-border disabled:opacity-50"
+        >
+            <ChevronRight className="w-4 h-4" />
+        </Button>
+      </div>
       )}
     </section>
   )

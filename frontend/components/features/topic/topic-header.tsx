@@ -1245,7 +1245,7 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
     }
   )
   const [userVote, setUserVote] = useState<"useful" | "not_useful" | null>(null)
-
+  
   const canEdit = canEditWiki || canProposeWikiEdit
 
   const handleWikiSave = (newContent: string) => {
@@ -1336,7 +1336,7 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
             <div className="flex items-start justify-between gap-4 mb-4 sm:mb-6">
               <h1 className="font-[Manrope] text-foreground font-extrabold text-3xl sm:text-4xl lg:text-[48px] leading-tight flex-1">
                 {topic.title}
-              </h1>
+            </h1>
               <div className="flex items-center gap-2 flex-shrink-0">
                 {state.user && topic.author.id === state.user.id && (
                   <>
@@ -1714,15 +1714,15 @@ KYK yurdu başvuru süreçleri, gerekli belgeler ve deneyimler.
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      
-      {/* Wiki Edit Dialog */}
-      <WikiEditDialog
-        open={isEditDialogOpen}
-        onOpenChange={setIsEditDialogOpen}
-        wikiContent={wikiContent}
-        topicId={topicId}
-        onSave={handleWikiSave}
-      />
+
+        {/* Wiki Edit Dialog */}
+        <WikiEditDialog
+          open={isEditDialogOpen}
+          onOpenChange={setIsEditDialogOpen}
+          wikiContent={wikiContent}
+          topicId={topicId}
+          onSave={handleWikiSave}
+        />
 
         {/* Wiki History Dialog */}
         <WikiHistory

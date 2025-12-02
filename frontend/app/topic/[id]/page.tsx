@@ -1,10 +1,6 @@
 import type { Metadata } from "next"
 import { TopicDetailPage as TopicDetailPageContent } from "@/components/features/topic/topic-detail-page"
 
-export function generateStaticParams() {
-  return []
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
   return {

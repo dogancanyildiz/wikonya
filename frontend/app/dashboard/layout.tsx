@@ -43,7 +43,7 @@ export default function DashboardLayout({
             <SocialResponsibilityCard />
 
           {/* Tab Content - Changes based on route */}
-          {children}
+            {children}
         </div>
       </div>
     </div>
